@@ -1,0 +1,370 @@
+<?xml version="1.0" ?>
+<diagram author="Simon Van Mierlo" name="Bouncing Balls - Tkinter Version ">
+	<description>
+		Tkinter frame with bouncing balls in it.
+	</description>
+	<top>
+		import time
+		import random
+		import Tkinter as tk
+		from mvk_widget import MvKWidget
+	</top>
+	<inport name="input"/>
+	<class name="MainApp" default="true">
+		<relationships>
+			<association name="fields" class="Field" />
+			<inheritance class="RuntimeClassBase" priority='1'/>
+			<inheritance class="tk.Tk" priority='0'/>
+		</relationships>
+		<method name="MainApp">
+			<body>
+				tk.Tk.__init__(self)
+				self.fixed_update_time = 20
+				self.update_self()
+				self.withdraw()
+				self.nr_of_fields = 0
+			</body>
+		</method>
+		<method name="update_self">
+			<body>
+				self.controller.update(self.fixed_update_time / 1000.0)
+				self.schedule_time = time.time()
+				self.scheduled_update_id = self.after(self.fixed_update_time, self.update_self)
+			</body>
+		</method>
+		<scxml initial="running">
+			<state id="running" initial="root">
+				<parallel id="root">
+					<state id="main_behaviour" initial="initializing">
+						<state id="initializing">
+							<transition target="../running">
+								<raise event="create_field" />
+							</transition>
+						</state>
+						<state id="running">
+							<transition target='.' event='button_pressed' cond='event_name == "create_new_field"'>
+								<parameter name="event_name" type="str" />
+								<raise event="create_field" />
+							</transition>
+						</state>
+					</state>
+					<state id="cd_behaviour" initial="waiting">
+						<state id="waiting">
+							<transition event="create_field" target="../creating">
+								<raise scope="cd" event="create_instance">
+									<parameter expr='"fields"' />
+								</raise>
+							</transition>
+							<transition event="delete_field" target='../check_nr_of_fields'>
+								<parameter name="association_name" type="str"/>
+								<raise scope="cd" event="delete_instance">
+									<parameter expr='association_name' />
+								</raise>
+								<script>
+									self.nr_of_fields -= 1
+								</script>
+							</transition>
+						</state>
+						<state id="creating">
+							<transition event="instance_created" target="../waiting">
+								<parameter name="association_name" type="string"/>
+								<raise scope="cd" event="start_instance">
+									<parameter expr="association_name" />
+								</raise>
+								<raise scope="narrow" event="set_association_name" target="association_name">
+									<parameter expr="association_name" />
+								</raise>
+								<script>
+									self.nr_of_fields += 1
+								</script>
+							</transition>
+						</state>
+						<state id="check_nr_of_fields">
+							<transition target="../../../stopped" cond="self.nr_of_fields == 0">
+								<script>
+									self.destroy()
+								</script>
+							</transition>
+							<transition target="../waiting" cond="self.nr_of_fields != 0"/>
+						</state>
+					</state>
+				</parallel>
+				<state id="stopped" />
+			</state>
+		</scxml>
+	</class>
+	<class name="Field">
+		<relationships>
+			<association name="balls" class="Ball" />
+			<association name="buttons" class="Button" />
+			<association name="parent" class="MainApp" min="1" max="1" />
+			<inheritance class="RuntimeClassBase" priority='1'/>
+			<inheritance class="tk.Toplevel" priority='0'/>
+			<inheritance class="MvKWidget" priority='-1'/>
+		</relationships>
+		<method name="Field">
+			<body>
+				<![CDATA[
+				tk.Toplevel.__init__(self)
+				self.title('BouncingBalls')
+
+				CANVAS_SIZE_TUPLE = (0, 0, self.winfo_screenwidth() * 2, self.winfo_screenheight() * 2)
+				self.c = tk.Canvas(self, relief=tk.RIDGE, scrollregion=CANVAS_SIZE_TUPLE)
+
+				MvKWidget.__init__(self, self.controller, self.c)
+				]]>
+			</body>
+		</method>
+		<method name="~Field">
+			<body>
+				self.destroy()
+			</body>
+		</method>
+		<scxml initial="root">
+			<state id="root" initial="waiting">
+				<state id="waiting">
+					<transition event="set_association_name" target="../initializing">
+						<parameter name="association_name" type="str" />
+						<script>
+							self.association_name = association_name
+						</script>
+					</transition>
+				</state>
+				<state id="initializing">
+					<transition target="../creating">
+						<raise scope="cd" event="create_instance">
+							<parameter expr='"buttons"' />
+							<parameter expr="self" />
+							<parameter expr="'create_new_field'" />
+							<parameter expr="'Spawn New Window'" />
+						</raise>
+					</transition>
+				</state>
+				<state id="creating">
+					<transition event='instance_created' target='../packing'>
+						<parameter name="association_name" type="string"/>
+						<raise scope="cd" event="start_instance">
+							<parameter expr="association_name" />
+						</raise>
+					</transition>
+				</state>
+				<state id="packing">
+					<transition event="button_created" target='../running'>
+						<parameter name="button" type="Button"/>
+						<script>
+							button.pack(expand=False, fill=tk.X, side=tk.TOP)
+							self.c.focus_force()
+							self.c.pack(expand=True, fill=tk.BOTH)
+						</script>
+					</transition>
+				</state>
+				<parallel id="running">
+					<transition	port="input" event="window-close" target="../deleting" cond='tagorid == id(self)'>
+						<parameter name="tagorid" type="int" default='None' />
+						<raise scope="narrow" target="'balls'" event='delete_self' />
+					</transition>
+					<state id="main_behaviour" initial="running">
+						<state id="running">
+							<transition port="input" event="right-click" target="../creating" cond='tagorid == id(self)'>
+								<parameter name='tagorid' type='int' default='None' />
+								<raise scope="cd" event="create_instance">
+									<parameter expr='"balls"' />
+									<parameter expr="self.c" />
+									<parameter expr="self.last_x" />
+									<parameter expr="self.last_y" />
+								</raise>
+							</transition>
+						</state>
+						<state id="creating">
+							<transition event="instance_created" target="../running">
+								<parameter name="association_name" type="string"/>
+								<raise scope="cd" event="start_instance">
+									<parameter expr="association_name" />
+								</raise>
+								<raise scope="narrow" event="set_association_name" target="association_name">
+									<parameter expr="association_name" />
+								</raise>
+							</transition>
+						</state>
+					</state>
+					<state id="deleting_behaviour" initial="running">
+						<state id="running">
+							<transition event="delete_ball" target='.'>
+								<parameter name="association_name" type="str"/>
+								<raise scope="cd" event="delete_instance">
+									<parameter expr='association_name' />
+								</raise>
+							</transition>
+						</state>
+					</state>
+					<state id="child_behaviour" initial="listening">
+						<state id="listening">
+							<transition event="button_pressed" target='.'>
+								<parameter name="event_name" type="str" />
+								<raise event="button_pressed" scope="narrow" target="'parent'">
+									<parameter expr='event_name' />
+								</raise>
+							</transition>
+						</state>
+					</state>
+				</parallel>
+				<state id="deleting">
+					<transition after="0.05" target="../deleted">
+						<raise event="delete_field" scope="narrow" target="'parent'">
+							<parameter expr='self.association_name' />
+						</raise>
+					</transition>
+				</state>
+				<state id="deleted" />
+			</state>
+		</scxml>
+	</class>
+	<class name="Button">
+		<relationships>
+			<association name="parent" class="Field" min="1" max="1" />
+			<inheritance class="RuntimeClassBase" priority='1'/>
+			<inheritance class="MvKWidget" priority='0'/>
+			<inheritance class="tk.Button" priority='-1'/>
+		</relationships>
+		<method name="Button">
+			<parameter name="parent" type="Field" />
+			<parameter name="event_name" type="str" />
+			<parameter name="button_text" type="str" />
+			<body>
+				tk.Button.__init__(self, parent, text=button_text)
+				MvKWidget.__init__(self, self.controller)
+				self.event_name = event_name
+			</body>
+		</method>
+		<scxml initial="initializing">
+			<state id="initializing">
+				<transition target="../running">
+					<raise event="button_created" scope="narrow" target="'parent'">
+						<parameter expr="self" />
+					</raise>
+				</transition>
+			</state>
+			<state id="running">
+				<transition port='input' event="left-click" target='.' cond='tagorid == id(self)'>
+					<parameter name='tagorid' type='int' default='None' />
+					<raise event="button_pressed" scope="narrow" target="'parent'">
+						<parameter expr="self.event_name" />
+					</raise>
+				</transition>
+			</state>
+		</scxml>
+	</class>
+	<class name="Ball">
+		<relationships>
+			<association name="parent" class="Field" min="1" max="1" />
+			<inheritance class="RuntimeClassBase" priority='1'/>
+			<inheritance class="MvKWidget" priority='0'/>
+		</relationships>
+		<attribute name="canvas" />
+		<method name="Ball">
+			<parameter name="canvas" />
+			<parameter name="x" />
+			<parameter name="y" />
+			<body>
+				self.canvas = canvas
+				self.r = 15.0
+				self.smooth = 0.4 # value between 0 and 1
+				self.vel = {'x': random.random() * 2.0 - 1.0, 'y': random.random() * 2.0 - 1.0}
+				self.id = self.canvas.create_oval(x, y, x + (self.r * 2), y + (self.r * 2), fill="black")
+				MvKWidget.__init__(self, self.controller, self.canvas, self.id)
+			</body>
+		</method>
+		<method name="~Ball">
+			<body>
+				self.canvas.delete(self.id)
+			</body>
+		</method>
+		<scxml initial="main_behaviour">
+			<state id="main_behaviour" initial="initializing">
+				<state id="initializing">
+					<transition event="set_association_name" target="../bouncing">
+						<parameter name="association_name" type="str" />
+						<script>
+							self.association_name = association_name
+						</script>
+					</transition>
+				</state>
+				<state id="bouncing">
+					<transition after="0.01" target=".">
+						<script>
+						<![CDATA[
+							pos = self.canvas.coords(self.id)
+							x = self.canvas.canvasx(pos[0])
+							y = self.canvas.canvasy(pos[1])
+							if x <= 0 or x + (self.r * 2) >= self.canvas.canvasx(self.canvas.winfo_width()):
+								self.vel['x'] = -self.vel['x']
+							if y <= 0 or y + (self.r * 2) >= self.canvas.canvasy(self.canvas.winfo_height()):
+								self.vel['y'] = -self.vel['y']
+							self.canvas.move(self.id, self.vel['x'], self.vel['y']);
+						]]>
+						</script>
+					</transition>
+					<transition port="input" event="left-click" target="../selected" cond='tagorid == id(self)'>
+						<parameter name='tagorid' type='int' default='None' />
+						<script>
+							self.canvas.itemconfig(self.id, fill="yellow")
+						</script>
+					</transition>
+				</state>
+				<state id="dragging">
+					<transition port="input" event="motion" target=".">
+						<parameter name='tagorid' type='int' default='None' />
+						<script>
+						<![CDATA[
+							coords = self.canvas.coords(self.id)
+							dx = self.canvas.canvasx(self.last_x) - self.canvas.canvasx(coords[0])
+							dy = self.canvas.canvasx(self.last_y) - self.canvas.canvasy(coords[1])
+
+							self.canvas.move(self.id, dx, dy);
+
+							# keep ball within boundaries
+							coords = self.canvas.coords(self.id)
+							x = self.canvas.canvasx(coords[0])
+							y = self.canvas.canvasy(coords[1])
+							if x - self.r <= 0:
+								x = 1;
+							elif x + self.r >= self.canvas.winfo_width():
+								x = self.canvas.winfo_width() - (2 * self.r) - 1
+							if y - self.r <= 0:
+								y = 1
+							elif y + self.r >= self.canvas.winfo_height():
+								y = self.canvas.winfo_height() - (2 * self.r) - 1;
+							self.canvas.coords(self.id, x, y, x + (self.r * 2), y + (self.r * 2));
+							self.vel = {
+								'x': (1 - self.smooth) * dx + self.smooth * self.vel['x'],
+								'y': (1 - self.smooth) * dy + self.smooth * self.vel['y']
+							}
+						]]>
+						</script>
+					</transition>
+					<transition port="input" event="left-release" target="../bouncing">
+						<parameter name='tagorid' type='int' default='None' />
+						<script>
+							self.canvas.itemconfig(self.id, fill="red")
+						</script>
+					</transition>
+				</state>
+				<state id='selected'>
+					<transition port="input" event="left-click" target="../dragging" cond='tagorid == id(self)'>
+						<parameter name='tagorid' type='int' default='None' />
+					</transition>
+					<transition port="input" event="delete" target=".">
+						<parameter name='tagorid' type='int' default='None' />
+						<raise event="delete_self" scope="local" />
+					</transition>
+				</state>
+				<transition event="delete_self" target='../deleted'>
+					<raise event="delete_ball" scope="narrow" target="'parent'">
+						<parameter expr='self.association_name' />
+					</raise>
+				</transition>
+			</state>
+			<state id='deleted' />
+		</scxml>
+	</class>
+</diagram>
