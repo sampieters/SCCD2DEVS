@@ -62,7 +62,7 @@ class DEVSGenerator(Visitor):
         self.writer.beginMethodBody()
 
         self.writer.addAssignment(GLC.SelfProperty("to_send"),
-                                  f"[(\"{class_diagram.default_class.name}\", 0, \"Initialize\")]")
+                                  f"[(\"{class_diagram.default_class.name}\", 0, \"Start\")]")
         self.writer.endMethodBody()
         self.writer.endConstructor()
         self.writer.endClass()
@@ -107,8 +107,8 @@ class DEVSGenerator(Visitor):
         self.writer.beginMethodBody()
         self.writer.addAssignment("out_dict", "{}")
 
-        self.writer.beginForLoopIterateArray(GLC.SelfProperty("State.to_send"), "(target, message)")
-        self.writer.addAssignment(f"out_dict[self.output[target]]", "[message]")
+        self.writer.beginForLoopIterateArray(GLC.SelfProperty("State.to_send"), "(target, id, message)")
+        self.writer.addAssignment(f"out_dict[self.output[target]]", "[(message, id)]")
         self.writer.endForLoopIterateArray()
 
         self.writer.add(GLC.ReturnStatement("out_dict"))
@@ -215,10 +215,93 @@ class DEVSGenerator(Visitor):
                 GLC.SelfProperty(f"associations[\"{association.name}\"]"),
                 GLC.FunctionCall("Association",
                                  [GLC.String(association.to_class), f"{association.min}", f"{association.max}"]))
+            
+        # TODO: Switch instance to write in constructor instead of the atomic devs because corresponds better
+        constructor = class_node.constructors[0]
+        if class_node.statechart:
+            self.writer.addVSpace()
+            if constructor.parent_class.statechart.big_step_maximality == "take_one":
+                self.writer.addAssignment(GLC.Property(GLC.SelfProperty("semantics"), "big_step_maximality"), GLC.Property("StatechartSemantics", "TakeOne"))
+            elif constructor.parent_class.statechart.big_step_maximality == "take_many":
+                self.writer.addAssignment(GLC.Property(GLC.SelfProperty("semantics"), "big_step_maximality"), GLC.Property("StatechartSemantics", "TakeMany"))
+
+            if constructor.parent_class.statechart.internal_event_lifeline == "queue":
+                self.writer.addAssignment(GLC.Property(GLC.SelfProperty("semantics"), "internal_event_lifeline"), GLC.Property("StatechartSemantics", "Queue"))
+            elif constructor.parent_class.statechart.internal_event_lifeline == "next_small_step":
+                self.writer.addAssignment(GLC.Property(GLC.SelfProperty("semantics"), "internal_event_lifeline"), GLC.Property("StatechartSemantics", "NextSmallStep"))
+            elif constructor.parent_class.statechart.internal_event_lifeline == "next_combo_step":
+                self.writer.addAssignment(GLC.Property(GLC.SelfProperty("semantics"), "internal_event_lifeline"), GLC.Property("StatechartSemantics", "NextComboStep"))
+
+            if constructor.parent_class.statechart.input_event_lifeline == "first_small_step":
+                self.writer.addAssignment(GLC.Property(GLC.SelfProperty("semantics"), "input_event_lifeline"), GLC.Property("StatechartSemantics", "FirstSmallStep"))
+            elif constructor.parent_class.statechart.input_event_lifeline == "first_combo_step":
+                self.writer.addAssignment(GLC.Property(GLC.SelfProperty("semantics"), "input_event_lifeline"), GLC.Property("StatechartSemantics", "FirstComboStep"))
+            elif constructor.parent_class.statechart.input_event_lifeline == "whole":
+                self.writer.addAssignment(GLC.Property(GLC.SelfProperty("semantics"), "input_event_lifeline"), GLC.Property("StatechartSemantics", "Whole"))
+
+            if constructor.parent_class.statechart.priority == "source_parent":
+                self.writer.addAssignment(GLC.Property(GLC.SelfProperty("semantics"), "priority"), GLC.Property("StatechartSemantics", "SourceParent"))
+            elif constructor.parent_class.statechart.priority == "source_child":
+                self.writer.addAssignment(GLC.Property(GLC.SelfProperty("semantics"), "priority"), GLC.Property("StatechartSemantics", "SourceChild"))
+
+            if constructor.parent_class.statechart.concurrency == "single":
+                self.writer.addAssignment(GLC.Property(GLC.SelfProperty("semantics"), "concurrency"), GLC.Property("StatechartSemantics", "Single"))
+            elif constructor.parent_class.statechart.concurrency == "many":
+                self.writer.addAssignment(GLC.Property(GLC.SelfProperty("semantics"), "concurrency"), GLC.Property("StatechartSemantics", "Many"))
+            
+            self.writer.addVSpace()
+            self.writer.addComment("build Statechart structure")
+            self.writer.add(GLC.FunctionCall(GLC.SelfProperty("build_statechart_structure"), []))
+
+        if constructor.parent_class.attributes:
+            self.writer.addVSpace()
+            self.writer.addComment("user defined attributes")
+            for attribute in constructor.parent_class.attributes:
+                if attribute.init_value is None :
+                    self.writer.addAssignment(GLC.SelfProperty(attribute.name), GLC.NoneExpression())
+                else :
+                    self.writer.addAssignment(GLC.SelfProperty(attribute.name), attribute.init_value)
+
+        self.writer.addVSpace()
+        self.writer.addComment("call user defined constructor")
+        self.writer.beginSuperClassMethodCall(f"{constructor.parent_class.name}Instance", "user_defined_constructor")
+        for p in constructor.getParams():
+            # we can't do p.accept(self) here because 'p' is a FormalParameter
+            # and we want to write it as an actual parameter
+            self.writer.addActualParameter(p.getIdent())
+        self.writer.endSuperClassMethodCall()
+
+
         self.writer.endMethodBody()
         self.writer.endConstructor()
 
-        # TODO: costructor and destructor
+        # visit constructor
+                # user defined constructor
+        self.writer.beginMethod("user_defined_constructor")
+        for p in constructor.getParams():
+            p.accept(self)
+        self.writer.beginMethodBody()
+        for super_class in constructor.parent_class.super_classes:
+            # begin call
+            if super_class in constructor.parent_class.super_class_objs:
+                self.writer.beginSuperClassMethodCall(super_class, "user_defined_constructor")
+            else:
+                self.writer.beginSuperClassConstructorCall(super_class)
+            # write actual parameters
+            if super_class in constructor.super_class_parameters:
+                for p in constructor.super_class_parameters[super_class]:
+                    self.writer.addActualParameter(p)
+            # end call
+            if super_class in constructor.parent_class.super_class_objs:
+                self.writer.endSuperClassMethodCall()
+            else:
+                self.writer.endSuperClassConstructorCall()
+        self.writer.addRawCode(constructor.body)
+        self.writer.endMethodBody()
+        self.writer.endMethod()
+
+        # visit destructor
+        class_node.destructors[0].accept(self)
 
         # visit methods
         for i in class_node.methods:
@@ -267,17 +350,18 @@ class DEVSGenerator(Visitor):
         self.writer.addAssignment("all_inputs", "inputs[self.obj_manager_in]")
 
         self.writer.beginForLoopIterateArray("all_inputs", "input")
-        self.writer.beginIf(GLC.EqualsExpression("input", GLC.String("Initialize")))
+        self.writer.beginIf(GLC.EqualsExpression("input[0]", GLC.String("Initialize")))
 
         self.writer.add(GLC.FunctionCall("self.State.append", [GLC.FunctionCall(f"{class_node.name}Instance")]))
         self.writer.endIf()
-        self.writer.beginElseIf(GLC.EqualsExpression("input", GLC.String("Start")))
+        self.writer.beginElseIf(GLC.EqualsExpression("input[0]", GLC.String("Start")))
+        self.writer.add(GLC.FunctionCall(GLC.SelfProperty("State[input[1]].start")))
         self.writer.endElseIf()
-        self.writer.beginElseIf(GLC.EqualsExpression("input", GLC.String("Delete")))
+        self.writer.beginElseIf(GLC.EqualsExpression("input[0]", GLC.String("Delete")))
         self.writer.endElseIf()
-        self.writer.beginElseIf(GLC.EqualsExpression("input", GLC.String("Associate")))
+        self.writer.beginElseIf(GLC.EqualsExpression("input[0]", GLC.String("Associate")))
         self.writer.endElseIf()
-        self.writer.beginElseIf(GLC.EqualsExpression("input", GLC.String("Disassociate")))
+        self.writer.beginElseIf(GLC.EqualsExpression("input[0]", GLC.String("Disassociate")))
         self.writer.endElseIf()
         self.writer.endForLoopIterateArray()
 
@@ -319,7 +403,10 @@ class DEVSGenerator(Visitor):
         self.writer.addActualParameter("name")
         self.writer.endSuperClassConstructorCall()
 
-        self.writer.addAssignment(GLC.SelfProperty("State"), "[]")
+        if constructor.parent_class.name == constructor.parent_class.class_diagram.default_class.name:
+            self.writer.addAssignment(GLC.SelfProperty("State"), f"[{constructor.parent_class.name}Instance()]")
+        else:
+            self.writer.addAssignment(GLC.SelfProperty("State"), "[]")
 
         self.writer.addAssignment(GLC.SelfProperty("obj_manager_in"),
                                   GLC.FunctionCall(GLC.SelfProperty("addInPort"), [GLC.String("obj_manager_in")]))
