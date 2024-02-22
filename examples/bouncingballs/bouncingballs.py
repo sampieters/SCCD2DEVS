@@ -215,7 +215,7 @@ class Field(RuntimeClassBase):
     
     def user_defined_constructor(self):
         self.field_window = ui.new_window(800,600,"BouncingBalls");
-        self.canvas = ui.append_canvas(self.field_window,800,600,{'background':'#eee'});
+        self.canvas = ui.append_canvas(self.field_window,800,550,{'background':'#eee'});
         ui.bind_event(self.field_window, ui.EVENTS.WINDOW_CLOSE, self.controller, 'window_close', self.inports['field_ui']);
         ui.bind_event(self.field_window, ui.EVENTS.KEY_PRESS, self.controller, 'key_press', self.inports['field_ui']);
         ui.bind_event(self.canvas.element, ui.EVENTS.MOUSE_RIGHT_CLICK,    self.controller, 'right_click', self.inports['field_ui']);
@@ -384,7 +384,7 @@ class Field(RuntimeClassBase):
         self.association_name = association_name
     
     def _root_initializing_0_exec(self, parameters):
-        self.big_step.outputEventOM(Event("create_instance", None, [self, "buttons", "Button", self, 'create_new_field', 'Spawn New Window']))
+        self.big_step.outputEventOM(Event("create_instance", None, [self, "buttons", "Button", self.field_window, 'create_new_field', 'Spawn New Window']))
     
     def _root_creating_0_exec(self, parameters):
         association_name = parameters[0]
@@ -426,7 +426,7 @@ class Field(RuntimeClassBase):
         RuntimeClassBase.initializeStatechart(self)
 
 class Button(RuntimeClassBase):
-    def __init__(self, controller, parent, event_name, button_text):
+    def __init__(self, controller, tkparent, event_name, button_text):
         RuntimeClassBase.__init__(self, controller)
         
         self.inports["button_ui"] = controller.addInputPort("button_ui", self)
@@ -441,11 +441,11 @@ class Button(RuntimeClassBase):
         self.build_statechart_structure()
         
         # call user defined constructor
-        Button.user_defined_constructor(self, parent, event_name, button_text)
+        Button.user_defined_constructor(self, tkparent, event_name, button_text)
     
-    def user_defined_constructor(self, parent, event_name, button_text):
+    def user_defined_constructor(self, tkparent, event_name, button_text):
         self.event_name = event_name;
-        button = ui.append_button(parent.field_window, event_name);
+        button = ui.append_button(tkparent, event_name);
         ui.bind_event(button.element, ui.EVENTS.MOUSE_CLICK, self.controller, 'mouse_click', self.inports['button_ui']);
     
     def user_defined_destructor(self):

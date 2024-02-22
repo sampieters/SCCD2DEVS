@@ -105,7 +105,7 @@
             <body>
                 <![CDATA[
                 self.field_window = ui.new_window(800,600,"BouncingBalls");
-                self.canvas = ui.append_canvas(self.field_window,800,600,{'background':'#eee'});
+                self.canvas = ui.append_canvas(self.field_window,800,550,{'background':'#eee'});
                 ui.bind_event(self.field_window, ui.EVENTS.WINDOW_CLOSE, self.controller, 'window_close', self.inports['field_ui']);
                 ui.bind_event(self.field_window, ui.EVENTS.KEY_PRESS, self.controller, 'key_press', self.inports['field_ui']);
                 ui.bind_event(self.canvas.element, ui.EVENTS.MOUSE_RIGHT_CLICK,    self.controller, 'right_click', self.inports['field_ui']);
@@ -138,7 +138,7 @@
                         <raise scope="cd" event="create_instance">
                             <parameter expr='"buttons"' />
                             <parameter expr='"Button"' />
-                            <parameter expr="self" />
+                            <parameter expr="self.field_window" />
                             <parameter expr="'create_new_field'" />
                             <parameter expr="'Spawn New Window'" />
                         </raise>
@@ -239,13 +239,13 @@
         </relationships>
         <inport name="button_ui"/>
         <constructor>
-            <parameter name="parent" type="Field" />
+            <parameter name="tkparent" type="object" />
             <parameter name="event_name" type="str" />
             <parameter name="button_text" type="str" />
             <body>
                 <![CDATA[
                 self.event_name = event_name;
-                button = ui.append_button(parent.field_window, event_name);
+                button = ui.append_button(tkparent, event_name);
                 ui.bind_event(button.element, ui.EVENTS.MOUSE_CLICK, self.controller, 'mouse_click', self.inports['button_ui']);
                 ]]>
             </body>
