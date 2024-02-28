@@ -85,7 +85,9 @@ class ui:
             elif event == ui.EVENTS.WINDOW_CLOSE :
                 #TODO: Quick fix, use a better version of pypdevs because this one can only send strings. Be sure to not set any spaces in the second argument otherwise it
                 # does not register
-                source = "self.State[0].field_window"
+                #source = "self.State[0].field_window"
+
+                source = "list(self.instances)[0].field_window"
                 ui.simulator.realtime_interrupt(f"{port} Event(\"{raise_name}\",self.{port},[{source}])")
                 
                 #controller.addInput(Event(raise_name, port, [source]))

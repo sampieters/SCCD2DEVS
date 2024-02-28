@@ -26,7 +26,7 @@
                     <state id="main_behaviour" initial="initializing">
                         <state id="initializing">
                             <transition target="../running">
-                                <raise event="create_field" />
+                                <raise event="create_field" />        
                             </transition>
                         </state>
                         <state id="running">
@@ -105,7 +105,7 @@
             <body>
                 <![CDATA[
                 self.field_window = ui.new_window(800,600,"BouncingBalls");
-                self.canvas = ui.append_canvas(self.field_window,800,600,{'background':'#eee'});
+                self.canvas = ui.append_canvas(self.field_window,800,550,{'background':'#eee'});
                 ui.bind_event(self.field_window, ui.EVENTS.WINDOW_CLOSE, self.controller, 'window_close', self.inports['field_ui']);
                 ui.bind_event(self.field_window, ui.EVENTS.KEY_PRESS, self.controller, 'key_press', self.inports['field_ui']);
                 ui.bind_event(self.canvas.element, ui.EVENTS.MOUSE_RIGHT_CLICK,    self.controller, 'right_click', self.inports['field_ui']);
@@ -138,7 +138,7 @@
                         <raise scope="cd" event="create_instance">
                             <parameter expr='"buttons"' />
                             <parameter expr='"Button"' />
-                            <parameter expr="self" />
+                            <parameter expr="self.field_window" />
                             <parameter expr="'create_new_field'" />
                             <parameter expr="'Spawn New Window'" />
                         </raise>
@@ -232,20 +232,20 @@
             </state>
         </scxml>
     </class>
-
+    
     <class name="Button">
         <relationships>
             <association name="parent" class="Field" min="1" max="1" />
         </relationships>
         <inport name="button_ui"/>
         <constructor>
-            <parameter name="parent" type="Field" />
+            <parameter name="tkparent" type="object" />
             <parameter name="event_name" type="str" />
             <parameter name="button_text" type="str" />
             <body>
                 <![CDATA[
                 self.event_name = event_name;
-                button = ui.append_button(parent.field_window, event_name);
+                button = ui.append_button(tkparent, event_name);
                 ui.bind_event(button.element, ui.EVENTS.MOUSE_CLICK, self.controller, 'mouse_click', self.inports['button_ui']);
                 ]]>
             </body>
@@ -269,7 +269,7 @@
             </state>
         </scxml>
     </class>
-
+    
     <class name="Ball">
         <atrribute name="element" />
         <attribute name="canvas" />
@@ -312,7 +312,7 @@
                         <script>
                             <![CDATA[
                             self.association_name = association_name
-                            ]]>
+                            ]]>                            
                         </script>
                     </transition>
                 </state>
@@ -320,13 +320,13 @@
                     <transition after="(20 - self.getSimulatedTime() % 20) / 1000.0" target=".">
                         <script>
                             <![CDATA[
-                            pos = self.element.get_position();
+                            pos = self.element.get_position();    
                             if pos.x-self.r <= 0 or pos.x+self.r >= self.canvas.get_width():
                                 self.vel['x'] = -self.vel['x'];
                             if pos.y-self.r <= 0 or pos.y+self.r >= self.canvas.get_height():
                                 self.vel['y'] = -self.vel['y'];
                             self.element.move(self.vel['x'], self.vel['y']);
-                            ]]>
+                            ]]>                            
                         </script>
                     </transition>
                     <transition port="ball_ui" event="mouse_press" target="../selected" cond="button == ui.MOUSE_BUTTONS.LEFT">
@@ -336,7 +336,7 @@
                         <script>
                             <![CDATA[
                             self.element.set_color("#ff0");
-                            ]]>
+                            ]]>                            
                         </script>
                     </transition>
                 </state>
@@ -377,7 +377,7 @@
                         <script>
                             <![CDATA[
                             self.element.set_color("#f00");
-                            ]]>
+                            ]]>                            
                         </script>
                     </transition>
                 </state>
@@ -392,7 +392,7 @@
                             ]]>
                         </script>
                     </transition>
-                    <transition event="delete_self" target='../../deleted'>
+                    <transition event="delete_self" target='../../deleted'>                    
                         <raise event="delete_ball" scope="narrow" target="'parent'">
                             <parameter expr='self.association_name' />
                         </raise>

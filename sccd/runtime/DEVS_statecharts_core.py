@@ -734,7 +734,50 @@ class ObjectManagerBase(object):
                
     def start(self):
         for i in self.instances:
-            i.start()                     
+            i.start()
+
+    def handleInput(self):
+        while not self.input_queue.isEmpty():
+            event_time = self.input_queue.getEarliestTime()
+            e = self.input_queue.pop()
+            
+            #TODO: tot nu toe zal dit werken maar niet 
+            #input_port = self.input_ports[e.getPort()]
+            input_port = e.getPort()
+
+            #target_instance = input_port.instance
+
+            target_instance = list(self.instances)[0]
+            #target_instance = self.State[0]
+            if target_instance == None:
+                self.broadcast(e, event_time - self.simulated_time)
+            else:
+                target_instance.addEvent(e, event_time - self.simulated_time)
+
+    def addInput(self, input_event_list, time_offset = 0, force_internal=False):
+        # force_internal is for narrow_cast events, otherwise these would arrive as external events (on the current wall-clock time)
+        if not isinstance(input_event_list, list):
+            input_event_list = [input_event_list]
+
+        for e in input_event_list:
+            if e.getName() == "":
+                raise InputException("Input event can't have an empty name.")
+            
+            #if e.getPort() not in self.IPorts:
+            #    raise InputException("Input port mismatch, no such port: " + e.getPort() + ".")
+                
+            if force_internal:
+                self.input_queue.add((0 if self.simulated_time is None else self.simulated_time) + time_offset, e)
+            else:
+                # TODO; changed this from self.accurate_time.get_wct() to self.simulated_time
+                self.input_queue.add((0 if self.simulated_time is None else 0) + time_offset, e)
+
+
+
+
+
+
+
 
     def handleEvent(self, e):
         self.handlers[e.getName()](e.getParameters())
@@ -796,13 +839,19 @@ class ObjectManagerBase(object):
             #new_instance = self.createInstance(class_name, parameters[3:])
 
             id = None
-            for index, i in enumerate(self.State):
+            for index, i in enumerate(self.instances):
                 if i == source:
                     id = index
                     break
 
             # Normally [3:] but instance cannot be past along, need to fix this
-            self.to_send.append((association_name, class_name, id, Event("create_instance", None, parameters[4:])))
+            #self.to_send.append((self.name, class_name, id, Event("create_instance", None, parameters[4:])))
+                
+
+            hulp = [association_name]
+            hulp.extend(parameters[3:])
+            #self.to_send.append((self.name, class_name, id, Event('create_instance', None, hulp)))
+            self.to_send.append((None, class_name, id, Event('create_instance', None, hulp)))
 
             #if not new_instance:
             #    raise ParameterException("Creating instance: no such class: " + class_name)

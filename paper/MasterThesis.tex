@@ -1,0 +1,70 @@
+\documentclass[a4paper,12pt]{report}
+
+\usepackage[masterthesis,english]{comp}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Translating statecharts and class diagrams to DEVS}
+\author{Sam Pieters}
+\principaladviser{Hans Vangheluwe}
+\assistantadviser{Joeri Exelmans}
+\submitdate{May 2024}
+\bibfile{references}
+\bibpunct{[}{]}{;}{a}{,}{,}
+%\bibliographystyle{alpha}
+
+% Make hyperref package use black links
+\hypersetup{
+	pdfauthor={Author of this thesis},
+	pdftitle={Title of this masterThesis},
+	pdfkeywords={some keywords},
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+
+%correct faulty hyphenation here, most usefull for "nederlandstalige samenvatting" as english is hyphenated automatically
+\hyphenation{die-nen}
+
+% Make sure links to images link correctly to the image and not the text
+\usepackage[all]{hypcap}
+
+%TODO COMMANDS
+\newcommand{\todo}[1]{
+	\addcontentsline{tdo}{todo}{\protect{#1}}
+    \textcolor{blue}{TODO: #1} %\marginpar{#1}
+}
+
+\makeatletter \newcommand \listoftodos{\section*{Todo list} \@starttoc{tdo}}
+  \newcommand\l@todo[2]
+    {\par\noindent \textit{#2}, \parbox{14cm}{#1}\par} \makeatother
+
+%Make sure that subenumerations are also numbered and referenced correctly
+\renewcommand{\theenumii}{.\arabic{enumii}}
+\renewcommand{\labelenumii}{\labelenumi\arabic{enumii}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%\listoftodos
+%\newpage
+\frontpages
+\input{00-NedSamenvatting}
+\input{00-Acknowledgements}
+\input{00-Abstract}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\mainbodypages
+\input{01-Introduction}
+\input{02-Background.tex}
+\input{03-Methodology.tex}
+\input{04-Implementation.tex}
+\input{05-Examples.tex}
+\input{99-Conclusions}
+\backpages
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{appendices}
+\input{AA-Testcode}
+\end{appendices}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}

@@ -17,6 +17,7 @@ from sccd.compiler.javascript_writer import JavascriptWriter
 from sccd.compiler.python_writer import PythonWriter
 
 def generate(input_file, output_file, target_language, platform):
+	#TODO: Set DEVS to platform and not to language.
 	sccd = xmlToSccd(input_file)
 
 	if not target_language:

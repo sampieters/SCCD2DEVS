@@ -1,0 +1,175 @@
+<?xml version="1.0" ?>
+<diagram author="Raphael Mannadiar" name="Traffic_Light_Python_Version">
+    <top>
+        from sccd.runtime.libs.ui import ui
+    </top>
+
+    <inport name="ui" />
+
+    <class name="MainApp" default="true">
+        <relationships>
+            <association name="trafficlight" class="TrafficLight" />
+        </relationships>
+        <method name="MainApp">
+            <body>
+                <![CDATA[
+                self.canvas   = ui.append_canvas(ui.window,100,310,{'background':'#eee'});
+                police_button = ui.append_button(ui.window, 'Police interrupt');
+                quit_button   = ui.append_button(ui.window, 'Quit');
+                ui.bind_event(police_button.element, ui.EVENTS.MOUSE_CLICK, self.controller, 'police_interrupt_clicked');
+                ui.bind_event(quit_button.element, ui.EVENTS.MOUSE_CLICK, self.controller, 'quit_clicked');
+                ]]>
+            </body>
+        </method>
+        <scxml initial="initializing">
+            <state id="initializing">
+                <transition target="../creating">
+                    <raise scope="cd" event="create_instance">
+                        <parameter expr='"trafficlight"' />
+                        <parameter expr='"TrafficLight"' />
+                        <parameter expr="self.canvas" />
+                    </raise>
+                </transition>
+            </state>
+            <state id="creating">
+                <transition event="instance_created" target="../initialized">
+                    <parameter name="association_name" type="string"/>
+                    <raise scope="cd" event="start_instance">
+                        <parameter expr="association_name" />
+                    </raise>
+                    <raise scope="narrow" event="set_association_name" target="association_name">
+                        <parameter expr="association_name" />
+                    </raise>
+                </transition>
+            </state>
+            <state id="initialized">
+            </state>
+        </scxml>
+    </class>
+
+    <class name="TrafficLight">
+        <relationships>
+        </relationships>
+        <method name="TrafficLight">
+            <parameter name="canvas" />
+            <body>
+                <![CDATA[
+                size        = 100;
+                offset      = size+5;
+                self.RED    = 0;
+                self.YELLOW = 1;
+                self.GREEN  = 2;
+                self.colors = ['#f00','#ff0','#0f0']
+                self.lights = [
+                    canvas.add_rectangle(size/2, size/2, size, size, {'fill':'#000'}),
+                    canvas.add_rectangle(size/2, size/2+offset,     size, size, {'fill':'#000'}),
+                    canvas.add_rectangle(size/2, size/2+2*offset, size, size, {'fill':'#000'})];
+                ]]>
+            </body>
+        </method>
+        <method name="clear">
+            <body>
+                <![CDATA[
+                self.lights[self.RED].set_color('#000');
+                self.lights[self.YELLOW].set_color('#000');
+                self.lights[self.GREEN].set_color('#000');
+                ]]>
+            </body>
+        </method>
+        <method name="setGreen">
+            <body>
+                <![CDATA[
+                self.clear();
+                self.lights[self.GREEN].set_color(self.colors[self.GREEN]);
+                ]]>
+            </body>
+        </method>
+        <method name="setYellow">
+            <body>
+                <![CDATA[
+                self.clear();
+                self.lights[self.YELLOW].set_color(self.colors[self.YELLOW]);
+                ]]>
+            </body>
+        </method>
+        <method name="setRed">
+            <body>
+                <![CDATA[
+                self.clear();
+                self.lights[self.RED].set_color(self.colors[self.RED]);
+                ]]>
+            </body>
+        </method>
+        <scxml initial="on">
+            <state id="on" initial="normal">
+                <state id="normal" initial="red">
+                    <state id="red">
+                        <onentry>
+                            <script>
+                                <![CDATA[
+                                self.setRed();
+                                ]]>
+                            </script>
+                        </onentry>
+                        <transition after='3' target='../green'/>
+                    </state>
+                    <state id="green">
+                        <onentry>
+                            <script>
+                                <![CDATA[
+                                self.setGreen();
+                                ]]>
+                            </script>
+                        </onentry>
+                        <transition after='2' target='../yellow'/>
+                    </state>
+                    <state id="yellow">
+                        <onentry>
+                            <script>
+                                <![CDATA[
+                                self.setYellow();
+                                ]]>
+                            </script>
+                        </onentry>
+                    <transition after='1' target='../red'/>
+                    </state>
+                    <transition event='police_interrupt_clicked' port='ui' target='../interrupted'/>
+                    <history id="history"/>
+                </state>
+                <state id="interrupted" initial="yellow">
+                    <state id="yellow">
+                        <onentry>
+                            <script>
+                                <![CDATA[
+                                self.setYellow();
+                                ]]>
+                            </script>
+                        </onentry>
+                        <transition after='.5' target='../black'/>
+                    </state>
+                    <state id="black">
+                        <onentry>
+                            <script>
+                                <![CDATA[
+                                self.clear();
+                                ]]>
+                            </script>
+                        </onentry>
+                        <transition after='.5' target='../yellow'/>
+                    </state>
+                    <transition event='police_interrupt_clicked' port='ui' target='../normal/history'/>
+                </state>
+                <transition event='quit_clicked' port='ui' target='../off'/>
+            </state>
+            <state id="off">
+                <onentry>
+                    <script>
+                        <![CDATA[
+                        self.clear();
+                        ]]>
+                    </script>
+                </onentry>
+            </state>
+        </scxml>
+    </class>
+</diagram>
