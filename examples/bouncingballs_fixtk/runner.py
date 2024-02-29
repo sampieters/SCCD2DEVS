@@ -14,7 +14,6 @@ class OutputListener:
 		self.ui = ui
 
 	def add(self, event):
-		print("out event:", event)
 		if event.port == "ui":
 			method = getattr(self.ui, event.name)
 			method(*event.parameters)

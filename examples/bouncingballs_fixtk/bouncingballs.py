@@ -12,6 +12,9 @@ from sccd.runtime.libs import ui_v2 as ui
 from sccd.runtime.libs.utils import utils
 import random
 
+CANVAS_WIDTH = 800
+CANVAS_HEIGHT = 550
+
 # package "Bouncing_Balls_Python_Version"
 
 class MainApp(RuntimeClassBase):
@@ -214,19 +217,9 @@ class Field(RuntimeClassBase):
         Field.user_defined_constructor(self)
     
     def user_defined_constructor(self):
-        # All of these TkInter calls have been converted to in/out-events:
-        #self.field_window = ui.new_window(800,600,"BouncingBalls");
-        #self.canvas = ui.append_canvas(self.field_window,800,550,{'background':'#eee'});
-        #ui.bind_event(self.field_window, ui.EVENTS.WINDOW_CLOSE, self.controller, 'window_close', self.inports['field_ui']);
-        #ui.bind_event(self.field_window, ui.EVENTS.KEY_PRESS, self.controller, 'key_press', self.inports['field_ui']);
-        #ui.bind_event(self.canvas.element, ui.EVENTS.MOUSE_RIGHT_CLICK,    self.controller, 'right_click', self.inports['field_ui']);
-        #ui.bind_event(self.canvas.element, ui.EVENTS.MOUSE_MOVE, self.controller, 'mouse_move', self.inports['field_ui']);
-        #ui.bind_event(self.canvas.element, ui.EVENTS.MOUSE_RELEASE, self.controller, 'mouse_release', self.inports['field_ui']);
-        print("created field")
         pass
     
     def user_defined_destructor(self):
-        # ui.close_window(self.field_window);
         pass
     
     
@@ -387,7 +380,7 @@ class Field(RuntimeClassBase):
         self.big_step.outputEvent(Event("create_window", self.getOutPortName("ui"), [800, 600, "BouncingBalls", self.inports['field_ui']]))
     
     def _root_creating_canvas_enter(self):
-        self.big_step.outputEvent(Event("create_canvas", self.getOutPortName("ui"), [self.window_id, 800, 550, {'background':'#eee'}, self.inports['field_ui']]))
+        self.big_step.outputEvent(Event("create_canvas", self.getOutPortName("ui"), [self.window_id, CANVAS_WIDTH, CANVAS_HEIGHT, {'background':'#eee'}, self.inports['field_ui']]))
     
     def _root_creating_button_enter(self):
         self.big_step.outputEventOM(Event("create_instance", None, [self, "buttons", "Button", self.window_id, 'create_new_field', 'Spawn New Window']))
@@ -421,7 +414,7 @@ class Field(RuntimeClassBase):
         x = parameters[0]
         y = parameters[1]
         button = parameters[2]
-        self.big_step.outputEventOM(Event("create_instance", None, [self, "balls", "Ball", self.canvas, x, y]))
+        self.big_step.outputEventOM(Event("create_instance", None, [self, "balls", "Ball", self.canvas_id, x, y]))
     
     def _root_running_main_behaviour_creating_ball_0_exec(self, parameters):
         association_name = parameters[0]
@@ -479,10 +472,6 @@ class Button(RuntimeClassBase):
     def user_defined_constructor(self, window_id, event_name, button_text):
         self.window_id = window_id;
         self.event_name = event_name;
-        
-        # Translated to events:
-        #button = ui.append_button(tkparent, event_name);
-        #ui.bind_event(button.element, ui.EVENTS.MOUSE_CLICK, self.controller, 'mouse_click', self.inports['button_ui']);
     
     def user_defined_destructor(self):
         pass
@@ -546,7 +535,7 @@ class Button(RuntimeClassBase):
         RuntimeClassBase.initializeStatechart(self)
 
 class Ball(RuntimeClassBase):
-    def __init__(self, controller, canvas, x, y):
+    def __init__(self, controller, canvas_id, x, y):
         RuntimeClassBase.__init__(self, controller)
         
         self.inports["ball_ui"] = controller.addInputPort("ball_ui", self)
@@ -561,17 +550,18 @@ class Ball(RuntimeClassBase):
         self.build_statechart_structure()
         
         # user defined attributes
-        self.canvas = None
+        self.canvas_id = None
+        self.pos = None
         
         # call user defined constructor
-        Ball.user_defined_constructor(self, canvas, x, y)
+        Ball.user_defined_constructor(self, canvas_id, x, y)
     
-    def user_defined_constructor(self, canvas, x, y):
-        self.canvas = canvas;
+    def user_defined_constructor(self, canvas_id, x, y):
+        self.canvas_id = canvas_id;
         self.r = 20.0;
         self.vel = {'x': random.uniform(-5.0, 5.0), 'y': random.uniform(-5.0, 5.0)};
-        self.mouse_pos = {};
-        self.smooth = 0.4; # value between 0 and 1
+        self.pos = {'x': x, 'y': y};
+        self.smooth = 0.6; # value between 0 and 1
         
         # TODO:
         #circle = self.canvas.add_circle(x, y, self.r, {'fill':'#000'});
@@ -581,7 +571,8 @@ class Ball(RuntimeClassBase):
         #self.element = circle;
     
     def user_defined_destructor(self):
-        self.canvas.remove_element(self.element);
+        #self.canvas.remove_element(self.element);
+        pass
     
     
     # builds Statechart structure
@@ -596,24 +587,29 @@ class Ball(RuntimeClassBase):
         # state /main_behaviour/initializing
         self.states["/main_behaviour/initializing"] = State(2, "/main_behaviour/initializing", self)
         
+        # state /main_behaviour/creating_circle
+        self.states["/main_behaviour/creating_circle"] = State(3, "/main_behaviour/creating_circle", self)
+        self.states["/main_behaviour/creating_circle"].setEnter(self._main_behaviour_creating_circle_enter)
+        
         # state /main_behaviour/bouncing
-        self.states["/main_behaviour/bouncing"] = State(3, "/main_behaviour/bouncing", self)
+        self.states["/main_behaviour/bouncing"] = State(4, "/main_behaviour/bouncing", self)
         self.states["/main_behaviour/bouncing"].setEnter(self._main_behaviour_bouncing_enter)
         self.states["/main_behaviour/bouncing"].setExit(self._main_behaviour_bouncing_exit)
         
         # state /main_behaviour/dragging
-        self.states["/main_behaviour/dragging"] = State(4, "/main_behaviour/dragging", self)
+        self.states["/main_behaviour/dragging"] = State(5, "/main_behaviour/dragging", self)
         
         # state /main_behaviour/selected
-        self.states["/main_behaviour/selected"] = State(5, "/main_behaviour/selected", self)
+        self.states["/main_behaviour/selected"] = State(6, "/main_behaviour/selected", self)
         
         # state /deleted
-        self.states["/deleted"] = State(6, "/deleted", self)
+        self.states["/deleted"] = State(7, "/deleted", self)
         
         # add children
         self.states[""].addChild(self.states["/main_behaviour"])
         self.states[""].addChild(self.states["/deleted"])
         self.states["/main_behaviour"].addChild(self.states["/main_behaviour/initializing"])
+        self.states["/main_behaviour"].addChild(self.states["/main_behaviour/creating_circle"])
         self.states["/main_behaviour"].addChild(self.states["/main_behaviour/bouncing"])
         self.states["/main_behaviour"].addChild(self.states["/main_behaviour/dragging"])
         self.states["/main_behaviour"].addChild(self.states["/main_behaviour/selected"])
@@ -622,10 +618,16 @@ class Ball(RuntimeClassBase):
         self.states["/main_behaviour"].default_state = self.states["/main_behaviour/initializing"]
         
         # transition /main_behaviour/initializing
-        _main_behaviour_initializing_0 = Transition(self, self.states["/main_behaviour/initializing"], [self.states["/main_behaviour/bouncing"]])
+        _main_behaviour_initializing_0 = Transition(self, self.states["/main_behaviour/initializing"], [self.states["/main_behaviour/creating_circle"]])
         _main_behaviour_initializing_0.setAction(self._main_behaviour_initializing_0_exec)
         _main_behaviour_initializing_0.setTrigger(Event("set_association_name", None))
         self.states["/main_behaviour/initializing"].addTransition(_main_behaviour_initializing_0)
+        
+        # transition /main_behaviour/creating_circle
+        _main_behaviour_creating_circle_0 = Transition(self, self.states["/main_behaviour/creating_circle"], [self.states["/main_behaviour/bouncing"]])
+        _main_behaviour_creating_circle_0.setAction(self._main_behaviour_creating_circle_0_exec)
+        _main_behaviour_creating_circle_0.setTrigger(Event("circle_created", None))
+        self.states["/main_behaviour/creating_circle"].addTransition(_main_behaviour_creating_circle_0)
         
         # transition /main_behaviour/bouncing
         _main_behaviour_bouncing_0 = Transition(self, self.states["/main_behaviour/bouncing"], [self.states["/main_behaviour/bouncing"]])
@@ -659,8 +661,11 @@ class Ball(RuntimeClassBase):
         _main_behaviour_selected_1.setTrigger(Event("delete_self", None))
         self.states["/main_behaviour/selected"].addTransition(_main_behaviour_selected_1)
     
+    def _main_behaviour_creating_circle_enter(self):
+        self.big_step.outputEvent(Event("create_circle", self.getOutPortName("ui"), [self.canvas_id, self.pos['x'], self.pos['y'], self.r, {'fill':'#000'}, self.inports['ball_ui']]))
+    
     def _main_behaviour_bouncing_enter(self):
-        self.addTimer(0, (20 - self.getSimulatedTime() % 20) / 1000.0)
+        self.addTimer(0, 0.02)
     
     def _main_behaviour_bouncing_exit(self):
         self.removeTimer(0)
@@ -669,19 +674,29 @@ class Ball(RuntimeClassBase):
         association_name = parameters[0]
         self.association_name = association_name
     
+    def _main_behaviour_creating_circle_0_exec(self, parameters):
+        canvas_id = parameters[0]
+        circle_id = parameters[1]
+        self.circle_id = circle_id
+        self.big_step.outputEvent(Event("bind_canvas_event", self.getOutPortName("ui"), [self.canvas_id, circle_id, ui.EVENTS.MOUSE_PRESS, 'mouse_press', self.inports['ball_ui']]))
+        self.big_step.outputEvent(Event("bind_canvas_event", self.getOutPortName("ui"), [self.canvas_id, circle_id, ui.EVENTS.MOUSE_MOVE, 'mouse_move', self.inports['ball_ui']]))
+        self.big_step.outputEvent(Event("bind_canvas_event", self.getOutPortName("ui"), [self.canvas_id, circle_id, ui.EVENTS.MOUSE_RELEASE, 'mouse_release', self.inports['ball_ui']]))
+    
     def _main_behaviour_bouncing_0_exec(self, parameters):
-        pos = self.element.get_position();    
-        if pos.x-self.r <= 0 or pos.x+self.r >= self.canvas.get_width():
+        # Invert velocity when colliding with canvas border:
+        if self.pos['x']-self.r <= 0 or self.pos['x']+self.r >= CANVAS_WIDTH:
             self.vel['x'] = -self.vel['x'];
-        if pos.y-self.r <= 0 or pos.y+self.r >= self.canvas.get_height():
+        if self.pos['y']-self.r <= 0 or self.pos['y']+self.r >= CANVAS_HEIGHT:
             self.vel['y'] = -self.vel['y'];
-        self.element.move(self.vel['x'], self.vel['y']);
+        self.big_step.outputEvent(Event("move_element", self.getOutPortName("ui"), [self.canvas_id, self.circle_id, self.vel['x'], self.vel['y']]))
+        self.pos['x'] += self.vel['x']
+        self.pos['y'] += self.vel['y']
     
     def _main_behaviour_bouncing_1_exec(self, parameters):
         x = parameters[0]
         y = parameters[1]
         button = parameters[2]
-        self.element.set_color("#ff0");
+        self.big_step.outputEvent(Event("set_element_color", self.getOutPortName("ui"), [self.canvas_id, self.circle_id, '#ff0']))
     
     def _main_behaviour_bouncing_1_guard(self, parameters):
         x = parameters[0]
@@ -693,32 +708,25 @@ class Ball(RuntimeClassBase):
         x = parameters[0]
         y = parameters[1]
         button = parameters[2]
-        dx = x - self.mouse_pos['x'];
-        dy = y - self.mouse_pos['y'];
+        # Always keep ball within canvas:
+        x = min(max(0+self.r, x), CANVAS_WIDTH-self.r)
+        y = min(max(0+self.r, y), CANVAS_HEIGHT-self.r)
         
-        self.element.move(dx, dy);
+        dx = x - self.pos['x']
+        dy = y - self.pos['y']
         
-        # keep ball within boundaries
-        pos = self.element.get_position();
-        if pos.x-self.r <= 0 :
-            pos.x = self.r + 1;
-        elif pos.x+self.r >= self.canvas.width :
-            pos.x = self.canvas.width-self.r-1;
-        if pos.y-self.r <= 0 :
-            pos.y = self.r + 1;
-        elif pos.y+self.r >= self.canvas.height :
-            pos.y = self.canvas.height-self.r-1;
-        self.element.set_position(pos.x, pos.y);
-        self.mouse_pos = {'x':x, 'y':y};
         self.vel = {
             'x': (1-self.smooth)*dx + self.smooth*self.vel['x'],
             'y': (1-self.smooth)*dy + self.smooth*self.vel['y']
-        };
+        }
+        
+        self.pos = {'x': x, 'y': y}
+        self.big_step.outputEvent(Event("set_element_pos", self.getOutPortName("ui"), [self.canvas_id, self.circle_id, x-self.r, y-self.r]))
     
     def _main_behaviour_dragging_1_exec(self, parameters):
         x = parameters[0]
         y = parameters[1]
-        self.element.set_color("#f00");
+        self.big_step.outputEvent(Event("set_element_color", self.getOutPortName("ui"), [self.canvas_id, self.circle_id, '#f00']))
     
     def _main_behaviour_selected_0_exec(self, parameters):
         x = parameters[0]
@@ -734,6 +742,7 @@ class Ball(RuntimeClassBase):
     
     def _main_behaviour_selected_1_exec(self, parameters):
         self.big_step.outputEventOM(Event("narrow_cast", None, [self, 'parent', Event("delete_ball", None, [self.association_name])]))
+        self.big_step.outputEvent(Event("destroy_element", self.getOutPortName("ui"), [self.canvas_id, self.element_id]))
     
     def initializeStatechart(self):
         # enter default state

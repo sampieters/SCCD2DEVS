@@ -126,6 +126,13 @@ class UI:
         # schedule in mainloop
         self.tk.after(0, callback)
 
+    def set_element_color(self, canvas_id, element_id, color):
+        def callback():
+            canvas = self.mapping[canvas_id]
+            canvas.itemconfig(element_id, fill=color)
+        # schedule in mainloop
+        self.tk.after(0, callback)
+
     def move_element(self, canvas_id, element_id, dx, dy):
         def callback():
             canvas = self.mapping[canvas_id]
