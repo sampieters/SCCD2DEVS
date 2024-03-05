@@ -1,0 +1,282 @@
+<?xml version="1.0" ?>
+<diagram>
+    <inport name="tkinter_input" />
+    <class name="Train" default="true">
+        <relationships>
+        </relationships>
+        <constructor>
+            <parameter name="root" />
+            <body>
+                <![CDATA[
+                self.root, self.acceleration, self.velocity = root, 0.0, 0.0
+                self.root.trainIs(self)
+                ]]>
+            </body>
+        </constructor>
+        <method name="updateState">
+            <body>
+                <![CDATA[
+                self.root.updateState()
+                ]]>
+            </body>
+        </method>
+        <method name="openDoors">
+            <body>
+                <![CDATA[
+                self.root.openDoors()
+                ]]>
+            </body>
+        </method>
+        <method name="closeDoors">
+            <body>
+                <![CDATA[
+                self.root.closeDoors()
+                ]]>
+            </body>
+        </method>
+        <method name="notify">
+            <parameter name="message" />
+            <parameter name="color" />
+            <body>
+                <![CDATA[
+                self.root.notify(message, color)
+                ]]>
+            </body>
+        </method>
+        <scxml initial="paused" priority="source_child">
+            <state id="normal_operation" initial="for_history">
+                <parallel id="for_history">
+                    <state id="train" initial="train">
+                        <state id="train" initial="stopped">
+                            <state id="stopped" initial="ready_to_leave">
+                                <onentry>
+                                    <script>
+                                        <![CDATA[
+                                        self.speed = 0.0
+                                        self.acceleration = 0.0
+                                        ]]>
+                                    </script>
+                                </onentry>
+                                <state id="opened_doors">
+                                    <onentry>
+                                        <script>
+                                        <![CDATA[self.notify("Please wait before closing doors", "white")]]>
+                                        </script>
+                                    </onentry>
+                                    <transition after="5" target="./../allow_closing" />
+                                </state>
+                                <state id="in_station">
+                                    <transition event="open" port="tkinter_input" target="./../opened_doors">
+                                        <script>
+                                            <![CDATA[
+                                            self.openDoors()
+                                            ]]>
+                                        </script>
+                                    </transition>
+                                </state>
+                                <state id="allow_closing">
+                                    <onentry>
+                                        <script>
+                                            <![CDATA[
+                                            self.notify("You can now close the doors!", "white")
+                                            ]]>
+                                        </script>
+                                    </onentry>
+                                    <transition event="close" port="tkinter_input" target="./../ready_to_leave">
+                                        <script>
+                                            <![CDATA[
+                                            self.closeDoors()
+                                            ]]>
+                                        </script>
+                                    </transition>
+                                </state>
+                                <state id="ready_to_leave">
+                                    <transition event="accel" port="tkinter_input" cond="value &gt; 0" target="./../../driving">
+                                        <parameter name="value" />
+                                        <script>
+                                            <![CDATA[
+                                            self.acceleration = value
+                                            ]]>
+                                        </script>
+                                    </transition>
+                                </state>
+                            </state>
+                            <state id="approaching_station">
+                                <transition cond="self.speed &lt;= 0" target="./../stopped/in_station" />
+                                <transition event="accel" port="tkinter_input" target=".">
+                                    <parameter name="value" />
+                                    <script>
+                                        <![CDATA[
+                                        self.acceleration = value
+                                        ]]>
+                                    </script>
+                                </transition>
+                                <transition event="leave" port="tkinter_input" target=".">
+                                    <script>
+                                        <![CDATA[
+                                        self.notify("Left station without stopping", "red")
+                                        ]]>
+                                    </script>
+                                    <raise event="error" scope="broad" />
+                                </transition>
+                            </state>
+                            <state id="driving">
+                                <transition event="enter" port="tkinter_input" cond="self.speed &lt;= 50" target="./../approaching_station" />
+                                <transition cond="self.speed &gt;= 100 and self.acceleration &gt; 0" target="./../max_speed" />
+                                <transition event="accel" port="tkinter_input" target="." >
+                                    <parameter name="value" />
+                                    <script>
+                                        <![CDATA[
+                                        self.acceleration = value
+                                        ]]>
+                                    </script>
+                                </transition>
+                                <transition cond="self.speed &lt;= 0 and self.acceleration &lt; 0" target="./../stopped/ready_to_leave" />
+                                <transition event="enter" cond="self.speed &gt; 50" target="./../approaching_station">
+                                    <script>
+                                        <![CDATA[
+                                        self.notify("Entered station too fast", "red")
+                                        ]]>
+                                    </script>
+                                    <raise event="error" scope="broad" />
+                                </transition>
+                            </state>
+                            <state id="max_speed">
+                                <onentry>
+                                    <script>
+                                        <![CDATA[
+                                        self.speed = 120.0
+                                        self.acceleration = 0.0
+                                        print("MAX")
+                                        ]]>
+                                    </script>
+                                </onentry>
+                                <onexit>
+                                    <script>
+                                        <![CDATA[print("LEAVE MAX")]]>
+                                    </script>
+                                </onexit>
+                                <transition event="accel" port="tkinter_input" cond="value &lt; 0" target="./../driving" >
+                                    <parameter name="value" />
+                                    <script>
+                                        <![CDATA[
+                                        self.acceleration = value
+                                        ]]>
+                                    </script>
+                                </transition>
+                                <transition event="enter" port="tkinter_input" target="." >
+                                    <script>
+                                        <![CDATA[
+                                        self.notify("Entered station at maximum speed!", "red")
+                                        ]]>
+                                    </script>
+                                    <raise event="error" scope="broad" />
+                                </transition>
+                            </state>
+                        </state>
+                    </state>
+                    <state id="GUI_update" initial="S_">
+                        <state id="S_" initial="updating">
+                            <state id="updating">
+                                <transition after="0.02" target="." >
+                                    <script>
+                                        <![CDATA[
+                                        self.updateState()
+                                        ]]>
+                                    </script>
+                                </transition>
+                            </state>
+                        </state>
+                    </state>
+                    <state id="polling" initial="S_">
+                        <state id="S_" initial="okay">
+                            <state id="okay">
+                                <transition after="20.0" target="./../warn">
+                                    <script>
+                                        <![CDATA[
+                                        self.notify("Please press button!", "yellow")
+                                        ]]>
+                                    </script>
+                                </transition>
+                            </state>
+                            <state id="warn">
+                                <transition event="awake" port="tkinter_input" target="./../okay">
+                                    <script>
+                                        <![CDATA[
+                                        self.notify("", "gray")
+                                        ]]>
+                                    </script>
+                                </transition>
+                                <transition after="10.0" target="." >
+                                    <script>
+                                        <![CDATA[
+                                        self.notify("Did not press the button in time", "red")
+                                        ]]>
+                                    </script>
+                                    <raise event="error" scope="broad" />
+                                </transition>
+                            </state>
+                        </state>
+                    </state>
+                </parallel>
+                <history id="H" type="deep" />
+                <transition event="red_light" port="tkinter_input" target="./../emergency_stop">
+                    <script>
+                        <![CDATA[
+                        self.notify("Passed red light", "red")
+                        ]]>
+                    </script>
+                </transition>
+                <transition event="yellow_light" port="tkinter_input" cond="self.speed &gt; 50" target="./../emergency_stop">
+                    <script>
+                        <![CDATA[
+                        self.notify("Passed yellow light while driving too fast", "red")
+                        ]]>
+                    </script>
+                </transition>
+                <transition event="error" target="./../emergency_stop" />
+                <transition event="pause" port="tkinter_input" target="./../paused">
+                    <script>
+                        <![CDATA[
+                        self.notify("Paused", "white")
+                        ]]>
+                    </script>
+                </transition>
+            </state>
+            <state id="emergency_stop" >
+                <onentry>
+                    <script>
+                        <![CDATA[
+                        self.acceleration = -1
+                        ]]>
+                    </script>
+                </onentry>
+                <transition cond="self.speed &lt;= 0" target="./../finished" />\
+                <transition after="0.02" target="." >
+                    <script>
+                        <![CDATA[
+                        self.updateState()
+                        ]]>
+                    </script>
+                </transition>
+            </state>
+            <state id="finished">
+                <onentry>
+                    <script>
+                        <![CDATA[
+                        self.acceleration = 0.0
+                        self.speed = 0.0
+                        ]]>
+                    </script>
+                </onentry>
+            </state>
+            <state id="paused">
+                <transition event="continue" port="tkinter_input" target="./../normal_operation/H" >
+                    <script>
+                        <![CDATA[self.notify("", "gray")]]>
+                    </script>
+                </transition>
+            </state>
+        </scxml>
+    </class>
+</diagram>

@@ -359,15 +359,17 @@ class DEVSGenerator(Visitor):
         self.writer.addFormalParameter("inputs")
         self.writer.beginMethodBody()
 
-        self.writer.addAssignment(GLC.SelfProperty("simulated_time"), GLC.AdditionExpression(GLC.SelfProperty("simulated_time"), GLC.SelfProperty("elapsed")))
+        #self.writer.addAssignment(GLC.SelfProperty("simulated_time"), GLC.AdditionExpression(GLC.SelfProperty("simulated_time"), GLC.SelfProperty("elapsed")))
+        self.writer.addAssignment(GLC.SelfProperty("next_time"), "0")
         self.writer.addAssignment("all_inputs", "[]")
 
-        temp_list = class_node.inports
-        temp_list.extend(["obj_manager_in", "input"])
-        for inport in temp_list:
+        class_node.inports.extend(["obj_manager_in", "input"])
+        for inport in class_node.inports:
             self.writer.beginIf(GLC.ArrayContains("inputs", GLC.SelfProperty(inport)))
             self.writer.add(GLC.FunctionCall("all_inputs.extend", [f"inputs[self.{inport}]"]))
             self.writer.endIf()
+        
+        #class_node.outports.extend(["obj_manager_out", "output"])
 
         self.writer.beginForLoopIterateArray("all_inputs", "input")
        
@@ -449,9 +451,18 @@ class DEVSGenerator(Visitor):
 
         self.writer.beginMethod("intTransition")
         self.writer.beginMethodBody()
+        self.writer.addAssignment("earliest", GLC.FunctionCall("min", [GLC.SelfProperty("getEarliestEventTime()"), GLC.SelfProperty("input_queue.getEarliestTime()")]))
+        self.writer.beginIf(GLC.NotExpression(GLC.EqualsExpression("earliest", "INFINITY")))
+        self.writer.addAssignment(GLC.SelfProperty("simulated_time"), "earliest")
+        self.writer.endIf()
+
         self.writer.addAssignment(GLC.SelfProperty("to_send"), "[]")
         self.writer.add(GLC.FunctionCall(GLC.SelfProperty("handleInput")))
         self.writer.add(GLC.FunctionCall(GLC.SelfProperty("stepAll")))
+
+        self.writer.addAssignment("next_earliest", GLC.FunctionCall("min", [GLC.SelfProperty("getEarliestEventTime()"), GLC.SelfProperty("input_queue.getEarliestTime()")]))
+        self.writer.addAssignment(GLC.SelfProperty("next_time"), "next_earliest - earliest")
+
         self.writer.add(GLC.ReturnStatement(GLC.SelfProperty("instances")))
         self.writer.endMethodBody()
         self.writer.endMethod()
@@ -492,12 +503,12 @@ class DEVSGenerator(Visitor):
         self.writer.beginMethod("timeAdvance")
         self.writer.beginMethodBody()
 
-        self.writer.beginIf(GLC.NotExpression(GLC.EqualsExpression(GLC.FunctionCall("len", [GLC.SelfProperty("to_send")]), "0")))
-        self.writer.add(GLC.ReturnStatement("0"))
-        self.writer.endIf()
+        #self.writer.beginIf(GLC.NotExpression(GLC.EqualsExpression(GLC.FunctionCall("len", [GLC.SelfProperty("to_send")]), "0")))
+        #self.writer.add(GLC.ReturnStatement("0"))
+        #self.writer.endIf()
 
-        self.writer.add(GLC.ReturnStatement(GLC.FunctionCall(GLC.SelfProperty("getEarliestEventTime"))))
-
+        #self.writer.add(GLC.ReturnStatement(GLC.FunctionCall(GLC.SelfProperty("getEarliestEventTime"))))
+        self.writer.add(GLC.ReturnStatement(GLC.SelfProperty("next_time")))
         self.writer.endMethodBody()
         self.writer.endMethod()
 
@@ -523,13 +534,12 @@ class DEVSGenerator(Visitor):
 
         self.writer.addAssignment(GLC.SelfProperty("elapsed"), "0")
 
-        self.writer.addAssignment(GLC.SelfProperty("obj_manager_in"),
-                                  GLC.FunctionCall(GLC.SelfProperty("addInPort"), [GLC.String("obj_manager_in")]))
+        #self.writer.addAssignment(GLC.SelfProperty("obj_manager_in"),
+         #                         GLC.FunctionCall(GLC.SelfProperty("addInPort"), [GLC.String("obj_manager_in")]))
         self.writer.addAssignment(GLC.SelfProperty("obj_manager_out"),
                                   GLC.FunctionCall(GLC.SelfProperty("addOutPort"), [GLC.String("obj_manager_out")]))
 
-        self.writer.addAssignment(GLC.SelfProperty("input"),
-                                  GLC.FunctionCall(GLC.SelfProperty("addInPort"), [GLC.String("input")]))
+        #self.writer.addAssignment(GLC.SelfProperty("input"), GLC.FunctionCall(GLC.SelfProperty("addInPort"), [GLC.String("input")]))
 
         self.writer.addAssignment(GLC.SelfProperty("outputs"), "{}")
         for association in constructor.parent_class.associations:
@@ -547,6 +557,8 @@ class DEVSGenerator(Visitor):
 
         if constructor.parent_class.name == constructor.parent_class.class_diagram.default_class.name:
             self.writer.add(GLC.FunctionCall(GLC.SelfProperty("instances.add"), [f"{constructor.parent_class.name}Instance(self)"]))
+
+        self.writer.addAssignment(GLC.SelfProperty("next_time"), "0")
 
         self.writer.endMethodBody()
         self.writer.endConstructor()

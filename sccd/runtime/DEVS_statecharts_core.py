@@ -435,8 +435,12 @@ class RuntimeClassBase(object):
         self.configuration.extend(states)
         self.configuration_bitmap = sum([2 ** s.state_id for s in states])
 
+    def getSimulatedTime(self):
+        return self.controller.simulated_time
+
     def addTimer(self, index, timeout):
-        pass
+        #self.timers_to_add[index] = (self.controller.simulated_time + int(timeout * 1000), Event("_%iafter" % index))
+        self.timers_to_add[index] = (self.controller.simulated_time + timeout, Event("_%iafter" % index))
 
     def removeTimer(self, index):
         if index in self.timers_to_add:
@@ -469,8 +473,7 @@ class RuntimeClassBase(object):
         # self.earliest_event_time keeps track of the earliest time this instance will execute a transition
         if not is_stable:
             self.earliest_event_time = self.controller.simulated_time
-            #self.earliest_event_time = self.controller.simulated_time
-
+        
         elif not self.active:
             self.earliest_event_time = INFINITY
         else:
@@ -603,6 +606,7 @@ class RuntimeClassBase(object):
             if state.enter:
                 state.enter()
         if self.eventless_states:
+            print("")
             pass
             #self.controller.object_manager.eventless.add(self)
 
@@ -695,11 +699,17 @@ class ObjectManagerBase(object):
                          "delete_instance": self.handleDeleteInstanceEvent,
                          "create_and_start_instance": self.handleCreateAndStartEvent}
     
+    #def getEarliestEventTime(self):
+        #while self.instance_times and self.instance_times[0][0] < self.instance_times[0][1].earliest_event_time:
+        #    heappop(self.instance_times)
+        #earliest_event_time = min(INFINITY if not self.instance_times else self.instance_times[0][0], self.events.getEarliestTime())
+
+        #return  min(earliest_event_time, self.input_queue.getEarliestTime())
+    
     def getEarliestEventTime(self):
         while self.instance_times and self.instance_times[0][0] < self.instance_times[0][1].earliest_event_time:
             heappop(self.instance_times)
-        earliest_event_time = min(INFINITY if not self.instance_times else self.instance_times[0][0], self.events.getEarliestTime())
-        return min(earliest_event_time, self.input_queue.getEarliestTime())
+        return min(INFINITY if not self.instance_times else self.instance_times[0][0], self.events.getEarliestTime())
         
     def addEvent(self, event, time_offset = 0):
         self.events.add(self.simulated_time + time_offset, event)
@@ -771,12 +781,6 @@ class ObjectManagerBase(object):
             else:
                 # TODO; changed this from self.accurate_time.get_wct() to self.simulated_time
                 self.input_queue.add((0 if self.simulated_time is None else 0) + time_offset, e)
-
-
-
-
-
-
 
 
     def handleEvent(self, e):
