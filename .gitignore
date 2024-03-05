@@ -1,10 +1,4 @@
 pypdevs/
-sccd2devs_example/
-sccd2python_example/
-input.xml
-TrafficLight.py
-TrafficLightSimulation.py
-
 
 # Byte-compiled / optimized Python files
 __pycache__/
