@@ -17,7 +17,6 @@ from sccd.compiler.javascript_writer import JavascriptWriter
 from sccd.compiler.python_writer import PythonWriter
 
 def generate(input_file, output_file, target_language, platform):
-	#TODO: Set DEVS to platform and not to language.
 	sccd = xmlToSccd(input_file)
 
 	if not target_language:
@@ -29,12 +28,12 @@ def generate(input_file, output_file, target_language, platform):
 		Logger.showError("Diagram specifies target language as \"" + sccd.language + "\", but language option of compiler has been set to \"" + target_language + "\". No output has been generated.")
 		return
 
-	if (target_language == "python" or target_language == "pypDEVS") and not output_file.endswith(".py") :
+	if target_language == "python" and not output_file.endswith(".py") :
 		output_file += ".py"
 	elif target_language == "javascript" and not output_file.endswith(".js") :
 		output_file += ".js"
 
-	if target_language == "pypDEVS":
+	if platform == 3:
 		generic = sccdToDEVS(sccd, platform)
 	else:
 		generic = sccdToGeneric(sccd, platform)
@@ -125,6 +124,8 @@ def main():
 			platform = Platforms.GameLoop
 		elif args['platform'] == "eventloop" :
 			platform = Platforms.EventLoop
+		elif args['platform'] == "pypdevs":
+			platform = Platforms.PypDEVS
 		else :
 			Logger.showError("Invalid platform.")
 			return		  

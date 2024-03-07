@@ -269,7 +269,7 @@ class MainApp(AtomicDEVS, ObjectManagerBase):
         next_earliest = min(self.getEarliestEventTime(), self.input_queue.getEarliestTime())
         if not (len(self.to_send) == 0):
             self.next_time = 0
-        elif next_earliest == INFINITY:
+        if next_earliest == INFINITY:
             self.next_time = INFINITY
         else:
             self.next_time = next_earliest - earliest
