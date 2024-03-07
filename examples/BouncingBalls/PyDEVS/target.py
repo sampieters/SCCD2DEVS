@@ -11,7 +11,7 @@ from sccd.runtime.DEVS_statecharts_core import *
 from pypdevs.DEVS import *
 from pypdevs.infinity import *
 from pypdevs.simulator import *
-from sccd.runtime.libs.ui import ui
+from sccd.runtime.libs import ui_v2 as ui
 from sccd.runtime.libs.utils import utils
 import random
 
@@ -154,7 +154,7 @@ class MainAppInstance(RuntimeClassBase):
         self.removeTimer(0)
     
     def _running_root_0_exec(self, parameters):
-        ui.close_window(ui.window)
+        self.big_step.outputEvent(Event("destroy_all", self.getOutPortName("ui"), []))
     
     def _running_root_main_behaviour_initializing_0_exec(self, parameters):
         self.raiseInternalEvent(Event("create_field", None, []))
@@ -200,13 +200,14 @@ class MainApp(AtomicDEVS, ObjectManagerBase):
         AtomicDEVS.__init__(self, name)
         ObjectManagerBase.__init__(self)
         self.elapsed = 0
+        self.name = "MainApp"
         self.obj_manager_out = self.addOutPort("obj_manager_out")
         self.outputs = {}
         self.outputs["fields"] = self.addOutPort("fields")
         self.obj_manager_in = self.addInPort("obj_manager_in")
         self.input = self.addInPort("input")
         self.instances.add(MainAppInstance(self))
-        self.next_time = 0
+        self.next_time = INFINITY
     
     def extTransition(self, inputs):
         self.next_time = 0
@@ -221,22 +222,22 @@ class MainApp(AtomicDEVS, ObjectManagerBase):
                 self.addInput(tem)
             if input[3].name == "create_instance":
                 self.instances.add(MainAppInstance(self))
-                ev = Event("instance_created", None, parameters=[f"{input[0]}[{len(self.instances)-1}]"])
-                self.to_send.append(("MainApp", TODO, input[2], ev))
+                ev = Event("instance_created", None, parameters=[f"{input[3].parameters[0]}[{len(self.instances)-1}]"])
+                self.to_send.append((input[1], input[0], input[2], ev))
             elif input[3].name == "start_instance":
                 instance = list(self.instances)[input[2]]
                 instance.start()
-                ev = Event("instance_started", None, parameters=[])
+                ev = Event("instance_started", None, parameters=[f"{input[0]}[{input[2]}]"])
                 self.to_send.append((input[0], input[1], input[2], ev))
             elif input[3].name == "delete_instance":
                 ev = Event("instance_deleted", None, parameters=[TODO])
-                self.to_send.append((TODO, TODO, TODO, ev))
+                self.to_send.append((self.name, TODO, TODO, ev))
             elif input[3].name == "associate_instance":
                 ev = Event("instance_associated", None, parameters=[TODO])
-                self.to_send.append((TODO, TODO, TODO, ev))
+                self.to_send.append((self.name, TODO, TODO, ev))
             elif input[3].name == "disassociate_instance":
                 ev = Event("instance_disassociated", None, parameters=[TODO])
-                self.to_send.append((TODO, TODO, TODO, ev))
+                self.to_send.append((self.name, TODO, TODO, ev))
             elif input[3].name == "instance_created":
                 instance = list(self.instances)[input[2]]
                 instance.addEvent(input[3])
@@ -266,13 +267,18 @@ class MainApp(AtomicDEVS, ObjectManagerBase):
         self.handleInput()
         self.stepAll()
         next_earliest = min(self.getEarliestEventTime(), self.input_queue.getEarliestTime())
-        self.next_time = next_earliest - earliest
+        if not (len(self.to_send) == 0):
+            self.next_time = 0
+        elif next_earliest == INFINITY:
+            self.next_time = INFINITY
+        else:
+            self.next_time = next_earliest - earliest
         return self.instances
     
     def outputFnc(self):
         to_dict = {}
         for sending in self.to_send:
-            if sending[0] == None:
+            if sending[3].port == None:
                 if self.obj_manager_out in to_dict:
                     to_dict[self.obj_manager_out].append(sending)
                 else:
@@ -309,23 +315,27 @@ class FieldInstance(RuntimeClassBase):
         self.build_statechart_structure()
         
         # user defined attributes
-        self.canvas = None
-        self.field_window = None
+        self.window_id = None
+        self.canvas_id = None
         
         # call user defined constructor
         FieldInstance.user_defined_constructor(self)
     
     def user_defined_constructor(self):
-        self.field_window = ui.new_window(800,600,"BouncingBalls");
-        self.canvas = ui.append_canvas(self.field_window,800,550,{'background':'#eee'});
-        ui.bind_event(self.field_window, ui.EVENTS.WINDOW_CLOSE, self.controller, 'window_close', self.inports['field_ui']);
-        ui.bind_event(self.field_window, ui.EVENTS.KEY_PRESS, self.controller, 'key_press', self.inports['field_ui']);
-        ui.bind_event(self.canvas.element, ui.EVENTS.MOUSE_RIGHT_CLICK,    self.controller, 'right_click', self.inports['field_ui']);
-        ui.bind_event(self.canvas.element, ui.EVENTS.MOUSE_MOVE, self.controller, 'mouse_move', self.inports['field_ui']);
-        ui.bind_event(self.canvas.element, ui.EVENTS.MOUSE_RELEASE, self.controller, 'mouse_release', self.inports['field_ui']);
+        # All of these TkInter calls have been converted to in/out-events:
+        #self.field_window = ui.new_window(800,600,"BouncingBalls");
+        #self.canvas = ui.append_canvas(self.field_window,800,550,{'background':'#eee'});
+        #ui.bind_event(self.field_window, ui.EVENTS.WINDOW_CLOSE, self.controller, 'window_close', self.inports['field_ui']);
+        #ui.bind_event(self.field_window, ui.EVENTS.KEY_PRESS, self.controller, 'key_press', self.inports['field_ui']);
+        #ui.bind_event(self.canvas.element, ui.EVENTS.MOUSE_RIGHT_CLICK,    self.controller, 'right_click', self.inports['field_ui']);
+        #ui.bind_event(self.canvas.element, ui.EVENTS.MOUSE_MOVE, self.controller, 'mouse_move', self.inports['field_ui']);
+        #ui.bind_event(self.canvas.element, ui.EVENTS.MOUSE_RELEASE, self.controller, 'mouse_release', self.inports['field_ui']);
+        print("created field")
+        pass
     
     def user_defined_destructor(self):
-        ui.close_window(self.field_window);
+        # ui.close_window(self.field_window);
+        pass
     
     
     # builds Statechart structure
@@ -340,14 +350,17 @@ class FieldInstance(RuntimeClassBase):
         # state /root/waiting
         self.states["/root/waiting"] = State(2, "/root/waiting", self)
         
-        # state /root/initializing
-        self.states["/root/initializing"] = State(3, "/root/initializing", self)
+        # state /root/creating_window
+        self.states["/root/creating_window"] = State(3, "/root/creating_window", self)
+        self.states["/root/creating_window"].setEnter(self._root_creating_window_enter)
         
-        # state /root/creating
-        self.states["/root/creating"] = State(4, "/root/creating", self)
+        # state /root/creating_canvas
+        self.states["/root/creating_canvas"] = State(4, "/root/creating_canvas", self)
+        self.states["/root/creating_canvas"].setEnter(self._root_creating_canvas_enter)
         
-        # state /root/packing
-        self.states["/root/packing"] = State(5, "/root/packing", self)
+        # state /root/creating_button
+        self.states["/root/creating_button"] = State(5, "/root/creating_button", self)
+        self.states["/root/creating_button"].setEnter(self._root_creating_button_enter)
         
         # state /root/running
         self.states["/root/running"] = ParallelState(6, "/root/running", self)
@@ -358,8 +371,8 @@ class FieldInstance(RuntimeClassBase):
         # state /root/running/main_behaviour/running
         self.states["/root/running/main_behaviour/running"] = State(8, "/root/running/main_behaviour/running", self)
         
-        # state /root/running/main_behaviour/creating
-        self.states["/root/running/main_behaviour/creating"] = State(9, "/root/running/main_behaviour/creating", self)
+        # state /root/running/main_behaviour/creating_ball
+        self.states["/root/running/main_behaviour/creating_ball"] = State(9, "/root/running/main_behaviour/creating_ball", self)
         
         # state /root/running/deleting_behaviour
         self.states["/root/running/deleting_behaviour"] = State(10, "/root/running/deleting_behaviour", self)
@@ -388,9 +401,9 @@ class FieldInstance(RuntimeClassBase):
         # add children
         self.states[""].addChild(self.states["/root"])
         self.states["/root"].addChild(self.states["/root/waiting"])
-        self.states["/root"].addChild(self.states["/root/initializing"])
-        self.states["/root"].addChild(self.states["/root/creating"])
-        self.states["/root"].addChild(self.states["/root/packing"])
+        self.states["/root"].addChild(self.states["/root/creating_window"])
+        self.states["/root"].addChild(self.states["/root/creating_canvas"])
+        self.states["/root"].addChild(self.states["/root/creating_button"])
         self.states["/root"].addChild(self.states["/root/running"])
         self.states["/root"].addChild(self.states["/root/deleting"])
         self.states["/root"].addChild(self.states["/root/deleted"])
@@ -399,7 +412,7 @@ class FieldInstance(RuntimeClassBase):
         self.states["/root/running"].addChild(self.states["/root/running/child_behaviour"])
         self.states["/root/running"].addChild(self.states["/root/running/deleting_balls_behaviour"])
         self.states["/root/running/main_behaviour"].addChild(self.states["/root/running/main_behaviour/running"])
-        self.states["/root/running/main_behaviour"].addChild(self.states["/root/running/main_behaviour/creating"])
+        self.states["/root/running/main_behaviour"].addChild(self.states["/root/running/main_behaviour/creating_ball"])
         self.states["/root/running/deleting_behaviour"].addChild(self.states["/root/running/deleting_behaviour/running"])
         self.states["/root/running/child_behaviour"].addChild(self.states["/root/running/child_behaviour/listening"])
         self.states["/root/running/deleting_balls_behaviour"].addChild(self.states["/root/running/deleting_balls_behaviour/listening"])
@@ -412,39 +425,40 @@ class FieldInstance(RuntimeClassBase):
         self.states["/root/running/deleting_balls_behaviour"].default_state = self.states["/root/running/deleting_balls_behaviour/listening"]
         
         # transition /root/waiting
-        _root_waiting_0 = Transition(self, self.states["/root/waiting"], [self.states["/root/initializing"]])
+        _root_waiting_0 = Transition(self, self.states["/root/waiting"], [self.states["/root/creating_window"]])
         _root_waiting_0.setAction(self._root_waiting_0_exec)
         _root_waiting_0.setTrigger(Event("set_association_name", None))
         self.states["/root/waiting"].addTransition(_root_waiting_0)
         
-        # transition /root/initializing
-        _root_initializing_0 = Transition(self, self.states["/root/initializing"], [self.states["/root/creating"]])
-        _root_initializing_0.setAction(self._root_initializing_0_exec)
-        _root_initializing_0.setTrigger(None)
-        self.states["/root/initializing"].addTransition(_root_initializing_0)
+        # transition /root/creating_window
+        _root_creating_window_0 = Transition(self, self.states["/root/creating_window"], [self.states["/root/creating_canvas"]])
+        _root_creating_window_0.setAction(self._root_creating_window_0_exec)
+        _root_creating_window_0.setTrigger(Event("window_created", None))
+        self.states["/root/creating_window"].addTransition(_root_creating_window_0)
         
-        # transition /root/creating
-        _root_creating_0 = Transition(self, self.states["/root/creating"], [self.states["/root/packing"]])
-        _root_creating_0.setAction(self._root_creating_0_exec)
-        _root_creating_0.setTrigger(Event("instance_created", None))
-        self.states["/root/creating"].addTransition(_root_creating_0)
+        # transition /root/creating_canvas
+        _root_creating_canvas_0 = Transition(self, self.states["/root/creating_canvas"], [self.states["/root/creating_button"]])
+        _root_creating_canvas_0.setAction(self._root_creating_canvas_0_exec)
+        _root_creating_canvas_0.setTrigger(Event("canvas_created", None))
+        self.states["/root/creating_canvas"].addTransition(_root_creating_canvas_0)
         
-        # transition /root/packing
-        _root_packing_0 = Transition(self, self.states["/root/packing"], [self.states["/root/running"]])
-        _root_packing_0.setTrigger(Event("button_created", None))
-        self.states["/root/packing"].addTransition(_root_packing_0)
+        # transition /root/creating_button
+        _root_creating_button_0 = Transition(self, self.states["/root/creating_button"], [self.states["/root/running"]])
+        _root_creating_button_0.setAction(self._root_creating_button_0_exec)
+        _root_creating_button_0.setTrigger(Event("instance_created", None))
+        self.states["/root/creating_button"].addTransition(_root_creating_button_0)
         
         # transition /root/running/main_behaviour/running
-        _root_running_main_behaviour_running_0 = Transition(self, self.states["/root/running/main_behaviour/running"], [self.states["/root/running/main_behaviour/creating"]])
+        _root_running_main_behaviour_running_0 = Transition(self, self.states["/root/running/main_behaviour/running"], [self.states["/root/running/main_behaviour/creating_ball"]])
         _root_running_main_behaviour_running_0.setAction(self._root_running_main_behaviour_running_0_exec)
         _root_running_main_behaviour_running_0.setTrigger(Event("right_click", self.getInPortName("field_ui")))
         self.states["/root/running/main_behaviour/running"].addTransition(_root_running_main_behaviour_running_0)
         
-        # transition /root/running/main_behaviour/creating
-        _root_running_main_behaviour_creating_0 = Transition(self, self.states["/root/running/main_behaviour/creating"], [self.states["/root/running/main_behaviour/running"]])
-        _root_running_main_behaviour_creating_0.setAction(self._root_running_main_behaviour_creating_0_exec)
-        _root_running_main_behaviour_creating_0.setTrigger(Event("instance_created", None))
-        self.states["/root/running/main_behaviour/creating"].addTransition(_root_running_main_behaviour_creating_0)
+        # transition /root/running/main_behaviour/creating_ball
+        _root_running_main_behaviour_creating_ball_0 = Transition(self, self.states["/root/running/main_behaviour/creating_ball"], [self.states["/root/running/main_behaviour/running"]])
+        _root_running_main_behaviour_creating_ball_0.setAction(self._root_running_main_behaviour_creating_ball_0_exec)
+        _root_running_main_behaviour_creating_ball_0.setTrigger(Event("instance_created", None))
+        self.states["/root/running/main_behaviour/creating_ball"].addTransition(_root_running_main_behaviour_creating_ball_0)
         
         # transition /root/running/deleting_behaviour/running
         _root_running_deleting_behaviour_running_0 = Transition(self, self.states["/root/running/deleting_behaviour/running"], [self.states["/root/running/deleting_behaviour/running"]])
@@ -477,6 +491,15 @@ class FieldInstance(RuntimeClassBase):
         _root_running_0.setTrigger(Event("window_close", self.getInPortName("field_ui")))
         self.states["/root/running"].addTransition(_root_running_0)
     
+    def _root_creating_window_enter(self):
+        self.big_step.outputEvent(Event("create_window", self.getOutPortName("ui"), [800, 600, "BouncingBalls", self.inports['field_ui']]))
+    
+    def _root_creating_canvas_enter(self):
+        self.big_step.outputEvent(Event("create_canvas", self.getOutPortName("ui"), [self.window_id, 800, 550, {'background':'#eee'}, self.inports['field_ui']]))
+    
+    def _root_creating_button_enter(self):
+        self.big_step.outputEventOM(Event("create_instance", None, [self, "buttons", "Button", self.window_id, 'create_new_field', 'Spawn New Window']))
+    
     def _root_running_0_exec(self, parameters):
         self.big_step.outputEventOM(Event("delete_instance", None, [self, "buttons"]))
         self.big_step.outputEventOM(Event("delete_instance", None, [self, "balls"]))
@@ -485,10 +508,20 @@ class FieldInstance(RuntimeClassBase):
         association_name = parameters[0]
         self.association_name = association_name
     
-    def _root_initializing_0_exec(self, parameters):
-        self.big_step.outputEventOM(Event("create_instance", None, [self, "buttons", "Button", self.field_window, 'create_new_field', 'Spawn New Window']))
+    def _root_creating_window_0_exec(self, parameters):
+        window_id = parameters[0]
+        self.window_id = window_id
+        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [window_id, ui.EVENTS.WINDOW_CLOSE, 'window_close', self.inports['field_ui']]))
+        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [window_id, ui.EVENTS.KEY_PRESS, 'key_press', self.inports['field_ui']]))
     
-    def _root_creating_0_exec(self, parameters):
+    def _root_creating_canvas_0_exec(self, parameters):
+        canvas_id = parameters[0]
+        self.canvas_id = canvas_id
+        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [canvas_id, ui.EVENTS.MOUSE_RIGHT_CLICK, 'right_click', self.inports['field_ui']]))
+        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [canvas_id, ui.EVENTS.MOUSE_MOVE, 'mouse_move', self.inports['field_ui']]))
+        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [canvas_id, ui.EVENTS.MOUSE_RELEASE, 'mouse_release', self.inports['field_ui']]))
+    
+    def _root_creating_button_0_exec(self, parameters):
         association_name = parameters[0]
         self.big_step.outputEventOM(Event("start_instance", None, [self, association_name]))
     
@@ -498,7 +531,7 @@ class FieldInstance(RuntimeClassBase):
         button = parameters[2]
         self.big_step.outputEventOM(Event("create_instance", None, [self, "balls", "Ball", self.canvas, x, y]))
     
-    def _root_running_main_behaviour_creating_0_exec(self, parameters):
+    def _root_running_main_behaviour_creating_ball_0_exec(self, parameters):
         association_name = parameters[0]
         self.big_step.outputEventOM(Event("start_instance", None, [self, association_name]))
         self.big_step.outputEventOM(Event("narrow_cast", None, [self, association_name, Event("set_association_name", None, [association_name])]))
@@ -521,6 +554,7 @@ class FieldInstance(RuntimeClassBase):
     
     def _root_deleting_0_exec(self, parameters):
         self.big_step.outputEventOM(Event("narrow_cast", None, [self, 'parent', Event("delete_field", None, [self.association_name])]))
+        self.big_step.outputEvent(Event("destroy_window", self.getOutPortName("ui"), [self.window_id]))
     
     def initializeStatechart(self):
         # enter default state
@@ -532,6 +566,7 @@ class Field(AtomicDEVS, ObjectManagerBase):
         AtomicDEVS.__init__(self, name)
         ObjectManagerBase.__init__(self)
         self.elapsed = 0
+        self.name = "Field"
         self.obj_manager_out = self.addOutPort("obj_manager_out")
         self.outputs = {}
         self.outputs["balls"] = self.addOutPort("balls")
@@ -540,7 +575,7 @@ class Field(AtomicDEVS, ObjectManagerBase):
         self.field_ui = self.addInPort("field_ui")
         self.obj_manager_in = self.addInPort("obj_manager_in")
         self.input = self.addInPort("input")
-        self.next_time = 0
+        self.next_time = INFINITY
     
     def extTransition(self, inputs):
         self.next_time = 0
@@ -557,22 +592,22 @@ class Field(AtomicDEVS, ObjectManagerBase):
                 self.addInput(tem)
             if input[3].name == "create_instance":
                 self.instances.add(FieldInstance(self))
-                ev = Event("instance_created", None, parameters=[f"{input[0]}[{len(self.instances)-1}]"])
-                self.to_send.append(("Field", TODO, input[2], ev))
+                ev = Event("instance_created", None, parameters=[f"{input[3].parameters[0]}[{len(self.instances)-1}]"])
+                self.to_send.append((input[1], input[0], input[2], ev))
             elif input[3].name == "start_instance":
                 instance = list(self.instances)[input[2]]
                 instance.start()
-                ev = Event("instance_started", None, parameters=[TODO])
+                ev = Event("instance_started", None, parameters=[f"{input[0]}[{input[2]}]"])
                 self.to_send.append((input[0], input[1], input[2], ev))
             elif input[3].name == "delete_instance":
                 ev = Event("instance_deleted", None, parameters=[TODO])
-                self.to_send.append((TODO, TODO, TODO, ev))
+                self.to_send.append((self.name, TODO, TODO, ev))
             elif input[3].name == "associate_instance":
                 ev = Event("instance_associated", None, parameters=[TODO])
-                self.to_send.append((TODO, TODO, TODO, ev))
+                self.to_send.append((self.name, TODO, TODO, ev))
             elif input[3].name == "disassociate_instance":
                 ev = Event("instance_disassociated", None, parameters=[TODO])
-                self.to_send.append((TODO, TODO, TODO, ev))
+                self.to_send.append((self.name, TODO, TODO, ev))
             elif input[3].name == "instance_created":
                 instance = list(self.instances)[input[2]]
                 instance.addEvent(input[3])
@@ -602,13 +637,18 @@ class Field(AtomicDEVS, ObjectManagerBase):
         self.handleInput()
         self.stepAll()
         next_earliest = min(self.getEarliestEventTime(), self.input_queue.getEarliestTime())
-        self.next_time = next_earliest - earliest
+        if not (len(self.to_send) == 0):
+            self.next_time = 0
+        if next_earliest == INFINITY:
+            self.next_time = INFINITY
+        else:
+            self.next_time = next_earliest - earliest
         return self.instances
     
     def outputFnc(self):
         to_dict = {}
         for sending in self.to_send:
-            if sending[0] == None:
+            if sending[3].port == None:
                 if self.obj_manager_out in to_dict:
                     to_dict[self.obj_manager_out].append(sending)
                 else:
@@ -628,7 +668,7 @@ class Field(AtomicDEVS, ObjectManagerBase):
         return self.next_time
 
 class ButtonInstance(RuntimeClassBase):
-    def __init__(self, atomdevs, tkparent, event_name, button_text):
+    def __init__(self, atomdevs, window_id, event_name, button_text):
         RuntimeClassBase.__init__(self, atomdevs)
         self.associations = {}
         self.associations["parent"] = Association("Field", 1, 1)
@@ -642,13 +682,21 @@ class ButtonInstance(RuntimeClassBase):
         # build Statechart structure
         self.build_statechart_structure()
         
+        # user defined attributes
+        self.window_id = None
+        self.event_name = None
+        self.button_id = None
+        
         # call user defined constructor
-        ButtonInstance.user_defined_constructor(self, tkparent, event_name, button_text)
+        ButtonInstance.user_defined_constructor(self, window_id, event_name, button_text)
     
-    def user_defined_constructor(self, tkparent, event_name, button_text):
+    def user_defined_constructor(self, window_id, event_name, button_text):
+        self.window_id = window_id;
         self.event_name = event_name;
-        button = ui.append_button(tkparent, event_name);
-        ui.bind_event(button.element, ui.EVENTS.MOUSE_CLICK, self.controller, 'mouse_click', self.inports['button_ui']);
+        
+        # Translated to events:
+        #button = ui.append_button(tkparent, event_name);
+        #ui.bind_event(button.element, ui.EVENTS.MOUSE_CLICK, self.controller, 'mouse_click', self.inports['button_ui']);
     
     def user_defined_destructor(self):
         pass
@@ -660,23 +708,24 @@ class ButtonInstance(RuntimeClassBase):
         # state <root>
         self.states[""] = State(0, "", self)
         
-        # state /initializing
-        self.states["/initializing"] = State(1, "/initializing", self)
+        # state /creating_button
+        self.states["/creating_button"] = State(1, "/creating_button", self)
+        self.states["/creating_button"].setEnter(self._creating_button_enter)
         
         # state /running
         self.states["/running"] = State(2, "/running", self)
         
         # add children
-        self.states[""].addChild(self.states["/initializing"])
+        self.states[""].addChild(self.states["/creating_button"])
         self.states[""].addChild(self.states["/running"])
         self.states[""].fixTree()
-        self.states[""].default_state = self.states["/initializing"]
+        self.states[""].default_state = self.states["/creating_button"]
         
-        # transition /initializing
-        _initializing_0 = Transition(self, self.states["/initializing"], [self.states["/running"]])
-        _initializing_0.setAction(self._initializing_0_exec)
-        _initializing_0.setTrigger(None)
-        self.states["/initializing"].addTransition(_initializing_0)
+        # transition /creating_button
+        _creating_button_0 = Transition(self, self.states["/creating_button"], [self.states["/running"]])
+        _creating_button_0.setAction(self._creating_button_0_exec)
+        _creating_button_0.setTrigger(Event("button_created", None))
+        self.states["/creating_button"].addTransition(_creating_button_0)
         
         # transition /running
         _running_0 = Transition(self, self.states["/running"], [self.states["/running"]])
@@ -685,8 +734,13 @@ class ButtonInstance(RuntimeClassBase):
         _running_0.setGuard(self._running_0_guard)
         self.states["/running"].addTransition(_running_0)
     
-    def _initializing_0_exec(self, parameters):
-        self.big_step.outputEventOM(Event("narrow_cast", None, [self, 'parent', Event("button_created", None, [])]))
+    def _creating_button_enter(self):
+        self.big_step.outputEvent(Event("create_button", self.getOutPortName("ui"), [self.window_id, self.event_name, self.inports['button_ui']]))
+    
+    def _creating_button_0_exec(self, parameters):
+        button_id = parameters[0]
+        self.button_id = button_id
+        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [button_id, ui.EVENTS.MOUSE_CLICK, "mouse_click", self.inports['button_ui']]))
     
     def _running_0_exec(self, parameters):
         x = parameters[0]
@@ -702,7 +756,7 @@ class ButtonInstance(RuntimeClassBase):
     
     def initializeStatechart(self):
         # enter default state
-        self.default_targets = self.states["/initializing"].getEffectiveTargetStates()
+        self.default_targets = self.states["/creating_button"].getEffectiveTargetStates()
         RuntimeClassBase.initializeStatechart(self)
 
 class Button(AtomicDEVS, ObjectManagerBase):
@@ -710,13 +764,14 @@ class Button(AtomicDEVS, ObjectManagerBase):
         AtomicDEVS.__init__(self, name)
         ObjectManagerBase.__init__(self)
         self.elapsed = 0
+        self.name = "Button"
         self.obj_manager_out = self.addOutPort("obj_manager_out")
         self.outputs = {}
         self.outputs["parent"] = self.addOutPort("parent")
         self.button_ui = self.addInPort("button_ui")
         self.obj_manager_in = self.addInPort("obj_manager_in")
         self.input = self.addInPort("input")
-        self.next_time = 0
+        self.next_time = INFINITY
     
     def extTransition(self, inputs):
         self.next_time = 0
@@ -733,22 +788,22 @@ class Button(AtomicDEVS, ObjectManagerBase):
                 self.addInput(tem)
             if input[3].name == "create_instance":
                 self.instances.add(ButtonInstance(self))
-                ev = Event("instance_created", None, parameters=[f"{input[0]}[{len(self.instances)-1}]"])
-                self.to_send.append(("Button", TODO, input[2], ev))
+                ev = Event("instance_created", None, parameters=[f"{input[3].parameters[0]}[{len(self.instances)-1}]"])
+                self.to_send.append((input[1], input[0], input[2], ev))
             elif input[3].name == "start_instance":
                 instance = list(self.instances)[input[2]]
                 instance.start()
-                ev = Event("instance_started", None, parameters=[TODO])
+                ev = Event("instance_started", None, parameters=[f"{input[0]}[{input[2]}]"])
                 self.to_send.append((input[0], input[1], input[2], ev))
             elif input[3].name == "delete_instance":
                 ev = Event("instance_deleted", None, parameters=[TODO])
-                self.to_send.append((TODO, TODO, TODO, ev))
+                self.to_send.append((self.name, TODO, TODO, ev))
             elif input[3].name == "associate_instance":
                 ev = Event("instance_associated", None, parameters=[TODO])
-                self.to_send.append((TODO, TODO, TODO, ev))
+                self.to_send.append((self.name, TODO, TODO, ev))
             elif input[3].name == "disassociate_instance":
                 ev = Event("instance_disassociated", None, parameters=[TODO])
-                self.to_send.append((TODO, TODO, TODO, ev))
+                self.to_send.append((self.name, TODO, TODO, ev))
             elif input[3].name == "instance_created":
                 instance = list(self.instances)[input[2]]
                 instance.addEvent(input[3])
@@ -778,13 +833,18 @@ class Button(AtomicDEVS, ObjectManagerBase):
         self.handleInput()
         self.stepAll()
         next_earliest = min(self.getEarliestEventTime(), self.input_queue.getEarliestTime())
-        self.next_time = next_earliest - earliest
+        if not (len(self.to_send) == 0):
+            self.next_time = 0
+        if next_earliest == INFINITY:
+            self.next_time = INFINITY
+        else:
+            self.next_time = next_earliest - earliest
         return self.instances
     
     def outputFnc(self):
         to_dict = {}
         for sending in self.to_send:
-            if sending[0] == None:
+            if sending[3].port == None:
                 if self.obj_manager_out in to_dict:
                     to_dict[self.obj_manager_out].append(sending)
                 else:
@@ -831,11 +891,12 @@ class BallInstance(RuntimeClassBase):
         self.mouse_pos = {};
         self.smooth = 0.4; # value between 0 and 1
         
-        circle = self.canvas.add_circle(x, y, self.r, {'fill':'#000'});
-        ui.bind_event(circle, ui.EVENTS.MOUSE_PRESS, self.controller, 'mouse_press', self.inports["ball_ui"]);
-        ui.bind_event(circle, ui.EVENTS.MOUSE_MOVE, self.controller, 'mouse_move', self.inports['ball_ui']);
-        ui.bind_event(circle, ui.EVENTS.MOUSE_RELEASE, self.controller, 'mouse_release', self.inports['ball_ui']);
-        self.element = circle;
+        # TODO:
+        #circle = self.canvas.add_circle(x, y, self.r, {'fill':'#000'});
+        #ui.bind_event(circle, ui.EVENTS.MOUSE_PRESS, self.controller, 'mouse_press', self.inports["ball_ui"]);
+        #ui.bind_event(circle, ui.EVENTS.MOUSE_MOVE, self.controller, 'mouse_move', self.inports['ball_ui']);
+        #ui.bind_event(circle, ui.EVENTS.MOUSE_RELEASE, self.controller, 'mouse_release', self.inports['ball_ui']);
+        #self.element = circle;
     
     def user_defined_destructor(self):
         self.canvas.remove_element(self.element);
@@ -1002,13 +1063,14 @@ class Ball(AtomicDEVS, ObjectManagerBase):
         AtomicDEVS.__init__(self, name)
         ObjectManagerBase.__init__(self)
         self.elapsed = 0
+        self.name = "Ball"
         self.obj_manager_out = self.addOutPort("obj_manager_out")
         self.outputs = {}
         self.outputs["parent"] = self.addOutPort("parent")
         self.ball_ui = self.addInPort("ball_ui")
         self.obj_manager_in = self.addInPort("obj_manager_in")
         self.input = self.addInPort("input")
-        self.next_time = 0
+        self.next_time = INFINITY
     
     def extTransition(self, inputs):
         self.next_time = 0
@@ -1025,22 +1087,22 @@ class Ball(AtomicDEVS, ObjectManagerBase):
                 self.addInput(tem)
             if input[3].name == "create_instance":
                 self.instances.add(BallInstance(self))
-                ev = Event("instance_created", None, parameters=[f"{input[0]}[{len(self.instances)-1}]"])
-                self.to_send.append(("Ball", TODO, input[2], ev))
+                ev = Event("instance_created", None, parameters=[f"{input[3].parameters[0]}[{len(self.instances)-1}]"])
+                self.to_send.append((input[1], input[0], input[2], ev))
             elif input[3].name == "start_instance":
                 instance = list(self.instances)[input[2]]
                 instance.start()
-                ev = Event("instance_started", None, parameters=[TODO])
+                ev = Event("instance_started", None, parameters=[f"{input[0]}[{input[2]}]"])
                 self.to_send.append((input[0], input[1], input[2], ev))
             elif input[3].name == "delete_instance":
                 ev = Event("instance_deleted", None, parameters=[TODO])
-                self.to_send.append((TODO, TODO, TODO, ev))
+                self.to_send.append((self.name, TODO, TODO, ev))
             elif input[3].name == "associate_instance":
                 ev = Event("instance_associated", None, parameters=[TODO])
-                self.to_send.append((TODO, TODO, TODO, ev))
+                self.to_send.append((self.name, TODO, TODO, ev))
             elif input[3].name == "disassociate_instance":
                 ev = Event("instance_disassociated", None, parameters=[TODO])
-                self.to_send.append((TODO, TODO, TODO, ev))
+                self.to_send.append((self.name, TODO, TODO, ev))
             elif input[3].name == "instance_created":
                 instance = list(self.instances)[input[2]]
                 instance.addEvent(input[3])
@@ -1070,13 +1132,18 @@ class Ball(AtomicDEVS, ObjectManagerBase):
         self.handleInput()
         self.stepAll()
         next_earliest = min(self.getEarliestEventTime(), self.input_queue.getEarliestTime())
-        self.next_time = next_earliest - earliest
+        if not (len(self.to_send) == 0):
+            self.next_time = 0
+        if next_earliest == INFINITY:
+            self.next_time = INFINITY
+        else:
+            self.next_time = next_earliest - earliest
         return self.instances
     
     def outputFnc(self):
         to_dict = {}
         for sending in self.to_send:
-            if sending[0] == None:
+            if sending[3].port == None:
                 if self.obj_manager_out in to_dict:
                     to_dict[self.obj_manager_out].append(sending)
                 else:
@@ -1123,7 +1190,10 @@ class ObjectManager(AtomicDEVS):
     def outputFnc(self):
         out_dict = {}
         for (source, target, id, message) in self.State.to_send:
-            out_dict[self.output[target]] = [(source, target, id, message)]
+            if self.output[target] in out_dict:
+                out_dict[self.output[target]].append((source, target, id, message))
+            else:
+                out_dict[self.output[target]] = [(source, target, id, message)]
         return out_dict
     
     def timeAdvance(self):
@@ -1135,6 +1205,7 @@ class Controller(CoupledDEVS):
     def __init__(self, name):
         CoupledDEVS.__init__(self, name)
         self.ui = self.addInPort("ui")
+        self.addOutPort("ui")
         self.objectmanager = self.addSubModel(ObjectManager("ObjectManager"))
         self.atomic0 = self.addSubModel(MainApp("MainApp"))
         self.atomic1 = self.addSubModel(Field("Field"))

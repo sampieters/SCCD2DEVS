@@ -4,11 +4,12 @@
         Tkinter frame with bouncing balls in it.
     </description>
     <top>
-        from sccd.runtime.libs.ui import ui
+        from sccd.runtime.libs import ui_v2 as ui
         from sccd.runtime.libs.utils import utils
         import random
     </top>
     <inport name="ui"/>
+    <outport name="ui"/>
     <class name="MainApp" default="true">
         <relationships>
             <association name="fields" class="Field" />
@@ -80,11 +81,7 @@
                         <state id="stopped" />
                     </state>
                     <transition target="../stopped" event="stop">
-                        <script>
-                            <![CDATA[
-                            ui.close_window(ui.window)
-                            ]]>
-                        </script>
+                        <raise port="ui" event="destroy_all"/>
                     </transition>
                 </parallel>
                 <state id="stopped" />
@@ -93,8 +90,8 @@
     </class>
 
     <class name="Field">
-        <attribute name="canvas" />
-        <attribute name="field_window" />
+        <attribute name="window_id" />
+        <attribute name="canvas_id" />
         <inport name="field_ui"/>
         <relationships>
             <association name="balls" class="Ball" />
@@ -104,27 +101,31 @@
         <constructor>
             <body>
                 <![CDATA[
-                self.field_window = ui.new_window(800,600,"BouncingBalls");
-                self.canvas = ui.append_canvas(self.field_window,800,550,{'background':'#eee'});
-                ui.bind_event(self.field_window, ui.EVENTS.WINDOW_CLOSE, self.controller, 'window_close', self.inports['field_ui']);
-                ui.bind_event(self.field_window, ui.EVENTS.KEY_PRESS, self.controller, 'key_press', self.inports['field_ui']);
-                ui.bind_event(self.canvas.element, ui.EVENTS.MOUSE_RIGHT_CLICK,    self.controller, 'right_click', self.inports['field_ui']);
-                ui.bind_event(self.canvas.element, ui.EVENTS.MOUSE_MOVE, self.controller, 'mouse_move', self.inports['field_ui']);
-                ui.bind_event(self.canvas.element, ui.EVENTS.MOUSE_RELEASE, self.controller, 'mouse_release', self.inports['field_ui']);
+                # All of these TkInter calls have been converted to in/out-events:
+                #self.field_window = ui.new_window(800,600,"BouncingBalls");
+                #self.canvas = ui.append_canvas(self.field_window,800,550,{'background':'#eee'});
+                #ui.bind_event(self.field_window, ui.EVENTS.WINDOW_CLOSE, self.controller, 'window_close', self.inports['field_ui']);
+                #ui.bind_event(self.field_window, ui.EVENTS.KEY_PRESS, self.controller, 'key_press', self.inports['field_ui']);
+                #ui.bind_event(self.canvas.element, ui.EVENTS.MOUSE_RIGHT_CLICK,    self.controller, 'right_click', self.inports['field_ui']);
+                #ui.bind_event(self.canvas.element, ui.EVENTS.MOUSE_MOVE, self.controller, 'mouse_move', self.inports['field_ui']);
+                #ui.bind_event(self.canvas.element, ui.EVENTS.MOUSE_RELEASE, self.controller, 'mouse_release', self.inports['field_ui']);
+                print("created field")
+                pass
                 ]]>
             </body>
         </constructor>
         <destructor>
             <body>
                 <![CDATA[
-                ui.close_window(self.field_window);
+                # ui.close_window(self.field_window);
+                pass
                 ]]>
             </body>
         </destructor>
         <scxml initial="root">
             <state id="root" initial="waiting">
                 <state id="waiting">
-                    <transition event="set_association_name" target="../initializing">
+                    <transition event="set_association_name" target="../creating_window">
                         <parameter name="association_name" type="str" />
                         <script>
                             <![CDATA[
@@ -133,30 +134,96 @@
                         </script>
                     </transition>
                 </state>
-                <state id="initializing">
-                    <transition target="../creating">
-                        <raise scope="cd" event="create_instance">
-                            <parameter expr='"buttons"' />
-                            <parameter expr='"Button"' />
-                            <parameter expr="self.field_window" />
-                            <parameter expr="'create_new_field'" />
-                            <parameter expr="'Spawn New Window'" />
+                <state id="creating_window">
+                    <onentry>
+                        <raise port="ui" event="create_window">
+                            <parameter expr="800"/><!-- width -->
+                            <parameter expr="600"/><!-- height -->
+                            <parameter expr='"BouncingBalls"'/><!-- title -->
+                            <parameter expr="self.inports['field_ui']"/><!-- inport for response -->
+                        </raise>
+                    </onentry>
+                    <transition event="window_created" target="../creating_canvas">
+                        <parameter name="window_id" type="int" />
+                        <script>
+                            <![CDATA[
+                            self.window_id = window_id
+                            ]]>
+                        </script>
+                        <raise port="ui" event="bind_event">
+                            <parameter expr="window_id"/><!-- widget_id -->
+                            <parameter expr="ui.EVENTS.WINDOW_CLOSE"/><!-- tk_event -->
+                            <parameter expr="'window_close'"/><!-- sccd_event_name -->
+                            <parameter expr="self.inports['field_ui']"/><!-- inport for response -->
+                        </raise>
+                        <raise port="ui" event="bind_event">
+                            <parameter expr="window_id"/><!-- widget_id -->
+                            <parameter expr="ui.EVENTS.KEY_PRESS"/><!-- tk_event -->
+                            <parameter expr="'key_press'"/><!-- sccd_event_name -->
+                            <parameter expr="self.inports['field_ui']"/><!-- inport for response -->
                         </raise>
                     </transition>
                 </state>
-                <state id="creating">
-                    <transition event='instance_created' target='../packing'>
+                <state id="creating_canvas">
+                    <onentry>
+                        <raise port="ui" event="create_canvas">
+                            <parameter expr="self.window_id"/><!-- window_id -->
+                            <parameter expr="800"/><!-- width -->
+                            <parameter expr="550"/><!-- height -->
+                            <parameter expr="{'background':'#eee'}"/><!-- style -->
+                            <parameter expr="self.inports['field_ui']"/><!-- inport for response -->
+                        </raise>
+                    </onentry>
+                    <transition event="canvas_created" target="../creating_button">
+                        <parameter name="canvas_id" type="int"/>
+                        <script>
+                            <![CDATA[
+                            self.canvas_id = canvas_id
+                            ]]>
+                        </script>
+                        <raise port="ui" event="bind_event">
+                            <parameter expr="canvas_id"/><!-- widget_id -->
+                            <parameter expr="ui.EVENTS.MOUSE_RIGHT_CLICK"/><!-- tk_event -->
+                            <parameter expr="'right_click'"/><!-- sccd_event_name -->
+                            <parameter expr="self.inports['field_ui']"/><!-- inport for response -->
+                        </raise>
+                        <raise port="ui" event="bind_event">
+                            <parameter expr="canvas_id"/><!-- widget_id -->
+                            <parameter expr="ui.EVENTS.MOUSE_MOVE"/><!-- tk_event -->
+                            <parameter expr="'mouse_move'"/><!-- sccd_event_name -->
+                            <parameter expr="self.inports['field_ui']"/><!-- inport for response -->
+                        </raise>
+                        <raise port="ui" event="bind_event">
+                            <parameter expr="canvas_id"/><!-- widget_id -->
+                            <parameter expr="ui.EVENTS.MOUSE_RELEASE"/><!-- tk_event -->
+                            <parameter expr="'mouse_release'"/><!-- sccd_event_name -->
+                            <parameter expr="self.inports['field_ui']"/><!-- inport for response -->
+                        </raise>
+                    </transition>
+                </state>
+                <state id="creating_button">
+                    <onentry>
+                        <raise scope="cd" event="create_instance">
+                            <parameter expr='"buttons"' />
+                            <parameter expr='"Button"' />
+                            <parameter expr="self.window_id" />
+                            <parameter expr="'create_new_field'" />
+                            <parameter expr="'Spawn New Window'" />
+                        </raise>
+                    </onentry>
+                    <transition event='instance_created' target='../running'>
                         <parameter name="association_name" type="string"/>
                         <raise scope="cd" event="start_instance">
                             <parameter expr="association_name" />
                         </raise>
                     </transition>
                 </state>
-                <state id="packing">
+<!--                 <state id="packing">
                     <transition event="button_created" target='../running'>
                     </transition>
                 </state>
-                <parallel id="running">
+ -->
+                 <parallel id="running">
                     <transition port="field_ui" event="window_close" target="../deleting">
                         <raise event="delete_instance" scope="cd">
                             <parameter expr='"buttons"' />
@@ -167,7 +234,7 @@
                     </transition>
                     <state id="main_behaviour" initial="running">
                         <state id="running">
-                            <transition port="field_ui" event="right_click" target="../creating">
+                            <transition port="field_ui" event="right_click" target="../creating_ball">
                                 <parameter name="x" />
                                 <parameter name="y" />
                                 <parameter name="button" />
@@ -180,7 +247,7 @@
                                 </raise>
                             </transition>
                         </state>
-                        <state id="creating">
+                        <state id="creating_ball">
                             <transition event="instance_created" target="../running">
                                 <parameter name="association_name" type="string"/>
                                 <raise scope="cd" event="start_instance">
@@ -226,6 +293,9 @@
                         <raise event="delete_field" scope="narrow" target="'parent'">
                             <parameter expr='self.association_name' />
                         </raise>
+                        <raise port="ui" event="destroy_window">
+                            <parameter expr="self.window_id"/><!-- window to destroy -->
+                        </raise>
                     </transition>
                 </state>
                 <state id="deleted" />
@@ -234,30 +304,60 @@
     </class>
     
     <class name="Button">
+        <attribute name="window_id" />
+        <attribute name="event_name" />
+        <attribute name="button_id" />
         <relationships>
             <association name="parent" class="Field" min="1" max="1" />
         </relationships>
         <inport name="button_ui"/>
         <constructor>
-            <parameter name="tkparent" type="object" />
+            <parameter name="window_id" type="int" />
             <parameter name="event_name" type="str" />
             <parameter name="button_text" type="str" />
             <body>
                 <![CDATA[
+                self.window_id = window_id;
                 self.event_name = event_name;
-                button = ui.append_button(tkparent, event_name);
-                ui.bind_event(button.element, ui.EVENTS.MOUSE_CLICK, self.controller, 'mouse_click', self.inports['button_ui']);
+
+                # Translated to events:
+                #button = ui.append_button(tkparent, event_name);
+                #ui.bind_event(button.element, ui.EVENTS.MOUSE_CLICK, self.controller, 'mouse_click', self.inports['button_ui']);
                 ]]>
             </body>
         </constructor>
-        <scxml initial="initializing">
-            <state id="initializing">
+        <scxml initial="creating_button">
+            <state id="creating_button">
+                <onentry>
+                    <raise port="ui" event="create_button">
+                        <parameter expr="self.window_id"/><!-- window_id -->
+                        <parameter expr="self.event_name"/><!-- text -->
+                        <parameter expr="self.inports['button_ui']"/><!-- inport for response -->
+                    </raise>
+                </onentry>
+                <transition event="button_created" target="../running">
+                    <parameter name="button_id" type="int"/>
+                    <script>
+                        <![CDATA[
+                        self.button_id = button_id
+                        ]]>
+                    </script>
+                    <raise port="ui" event="bind_event">
+                        <parameter expr="button_id"/><!-- widget_id -->
+                        <parameter expr="ui.EVENTS.MOUSE_CLICK"/><!-- tk_event -->
+                        <parameter expr='"mouse_click"'/><!-- sccd_event_name -->
+                        <parameter expr="self.inports['button_ui']"/><!-- inport for response -->
+                    </raise>
+                </transition>
+            </state>
+<!--             <state id="initializing">
                 <transition target="../running">
                     <raise event="button_created" scope="narrow" target="'parent'">
                     </raise>
                 </transition>
             </state>
-            <state id="running">
+ -->
+             <state id="running">
                 <transition port='button_ui' event="mouse_click" target='.' cond="button == ui.MOUSE_BUTTONS.LEFT">
                     <parameter name="x" />
                     <parameter name="y" />
@@ -289,11 +389,12 @@
                 self.mouse_pos = {};
                 self.smooth = 0.4; # value between 0 and 1
 
-                circle = self.canvas.add_circle(x, y, self.r, {'fill':'#000'});
-                ui.bind_event(circle, ui.EVENTS.MOUSE_PRESS, self.controller, 'mouse_press', self.inports["ball_ui"]);
-                ui.bind_event(circle, ui.EVENTS.MOUSE_MOVE, self.controller, 'mouse_move', self.inports['ball_ui']);
-                ui.bind_event(circle, ui.EVENTS.MOUSE_RELEASE, self.controller, 'mouse_release', self.inports['ball_ui']);
-                self.element = circle;
+                # TODO:
+                #circle = self.canvas.add_circle(x, y, self.r, {'fill':'#000'});
+                #ui.bind_event(circle, ui.EVENTS.MOUSE_PRESS, self.controller, 'mouse_press', self.inports["ball_ui"]);
+                #ui.bind_event(circle, ui.EVENTS.MOUSE_MOVE, self.controller, 'mouse_move', self.inports['ball_ui']);
+                #ui.bind_event(circle, ui.EVENTS.MOUSE_RELEASE, self.controller, 'mouse_release', self.inports['ball_ui']);
+                #self.element = circle;
                 ]]>
             </body>
         </constructor>

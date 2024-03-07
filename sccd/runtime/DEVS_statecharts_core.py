@@ -854,8 +854,8 @@ class ObjectManagerBase(object):
 
             hulp = [association_name]
             hulp.extend(parameters[3:])
-            #self.to_send.append((self.name, class_name, id, Event('create_instance', None, hulp)))
-            self.to_send.append((None, class_name, id, Event('create_instance', None, hulp)))
+            self.to_send.append((self.name, class_name, id, Event('create_instance', None, hulp)))
+            #self.to_send.append((None, class_name, id, Event('create_instance', None, hulp)))
 
             #if not new_instance:
             #    raise ParameterException("Creating instance: no such class: " + class_name)
