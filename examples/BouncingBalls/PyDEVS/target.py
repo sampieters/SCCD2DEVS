@@ -11,7 +11,7 @@ from sccd.runtime.DEVS_statecharts_core import *
 from pypdevs.DEVS import *
 from pypdevs.infinity import *
 from pypdevs.simulator import *
-from sccd.runtime.libs import ui_v2 as ui
+from sccd.runtime.libs import DEVui_v2 as ui
 from sccd.runtime.libs.utils import utils
 import random
 
@@ -269,7 +269,7 @@ class MainApp(AtomicDEVS, ObjectManagerBase):
         next_earliest = min(self.getEarliestEventTime(), self.input_queue.getEarliestTime())
         if not (len(self.to_send) == 0):
             self.next_time = 0
-        if next_earliest == INFINITY:
+        elif next_earliest == INFINITY:
             self.next_time = INFINITY
         else:
             self.next_time = next_earliest - earliest
@@ -492,10 +492,10 @@ class FieldInstance(RuntimeClassBase):
         self.states["/root/running"].addTransition(_root_running_0)
     
     def _root_creating_window_enter(self):
-        self.big_step.outputEvent(Event("create_window", self.getOutPortName("ui"), [800, 600, "BouncingBalls", self.inports['field_ui']]))
+        self.big_step.outputEvent(Event("create_window", self.getOutPortName("ui"), [800, 600, "BouncingBalls", 'field_ui']))
     
     def _root_creating_canvas_enter(self):
-        self.big_step.outputEvent(Event("create_canvas", self.getOutPortName("ui"), [self.window_id, 800, 550, {'background':'#eee'}, self.inports['field_ui']]))
+        self.big_step.outputEvent(Event("create_canvas", self.getOutPortName("ui"), [self.window_id, 800, 550, {'background':'#eee'}, 'field_ui']))
     
     def _root_creating_button_enter(self):
         self.big_step.outputEventOM(Event("create_instance", None, [self, "buttons", "Button", self.window_id, 'create_new_field', 'Spawn New Window']))
@@ -511,15 +511,15 @@ class FieldInstance(RuntimeClassBase):
     def _root_creating_window_0_exec(self, parameters):
         window_id = parameters[0]
         self.window_id = window_id
-        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [window_id, ui.EVENTS.WINDOW_CLOSE, 'window_close', self.inports['field_ui']]))
-        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [window_id, ui.EVENTS.KEY_PRESS, 'key_press', self.inports['field_ui']]))
+        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [window_id, ui.EVENTS.WINDOW_CLOSE, 'window_close', 'field_ui']))
+        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [window_id, ui.EVENTS.KEY_PRESS, 'key_press', 'field_ui']))
     
     def _root_creating_canvas_0_exec(self, parameters):
         canvas_id = parameters[0]
         self.canvas_id = canvas_id
-        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [canvas_id, ui.EVENTS.MOUSE_RIGHT_CLICK, 'right_click', self.inports['field_ui']]))
-        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [canvas_id, ui.EVENTS.MOUSE_MOVE, 'mouse_move', self.inports['field_ui']]))
-        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [canvas_id, ui.EVENTS.MOUSE_RELEASE, 'mouse_release', self.inports['field_ui']]))
+        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [canvas_id, ui.EVENTS.MOUSE_RIGHT_CLICK, 'right_click', 'field_ui']))
+        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [canvas_id, ui.EVENTS.MOUSE_MOVE, 'mouse_move', 'field_ui']))
+        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [canvas_id, ui.EVENTS.MOUSE_RELEASE, 'mouse_release', 'field_ui']))
     
     def _root_creating_button_0_exec(self, parameters):
         association_name = parameters[0]
@@ -590,7 +590,7 @@ class Field(AtomicDEVS, ObjectManagerBase):
             if isinstance(input, str):
                 tem = eval(input)
                 self.addInput(tem)
-            if input[3].name == "create_instance":
+            elif input[3].name == "create_instance":
                 self.instances.add(FieldInstance(self))
                 ev = Event("instance_created", None, parameters=[f"{input[3].parameters[0]}[{len(self.instances)-1}]"])
                 self.to_send.append((input[1], input[0], input[2], ev))
@@ -611,7 +611,7 @@ class Field(AtomicDEVS, ObjectManagerBase):
             elif input[3].name == "instance_created":
                 instance = list(self.instances)[input[2]]
                 instance.addEvent(input[3])
-                instance.associations['fields'].instances[0] = input[3].parameters[0]
+                instance.associations['buttons'].instances[0] = input[3].parameters[0]
             elif input[3].name == "instance_started":
                 instance = list(self.instances)[input[2]]
                 instance.addEvent(input[3])
@@ -639,7 +639,7 @@ class Field(AtomicDEVS, ObjectManagerBase):
         next_earliest = min(self.getEarliestEventTime(), self.input_queue.getEarliestTime())
         if not (len(self.to_send) == 0):
             self.next_time = 0
-        if next_earliest == INFINITY:
+        elif next_earliest == INFINITY:
             self.next_time = INFINITY
         else:
             self.next_time = next_earliest - earliest
@@ -786,8 +786,9 @@ class Button(AtomicDEVS, ObjectManagerBase):
             if isinstance(input, str):
                 tem = eval(input)
                 self.addInput(tem)
-            if input[3].name == "create_instance":
-                self.instances.add(ButtonInstance(self))
+            elif input[3].name == "create_instance":
+                # TODO: In generator add parameters
+                self.instances.add(ButtonInstance(self, input[3].parameters[1], input[3].parameters[2], input[3].parameters[3]))
                 ev = Event("instance_created", None, parameters=[f"{input[3].parameters[0]}[{len(self.instances)-1}]"])
                 self.to_send.append((input[1], input[0], input[2], ev))
             elif input[3].name == "start_instance":
@@ -835,7 +836,7 @@ class Button(AtomicDEVS, ObjectManagerBase):
         next_earliest = min(self.getEarliestEventTime(), self.input_queue.getEarliestTime())
         if not (len(self.to_send) == 0):
             self.next_time = 0
-        if next_earliest == INFINITY:
+        elif next_earliest == INFINITY:
             self.next_time = INFINITY
         else:
             self.next_time = next_earliest - earliest

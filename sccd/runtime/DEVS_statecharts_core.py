@@ -698,6 +698,8 @@ class ObjectManagerBase(object):
                          "start_instance": self.handleStartInstanceEvent,
                          "delete_instance": self.handleDeleteInstanceEvent,
                          "create_and_start_instance": self.handleCreateAndStartEvent}
+        
+        self.output_listeners = []
     
     #def getEarliestEventTime(self):
         #while self.instance_times and self.instance_times[0][0] < self.instance_times[0][1].earliest_event_time:
@@ -785,6 +787,10 @@ class ObjectManagerBase(object):
 
     def handleEvent(self, e):
         self.handlers[e.getName()](e.getParameters())
+
+    def outputEvent(self, event):
+        for listener in self.output_listeners:
+            listener.add(event)
 
     def processAssociationReference(self, input_string):
         if len(input_string) == 0:
@@ -1026,3 +1032,6 @@ class ObjectManagerBase(object):
         instance = self.instantiate(to_class, construct_params)
         self.instances.add(instance)
         return instance
+
+    def addMyOwnOutputListener(self, listener):
+        self.output_listeners.append(listener)
