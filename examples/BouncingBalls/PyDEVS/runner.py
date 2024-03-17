@@ -1,5 +1,5 @@
 from pypdevs.simulator import Simulator
-import target as target
+import examples.BouncingBalls.PyDEVS.best_target as best_target
 
 from tkinter import *
 from sccd.runtime.libs.DEVui_v2 import UI
@@ -14,8 +14,8 @@ class OutputListener:
 			method(*event.parameters)
 
 if __name__ == '__main__':
-	model = target.Controller(name="controller")
-	refs = {"ui": model.ui, "field_ui": model.atomic1.field_ui}
+	model = best_target.Controller(name="controller")
+	refs = {"ui": model.ui, "field_ui": model.atomic1.field_ui, "button_ui": model.atomic2.button_ui, "ball_ui": model.atomic3.ball_ui}
 
 	tkroot = Tk()
 	tkroot.withdraw()
@@ -28,5 +28,7 @@ if __name__ == '__main__':
 
 	ui = UI(tkroot, sim)
 	model.atomic1.addMyOwnOutputListener(OutputListener(ui))
+	model.atomic2.addMyOwnOutputListener(OutputListener(ui))
+	model.atomic3.addMyOwnOutputListener(OutputListener(ui))
 	sim.simulate()
 	tkroot.mainloop()

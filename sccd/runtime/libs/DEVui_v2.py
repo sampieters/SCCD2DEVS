@@ -63,7 +63,9 @@ class UI:
             button = tk.Button(window, text=text)
             button.pack(fill=tk.BOTH, expand=1)
             button_id = self._gen_id(button)
-            self.controller.addInput(Event("button_created", res_port, [button_id]))
+
+            #self.controller.addInput(Event("button_created", res_port, [button_id]))
+            self.controller.realtime_interrupt(f"{res_port} Event(\"button_created\",\"{res_port}\",[{button_id}])")
         # schedule in mainloop:
         self.tk.after(0, callback)
 
@@ -76,7 +78,7 @@ class UI:
             canvas_id = self._gen_id(canvas)
             
             #self.controller.addInput(Event("canvas_created", res_port, [canvas_id]))
-            self.controller.realtime_interrupt(f"{res_port} Event(\"canvas_created\",self.{res_port},[{canvas_id}])")
+            self.controller.realtime_interrupt(f"{res_port} Event(\"canvas_created\",\"{res_port}\",[{canvas_id}])")
         # schedule in mainloop:
         self.tk.after(0, callback)
 
@@ -89,7 +91,7 @@ class UI:
             #self.controller.addInput(Event("window_created", res_port, [window_id]))
 
             #source = f"{res_port} Event(\"window_created\", {res_port},[{window_id}])"
-            self.controller.realtime_interrupt(f"{res_port} Event(\"window_created\",self.{res_port},[{window_id}])")
+            self.controller.realtime_interrupt(f"{res_port} Event(\"window_created\",\"{res_port}\",[{window_id}])")
         # schedule in mainloop:
         self.tk.after(0, callback)
 
@@ -111,7 +113,8 @@ class UI:
         def callback():
             canvas = self.mapping[canvas_id]
             circle_id = canvas.create_oval(x-r, y-r, x+r, y+r, **style)
-            self.controller.addInput(Event("circle_created", res_port, [canvas_id, circle_id]))
+            #self.controller.addInput(Event("circle_created", res_port, [canvas_id, circle_id]))
+            self.controller.realtime_interrupt(f"{res_port} Event(\"circle_created\",\"{res_port}\",[{canvas_id},{circle_id}])")
         # schedule in mainloop:
         self.tk.after(0, callback)
 
@@ -163,10 +166,17 @@ class UI:
              event == EVENTS.MOUSE_RELEASE or \
              event == EVENTS.MOUSE_RIGHT_CLICK :
             #self.controller.addInput(Event(raise_name, port, [ev.x, ev.y, ev.num]))
-            self.controller.realtime_interrupt(f"{port} Event(\"{raise_name}\",self.{port},[{ev.x},{ev.y},\"{ev.num}\"])")
+
+            match ev.num:
+                case int():
+                    hel = f"{port} Event(\"{raise_name}\",\"{port}\",[{ev.x},{ev.y},{ev.num}])"
+                case _:
+                    hel = f"{port} Event(\"{raise_name}\",\"{port}\",[{ev.x},{ev.y},\"{ev.num}\"])"
+                    
+            self.controller.realtime_interrupt(hel)
         elif event == EVENTS.WINDOW_CLOSE :
             #self.controller.addInput(Event(raise_name, port, []))
-            self.controller.realtime_interrupt(f"{port} Event(\"{raise_name}\",self.{port},[])")
+            self.controller.realtime_interrupt(f"{port} Event(\"{raise_name}\",\"{port}\",[])")
             
         else:
             raise Exception('Unsupported event: ' + str(event))

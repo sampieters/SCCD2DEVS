@@ -95,3 +95,8 @@ python3 runner.py
 ```
 
 ### Timer
+
+## TODO
+fill parameters in constructor (e.g. Button, Ball).
+some "if" should be "elif"
+self.inports["elem"] should only be "elem"

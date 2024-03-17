@@ -758,7 +758,13 @@ class ObjectManagerBase(object):
             input_port = e.getPort()
 
             #target_instance = input_port.instance
-
+            #TODO: get the first field, should be dynamically
+            #temp = None
+            #try:
+            #    temp = self.processAssociationReference(e.parameters[0])[0]
+            #    temp = temp[1]
+            #except:
+            #    temp = 0
             target_instance = list(self.instances)[0]
             #target_instance = self.State[0]
             if target_instance == None:
@@ -783,6 +789,24 @@ class ObjectManagerBase(object):
             else:
                 # TODO; changed this from self.accurate_time.get_wct() to self.simulated_time
                 self.input_queue.add((0 if self.simulated_time is None else 0) + time_offset, e)
+
+    def addInputPort(self, virtual_name, instance = None):
+        if instance == None:
+            port_name = virtual_name
+        else:
+            port_name = "private_" + str(self.private_port_counter) + "_" + virtual_name
+            self.private_port_counter += 1
+        self.input_ports[port_name] = InputPortEntry(virtual_name, instance)
+        return port_name
+        
+    def addOutputPort(self, virtual_name, instance = None):
+        if instance == None:
+            port_name = virtual_name
+        else:
+            port_name = "private_" + str(self.private_port_counter) + "_" + virtual_name
+            self.private_port_counter += 1
+        self.output_ports[port_name] = OutputPortEntry(port_name, virtual_name, instance)
+        return port_name
 
 
     def handleEvent(self, e):
@@ -820,7 +844,7 @@ class ObjectManagerBase(object):
             for i in self.getInstances(source, traversal_list):
                 #i["instance"].start()
                 # TODO: start instance over a link from mainapp to field
-                self.to_send.append((i['assoc_name'], "Field", 0, Event("start_instance", None, None)))
+                self.to_send.append((i['assoc_name'], i['to_class'], 0, Event("start_instance", None, [i['instance']])))
 
 
 
@@ -848,20 +872,15 @@ class ObjectManagerBase(object):
             class_name = association.to_class if len(parameters) == 2 else parameters[2]
             #new_instance = self.createInstance(class_name, parameters[3:])
 
-            id = None
-            for index, i in enumerate(self.instances):
-                if i == source:
-                    id = index
-                    break
-
-            # Normally [3:] but instance cannot be past along, need to fix this
-            #self.to_send.append((self.name, class_name, id, Event("create_instance", None, parameters[4:])))
-                
+            #id = None
+            #for index, i in enumerate(self.instances):
+            #    if i == source:
+            #        id = index
+            #        break
 
             hulp = [association_name]
             hulp.extend(parameters[3:])
-            self.to_send.append((self.name, class_name, id, Event('create_instance', None, hulp)))
-            #self.to_send.append((None, class_name, id, Event('create_instance', None, hulp)))
+            self.to_send.append((self.name, class_name, 0, Event('create_instance', None, hulp)))
 
             #if not new_instance:
             #    raise ParameterException("Creating instance: no such class: " + class_name)
@@ -897,23 +916,24 @@ class ObjectManagerBase(object):
             association = source.associations[traversal_list[0][0]]
             
             for i in instances:
-                try:
-                    for assoc_name in i["instance"].associations:
-                        if assoc_name != 'parent':
-                            traversal_list = self.processAssociationReference(assoc_name)
-                            instances = self.getInstances(i["instance"], traversal_list)
-                            if len(instances) > 0:
-                                raise RuntimeException("Error removing instance from association %s, still %i children left connected with association %s" % (association_name, len(instances), assoc_name))
-                    del i["instance"].controller.input_ports[i["instance"].narrow_cast_port]
-                    association.removeInstance(i["instance"])
-                    self.instances.discard(i["instance"])
-                    self.eventless.discard(i["instance"])
-                except AssociationException as exception:
-                    raise RuntimeException("Error removing instance from association '" + association_name + "': " + str(exception))
-                i["instance"].user_defined_destructor()
-                i["instance"].stop()
+                self.to_send.append((i['assoc_name'], i['to_class'], 0, Event("delete_instance", None, None)))
+                #try:
+                    #for assoc_name in i["instance"].associations:
+                    #    if assoc_name != 'parent':
+                    #        traversal_list = self.processAssociationReference(assoc_name)
+                    #        instances = self.getInstances(i["instance"], traversal_list)
+                    #        if len(instances) > 0:
+                    #            raise RuntimeException("Error removing instance from association %s, still %i children left connected with association %s" % (association_name, len(instances), assoc_name))
+                    #del i["instance"].controller.input_ports[i["instance"].narrow_cast_port]
+                    #association.removeInstance(i["instance"])
+                    #self.instances.discard(i["instance"])
+                    #self.eventless.discard(i["instance"])
+                #except AssociationException as exception:
+                #    raise RuntimeException("Error removing instance from association '" + association_name + "': " + str(exception))
+                #i["instance"].user_defined_destructor()
+                #i["instance"].stop()
                 
-            source.addEvent(Event("instance_deleted", parameters = [parameters[1]]))
+            #source.addEvent(Event("instance_deleted", parameters = [parameters[1]]))
                 
     def handleAssociateEvent(self, parameters):
         if len(parameters) != 3:
@@ -979,13 +999,14 @@ class ObjectManagerBase(object):
             for i in self.getInstances(source, traversal_list):
                 # TODO: port cannot be none but don't know yet how to do port 
                 ev = Event(cast_event.name, None, cast_event.parameters)
-                self.to_send.append((i["assoc_name"], "Field", i["assoc_index"], ev))
+                self.to_send.append((i["assoc_name"], i['to_class'], i["assoc_index"], ev))
 
                 #to_send_event = Event(cast_event.name, i["instance"].narrow_cast_port, cast_event.parameters)
                 #i["instance"].controller.addInput(to_send_event, force_internal=True)
         
     def getInstances(self, source, traversal_list):
         currents = [{
+            "to_class": None,
             "instance": source,
             "ref": None,
             "assoc_name": None,
@@ -1001,6 +1022,7 @@ class ObjectManagerBase(object):
                     try:
                         # TODO: instance in nexts was the object but now a reference, can introduce bugs
                         nexts.append({
+                            "to_class": association.to_class,
                             "instance": association.instances[index],
                             "ref": current["instance"],
                             "assoc_name": name,
@@ -1013,6 +1035,7 @@ class ObjectManagerBase(object):
                 elif (index == -1):
                     for i in association.instances:
                         nexts.append({
+                            "to_class": association.to_class,
                             "instance": association.instances[i],
                             "ref": current["instance"],
                             "assoc_name": name,
