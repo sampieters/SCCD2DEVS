@@ -97,6 +97,6 @@ python3 runner.py
 ### Timer
 
 ## TODO
-fill parameters in constructor (e.g. Button, Ball).
-some "if" should be "elif"
-self.inports["elem"] should only be "elem"
+1) fill parameters in constructor (e.g. Button, Ball).
+2) self.inports["elem"] should only be "elem"
+3) Convert DEVui_v2 to ui_v2

@@ -47,7 +47,7 @@ class MainAppInstance(RuntimeClassBase):
     
     # user defined method
     def update_timers(self):
-        self.canvas.element.itemconfigure(self.clock_text, text=str('%.2f' % (self.getSimulatedTime() / 1000.0)))
+        self.canvas.element.itemconfigure(self.clock_text, text=str('%.2f' % (self.getSimulatedTime())))
         #self.canvas.element.itemconfigure(self.actual_clock_text, text='%.2f' % (time() / 1000.0))
     
     

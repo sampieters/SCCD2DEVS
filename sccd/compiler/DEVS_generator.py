@@ -378,10 +378,10 @@ class DEVSGenerator(Visitor):
 
         self.writer.beginForLoopIterateArray("all_inputs", "input")
        
-        self.writer.beginIf(GLC.FunctionCall("isinstance", ["input", "str"]))
+        self.writer.beginElseIf(GLC.FunctionCall("isinstance", ["input", "str"]))
         self.writer.addAssignment("tem", GLC.FunctionCall("eval", ["input"]))
         self.writer.add(GLC.FunctionCall(GLC.SelfProperty("addInput"), ["tem"]))
-        self.writer.endIf()
+        self.writer.endElseIf()
 
         self.writer.beginElseIf(GLC.EqualsExpression("input[3].name", GLC.String("create_instance")))
         self.writer.add(GLC.FunctionCall(GLC.SelfProperty("instances.add"), [GLC.FunctionCall(f"{class_node.name}Instance", ["self"])]))
@@ -443,11 +443,7 @@ class DEVSGenerator(Visitor):
         self.writer.addAssignment("ev", "input[3]")
         self.writer.add(GLC.FunctionCall(GLC.SelfProperty("addInput"), ["ev", "force_internal=True"]))
         self.writer.endElseIf()
-
-
-
-
-
+        
         self.writer.endForLoopIterateArray()
 
         self.writer.add(GLC.ReturnStatement(GLC.SelfProperty("instances")))
@@ -467,10 +463,9 @@ class DEVSGenerator(Visitor):
 
         self.writer.addAssignment("next_earliest", GLC.FunctionCall("min", [GLC.SelfProperty("getEarliestEventTime()"), GLC.SelfProperty("input_queue.getEarliestTime()")]))
         
-
-        self.writer.beginIf(GLC.NotExpression(GLC.EqualsExpression("len(self.to_send)", "0")))
+        self.writer.beginElseIf(GLC.NotExpression(GLC.EqualsExpression("len(self.to_send)", "0")))
         self.writer.addAssignment(GLC.SelfProperty("next_time"), "0")
-        self.writer.endIf()
+        self.writer.endElseIf()
         self.writer.beginElseIf(GLC.EqualsExpression("next_earliest", "INFINITY"))
         self.writer.addAssignment(GLC.SelfProperty("next_time"), "INFINITY")
         self.writer.endElseIf()

@@ -242,9 +242,24 @@ class MainApp(AtomicDEVS, ObjectManagerBase):
                 ev = Event("instance_disassociated", None, parameters=[TODO])
                 self.to_send.append((self.name, TODO, TODO, ev))
             elif input[3].name == "instance_created":
+                association = self.processAssociationReference(input[3].parameters[0])[0]
                 instance = list(self.instances)[input[2]]
+                p = instance.associations.get(association[0])
+                if p:
+                    p.addInstance(input[3].parameters[0])
                 instance.addEvent(input[3])
-                instance.associations['fields'].instances[0] = input[3].parameters[0]
+                #instance.associations['fields'].instances[0] = input[3].parameters[0]
+
+
+
+                #association = self.processAssociationReference(input[3].parameters[0])[0]
+                #instance = list(self.instances)[input[2]]
+                #p = instance.associations.get(association[0])
+                #if p:
+                #    p.addInstance(input[3].parameters[0])
+                #instance.addEvent(input[3])
+
+                
             elif input[3].name == "instance_started":
                 instance = list(self.instances)[input[2]]
                 instance.addEvent(input[3])
@@ -260,6 +275,9 @@ class MainApp(AtomicDEVS, ObjectManagerBase):
             elif input[3].name == "set_association_name":
                 ev = input[3]
                 self.addInput(ev, force_internal=True)
+            else:
+                ev = input[3]
+                self.addInput(ev)
         return self.instances
     
     def intTransition(self):
@@ -301,6 +319,8 @@ class MainApp(AtomicDEVS, ObjectManagerBase):
         return self.next_time
 
 class FieldInstance(RuntimeClassBase):
+    num_instances = 0
+
     def __init__(self, atomdevs):
         RuntimeClassBase.__init__(self, atomdevs)
         self.associations = {}
@@ -323,6 +343,9 @@ class FieldInstance(RuntimeClassBase):
         
         # call user defined constructor
         FieldInstance.user_defined_constructor(self)
+
+        self.inports['field_ui'] = ('field_ui', FieldInstance.num_instances)
+        FieldInstance.num_instances += 1
     
     def user_defined_constructor(self):
         pass
@@ -485,10 +508,10 @@ class FieldInstance(RuntimeClassBase):
         self.states["/root/running"].addTransition(_root_running_0)
     
     def _root_creating_window_enter(self):
-        self.big_step.outputEvent(Event("create_window", self.getOutPortName("ui"), [800, 600, "BouncingBalls", 'field_ui']))
+        self.big_step.outputEvent(Event("create_window", self.getOutPortName("ui"), [800, 600, "BouncingBalls",  self.inports['field_ui']]))
     
     def _root_creating_canvas_enter(self):
-        self.big_step.outputEvent(Event("create_canvas", self.getOutPortName("ui"), [self.window_id, CANVAS_WIDTH, CANVAS_HEIGHT, {'background':'#eee'}, 'field_ui']))
+        self.big_step.outputEvent(Event("create_canvas", self.getOutPortName("ui"), [self.window_id, CANVAS_WIDTH, CANVAS_HEIGHT, {'background':'#eee'},  self.inports['field_ui']]))
     
     def _root_creating_button_enter(self):
         self.big_step.outputEventOM(Event("create_instance", None, [self, "buttons", "Button", self.window_id, 'create_new_field', 'Spawn New Window']))
@@ -504,15 +527,15 @@ class FieldInstance(RuntimeClassBase):
     def _root_creating_window_0_exec(self, parameters):
         window_id = parameters[0]
         self.window_id = window_id
-        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [window_id, ui.EVENTS.WINDOW_CLOSE, 'window_close', 'field_ui']))
-        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [window_id, ui.EVENTS.KEY_PRESS, 'key_press', 'field_ui']))
+        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [window_id, ui.EVENTS.WINDOW_CLOSE, 'window_close',  self.inports['field_ui']]))
+        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [window_id, ui.EVENTS.KEY_PRESS, 'key_press',  self.inports['field_ui']]))
     
     def _root_creating_canvas_0_exec(self, parameters):
         canvas_id = parameters[0]
         self.canvas_id = canvas_id
-        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [canvas_id, ui.EVENTS.MOUSE_RIGHT_CLICK, 'right_click', 'field_ui']))
-        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [canvas_id, ui.EVENTS.MOUSE_MOVE, 'mouse_move', 'field_ui']))
-        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [canvas_id, ui.EVENTS.MOUSE_RELEASE, 'mouse_release', 'field_ui']))
+        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [canvas_id, ui.EVENTS.MOUSE_RIGHT_CLICK, 'right_click',  self.inports['field_ui']]))
+        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [canvas_id, ui.EVENTS.MOUSE_MOVE, 'mouse_move',  self.inports['field_ui']]))
+        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [canvas_id, ui.EVENTS.MOUSE_RELEASE, 'mouse_release',  self.inports['field_ui']]))
     
     def _root_creating_button_0_exec(self, parameters):
         association_name = parameters[0]
@@ -568,9 +591,6 @@ class Field(AtomicDEVS, ObjectManagerBase):
         self.field_ui = self.addInPort("field_ui")
         self.obj_manager_in = self.addInPort("obj_manager_in")
         self.input = self.addInPort("input")
-
-        self.inports["field_ui"] = self.addInputPort("field_ui", self)
-
         self.next_time = INFINITY
     
     def extTransition(self, inputs):
@@ -587,9 +607,17 @@ class Field(AtomicDEVS, ObjectManagerBase):
                 tem = eval(input)
                 self.addInput(tem)
             elif input[3].name == "create_instance":
-                self.instances.add(FieldInstance(self))
+                new_instance = FieldInstance(self)
+                self.instances.add(new_instance)
+
+                #TODO: hardcoded but needs to be fixed
+                p = new_instance.associations.get("parent")
+                if p:
+                    p.addInstance(f"mainapp[0]")
+
                 ev = Event("instance_created", None, parameters=[f"{input[3].parameters[0]}[{len(self.instances)-1}]"])
                 self.to_send.append((input[1], input[0], input[2], ev))
+
             elif input[3].name == "start_instance":
                 instance = list(self.instances)[input[2]]
                 instance.start()
@@ -671,6 +699,8 @@ class Field(AtomicDEVS, ObjectManagerBase):
         return self.next_time
 
 class ButtonInstance(RuntimeClassBase):
+    num_instances = 0
+
     def __init__(self, atomdevs, window_id, event_name, button_text):
         RuntimeClassBase.__init__(self, atomdevs)
         self.associations = {}
@@ -692,6 +722,9 @@ class ButtonInstance(RuntimeClassBase):
         
         # call user defined constructor
         ButtonInstance.user_defined_constructor(self, window_id, event_name, button_text)
+
+        self.inports['button_ui'] = ('button_ui', ButtonInstance.num_instances)
+        ButtonInstance.num_instances += 1
     
     def user_defined_constructor(self, window_id, event_name, button_text):
         self.window_id = window_id;
@@ -734,12 +767,12 @@ class ButtonInstance(RuntimeClassBase):
         self.states["/running"].addTransition(_running_0)
     
     def _creating_button_enter(self):
-        self.big_step.outputEvent(Event("create_button", self.getOutPortName("ui"), [self.window_id, self.event_name, 'button_ui']))
+        self.big_step.outputEvent(Event("create_button", self.getOutPortName("ui"), [self.window_id, self.event_name,  self.inports['button_ui']]))
     
     def _creating_button_0_exec(self, parameters):
         button_id = parameters[0]
         self.button_id = button_id
-        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [button_id, ui.EVENTS.MOUSE_CLICK, "mouse_click", 'button_ui']))
+        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [button_id, ui.EVENTS.MOUSE_CLICK, "mouse_click",  self.inports['button_ui']]))
     
     def _running_0_exec(self, parameters):
         x = parameters[0]
@@ -786,44 +819,13 @@ class Button(AtomicDEVS, ObjectManagerBase):
                 tem = eval(input)
                 self.addInput(tem)
             elif input[3].name == "create_instance":
-                '''
-                if len(parameters) < 2:
-                    raise ParameterException ("The create event needs at least 2 parameters.")
-
-                source = parameters[0]
-                association_name = parameters[1]
-        
-                traversal_list = self.processAssociationReference(association_name)
-                instances = self.getInstances(source, traversal_list)
-                
-                association = source.associations[association_name]
-                # association = self.instances_map[source].getAssociation(association_name)
-                if association.allowedToAdd():
-                    class_name = association.to_class if len(parameters) == 2 else parameters[2]
-                    new_instance = self.createInstance(class_name, parameters[3:])
-                    if not new_instance:
-                        raise ParameterException("Creating instance: no such class: " + class_name)
-                    # index = association.addInstance(new_instance)
-                    try:
-                        index = association.addInstance(new_instance)
-                    except AssociationException as exception:
-                        raise RuntimeException("Error adding instance to association '" + association_name + "': " + str(exception))
-                    p = new_instance.associations.get("parent")
-                    if p:
-                        p.addInstance(source)
-                    source.addEvent(Event("instance_created", None, [association_name+"["+str(index)+"]"]))
-                    return [source, association_name+"["+str(index)+"]"]
-                else:
-                    source.addEvent(Event("instance_creation_error", None, [association_name]))
-                    return []
-                '''
-
                 new_instance = ButtonInstance(self, input[3].parameters[1], input[3].parameters[2], input[3].parameters[3])
                 self.instances.add(new_instance)
 
-                #p = new_instance.associations.get("parent")
-                #if p:
-                #    p.addInstance(f"{input[3].parameters[0]}[{input[3].parameters[1]}]")
+                #TODO: hardcoded but needs to be fixed
+                p = new_instance.associations.get("parent")
+                if p:
+                    p.addInstance(f"fields[0]")
 
 
 
@@ -906,6 +908,8 @@ class Button(AtomicDEVS, ObjectManagerBase):
         return self.next_time
 
 class BallInstance(RuntimeClassBase):
+    num_instances = 0
+
     def __init__(self, atomdevs, canvas_id, x, y):
         RuntimeClassBase.__init__(self, atomdevs)
         self.associations = {}
@@ -926,6 +930,9 @@ class BallInstance(RuntimeClassBase):
         
         # call user defined constructor
         BallInstance.user_defined_constructor(self, canvas_id, x, y)
+
+        self.inports['ball_ui'] = ('ball_ui', BallInstance.num_instances)
+        BallInstance.num_instances += 1
     
     def user_defined_constructor(self, canvas_id, x, y):
         self.canvas_id = canvas_id;
@@ -1033,7 +1040,7 @@ class BallInstance(RuntimeClassBase):
         self.states["/main_behaviour/selected"].addTransition(_main_behaviour_selected_1)
     
     def _main_behaviour_creating_circle_enter(self):
-        self.big_step.outputEvent(Event("create_circle", self.getOutPortName("ui"), [self.canvas_id, self.pos['x'], self.pos['y'], self.r, {'fill':'#000'}, 'ball_ui']))
+        self.big_step.outputEvent(Event("create_circle", self.getOutPortName("ui"), [self.canvas_id, self.pos['x'], self.pos['y'], self.r, {'fill':'#000'},  self.inports['ball_ui']]))
     
     def _main_behaviour_bouncing_enter(self):
         self.addTimer(0, 0.02)
@@ -1049,9 +1056,9 @@ class BallInstance(RuntimeClassBase):
         canvas_id = parameters[0]
         circle_id = parameters[1]
         self.circle_id = circle_id
-        self.big_step.outputEvent(Event("bind_canvas_event", self.getOutPortName("ui"), [self.canvas_id, circle_id, ui.EVENTS.MOUSE_PRESS, 'mouse_press', 'ball_ui']))
-        self.big_step.outputEvent(Event("bind_canvas_event", self.getOutPortName("ui"), [self.canvas_id, circle_id, ui.EVENTS.MOUSE_MOVE, 'mouse_move', 'ball_ui']))
-        self.big_step.outputEvent(Event("bind_canvas_event", self.getOutPortName("ui"), [self.canvas_id, circle_id, ui.EVENTS.MOUSE_RELEASE, 'mouse_release', 'ball_ui']))
+        self.big_step.outputEvent(Event("bind_canvas_event", self.getOutPortName("ui"), [self.canvas_id, circle_id, ui.EVENTS.MOUSE_PRESS, 'mouse_press',  self.inports['ball_ui']]))
+        self.big_step.outputEvent(Event("bind_canvas_event", self.getOutPortName("ui"), [self.canvas_id, circle_id, ui.EVENTS.MOUSE_MOVE, 'mouse_move',  self.inports['ball_ui']]))
+        self.big_step.outputEvent(Event("bind_canvas_event", self.getOutPortName("ui"), [self.canvas_id, circle_id, ui.EVENTS.MOUSE_RELEASE, 'mouse_release',  self.inports['ball_ui']]))
     
     def _main_behaviour_bouncing_0_exec(self, parameters):
         # Invert velocity when colliding with canvas border:
@@ -1135,6 +1142,7 @@ class Ball(AtomicDEVS, ObjectManagerBase):
         self.next_time = INFINITY
     
     def extTransition(self, inputs):
+        self.simulated_time += self.elapsed
         self.next_time = 0
         all_inputs = []
         if self.ball_ui in inputs:
@@ -1152,11 +1160,10 @@ class Ball(AtomicDEVS, ObjectManagerBase):
                 ev = Event("instance_created", None, parameters=[f"{input[3].parameters[0]}[{len(self.instances)-1}]"])
                 self.to_send.append((self.name, input[0], input[2], ev))
             elif input[3].name == "start_instance":
-                association = self.processAssociationReference(input[3].parameters[0])[0]
-                instance = list(self.instances)[association[1]]
+                instance = list(self.instances)[input[3].parameters[0]]
                 instance.start()
                 ev = Event("instance_started", None, parameters=[input[3].parameters[0]])
-                self.to_send.append((input[0], input[1], association[1], ev))
+                self.to_send.append((input[0], input[1], input[3].parameters[0], ev))
             elif input[3].name == "delete_instance":
                 ev = Event("instance_deleted", None, parameters=[])
                 self.to_send.append((self.name, input[0], input[2], ev))
@@ -1172,8 +1179,7 @@ class Ball(AtomicDEVS, ObjectManagerBase):
                 instance.addEvent(input[3])
                 instance.associations['fields'].instances[0] = input[3].parameters[0]
             elif input[3].name == "instance_started":
-                association = self.processAssociationReference(input[3].parameters[0])[0]
-                instance = list(self.instances)[association[1]]
+                instance = list(self.instances)[input[3].parameters[0]]
                 instance.addEvent(input[3])
             elif input[3].name == "instance_deleted":
                 instance = list(self.instances)[input[2]]
@@ -1190,7 +1196,8 @@ class Ball(AtomicDEVS, ObjectManagerBase):
         return self.instances
     
     def intTransition(self):
-        earliest = min(self.getEarliestEventTime(), self.input_queue.getEarliestTime())
+        # TODO: self.simulated_time added here, do this everywhere
+        earliest = min(self.getEarliestEventTime(), self.simulated_time + self.input_queue.getEarliestTime())
         if not (earliest == INFINITY):
             self.simulated_time = earliest
         self.to_send = []
@@ -1203,6 +1210,7 @@ class Ball(AtomicDEVS, ObjectManagerBase):
             self.next_time = INFINITY
         else:
             self.next_time = next_earliest - earliest
+            #helping = self.time_next[0] - self.time_last[0]
         return self.instances
     
     def outputFnc(self):

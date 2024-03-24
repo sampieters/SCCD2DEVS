@@ -64,8 +64,7 @@ class UI:
             button.pack(fill=tk.BOTH, expand=1)
             button_id = self._gen_id(button)
 
-            #self.controller.addInput(Event("button_created", res_port, [button_id]))
-            self.controller.realtime_interrupt(f"{res_port} Event(\"button_created\",\"{res_port}\",[{button_id}])")
+            self.controller.realtime_interrupt(f"{res_port[0]} Event(\"button_created\",\"{res_port[0]}\",[{button_id}],{res_port[1]})")
         # schedule in mainloop:
         self.tk.after(0, callback)
 
@@ -77,8 +76,7 @@ class UI:
             canvas.pack(fill=tk.BOTH, expand=1)
             canvas_id = self._gen_id(canvas)
             
-            #self.controller.addInput(Event("canvas_created", res_port, [canvas_id]))
-            self.controller.realtime_interrupt(f"{res_port} Event(\"canvas_created\",\"{res_port}\",[{canvas_id}])")
+            self.controller.realtime_interrupt(f"{res_port[0]} Event(\"canvas_created\",\"{res_port[0]}\",[{canvas_id}],{res_port[1]})")
         # schedule in mainloop:
         self.tk.after(0, callback)
 
@@ -88,10 +86,8 @@ class UI:
             window.title(title)
             window.geometry(str(width)+"x"+str(height)+"+300+300")
             window_id = self._gen_id(window)
-            #self.controller.addInput(Event("window_created", res_port, [window_id]))
 
-            #source = f"{res_port} Event(\"window_created\", {res_port},[{window_id}])"
-            self.controller.realtime_interrupt(f"{res_port} Event(\"window_created\",\"{res_port}\",[{window_id}])")
+            self.controller.realtime_interrupt(f"{res_port[0]} Event(\"window_created\",\"{res_port[0]}\",[{window_id}],{res_port[1]})")
         # schedule in mainloop:
         self.tk.after(0, callback)
 
@@ -100,7 +96,7 @@ class UI:
             window = self.mapping[window_id]
             window.destroy()
             if res_port != None:
-                self.controller.addInput(Event("window_destroyed", res_port, [window_id]))
+                self.controller.realtime_interrupt(f"{res_port[0]} Event(\"window_destroyed\",\"{res_port[0]}\",[{window_id}],{res_port[1]})")
         # schedule in mainloop:
         self.tk.after(0, callback)
 
@@ -113,8 +109,7 @@ class UI:
         def callback():
             canvas = self.mapping[canvas_id]
             circle_id = canvas.create_oval(x-r, y-r, x+r, y+r, **style)
-            #self.controller.addInput(Event("circle_created", res_port, [canvas_id, circle_id]))
-            self.controller.realtime_interrupt(f"{res_port} Event(\"circle_created\",\"{res_port}\",[{canvas_id},{circle_id}])")
+            self.controller.realtime_interrupt(f"{res_port[0]} Event(\"circle_created\",\"{res_port[0]}\",[{canvas_id},{circle_id}],{res_port[1]})")
         # schedule in mainloop:
         self.tk.after(0, callback)
 
@@ -122,7 +117,7 @@ class UI:
         def callback():
             canvas = self.mapping[canvas_id]
             rect_id = canvas.create_rectangle(x-w/2.0, y-h/2.0, x+w/2.0, y+h/2.0, **style)
-            self.controller.addInput(Event("rectangle_created", res_port, [canvas_id, rect_id]))
+            self.controller.realtime_interrupt(f"{res_port[0]} Event(\"rectangle_created\",\"{res_port[0]}\",[{canvas_id},{rect_id}],{res_port[1]})")
         # schedule in mainloop
         self.tk.after(0, callback)
 
@@ -153,30 +148,29 @@ class UI:
             canvas = self.mapping[canvas_id]
             canvas.delete(element.element_id)
             if res_port != None:
-                self.controller.addInput(Event("element_destroyed", res_port, [canvas_id, element_id]))
+                self.controller.realtime_interrupt(f"{res_port[0]} Event(\"element_destroyed\",\"{res_port[0]}\",[{canvas_id},{element_id}],{res_port[1]})")
         # schedule in mainloop
         self.tk.after(0, callback)
 
     def _handle_event(self, event, raise_name, port, ev=None):
         if event == EVENTS.KEY_PRESS :
-            self.controller.addInput(Event(raise_name, port, [ev.keycode]))
+            self.controller.realtime_interrupt(f"{port[0]} Event(\"{raise_name}\",\"{port[0]}\",[{ev.keycode}],{port[1]})")
+
         elif event == EVENTS.MOUSE_CLICK or \
              event == EVENTS.MOUSE_MOVE or \
              event == EVENTS.MOUSE_PRESS or \
              event == EVENTS.MOUSE_RELEASE or \
              event == EVENTS.MOUSE_RIGHT_CLICK :
-            #self.controller.addInput(Event(raise_name, port, [ev.x, ev.y, ev.num]))
 
             match ev.num:
                 case int():
-                    hel = f"{port} Event(\"{raise_name}\",\"{port}\",[{ev.x},{ev.y},{ev.num}])"
+                    hel = f"{port[0]} Event(\"{raise_name}\",\"{port[0]}\",[{ev.x},{ev.y},{ev.num}],{port[1]})"
                 case _:
-                    hel = f"{port} Event(\"{raise_name}\",\"{port}\",[{ev.x},{ev.y},\"{ev.num}\"])"
-                    
+                    hel = f"{port[0]} Event(\"{raise_name}\",\"{port[0]}\",[{ev.x},{ev.y},\"{ev.num}\"],{port[1]})"
+
             self.controller.realtime_interrupt(hel)
         elif event == EVENTS.WINDOW_CLOSE :
-            #self.controller.addInput(Event(raise_name, port, []))
-            self.controller.realtime_interrupt(f"{port} Event(\"{raise_name}\",\"{port}\",[])")
+            self.controller.realtime_interrupt(f"{port[0]} Event(\"{raise_name}\",\"{port[0]}\",[],{port[1]})")
             
         else:
             raise Exception('Unsupported event: ' + str(event))

@@ -4,13 +4,9 @@ from sccd.runtime.event_queue import EventQueue
 from pypdevs.infinity import INFINITY
 
 from heapq import heappush, heappop, heapify
+import threading
 
-DEBUG = False
 ELSE_GUARD = "ELSE_GUARD"
-
-def print_debug(msg):
-    if DEBUG:
-        print(msg)
 
 class RuntimeException(Exception):
     """
@@ -251,7 +247,6 @@ class Transition:
                     f = lambda s0: not s0.descendants and s0 in s.descendants
                 self.obj.history_values[h.state_id] = list(filter(f, self.obj.configuration))
         for s in exit_set:
-            print_debug('EXIT: %s::%s' % (self.obj.__class__.__name__, s.name))
             self.obj.eventless_states -= s.has_eventless_transitions
             # execute exit action(s)
             if s.exit:
@@ -270,7 +265,6 @@ class Transition:
         targets = self.__getEffectiveTargetStates()
         enter_set = self.__enterSet(targets)
         for s in enter_set:
-            print_debug('ENTER: %s::%s' % (self.obj.__class__.__name__, s.name))
             self.obj.eventless_states += s.has_eventless_transitions
             self.obj.configuration_bitmap |= 2 ** s.state_id
             # execute enter action(s)
@@ -340,10 +334,11 @@ class Transition:
 
 
 class Event(object):
-    def __init__(self, event_name, port="", parameters=[]):
+    def __init__(self, event_name, port="", parameters=[], instance=None):
         self.name = event_name
         self.parameters = parameters
         self.port = port
+        self.instance = instance
 
     # for comparisons in heaps
     def __lt__(self, other):
@@ -700,6 +695,10 @@ class ObjectManagerBase(object):
                          "create_and_start_instance": self.handleCreateAndStartEvent}
         
         self.output_listeners = []
+
+        self.inports = {}
+
+        self.lock = threading.Condition()
     
     #def getEarliestEventTime(self):
         #while self.instance_times and self.instance_times[0][0] < self.instance_times[0][1].earliest_event_time:
@@ -708,10 +707,16 @@ class ObjectManagerBase(object):
 
         #return  min(earliest_event_time, self.input_queue.getEarliestTime())
     
+    #def getEarliestEventTime(self):
+    #    while self.instance_times and self.instance_times[0][0] < self.instance_times[0][1].earliest_event_time:
+    #        heappop(self.instance_times)
+    #    return min(INFINITY if not self.instance_times else self.instance_times[0][0], self.events.getEarliestTime())
+    
     def getEarliestEventTime(self):
-        while self.instance_times and self.instance_times[0][0] < self.instance_times[0][1].earliest_event_time:
-            heappop(self.instance_times)
-        return min(INFINITY if not self.instance_times else self.instance_times[0][0], self.events.getEarliestTime())
+        with self.lock:
+            while self.instance_times and self.instance_times[0][0] < self.instance_times[0][1].earliest_event_time:
+                heappop(self.instance_times)
+            return min(INFINITY if not self.instance_times else self.instance_times[0][0], self.events.getEarliestTime())
         
     def addEvent(self, event, time_offset = 0):
         self.events.add(self.simulated_time + time_offset, event)
@@ -760,12 +765,12 @@ class ObjectManagerBase(object):
             #target_instance = input_port.instance
             #TODO: get the first field, should be dynamically
             #temp = None
-            #try:
-            #    temp = self.processAssociationReference(e.parameters[0])[0]
-            #    temp = temp[1]
-            #except:
-            #    temp = 0
-            target_instance = list(self.instances)[0]
+
+            temp = e.instance
+            if temp is None:
+                temp = self.processAssociationReference(e.parameters[0])[0]
+                temp = temp[1]
+            target_instance = list(self.instances)[temp]
             #target_instance = self.State[0]
             if target_instance == None:
                 self.broadcast(e, event_time - self.simulated_time)
@@ -788,25 +793,8 @@ class ObjectManagerBase(object):
                 self.input_queue.add((0 if self.simulated_time is None else self.simulated_time) + time_offset, e)
             else:
                 # TODO; changed this from self.accurate_time.get_wct() to self.simulated_time
+                #self.input_queue.add((0 if self.simulated_time is None else 0) + time_offset, e)
                 self.input_queue.add((0 if self.simulated_time is None else 0) + time_offset, e)
-
-    def addInputPort(self, virtual_name, instance = None):
-        if instance == None:
-            port_name = virtual_name
-        else:
-            port_name = "private_" + str(self.private_port_counter) + "_" + virtual_name
-            self.private_port_counter += 1
-        self.input_ports[port_name] = InputPortEntry(virtual_name, instance)
-        return port_name
-        
-    def addOutputPort(self, virtual_name, instance = None):
-        if instance == None:
-            port_name = virtual_name
-        else:
-            port_name = "private_" + str(self.private_port_counter) + "_" + virtual_name
-            self.private_port_counter += 1
-        self.output_ports[port_name] = OutputPortEntry(port_name, virtual_name, instance)
-        return port_name
 
 
     def handleEvent(self, e):
@@ -998,7 +986,7 @@ class ObjectManagerBase(object):
             cast_event = parameters[2]
             for i in self.getInstances(source, traversal_list):
                 # TODO: port cannot be none but don't know yet how to do port 
-                ev = Event(cast_event.name, None, cast_event.parameters)
+                ev = Event(cast_event.name, None, cast_event.parameters, i["instance"])
                 self.to_send.append((i["assoc_name"], i['to_class'], i["assoc_index"], ev))
 
                 #to_send_event = Event(cast_event.name, i["instance"].narrow_cast_port, cast_event.parameters)
@@ -1023,7 +1011,7 @@ class ObjectManagerBase(object):
                         # TODO: instance in nexts was the object but now a reference, can introduce bugs
                         nexts.append({
                             "to_class": association.to_class,
-                            "instance": association.instances[index],
+                            "instance": index,
                             "ref": current["instance"],
                             "assoc_name": name,
                             "assoc_index": index,
@@ -1034,9 +1022,10 @@ class ObjectManagerBase(object):
                         pass
                 elif (index == -1):
                     for i in association.instances:
+                        parent = self.processAssociationReference(association.instances[i])[0]
                         nexts.append({
                             "to_class": association.to_class,
-                            "instance": association.instances[i],
+                            "instance": parent[1],
                             "ref": current["instance"],
                             "assoc_name": name,
                             "assoc_index": index,

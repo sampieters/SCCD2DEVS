@@ -211,6 +211,9 @@ class MainApp(AtomicDEVS, ObjectManagerBase):
         self.input = self.addInPort("input")
         self.instances.add(MainAppInstance(self))
         self.next_time = INFINITY
+
+
+        self.inports['input'] = self.addInPort('input')
     
     def extTransition(self, inputs):
         self.next_time = 0
@@ -301,6 +304,8 @@ class MainApp(AtomicDEVS, ObjectManagerBase):
         return self.next_time
 
 class FieldInstance(RuntimeClassBase):
+    num_instances = 0
+
     def __init__(self, atomdevs):
         RuntimeClassBase.__init__(self, atomdevs)
         self.associations = {}
@@ -323,6 +328,9 @@ class FieldInstance(RuntimeClassBase):
         
         # call user defined constructor
         FieldInstance.user_defined_constructor(self)
+
+        self.inports['field_ui'] = ('field_ui', FieldInstance.num_instances)
+        FieldInstance.num_instances += 1
     
     def user_defined_constructor(self):
         pass
@@ -604,7 +612,7 @@ class Field(AtomicDEVS, ObjectManagerBase):
             elif input[3].name == "instance_created":
                 instance = list(self.instances)[input[2]]
                 instance.addEvent(input[3])
-                instance.associations['fields'].instances[0] = input[3].parameters[0]
+                instance.associations['buttons'].instances[0] = input[3].parameters[0]
             elif input[3].name == "instance_started":
                 instance = list(self.instances)[input[2]]
                 instance.addEvent(input[3])
@@ -661,6 +669,8 @@ class Field(AtomicDEVS, ObjectManagerBase):
         return self.next_time
 
 class ButtonInstance(RuntimeClassBase):
+    num_instances = 0
+
     def __init__(self, atomdevs, window_id, event_name, button_text):
         RuntimeClassBase.__init__(self, atomdevs)
         self.associations = {}
@@ -682,6 +692,9 @@ class ButtonInstance(RuntimeClassBase):
         
         # call user defined constructor
         ButtonInstance.user_defined_constructor(self, window_id, event_name, button_text)
+
+        self.inports['button_ui'] = ('button_ui', ButtonInstance.num_instances)
+        ButtonInstance.num_instances += 1
     
     def user_defined_constructor(self, window_id, event_name, button_text):
         self.window_id = window_id;
@@ -760,6 +773,7 @@ class Button(AtomicDEVS, ObjectManagerBase):
         self.button_ui = self.addInPort("button_ui")
         self.obj_manager_in = self.addInPort("obj_manager_in")
         self.input = self.addInPort("input")
+
         self.next_time = INFINITY
     
     def extTransition(self, inputs):
@@ -776,7 +790,7 @@ class Button(AtomicDEVS, ObjectManagerBase):
                 tem = eval(input)
                 self.addInput(tem)
             elif input[3].name == "create_instance":
-                self.instances.add(ButtonInstance(self))
+                self.instances.add(ButtonInstance(self, input[3].parameters[1], input[3].parameters[2], input[3].parameters[3]))
                 ev = Event("instance_created", None, parameters=[f"{input[3].parameters[0]}[{len(self.instances)-1}]"])
                 self.to_send.append((input[1], input[0], input[2], ev))
             elif input[3].name == "start_instance":
@@ -853,6 +867,8 @@ class Button(AtomicDEVS, ObjectManagerBase):
         return self.next_time
 
 class BallInstance(RuntimeClassBase):
+    num_instances = 0
+
     def __init__(self, atomdevs, canvas_id, x, y):
         RuntimeClassBase.__init__(self, atomdevs)
         self.associations = {}
@@ -873,6 +889,9 @@ class BallInstance(RuntimeClassBase):
         
         # call user defined constructor
         BallInstance.user_defined_constructor(self, canvas_id, x, y)
+
+        self.inports['ball_ui'] = ('ball_ui', BallInstance.num_instances)
+        BallInstance.num_instances += 1
     
     def user_defined_constructor(self, canvas_id, x, y):
         self.canvas_id = canvas_id;
@@ -1095,7 +1114,7 @@ class Ball(AtomicDEVS, ObjectManagerBase):
                 tem = eval(input)
                 self.addInput(tem)
             elif input[3].name == "create_instance":
-                self.instances.add(BallInstance(self))
+                self.instances.add(BallInstance(self, input[3].parameters[1], input[3].parameters[2], input[3].parameters[3]))
                 ev = Event("instance_created", None, parameters=[f"{input[3].parameters[0]}[{len(self.instances)-1}]"])
                 self.to_send.append((input[1], input[0], input[2], ev))
             elif input[3].name == "start_instance":
