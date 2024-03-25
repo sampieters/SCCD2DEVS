@@ -266,7 +266,6 @@ class ObjectManagerBase(object):
             
             traversal_list = self.processAssociationReference(association_name)
             instances = self.getInstances(source, traversal_list)
-            # association = self.instances_map[source].getAssociation(traversal_list[0][0])
             association = source.associations[traversal_list[0][0]]
             
             for i in instances:

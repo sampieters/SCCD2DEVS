@@ -209,10 +209,11 @@ class MainApp(AtomicDEVS, ObjectManagerBase):
         self.outputs["fields"] = self.addOutPort("fields")
         self.obj_manager_in = self.addInPort("obj_manager_in")
         self.input = self.addInPort("input")
-        self.instances.add(MainAppInstance(self))
+        self.instances.append(MainAppInstance(self))
         self.next_time = INFINITY
     
     def extTransition(self, inputs):
+        self.simulated_time = (self.simulated_time + self.elapsed)
         self.next_time = 0
         all_inputs = []
         if self.obj_manager_in in inputs:
@@ -224,46 +225,47 @@ class MainApp(AtomicDEVS, ObjectManagerBase):
                 tem = eval(input)
                 self.addInput(tem)
             elif input[3].name == "create_instance":
-                self.instances.add(MainAppInstance(self))
-                ev = Event("instance_created", None, parameters=[f"{input[3].parameters[0]}[{len(self.instances)-1}]"])
+                new_instance = MainAppInstance(self)
+                self.instances.append(new_instance)
+                p = new_instance.associations.get("parent")
+                if p:
+                    p.addInstance("fields[0]")
+                ev = Event("instance_created", None, [f"{input[3].parameters[0]}[{len(self.instances)-1}]"])
                 self.to_send.append((input[1], input[0], input[2], ev))
             elif input[3].name == "start_instance":
-                instance = list(self.instances)[input[2]]
+                instance = self.instances[input[3].instance]
                 instance.start()
-                ev = Event("instance_started", None, parameters=[f"{input[0]}[{input[2]}]"])
+                ev = Event("instance_started", None, [f"{input[0]}[{len(self.instances)-1}]"], input[3].instance)
                 self.to_send.append((input[0], input[1], input[2], ev))
             elif input[3].name == "delete_instance":
-                ev = Event("instance_deleted", None, parameters=[TODO])
-                self.to_send.append((self.name, TODO, TODO, ev))
+                pass
             elif input[3].name == "associate_instance":
-                ev = Event("instance_associated", None, parameters=[TODO])
-                self.to_send.append((self.name, TODO, TODO, ev))
+                pass
             elif input[3].name == "disassociate_instance":
-                ev = Event("instance_disassociated", None, parameters=[TODO])
-                self.to_send.append((self.name, TODO, TODO, ev))
+                pass
             elif input[3].name == "instance_created":
-                instance = list(self.instances)[input[2]]
+                association = self.processAssociationReference(input[3].parameters[0])[0]
+                instance = self.instances[input[2]]
+                p = instance.associations.get(association[0])
+                if p:
+                    p.addInstance(input[3].parameters[0])
                 instance.addEvent(input[3])
-                instance.associations['fields'].instances[0] = input[3].parameters[0]
             elif input[3].name == "instance_started":
-                instance = list(self.instances)[input[2]]
+                instance = self.instances[input[3].instance]
                 instance.addEvent(input[3])
             elif input[3].name == "instance_deleted":
-                instance = list(self.instances)[input[2]]
-                instance.addEvent(input[3])
+                pass
             elif input[3].name == "instance_associated":
-                instance = list(self.instances)[input[2]]
-                instance.addEvent(input[3])
+                pass
             elif input[3].name == "instance_disassociated":
-                instance = list(self.instances)[input[2]]
-                instance.addEvent(input[3])
-            elif input[3].name == "set_association_name":
+                pass
+            else:
                 ev = input[3]
-                self.addInput(ev, force_internal=True)
+                self.addInput(ev)
         return self.instances
     
     def intTransition(self):
-        earliest = min(self.getEarliestEventTime(), self.input_queue.getEarliestTime())
+        earliest = min(self.getEarliestEventTime(), self.simulated_time + self.input_queue.getEarliestTime())
         if not (earliest == INFINITY):
             self.simulated_time = earliest
         self.to_send = []
@@ -323,6 +325,7 @@ class FieldInstance(RuntimeClassBase):
         
         # call user defined constructor
         FieldInstance.user_defined_constructor(self)
+        self.inports["field_ui"] = ('field_ui', len(atomdevs.instances))
     
     def user_defined_constructor(self):
         pass
@@ -571,6 +574,7 @@ class Field(AtomicDEVS, ObjectManagerBase):
         self.next_time = INFINITY
     
     def extTransition(self, inputs):
+        self.simulated_time = (self.simulated_time + self.elapsed)
         self.next_time = 0
         all_inputs = []
         if self.field_ui in inputs:
@@ -584,46 +588,47 @@ class Field(AtomicDEVS, ObjectManagerBase):
                 tem = eval(input)
                 self.addInput(tem)
             elif input[3].name == "create_instance":
-                self.instances.add(FieldInstance(self))
-                ev = Event("instance_created", None, parameters=[f"{input[3].parameters[0]}[{len(self.instances)-1}]"])
+                new_instance = FieldInstance(self)
+                self.instances.append(new_instance)
+                p = new_instance.associations.get("parent")
+                if p:
+                    p.addInstance("fields[0]")
+                ev = Event("instance_created", None, [f"{input[3].parameters[0]}[{len(self.instances)-1}]"])
                 self.to_send.append((input[1], input[0], input[2], ev))
             elif input[3].name == "start_instance":
-                instance = list(self.instances)[input[2]]
+                instance = self.instances[input[3].instance]
                 instance.start()
-                ev = Event("instance_started", None, parameters=[f"{input[0]}[{input[2]}]"])
+                ev = Event("instance_started", None, [f"{input[0]}[{len(self.instances)-1}]"], input[3].instance)
                 self.to_send.append((input[0], input[1], input[2], ev))
             elif input[3].name == "delete_instance":
-                ev = Event("instance_deleted", None, parameters=[TODO])
-                self.to_send.append((self.name, TODO, TODO, ev))
+                pass
             elif input[3].name == "associate_instance":
-                ev = Event("instance_associated", None, parameters=[TODO])
-                self.to_send.append((self.name, TODO, TODO, ev))
+                pass
             elif input[3].name == "disassociate_instance":
-                ev = Event("instance_disassociated", None, parameters=[TODO])
-                self.to_send.append((self.name, TODO, TODO, ev))
+                pass
             elif input[3].name == "instance_created":
-                instance = list(self.instances)[input[2]]
+                association = self.processAssociationReference(input[3].parameters[0])[0]
+                instance = self.instances[input[2]]
+                p = instance.associations.get(association[0])
+                if p:
+                    p.addInstance(input[3].parameters[0])
                 instance.addEvent(input[3])
-                instance.associations['fields'].instances[0] = input[3].parameters[0]
             elif input[3].name == "instance_started":
-                instance = list(self.instances)[input[2]]
+                instance = self.instances[input[3].instance]
                 instance.addEvent(input[3])
             elif input[3].name == "instance_deleted":
-                instance = list(self.instances)[input[2]]
-                instance.addEvent(input[3])
+                pass
             elif input[3].name == "instance_associated":
-                instance = list(self.instances)[input[2]]
-                instance.addEvent(input[3])
+                pass
             elif input[3].name == "instance_disassociated":
-                instance = list(self.instances)[input[2]]
-                instance.addEvent(input[3])
-            elif input[3].name == "set_association_name":
+                pass
+            else:
                 ev = input[3]
-                self.addInput(ev, force_internal=True)
+                self.addInput(ev)
         return self.instances
     
     def intTransition(self):
-        earliest = min(self.getEarliestEventTime(), self.input_queue.getEarliestTime())
+        earliest = min(self.getEarliestEventTime(), self.simulated_time + self.input_queue.getEarliestTime())
         if not (earliest == INFINITY):
             self.simulated_time = earliest
         self.to_send = []
@@ -682,6 +687,7 @@ class ButtonInstance(RuntimeClassBase):
         
         # call user defined constructor
         ButtonInstance.user_defined_constructor(self, window_id, event_name, button_text)
+        self.inports["button_ui"] = ('button_ui', len(atomdevs.instances))
     
     def user_defined_constructor(self, window_id, event_name, button_text):
         self.window_id = window_id;
@@ -763,6 +769,7 @@ class Button(AtomicDEVS, ObjectManagerBase):
         self.next_time = INFINITY
     
     def extTransition(self, inputs):
+        self.simulated_time = (self.simulated_time + self.elapsed)
         self.next_time = 0
         all_inputs = []
         if self.button_ui in inputs:
@@ -776,46 +783,64 @@ class Button(AtomicDEVS, ObjectManagerBase):
                 tem = eval(input)
                 self.addInput(tem)
             elif input[3].name == "create_instance":
-                self.instances.add(ButtonInstance(self))
-                ev = Event("instance_created", None, parameters=[f"{input[3].parameters[0]}[{len(self.instances)-1}]"])
+                new_instance = ButtonInstance(self, input[3].parameters[1], input[3].parameters[2], input[3].parameters[3])
+                self.instances.append(new_instance)
+                p = new_instance.associations.get("parent")
+                if p:
+                    p.addInstance("fields[0]")
+                ev = Event("instance_created", None, [f"{input[3].parameters[0]}[{len(self.instances)-1}]"])
                 self.to_send.append((input[1], input[0], input[2], ev))
             elif input[3].name == "start_instance":
-                instance = list(self.instances)[input[2]]
+                instance = self.instances[input[3].instance]
                 instance.start()
-                ev = Event("instance_started", None, parameters=[f"{input[0]}[{input[2]}]"])
+                ev = Event("instance_started", None, [f"{input[0]}[{len(self.instances)-1}]"], input[3].instance)
                 self.to_send.append((input[0], input[1], input[2], ev))
             elif input[3].name == "delete_instance":
-                ev = Event("instance_deleted", None, parameters=[TODO])
-                self.to_send.append((self.name, TODO, TODO, ev))
+                instance = self.instances[input[3].instance]
+                try:
+                    for assoc_name in instance.associations:
+                        if assoc_name != 'parent':
+                            traversal_list = self.processAssociationReference(assoc_name)
+                            instances = self.getInstances(i["instance"], traversal_list)
+                            if len(instances) > 0:
+                                raise RuntimeException("Error removing instance from association %s, still %i children left connected with association %s" % (assoc_name, len(instances), assoc_name))
+                    #del i["instance"].controller.input_ports[i["instance"].narrow_cast_port]
+                    #association.removeInstance(instance)
+                    self.instances.remove(instance)
+                    self.eventless.discard(instance)
+                except AssociationException as exception:
+                    raise RuntimeException("Error removing instance from association '" + assoc_name + "': " + str(exception))
+                instance.user_defined_destructor()
+                instance.stop()
+                ev = Event("instance_deleted", None, parameters = [input[0]])
+                self.to_send.append((input[0], input[1], input[2], ev))
             elif input[3].name == "associate_instance":
-                ev = Event("instance_associated", None, parameters=[TODO])
-                self.to_send.append((self.name, TODO, TODO, ev))
+                pass
             elif input[3].name == "disassociate_instance":
-                ev = Event("instance_disassociated", None, parameters=[TODO])
-                self.to_send.append((self.name, TODO, TODO, ev))
+                pass
             elif input[3].name == "instance_created":
-                instance = list(self.instances)[input[2]]
+                association = self.processAssociationReference(input[3].parameters[0])[0]
+                instance = self.instances[input[2]]
+                p = instance.associations.get(association[0])
+                if p:
+                    p.addInstance(input[3].parameters[0])
                 instance.addEvent(input[3])
-                instance.associations['fields'].instances[0] = input[3].parameters[0]
             elif input[3].name == "instance_started":
-                instance = list(self.instances)[input[2]]
+                instance = self.instances[input[3].instance]
                 instance.addEvent(input[3])
             elif input[3].name == "instance_deleted":
-                instance = list(self.instances)[input[2]]
-                instance.addEvent(input[3])
+                pass
             elif input[3].name == "instance_associated":
-                instance = list(self.instances)[input[2]]
-                instance.addEvent(input[3])
+                pass
             elif input[3].name == "instance_disassociated":
-                instance = list(self.instances)[input[2]]
-                instance.addEvent(input[3])
-            elif input[3].name == "set_association_name":
+                pass
+            else:
                 ev = input[3]
-                self.addInput(ev, force_internal=True)
+                self.addInput(ev)
         return self.instances
     
     def intTransition(self):
-        earliest = min(self.getEarliestEventTime(), self.input_queue.getEarliestTime())
+        earliest = min(self.getEarliestEventTime(), self.simulated_time + self.input_queue.getEarliestTime())
         if not (earliest == INFINITY):
             self.simulated_time = earliest
         self.to_send = []
@@ -873,6 +898,7 @@ class BallInstance(RuntimeClassBase):
         
         # call user defined constructor
         BallInstance.user_defined_constructor(self, canvas_id, x, y)
+        self.inports["ball_ui"] = ('ball_ui', len(atomdevs.instances))
     
     def user_defined_constructor(self, canvas_id, x, y):
         self.canvas_id = canvas_id;
@@ -1082,6 +1108,7 @@ class Ball(AtomicDEVS, ObjectManagerBase):
         self.next_time = INFINITY
     
     def extTransition(self, inputs):
+        self.simulated_time = (self.simulated_time + self.elapsed)
         self.next_time = 0
         all_inputs = []
         if self.ball_ui in inputs:
@@ -1095,46 +1122,47 @@ class Ball(AtomicDEVS, ObjectManagerBase):
                 tem = eval(input)
                 self.addInput(tem)
             elif input[3].name == "create_instance":
-                self.instances.add(BallInstance(self))
-                ev = Event("instance_created", None, parameters=[f"{input[3].parameters[0]}[{len(self.instances)-1}]"])
+                new_instance = BallInstance(self, input[3].parameters[1], input[3].parameters[2], input[3].parameters[3])
+                self.instances.append(new_instance)
+                p = new_instance.associations.get("parent")
+                if p:
+                    p.addInstance("fields[0]")
+                ev = Event("instance_created", None, [f"{input[3].parameters[0]}[{len(self.instances)-1}]"])
                 self.to_send.append((input[1], input[0], input[2], ev))
             elif input[3].name == "start_instance":
-                instance = list(self.instances)[input[2]]
+                instance = self.instances[input[3].instance]
                 instance.start()
-                ev = Event("instance_started", None, parameters=[f"{input[0]}[{input[2]}]"])
+                ev = Event("instance_started", None, [f"{input[0]}[{len(self.instances)-1}]"], input[3].instance)
                 self.to_send.append((input[0], input[1], input[2], ev))
             elif input[3].name == "delete_instance":
-                ev = Event("instance_deleted", None, parameters=[TODO])
-                self.to_send.append((self.name, TODO, TODO, ev))
+                pass
             elif input[3].name == "associate_instance":
-                ev = Event("instance_associated", None, parameters=[TODO])
-                self.to_send.append((self.name, TODO, TODO, ev))
+                pass
             elif input[3].name == "disassociate_instance":
-                ev = Event("instance_disassociated", None, parameters=[TODO])
-                self.to_send.append((self.name, TODO, TODO, ev))
+                pass
             elif input[3].name == "instance_created":
-                instance = list(self.instances)[input[2]]
+                association = self.processAssociationReference(input[3].parameters[0])[0]
+                instance = self.instances[input[2]]
+                p = instance.associations.get(association[0])
+                if p:
+                    p.addInstance(input[3].parameters[0])
                 instance.addEvent(input[3])
-                instance.associations['fields'].instances[0] = input[3].parameters[0]
             elif input[3].name == "instance_started":
-                instance = list(self.instances)[input[2]]
+                instance = self.instances[input[3].instance]
                 instance.addEvent(input[3])
             elif input[3].name == "instance_deleted":
-                instance = list(self.instances)[input[2]]
-                instance.addEvent(input[3])
+                pass
             elif input[3].name == "instance_associated":
-                instance = list(self.instances)[input[2]]
-                instance.addEvent(input[3])
+                pass
             elif input[3].name == "instance_disassociated":
-                instance = list(self.instances)[input[2]]
-                instance.addEvent(input[3])
-            elif input[3].name == "set_association_name":
+                pass
+            else:
                 ev = input[3]
-                self.addInput(ev, force_internal=True)
+                self.addInput(ev)
         return self.instances
     
     def intTransition(self):
-        earliest = min(self.getEarliestEventTime(), self.input_queue.getEarliestTime())
+        earliest = min(self.getEarliestEventTime(), self.simulated_time + self.input_queue.getEarliestTime())
         if not (earliest == INFINITY):
             self.simulated_time = earliest
         self.to_send = []
@@ -1173,7 +1201,7 @@ class Ball(AtomicDEVS, ObjectManagerBase):
 
 class ObjectManagerState:
     def __init__(self):
-        self.to_send = [(None, "MainApp", 0, Event("start_instance", None, None))]
+        self.to_send = [(None, "MainApp", 0, Event("start_instance", None, [0], 0))]
 
 class ObjectManager(AtomicDEVS):
     def __init__(self, name):

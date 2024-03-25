@@ -681,7 +681,7 @@ class ObjectManagerBase(object):
         self.to_send = []
 
         self.events = EventQueue()
-        self.instances = set() # a set of RuntimeClassBase instances
+        self.instances = []
         self.instance_times = []
         self.eventless = set()
         self.regex_pattern = re.compile("^([a-zA-Z_]\w*)(?:\[(\d+)\])?$")
@@ -699,18 +699,6 @@ class ObjectManagerBase(object):
         self.inports = {}
 
         self.lock = threading.Condition()
-    
-    #def getEarliestEventTime(self):
-        #while self.instance_times and self.instance_times[0][0] < self.instance_times[0][1].earliest_event_time:
-        #    heappop(self.instance_times)
-        #earliest_event_time = min(INFINITY if not self.instance_times else self.instance_times[0][0], self.events.getEarliestTime())
-
-        #return  min(earliest_event_time, self.input_queue.getEarliestTime())
-    
-    #def getEarliestEventTime(self):
-    #    while self.instance_times and self.instance_times[0][0] < self.instance_times[0][1].earliest_event_time:
-    #        heappop(self.instance_times)
-    #    return min(INFINITY if not self.instance_times else self.instance_times[0][0], self.events.getEarliestTime())
     
     def getEarliestEventTime(self):
         with self.lock:
@@ -832,7 +820,7 @@ class ObjectManagerBase(object):
             for i in self.getInstances(source, traversal_list):
                 #i["instance"].start()
                 # TODO: start instance over a link from mainapp to field
-                self.to_send.append((i['assoc_name'], i['to_class'], 0, Event("start_instance", None, [i['instance']])))
+                self.to_send.append((i['assoc_name'], i['to_class'], 0, Event("start_instance", None, [], i['instance'])))
 
 
 
@@ -904,7 +892,7 @@ class ObjectManagerBase(object):
             association = source.associations[traversal_list[0][0]]
             
             for i in instances:
-                self.to_send.append((i['assoc_name'], i['to_class'], 0, Event("delete_instance", None, None)))
+                self.to_send.append((i['assoc_name'], i['to_class'], 0, Event("delete_instance", None, None, i['instance'])))
                 #try:
                     #for assoc_name in i["instance"].associations:
                     #    if assoc_name != 'parent':

@@ -1,8 +1,7 @@
-from pypdevs.simulator import Simulator
-import examples.BouncingBalls.PyDEVS.best_target as target
-
-from tkinter import *
-from sccd.runtime.libs.DEVui_v2 import UI
+import tkinter as tk
+import target as target
+from sccd.runtime.libs.ui_v2 import UI
+from sccd.runtime.DEVS_loop import DEVSSimulator
 
 class OutputListener:
 	def __init__(self, ui):
@@ -17,9 +16,9 @@ if __name__ == '__main__':
 	model = target.Controller(name="controller")
 	refs = {"ui": model.ui, "field_ui": model.atomic1.field_ui, "button_ui": model.atomic2.button_ui, "ball_ui": model.atomic3.ball_ui}
 
-	tkroot = Tk()
+	tkroot = tk.Tk()
 	tkroot.withdraw()
-	sim = Simulator(model)
+	sim = DEVSSimulator(model)
 	sim.setRealTime(True)
 	sim.setRealTimeInputFile(None)
 	sim.setRealTimePorts(refs)
