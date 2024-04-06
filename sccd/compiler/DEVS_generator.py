@@ -60,7 +60,7 @@ class DEVSGenerator(Visitor):
         self.writer.beginConstructor()
         self.writer.beginMethodBody()
 
-        self.writer.addAssignment(GLC.SelfProperty("to_send"), f"[(None, \"{class_diagram.default_class.name}\", 0, Event(\"start_instance\", None, [0], 0))]")
+        self.writer.addAssignment(GLC.SelfProperty("to_send"), f"[(None, \"{class_diagram.default_class.name}\", Event(\"start_instance\", None, [0], 0))]")
 
         self.writer.endMethodBody()
         self.writer.endConstructor()
@@ -112,12 +112,12 @@ class DEVSGenerator(Visitor):
         self.writer.beginMethodBody()
         self.writer.addAssignment("out_dict", "{}")
 
-        self.writer.beginForLoopIterateArray(GLC.SelfProperty("State.to_send"), "(source, target, id, message)")
+        self.writer.beginForLoopIterateArray(GLC.SelfProperty("State.to_send"), "(source, target, message)")
         self.writer.beginIf(GLC.ArrayContains("out_dict", "self.output[target]"))
-        self.writer.add(GLC.FunctionCall("out_dict[self.output[target]].append", ["(source, target, id, message)"]))
+        self.writer.add(GLC.FunctionCall("out_dict[self.output[target]].append", ["(source, target, message)"]))
         self.writer.endIf()
         self.writer.beginElse()
-        self.writer.addAssignment(f"out_dict[self.output[target]]", "[(source, target, id, message)]")
+        self.writer.addAssignment(f"out_dict[self.output[target]]", "[(source, target, message)]")
         self.writer.endElse()
         self.writer.endForLoopIterateArray()
 
@@ -386,68 +386,62 @@ class DEVSGenerator(Visitor):
         self.writer.add(GLC.FunctionCall(GLC.SelfProperty("addInput"), ["tem"]))
         self.writer.endElseIf()
 
-        self.writer.beginElseIf(GLC.EqualsExpression("input[3].name", GLC.String("create_instance")))
+        self.writer.beginElseIf(GLC.EqualsExpression("input[2].name", GLC.String("create_instance")))
 
         parameters = [GLC.SelfExpression()]
         for i, _ in enumerate(constructor.parameters):
-            parameters.append(f"input[3].parameters[{i+1}]")
+            parameters.append(f"input[2].parameters[{i+2}]")
 
         self.writer.addAssignment("new_instance", GLC.FunctionCall(f"{class_node.name}Instance", parameters))
         self.writer.add(GLC.FunctionCall(GLC.SelfProperty("instances.append"), ["new_instance"]))
 
         self.writer.addAssignment("p", "new_instance.associations.get(\"parent\")")
         self.writer.beginIf("p")
-        self.writer.add(GLC.FunctionCall("p.addInstance", [GLC.String("fields[0]")]))
+        self.writer.add(GLC.FunctionCall("p.addInstance", ["input[2].instance"]))
         self.writer.endIf()
 
-
-        self.writer.addAssignment("ev", GLC.FunctionCall("Event", ["\"instance_created\"", "None", "[f\"{input[3].parameters[0]}[{len(self.instances)-1}]\"]"]))
-        self.writer.add(GLC.FunctionCall(GLC.SelfProperty("to_send.append"), ["(input[1], input[0], input[2], ev)"]))
+        self.writer.addAssignment("ev", GLC.FunctionCall("Event", ["\"instance_created\"", "None", "[f\"{input[2].parameters[0]}[{len(self.instances)-1}]\"], input[2].instance"]))
+        self.writer.add(GLC.FunctionCall(GLC.SelfProperty("to_send.append"), ["(input[1], input[0], ev)"]))
         self.writer.endElseIf()
 
-        self.writer.beginElseIf(GLC.EqualsExpression("input[3].name", GLC.String("start_instance")))
-        self.writer.addAssignment("instance", "self.instances[input[3].instance]")
+        self.writer.beginElseIf(GLC.EqualsExpression("input[2].name", GLC.String("start_instance")))
+        self.writer.addAssignment("instance", "self.instances[input[2].instance]")
         self.writer.add(GLC.FunctionCall("instance.start"))
 
-        self.writer.addAssignment("ev", GLC.FunctionCall("Event", ["\"instance_started\"", "None", "[f\"{input[0]}[{len(self.instances)-1}]\"], input[3].instance"]))
-        self.writer.add(GLC.FunctionCall(GLC.SelfProperty("to_send.append"), ["(input[0], input[1], input[2], ev)"]))
+        self.writer.addAssignment("ev", GLC.FunctionCall("Event", ["\"instance_started\"", "None", "[f\"{input[0]}[{len(self.instances)-1}]\"], input[2].instance"]))
+        self.writer.add(GLC.FunctionCall(GLC.SelfProperty("to_send.append"), ["(input[0], input[1], ev)"]))
         self.writer.endElseIf()
 
-        self.writer.beginElseIf(GLC.EqualsExpression("input[3].name", GLC.String("delete_instance")))
+        self.writer.beginElseIf(GLC.EqualsExpression("input[2].name", GLC.String("delete_instance")))
         self.writer.endElseIf()
 
-        self.writer.beginElseIf(GLC.EqualsExpression("input[3].name", GLC.String("associate_instance")))
+        self.writer.beginElseIf(GLC.EqualsExpression("input[2].name", GLC.String("associate_instance")))
         self.writer.endElseIf()
 
-        self.writer.beginElseIf(GLC.EqualsExpression("input[3].name", GLC.String("disassociate_instance")))
+        self.writer.beginElseIf(GLC.EqualsExpression("input[2].name", GLC.String("disassociate_instance")))
         self.writer.endElseIf()
 
-        self.writer.beginElseIf(GLC.EqualsExpression("input[3].name", GLC.String("instance_created")))
-        self.writer.addAssignment("association", "self.processAssociationReference(input[3].parameters[0])[0]")
-        self.writer.addAssignment("instance", "self.instances[input[2]]")
-        self.writer.addAssignment("p", "instance.associations.get(association[0])")
-        self.writer.beginIf("p")
-        self.writer.add(GLC.FunctionCall("p.addInstance", ["input[3].parameters[0]"]))
-        self.writer.endIf()
-        self.writer.add(GLC.FunctionCall("instance.addEvent", ["input[3]"]))
+        self.writer.beginElseIf(GLC.EqualsExpression("input[2].name", GLC.String("instance_created")))
+        self.writer.addAssignment("instance", "self.instances[input[2].instance]")
+        self.writer.add(GLC.FunctionCall("instance.addEvent", ["input[2]"]))
         self.writer.endElseIf()
 
-        self.writer.beginElseIf(GLC.EqualsExpression("input[3].name", GLC.String("instance_started")))
-        self.writer.addAssignment("instance", "self.instances[input[3].instance]")
-        self.writer.add(GLC.FunctionCall("instance.addEvent", ["input[3]"]))
+        self.writer.beginElseIf(GLC.EqualsExpression("input[2].name", GLC.String("instance_started")))
+        self.writer.addAssignment("instance", "self.instances[input[2].instance]")
+        self.writer.add(GLC.FunctionCall("instance.addEvent", ["input[2]"]))
         self.writer.endElseIf()
 
-        self.writer.beginElseIf(GLC.EqualsExpression("input[3].name", GLC.String("instance_deleted")))
+        self.writer.beginElseIf(GLC.EqualsExpression("input[2].name", GLC.String("instance_deleted")))
         self.writer.endElseIf()
 
-        self.writer.beginElseIf(GLC.EqualsExpression("input[3].name", GLC.String("instance_associated")))
+        self.writer.beginElseIf(GLC.EqualsExpression("input[2].name", GLC.String("instance_associated")))
         self.writer.endElseIf()
 
-        self.writer.beginElseIf(GLC.EqualsExpression("input[3].name", GLC.String("instance_disassociated")))
+        self.writer.beginElseIf(GLC.EqualsExpression("input[2].name", GLC.String("instance_disassociated")))
         self.writer.endElseIf()
 
         self.writer.beginElse()
-        self.writer.addAssignment("ev", "input[3]")
+        self.writer.addAssignment("ev", "input[2]")
         self.writer.add(GLC.FunctionCall(GLC.SelfProperty("addInput"), ["ev"]))
         self.writer.endElse()
         
@@ -488,7 +482,7 @@ class DEVSGenerator(Visitor):
         self.writer.beginMethodBody()
         self.writer.addAssignment("to_dict", "{}")
         self.writer.beginForLoopIterateArray(GLC.SelfProperty("to_send"), "sending")
-        self.writer.beginIf(GLC.EqualsExpression("sending[3].port", "None"))
+        self.writer.beginIf(GLC.EqualsExpression("sending[2].port", "None"))
 
         self.writer.beginIf(GLC.ArrayContains("to_dict", "self.obj_manager_out"))
         self.writer.add(GLC.FunctionCall("to_dict[self.obj_manager_out].append", ["sending"]))

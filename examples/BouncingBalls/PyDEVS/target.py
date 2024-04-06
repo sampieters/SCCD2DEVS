@@ -224,43 +224,39 @@ class MainApp(AtomicDEVS, ObjectManagerBase):
             if isinstance(input, str):
                 tem = eval(input)
                 self.addInput(tem)
-            elif input[3].name == "create_instance":
+            elif input[2].name == "create_instance":
                 new_instance = MainAppInstance(self)
                 self.instances.append(new_instance)
                 p = new_instance.associations.get("parent")
                 if p:
-                    p.addInstance("fields[0]")
-                ev = Event("instance_created", None, [f"{input[3].parameters[0]}[{len(self.instances)-1}]"])
-                self.to_send.append((input[1], input[0], input[2], ev))
-            elif input[3].name == "start_instance":
-                instance = self.instances[input[3].instance]
+                    p.addInstance(input[2].instance)
+                ev = Event("instance_created", None, [f"{input[2].parameters[0]}[{len(self.instances)-1}]"], input[2].instance)
+                self.to_send.append((input[1], input[0], ev))
+            elif input[2].name == "start_instance":
+                instance = self.instances[input[2].instance]
                 instance.start()
-                ev = Event("instance_started", None, [f"{input[0]}[{len(self.instances)-1}]"], input[3].instance)
-                self.to_send.append((input[0], input[1], input[2], ev))
-            elif input[3].name == "delete_instance":
+                ev = Event("instance_started", None, [f"{input[0]}[{len(self.instances)-1}]"], input[2].instance)
+                self.to_send.append((input[0], input[1], ev))
+            elif input[2].name == "delete_instance":
                 pass
-            elif input[3].name == "associate_instance":
+            elif input[2].name == "associate_instance":
                 pass
-            elif input[3].name == "disassociate_instance":
+            elif input[2].name == "disassociate_instance":
                 pass
-            elif input[3].name == "instance_created":
-                association = self.processAssociationReference(input[3].parameters[0])[0]
-                instance = self.instances[input[2]]
-                p = instance.associations.get(association[0])
-                if p:
-                    p.addInstance(input[3].parameters[0])
-                instance.addEvent(input[3])
-            elif input[3].name == "instance_started":
-                instance = self.instances[input[3].instance]
-                instance.addEvent(input[3])
-            elif input[3].name == "instance_deleted":
+            elif input[2].name == "instance_created":
+                instance = self.instances[input[2].instance]
+                instance.addEvent(input[2])
+            elif input[2].name == "instance_started":
+                instance = self.instances[input[2].instance]
+                instance.addEvent(input[2])
+            elif input[2].name == "instance_deleted":
                 pass
-            elif input[3].name == "instance_associated":
+            elif input[2].name == "instance_associated":
                 pass
-            elif input[3].name == "instance_disassociated":
+            elif input[2].name == "instance_disassociated":
                 pass
             else:
-                ev = input[3]
+                ev = input[2]
                 self.addInput(ev)
         return self.instances
     
@@ -283,7 +279,7 @@ class MainApp(AtomicDEVS, ObjectManagerBase):
     def outputFnc(self):
         to_dict = {}
         for sending in self.to_send:
-            if sending[3].port == None:
+            if sending[2].port == None:
                 if self.obj_manager_out in to_dict:
                     to_dict[self.obj_manager_out].append(sending)
                 else:
@@ -587,43 +583,39 @@ class Field(AtomicDEVS, ObjectManagerBase):
             if isinstance(input, str):
                 tem = eval(input)
                 self.addInput(tem)
-            elif input[3].name == "create_instance":
+            elif input[2].name == "create_instance":
                 new_instance = FieldInstance(self)
                 self.instances.append(new_instance)
                 p = new_instance.associations.get("parent")
                 if p:
-                    p.addInstance("fields[0]")
-                ev = Event("instance_created", None, [f"{input[3].parameters[0]}[{len(self.instances)-1}]"])
-                self.to_send.append((input[1], input[0], input[2], ev))
-            elif input[3].name == "start_instance":
-                instance = self.instances[input[3].instance]
+                    p.addInstance(input[2].instance)
+                ev = Event("instance_created", None, [f"{input[2].parameters[0]}[{len(self.instances)-1}]"], input[2].instance)
+                self.to_send.append((input[1], input[0], ev))
+            elif input[2].name == "start_instance":
+                instance = self.instances[input[2].instance]
                 instance.start()
-                ev = Event("instance_started", None, [f"{input[0]}[{len(self.instances)-1}]"], input[3].instance)
-                self.to_send.append((input[0], input[1], input[2], ev))
-            elif input[3].name == "delete_instance":
+                ev = Event("instance_started", None, [f"{input[0]}[{len(self.instances)-1}]"], input[2].instance)
+                self.to_send.append((input[0], input[1], ev))
+            elif input[2].name == "delete_instance":
                 pass
-            elif input[3].name == "associate_instance":
+            elif input[2].name == "associate_instance":
                 pass
-            elif input[3].name == "disassociate_instance":
+            elif input[2].name == "disassociate_instance":
                 pass
-            elif input[3].name == "instance_created":
-                association = self.processAssociationReference(input[3].parameters[0])[0]
-                instance = self.instances[input[2]]
-                p = instance.associations.get(association[0])
-                if p:
-                    p.addInstance(input[3].parameters[0])
-                instance.addEvent(input[3])
-            elif input[3].name == "instance_started":
-                instance = self.instances[input[3].instance]
-                instance.addEvent(input[3])
-            elif input[3].name == "instance_deleted":
+            elif input[2].name == "instance_created":
+                instance = self.instances[input[2].instance]
+                instance.addEvent(input[2])
+            elif input[2].name == "instance_started":
+                instance = self.instances[input[2].instance]
+                instance.addEvent(input[2])
+            elif input[2].name == "instance_deleted":
                 pass
-            elif input[3].name == "instance_associated":
+            elif input[2].name == "instance_associated":
                 pass
-            elif input[3].name == "instance_disassociated":
+            elif input[2].name == "instance_disassociated":
                 pass
             else:
-                ev = input[3]
+                ev = input[2]
                 self.addInput(ev)
         return self.instances
     
@@ -646,7 +638,7 @@ class Field(AtomicDEVS, ObjectManagerBase):
     def outputFnc(self):
         to_dict = {}
         for sending in self.to_send:
-            if sending[3].port == None:
+            if sending[2].port == None:
                 if self.obj_manager_out in to_dict:
                     to_dict[self.obj_manager_out].append(sending)
                 else:
@@ -782,60 +774,39 @@ class Button(AtomicDEVS, ObjectManagerBase):
             if isinstance(input, str):
                 tem = eval(input)
                 self.addInput(tem)
-            elif input[3].name == "create_instance":
-                new_instance = ButtonInstance(self, input[3].parameters[1], input[3].parameters[2], input[3].parameters[3])
+            elif input[2].name == "create_instance":
+                new_instance = ButtonInstance(self, input[2].parameters[2], input[2].parameters[3], input[2].parameters[4])
                 self.instances.append(new_instance)
                 p = new_instance.associations.get("parent")
                 if p:
-                    p.addInstance("fields[0]")
-                ev = Event("instance_created", None, [f"{input[3].parameters[0]}[{len(self.instances)-1}]"])
-                self.to_send.append((input[1], input[0], input[2], ev))
-            elif input[3].name == "start_instance":
-                instance = self.instances[input[3].instance]
+                    p.addInstance(input[2].instance)
+                ev = Event("instance_created", None, [f"{input[2].parameters[0]}[{len(self.instances)-1}]"], input[2].instance)
+                self.to_send.append((input[1], input[0], ev))
+            elif input[2].name == "start_instance":
+                instance = self.instances[input[2].instance]
                 instance.start()
-                ev = Event("instance_started", None, [f"{input[0]}[{len(self.instances)-1}]"], input[3].instance)
-                self.to_send.append((input[0], input[1], input[2], ev))
-            elif input[3].name == "delete_instance":
-                instance = self.instances[input[3].instance]
-                try:
-                    for assoc_name in instance.associations:
-                        if assoc_name != 'parent':
-                            traversal_list = self.processAssociationReference(assoc_name)
-                            instances = self.getInstances(i["instance"], traversal_list)
-                            if len(instances) > 0:
-                                raise RuntimeException("Error removing instance from association %s, still %i children left connected with association %s" % (assoc_name, len(instances), assoc_name))
-                    #del i["instance"].controller.input_ports[i["instance"].narrow_cast_port]
-                    #association.removeInstance(instance)
-                    self.instances.remove(instance)
-                    self.eventless.discard(instance)
-                except AssociationException as exception:
-                    raise RuntimeException("Error removing instance from association '" + assoc_name + "': " + str(exception))
-                instance.user_defined_destructor()
-                instance.stop()
-                ev = Event("instance_deleted", None, parameters = [input[0]])
-                self.to_send.append((input[0], input[1], input[2], ev))
-            elif input[3].name == "associate_instance":
+                ev = Event("instance_started", None, [f"{input[0]}[{len(self.instances)-1}]"], input[2].instance)
+                self.to_send.append((input[0], input[1], ev))
+            elif input[2].name == "delete_instance":
                 pass
-            elif input[3].name == "disassociate_instance":
+            elif input[2].name == "associate_instance":
                 pass
-            elif input[3].name == "instance_created":
-                association = self.processAssociationReference(input[3].parameters[0])[0]
-                instance = self.instances[input[2]]
-                p = instance.associations.get(association[0])
-                if p:
-                    p.addInstance(input[3].parameters[0])
-                instance.addEvent(input[3])
-            elif input[3].name == "instance_started":
-                instance = self.instances[input[3].instance]
-                instance.addEvent(input[3])
-            elif input[3].name == "instance_deleted":
+            elif input[2].name == "disassociate_instance":
                 pass
-            elif input[3].name == "instance_associated":
+            elif input[2].name == "instance_created":
+                instance = self.instances[input[2].instance]
+                instance.addEvent(input[2])
+            elif input[2].name == "instance_started":
+                instance = self.instances[input[2].instance]
+                instance.addEvent(input[2])
+            elif input[2].name == "instance_deleted":
                 pass
-            elif input[3].name == "instance_disassociated":
+            elif input[2].name == "instance_associated":
+                pass
+            elif input[2].name == "instance_disassociated":
                 pass
             else:
-                ev = input[3]
+                ev = input[2]
                 self.addInput(ev)
         return self.instances
     
@@ -858,7 +829,7 @@ class Button(AtomicDEVS, ObjectManagerBase):
     def outputFnc(self):
         to_dict = {}
         for sending in self.to_send:
-            if sending[3].port == None:
+            if sending[2].port == None:
                 if self.obj_manager_out in to_dict:
                     to_dict[self.obj_manager_out].append(sending)
                 else:
@@ -1121,43 +1092,39 @@ class Ball(AtomicDEVS, ObjectManagerBase):
             if isinstance(input, str):
                 tem = eval(input)
                 self.addInput(tem)
-            elif input[3].name == "create_instance":
-                new_instance = BallInstance(self, input[3].parameters[1], input[3].parameters[2], input[3].parameters[3])
+            elif input[2].name == "create_instance":
+                new_instance = BallInstance(self, input[2].parameters[2], input[2].parameters[3], input[2].parameters[4])
                 self.instances.append(new_instance)
                 p = new_instance.associations.get("parent")
                 if p:
-                    p.addInstance("fields[0]")
-                ev = Event("instance_created", None, [f"{input[3].parameters[0]}[{len(self.instances)-1}]"])
-                self.to_send.append((input[1], input[0], input[2], ev))
-            elif input[3].name == "start_instance":
-                instance = self.instances[input[3].instance]
+                    p.addInstance(input[2].instance)
+                ev = Event("instance_created", None, [f"{input[2].parameters[0]}[{len(self.instances)-1}]"], input[2].instance)
+                self.to_send.append((input[1], input[0], ev))
+            elif input[2].name == "start_instance":
+                instance = self.instances[input[2].instance]
                 instance.start()
-                ev = Event("instance_started", None, [f"{input[0]}[{len(self.instances)-1}]"], input[3].instance)
-                self.to_send.append((input[0], input[1], input[2], ev))
-            elif input[3].name == "delete_instance":
+                ev = Event("instance_started", None, [f"{input[0]}[{len(self.instances)-1}]"], input[2].instance)
+                self.to_send.append((input[0], input[1], ev))
+            elif input[2].name == "delete_instance":
                 pass
-            elif input[3].name == "associate_instance":
+            elif input[2].name == "associate_instance":
                 pass
-            elif input[3].name == "disassociate_instance":
+            elif input[2].name == "disassociate_instance":
                 pass
-            elif input[3].name == "instance_created":
-                association = self.processAssociationReference(input[3].parameters[0])[0]
-                instance = self.instances[input[2]]
-                p = instance.associations.get(association[0])
-                if p:
-                    p.addInstance(input[3].parameters[0])
-                instance.addEvent(input[3])
-            elif input[3].name == "instance_started":
-                instance = self.instances[input[3].instance]
-                instance.addEvent(input[3])
-            elif input[3].name == "instance_deleted":
+            elif input[2].name == "instance_created":
+                instance = self.instances[input[2].instance]
+                instance.addEvent(input[2])
+            elif input[2].name == "instance_started":
+                instance = self.instances[input[2].instance]
+                instance.addEvent(input[2])
+            elif input[2].name == "instance_deleted":
                 pass
-            elif input[3].name == "instance_associated":
+            elif input[2].name == "instance_associated":
                 pass
-            elif input[3].name == "instance_disassociated":
+            elif input[2].name == "instance_disassociated":
                 pass
             else:
-                ev = input[3]
+                ev = input[2]
                 self.addInput(ev)
         return self.instances
     
@@ -1180,7 +1147,7 @@ class Ball(AtomicDEVS, ObjectManagerBase):
     def outputFnc(self):
         to_dict = {}
         for sending in self.to_send:
-            if sending[3].port == None:
+            if sending[2].port == None:
                 if self.obj_manager_out in to_dict:
                     to_dict[self.obj_manager_out].append(sending)
                 else:
@@ -1201,7 +1168,7 @@ class Ball(AtomicDEVS, ObjectManagerBase):
 
 class ObjectManagerState:
     def __init__(self):
-        self.to_send = [(None, "MainApp", 0, Event("start_instance", None, [0], 0))]
+        self.to_send = [(None, "MainApp", Event("start_instance", None, [0], 0))]
 
 class ObjectManager(AtomicDEVS):
     def __init__(self, name):
@@ -1226,11 +1193,11 @@ class ObjectManager(AtomicDEVS):
     
     def outputFnc(self):
         out_dict = {}
-        for (source, target, id, message) in self.State.to_send:
+        for (source, target, message) in self.State.to_send:
             if self.output[target] in out_dict:
-                out_dict[self.output[target]].append((source, target, id, message))
+                out_dict[self.output[target]].append((source, target, message))
             else:
-                out_dict[self.output[target]] = [(source, target, id, message)]
+                out_dict[self.output[target]] = [(source, target, message)]
         return out_dict
     
     def timeAdvance(self):

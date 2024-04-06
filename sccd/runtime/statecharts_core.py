@@ -231,14 +231,13 @@ class ObjectManagerBase(object):
         instances = self.getInstances(source, traversal_list)
         
         association = source.associations[association_name]
-        # association = self.instances_map[source].getAssociation(association_name)
+
         if association.allowedToAdd():
             ''' allow subclasses to be instantiated '''
             class_name = association.to_class if len(parameters) == 2 else parameters[2]
             new_instance = self.createInstance(class_name, parameters[3:])
             if not new_instance:
                 raise ParameterException("Creating instance: no such class: " + class_name)
-            # index = association.addInstance(new_instance)
             try:
                 index = association.addInstance(new_instance)
             except AssociationException as exception:

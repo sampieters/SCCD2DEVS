@@ -13,6 +13,10 @@ from pypdevs.simulator import *
 from sccd.runtime.libs.ui import ui
 from time import time
 
+CANVAS_WIDTH = 500
+CANVAS_HEIGHT = 250
+FONT_SIZE = 50
+
 # package "Timer (Eventloop Version)"
 
 class MainAppInstance(RuntimeClassBase):
@@ -33,13 +37,25 @@ class MainAppInstance(RuntimeClassBase):
         MainAppInstance.user_defined_constructor(self)
     
     def user_defined_constructor(self):
-        self.canvas = ui.append_canvas(ui.window,100,100,{'background':'#222222'})
-        self.clock_text = self.canvas.element.create_text(25,25,{'text':'0.0'})
-        self.actual_clock_text = self.canvas.element.create_text(25,50,{'text':'0.0'})
+        self.canvas = ui.append_canvas(ui.window,CANVAS_WIDTH,CANVAS_HEIGHT,{'background':'#222222'})
+        self.clock_text = self.canvas.element.create_text(
+            CANVAS_WIDTH / 2,
+            CANVAS_HEIGHT / 2,
+            text='0.0', 
+            anchor='center',
+            font=("TkDefaultFont", FONT_SIZE)
+            )
+        self.actual_clock_text = self.canvas.element.create_text(
+            CANVAS_WIDTH / 2, 
+            (CANVAS_HEIGHT / 2) + FONT_SIZE, 
+            text='0.0', 
+            anchor='center',
+            font=("TkDefaultFont", FONT_SIZE)
+        )
         interrupt_button = ui.append_button(ui.window, 'INTERRUPT');
         continue_button = ui.append_button(ui.window, 'CONTINUE');
-        ui.bind_event(interrupt_button.element, ui.EVENTS.MOUSE_CLICK, self.controller, 'interrupt_clicked');
-        ui.bind_event(continue_button.element, ui.EVENTS.MOUSE_CLICK, self.controller, 'continue_clicked');
+        #ui.bind_event(interrupt_button.element, ui.EVENTS.MOUSE_CLICK, self.controller, 'interrupt_clicked');
+        #ui.bind_event(continue_button.element, ui.EVENTS.MOUSE_CLICK, self.controller, 'continue_clicked');
     
     def user_defined_destructor(self):
         pass
