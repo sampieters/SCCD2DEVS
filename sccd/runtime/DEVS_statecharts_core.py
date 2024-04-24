@@ -858,7 +858,7 @@ class ObjectManagerBase(object):
             ''' allow subclasses to be instantiated '''
             class_name = association.to_class if len(parameters) == 2 else parameters[2]
 
-            new_instance = association_name + f"[{len(self.instances)-1}]"
+            new_instance = association_name + f"[{len(instances)}]"
 
             try:
                 index = association.addInstance(new_instance)
@@ -884,6 +884,7 @@ class ObjectManagerBase(object):
             association_name = parameters[1]
             
             traversal_list = self.processAssociationReference(association_name)
+            
             instances = self.getInstances(source, traversal_list)
             association = source.associations[traversal_list[0][0]]
             
