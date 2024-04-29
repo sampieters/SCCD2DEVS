@@ -56,7 +56,7 @@ class Association(object):
         if self.allowedToAdd():
             new_id = self.next_id
             self.next_id += 1
-            self.instances[new_id] = new_id
+            self.instances[new_id] = instance
             self.instances_to_ids[instance] = new_id
             self.size += 1
             return new_id
@@ -65,7 +65,8 @@ class Association(object):
 
     def removeInstance(self, instance):
         if self.allowedToRemove():
-            index = self.instances_to_ids[instance]
+            #index = self.instances_to_ids[instance]
+            index = instance
             del self.instances[index]
             del self.instances_to_ids[instance]
             self.size -= 1
@@ -848,7 +849,12 @@ class ObjectManagerBase(object):
             source_index = 0
 
         association_name = parameters[1]
-        
+
+        index = 0
+        for inst in self.instances:
+            index += len(inst.associations[association_name].instances)
+
+
         traversal_list = self.processAssociationReference(association_name)
         instances = self.getInstances(source, traversal_list)
         
@@ -861,7 +867,7 @@ class ObjectManagerBase(object):
             new_instance = association_name + f"[{len(instances)}]"
 
             try:
-                index = association.addInstance(new_instance)
+                new_index = association.addInstance(index)
             except AssociationException as exception:
                 raise RuntimeException("Error adding instance to association '" + association_name + "': " + str(exception))
             
@@ -887,6 +893,9 @@ class ObjectManagerBase(object):
             
             instances = self.getInstances(source, traversal_list)
             association = source.associations[traversal_list[0][0]]
+
+            for assoc in association.instances:
+                association.removeInstance(assoc)
             
             #for i in instances:
             #    try:
@@ -910,7 +919,10 @@ class ObjectManagerBase(object):
             index = self.processAssociationReference(source.association_name)
             index = index[0][1]
 
-            self.to_send.append((source.association_name, association.to_class, Event("delete_instance", None, [parameters[1]], index)))
+
+            params = list(association.instances.values())
+
+            self.to_send.append((source.association_name, association.to_class, Event("delete_instance", None, [parameters[1], params], index)))
         
 
 

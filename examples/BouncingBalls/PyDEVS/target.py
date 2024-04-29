@@ -1106,7 +1106,24 @@ class Ball(AtomicDEVS, ObjectManagerBase):
                 ev = Event("instance_started", None, [f"{input[0]}[{len(self.instances)-1}]"], input[2].instance)
                 self.to_send.append((input[0], input[1], ev))
             elif input[2].name == "delete_instance":
-                pass
+                for index in input[2].parameters[1]:
+                    i = self.instances[index]
+                    try:
+                        for assoc_name in i.associations:
+                            if assoc_name != 'parent':
+                                traversal_list = self.processAssociationReference(assoc_name)
+                                instances = self.getInstances(i["instance"], traversal_list)
+                                if len(instances) > 0:
+                                    raise RuntimeException("Error removing instance from association %s, still %i children left connected with association %s" % (association_name, len(instances), assoc_name))
+                        # TODO: These still do need to be implemented
+                        #association.removeInstance(i["instance"])
+                        #self.eventless.discard(i["instance"])
+                    except AssociationException as exception:
+                        raise RuntimeException("Error removing instance from association '" + association_name + "': " + str(exception))
+                    i.user_defined_destructor()
+                    i.stop()
+                self.instances = [self.instances[i] for i in range(len(self.instances)) if i not in input[2].parameters[1]]
+                #source.addEvent(Event("instance_deleted", parameters = [parameters[1]]))
             elif input[2].name == "associate_instance":
                 pass
             elif input[2].name == "disassociate_instance":
