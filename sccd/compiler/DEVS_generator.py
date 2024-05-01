@@ -413,12 +413,27 @@ class DEVSGenerator(Visitor):
         self.writer.endElseIf()
 
         self.writer.beginElseIf(GLC.EqualsExpression("input[2].name", GLC.String("delete_instance")))
-        self.writer.endElseIf()
+        
+        self.writer.beginForLoopIterateArray("input[2].parameters[1]", "index")
+        self.writer.addAssignment("i", "self.instances[index]")
+        
+        # TODO: Try, except block 
+        self.writer.beginForLoopIterateArray("i.associations", "assoc_name")
+        self.writer.beginIf(GLC.NotExpression(GLC.EqualsExpression("assoc_name", GLC.String("parent"))))
+        self.writer.addAssignment("traversal_list", "self.processAssociationReference(assoc_name)")
+        self.writer.addAssignment("instances", "self.getInstances(i[\"instance\"], traversal_list)")
+        self.writer.beginIf(GLC.GreaterThanExpression("len(instances)", "0"))
+        self.writer.addRawCode("pass")
+        self.writer.endIf()
+        self.writer.endIf()
+        self.writer.endForLoopIterateArray()
 
-        self.writer.beginElseIf(GLC.EqualsExpression("input[2].name", GLC.String("associate_instance")))
-        self.writer.endElseIf()
-
-        self.writer.beginElseIf(GLC.EqualsExpression("input[2].name", GLC.String("disassociate_instance")))
+        self.writer.add(GLC.FunctionCall("i.user_defined_destructor"))
+        self.writer.add(GLC.FunctionCall("i.stop"))
+        self.writer.endForLoopIterateArray()
+        self.writer.addAssignment("self.instances", "[self.instances[i] for i in range(len(self.instances)) if i not in input[2].parameters[1]]")
+        self.writer.addAssignment("ev", "Event(\"instance_deleted\", None, input[2].parameters[1], input[2].instance)")
+        self.writer.add(GLC.FunctionCall("self.to_send.append", ["(input[1], input[0], ev)"]))
         self.writer.endElseIf()
 
         self.writer.beginElseIf(GLC.EqualsExpression("input[2].name", GLC.String("instance_created")))
@@ -432,12 +447,16 @@ class DEVSGenerator(Visitor):
         self.writer.endElseIf()
 
         self.writer.beginElseIf(GLC.EqualsExpression("input[2].name", GLC.String("instance_deleted")))
-        self.writer.endElseIf()
+        self.writer.addAssignment("instance", "self.instances[input[2].instance]")
+        self.writer.beginForLoopIterateArray("instance.associations.items()", "association")
+        self.writer.beginIf(GLC.EqualsExpression("association[1].to_class", "input[0]"))
 
-        self.writer.beginElseIf(GLC.EqualsExpression("input[2].name", GLC.String("instance_associated")))
-        self.writer.endElseIf()
+        self.writer.beginForLoopIterateArray("input[2].parameters", "index")
+        self.writer.add(GLC.FunctionCall("association[1].removeInstance", ["index"]))
+        self.writer.endForLoopIterateArray()
 
-        self.writer.beginElseIf(GLC.EqualsExpression("input[2].name", GLC.String("instance_disassociated")))
+        self.writer.endIf()
+        self.writer.endForLoopIterateArray()
         self.writer.endElseIf()
 
         self.writer.beginElse()

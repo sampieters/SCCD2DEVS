@@ -102,6 +102,21 @@ class UI:
             self.tk.destroy()
         self.tk.after(0, callback)
 
+    def create_text(self, canvas_id, x, y, the_text, res_port):
+        def callback():
+            canvas = self.mapping[canvas_id]
+            text_id = canvas.create_text(x, y, text=the_text)
+            self.controller.addInput(Event("text_created", res_port, [canvas_id, text_id]))
+        # schedule in mainloop:
+        self.tk.after(0, callback)
+
+    def update_text(self, canvas_id, text_id, the_text, res_port):
+        def callback():
+            canvas = self.mapping[canvas_id]
+            canvas.itemconfigure(text_id, text=the_text)
+        # schedule in mainloop:
+        self.tk.after(0, callback)
+
     def create_circle(self, canvas_id, x, y, r, style, res_port):
         def callback():
             canvas = self.mapping[canvas_id]

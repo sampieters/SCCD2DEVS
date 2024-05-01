@@ -610,7 +610,11 @@ class Field(AtomicDEVS, ObjectManagerBase):
                 instance.addEvent(input[2])
             elif input[2].name == "instance_deleted":
                 instance = self.instances[input[2].instance]
-                instance.addEvent(input[2])
+                for assoc in instance.associations.items():
+                    if assoc[1].to_class == input[0]:
+                        for index in input[2].parameters:
+                            assoc[1].removeInstance(index)
+                        break
             elif input[2].name == "instance_associated":
                 pass
             elif input[2].name == "instance_disassociated":
@@ -783,64 +787,13 @@ class Button(AtomicDEVS, ObjectManagerBase):
                     p.addInstance(input[2].instance)
                 ev = Event("instance_created", None, [f"{input[2].parameters[0]}[{len(self.instances)-1}]"], input[2].instance)
                 self.to_send.append((input[1], input[0], ev))
-
             elif input[2].name == "start_instance":
                 instance = self.instances[input[2].instance]
                 instance.start()
                 ev = Event("instance_started", None, [f"{input[0]}[{len(self.instances)-1}]"], input[2].instance)
                 self.to_send.append((input[0], input[1], ev))
             elif input[2].name == "delete_instance":
-                instances = self.instances
-                for i in instances:
-                    try:
-                        for assoc_name in i.associations:
-                            if assoc_name != 'parent':
-                                traversal_list = self.processAssociationReference(assoc_name)
-                                instances = self.getInstances(i["instance"], traversal_list)
-                                if len(instances) > 0:
-                                    raise RuntimeException("Error removing instance from association %s, still %i children left connected with association %s" % (association_name, len(instances), assoc_name))
-                                del i["instance"].controller.input_ports[i["instance"].narrow_cast_port]
-                                association.removeInstance(i["instance"])
-                                self.instances.discard(i["instance"])
-                                self.eventless.discard(i["instance"])
-                    except AssociationException as exception:
-                        raise RuntimeException("Error removing instance from association '" + association_name + "': " + str(exception))
-                    i.user_defined_destructor()
-                    i.stop()
-                
-                ev = Event("instance_deleted", None, [input[0]])
-                self.to_send.append((input[1], input[0], ev))
-            #source.addEvent(Event("instance_deleted", parameters = [parameters[1]]))
-
-
-
-
-
-
-
-
-
-
-                #instance = self.instances[input[2].instance]
-                #try:
-                #    for assoc_name in instance.associations:
-                #        if assoc_name != 'parent':
-                #            traversal_list = self.processAssociationReference(assoc_name)
-                #            instances = self.getInstances(i["instance"], traversal_list)
-                #            if len(instances) > 0:
-                #                raise RuntimeException("Error removing instance from association %s, still %i children left connected with association %s" % (assoc_name, len(instances), assoc_name))
-                    #del i["instance"].controller.input_ports[i["instance"].narrow_cast_port]
-                    #association.removeInstance(instance)
-                #    self.instances.remove(instance)
-                #    self.eventless.discard(instance)
-                #except AssociationException as exception:
-                #    raise RuntimeException("Error removing instance from association '" + assoc_name + "': " + str(exception))
-                #instance.user_defined_destructor()
-                #instance.stop()
-
-                #ev = Event("instance_deleted", None, [input[0]])
-                #self.to_send.append((input[1], input[0], ev))
-
+                pass
             elif input[2].name == "associate_instance":
                 pass
             elif input[2].name == "disassociate_instance":
@@ -1158,24 +1111,28 @@ class Ball(AtomicDEVS, ObjectManagerBase):
                 ev = Event("instance_started", None, [f"{input[0]}[{len(self.instances)-1}]"], input[2].instance)
                 self.to_send.append((input[0], input[1], ev))
             elif input[2].name == "delete_instance":
-                instance = self.instances[input[2].instance]
-                try:
-                    for assoc_name in instance.associations:
-                        if assoc_name != 'parent':
-                            traversal_list = self.processAssociationReference(assoc_name)
-                            instances = self.getInstances(i["instance"], traversal_list)
-                            if len(instances) > 0:
-                                raise RuntimeException("Error removing instance from association %s, still %i children left connected with association %s" % (assoc_name, len(instances), assoc_name))
-                    #del i["instance"].controller.input_ports[i["instance"].narrow_cast_port]
-                    #association.removeInstance(instance)
-                    self.instances.remove(instance)
-                    self.eventless.discard(instance)
-                except AssociationException as exception:
-                    raise RuntimeException("Error removing instance from association '" + assoc_name + "': " + str(exception))
-                instance.user_defined_destructor()
-                instance.stop()
-                ev = Event("instance_deleted", None, parameters = [input[0]])
-                self.to_send.append((input[0], input[1], ev))
+                for index in input[2].parameters[1]:
+                    i = self.instances[index]
+                    try:
+                        for assoc_name in i.associations:
+                            if assoc_name != 'parent':
+                                traversal_list = self.processAssociationReference(assoc_name)
+                                instances = self.getInstances(i["instance"], traversal_list)
+                                if len(instances) > 0:
+                                    raise RuntimeException("Error removing instance from association %s, still %i children left connected with association %s" % (association_name, len(instances), assoc_name))
+                        # TODO: These still do need to be implemented
+                        #association.removeInstance(i["instance"])
+                        #self.eventless.discard(i["instance"])
+                    except AssociationException as exception:
+                        raise RuntimeException("Error removing instance from association '" + association_name + "': " + str(exception))
+                    i.user_defined_destructor()
+                    i.stop()
+                self.instances = [self.instances[i] for i in range(len(self.instances)) if i not in input[2].parameters[1]]
+                #source.addEvent(Event("instance_deleted", parameters = [parameters[1]]))
+
+                ev = Event("instance_deleted", None, input[2].parameters[1], input[2].instance)
+                self.to_send.append((input[1], input[0], ev))
+
             elif input[2].name == "associate_instance":
                 pass
             elif input[2].name == "disassociate_instance":

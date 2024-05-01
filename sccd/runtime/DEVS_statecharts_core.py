@@ -65,8 +65,7 @@ class Association(object):
 
     def removeInstance(self, instance):
         if self.allowedToRemove():
-            #index = self.instances_to_ids[instance]
-            index = instance
+            index = self.instances_to_ids[instance]
             del self.instances[index]
             del self.instances_to_ids[instance]
             self.size -= 1
@@ -894,9 +893,6 @@ class ObjectManagerBase(object):
             instances = self.getInstances(source, traversal_list)
             association = source.associations[traversal_list[0][0]]
 
-            for assoc in association.instances:
-                association.removeInstance(assoc)
-            
             #for i in instances:
             #    try:
             #        for assoc_name in i["instance"].associations:
@@ -922,7 +918,10 @@ class ObjectManagerBase(object):
 
             params = list(association.instances.values())
 
-            self.to_send.append((source.association_name, association.to_class, Event("delete_instance", None, [parameters[1], params], index)))
+            self.to_send.append((self.name, association.to_class, Event("delete_instance", None, [parameters[1], params], index)))
+
+            #for assoc in association.instances:
+            #    association.removeInstance(assoc)
         
 
 
