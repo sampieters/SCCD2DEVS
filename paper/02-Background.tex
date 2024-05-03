@@ -1,9 +1,178 @@
 \chapter{Background}
 \label{chapt:Background}
 
-\section{SCCD}
-\subsection{Statechart}
-\subsection{SCXML}
+\section{Statecharts and Class Diagrams (SCCD)}
+\subsection{The Statechart Formalism}
+
+\subsection{State Chart XML (SCXML)}
+State Chart XML (SCXML) is a general-purpose event-based state machine language that combines concepts from CCXML and Harel 
+State Tables. 
+
+
+
+
+\subsection{Statecharts and Class Diagrams (SCCD)}
+In this section the SCCD (a Statecharts and Class Diagrams hybrid) formalism and its SCCDXML representation, an extension 
+of SCXML, is explained. SCCD facilitates the specification of complex timed, reactive, interactive discrete-event systems 
+(e.g., complex user interfaces).
+
+\subsubsection{The SCCD language}
+The SCCD languages extends the SCXML, explained in subsection (TODO), by adding new features to its concrete syntax.
+
+\paragraph{Top-level Elements}
+The top-level element is a diagram. It has an input/output interface to communicate with its environment, it can optionally 
+import library classes, and it holds a number of class definitions. One of these classes is the default, and is instantiated 
+when the application is launched.
+
+% TODO: Listing
+
+Listing (TODO) shows the top-level diagram of an application. It imports a library class that is used to draw the graphical 
+elements on the screen, one input port called "input" which receives events when the user interacts with the UI (for example, 
+pressing a key), and four classes, explained in the following subsections.
+
+\paragraph{Classes}
+Classes are the main addition of the SCCD language. They model both structure and behaviour—structure in the form of 
+attributes and relations with other classes, behaviour in the form of methods, which access and change the values of 
+attributes of the class, and an SCXML model, which constitutes the "modal" part of the system, modelling the control flow 
+of the class's behaviour. At runtime, a class can be instantiated, which creates an object. Objects are initialized according 
+to the class's constructor, and can be deleted, invoking the class's destructor. The relationships modelled between classes 
+are instantiated at runtime in the form of links. They serve as communication channels, over which objects can send and receive 
+events.
+
+% TODO: Listing
+
+Listing 2 shows the definition of the "Ball" class. It defines a number of relations (discussed in the next paragraph), a 
+constructor and destructor, a method that moves the ball to a new position, and an SCXML model that consists of four states. 
+It can optionally also define private input ports and output ports. In this case, the ball defines a private input port, that 
+allows the environment to send events that are only meant for a particular ball. For example, when the user left-clicks on a 
+ball to select it, that event should only be sent to that specific instance.
+
+\paragraph{Relationships}
+Classes can have relationships with other classes. There are two types of relationships: associations and inheritance.
+
+An association is defined between a source class and a target class, and has a name. It allows instances of the source class 
+to send events to instances of the target class by referencing the association name. An association has a multiplicity, 
+defined as a minimal cardinality $c_{min} \in \mathbb{N}$ and a maximal cardinality $c_{max} \in \mathbb{N}_{>0} \cup \{inf\}$. 
+They control how many instances of the target class have to be minimally associated to each instance of the source class, and 
+how many instances of the target class can be maximally associated to each instance of the source class, respectively. Each 
+time an association is created, it results in a link between the source and target object. This link gets a unique identifier, 
+allowing the source object to reference the target, for example to send events.
+
+An inheritance relation results in the source of the relation to inherit all attributes and methods from the target of the 
+relation. Specialisation of modal behaviour (i.e., (parts of) the SCXML model of the superclass) is currently not supported.
+
+% TODO: Listing
+
+Listing (TODO) shows the relationships of the "Window" class. It has an association to its parent, the main application. 
+Exactly one instance of that link has to exist between each "Window" instance and the main application. It is additionally 
+associated to a number of buttons and balls, and inherits from the library class "UIWidget", allowing it to be drawn on screen.
+
+\paragraph{Events}
+Events in SCCD are strings. They are accompanied by a number of parameter values: the sender is obliged to send the correct 
+number of values, and the receiver declares the parameters when catching the event. Each parameter has a name, that can be used 
+as a local variable in the action associated with the transition that catches the event.
+
+With the addition of a public input/output interface using ports, as well as classes and associations, comes the need for 
+scoping events. In traditional SCXML models, an event is sensed by the Statecharts model that generated it. SCCD adds the ability 
+to transmit events to class instances and to output ports. In particular, the raise tag was extended with a scope attribute, that 
+can take on the following values:
+\begin{itemize}
+    \item \textbf{local:} The event will only be visible for the sending instance.
+    \item \textbf{broad:} The event is broadcast to all instances.
+    \item \textbf{output:} The event is sent to an output port and is only valid in combination with the output attribute, which 
+    specifies the name of the output port.
+    \item \textbf{narrow:} The event is narrow-cast to specific instances only, and is only valid in combination with the target 
+    attribute, which specifies the instance to send the event to. For example, an instance of the "Window" class can narrow-cast 
+    an event by sending the event to a specific instance of the "Ball" class, identified by a unique link identifier.
+    \item \textbf{cd:} The event is processed by the object manager. See the next section for more details.
+\end{itemize}
+% TODO: Listing 
+Listing (TODO) presents a transition modelled on the "Button" class. It reacts to the user left-clicking the button (represented 
+by an event sent on the button input port). The button reacts by notifying its parent that it was clicked.
+
+\subsubsection{The Object Manager}
+At runtime, a central entity called the object manager is responsible for creating, deleting, and starting class instances, as 
+well as managing links (instances of associations) between class instances. It also checks whether no cardinalities are violated: 
+when the user creates an association, it checks that the maximal cardinality is not violated, and when the user deletes an 
+association, it check whether the minimal cardinality is not violated. As mentioned previously, instances can send events to the 
+object manager using the "cd" scope. The object manager can thus be seen as an ever-present, globally accessible object instance, 
+although it is implicitly defined in the runtime, instead of as a SCCD class.
+
+When the application is started, the object manager creates an instance of the default class and starts its associated Statecharts 
+model. From then on, instances can send several events to the object manager to control the set of currently executing objects. 
+The object manager accepts four events. We list them below, including the parameters that have to be sent as part of the event:
+\begin{itemize}
+    \item \textbf{create\_instance(association name, class name, args*):}
+    \item \textbf{delete\_instance(link\_ref):}
+    \item \textbf{start\_instance(link\_ref):}
+    \item \textbf{associate\_instance(source\_ref, association\_name, target\_ref):}
+\end{itemize}
+
+% TODO: Verder aanvullen
+
+\subsubsection{The SCCD compiler}
+The semantics of an SCCD model are loosely based on the agent model, where each instance of a class can be seen as an agent that 
+communicates with other agents through its input/output interface, and its autonomous behaviour controlled by its Statecharts 
+model. The compiler generates appropriate code that continuously executes the system by allowing each agent to execute a step, 
+which optionally generates output that can be sensed by the other agents.
+
+The compiler supports two programming languages, Javascript and Python, and options for the statecharts semantics. Supporting 
+multiple languages is a major advantage, as one can imagine developing an application in SCCD and generating code for multiple 
+languages from the same model. The generated code would exhibit identical behaviour for each implementation language, such as a 
+web-based application (implemented in HTML/Javascript) and a desktop application (implemented in, for example, Python).
+
+SCCD has one semantic definition. There are, however, many platforms on which the code generated from an SCCD model can be run. 
+The runtime platform provides essential functions used by the runtime kernel, such as the queueing of events and the scheduling 
+of (timed) events. Three runtime platforms are supported. A platform holds a list (or queue) of events, and they differ in the 
+way they handle events generated during execution. The kernel attempts to run the SCCD model in real-time, meaning that the delay 
+on timed transitions is intepreted as an amount of seconds. Raising of events and untimed transitions are executed as fast as 
+possible. Figure (TODO) presents an overview of the three platforms, and how they handle events.
+
+The most basic platform, available in most programming languages, is based on threads. Currently, the platform runs one thread, 
+which manipulates a global event queue, made thread-safe by locks. Input from the environment is handled by obtaining this lock, 
+which the kernel releases after every step of the execution algorithm. This allows external input to be interleaved with 
+internally raised events. Running an application on this platform can interfere with other scheduling mechanisms, such as a UI 
+module, however.
+
+To overcome this interference problem, the event loop platform reuses the event queue managed by an existing UI platform, such 
+as Tkinter. The UI platform provides functions for managing time-outs (for timed events), as well as pushing and popping items 
+from the queue. This results in a seamless integration of both Statecharts events and external UI events, such as user clicks: 
+the UI platform is now responsible for the correct interleaving.
+
+The game loop platform facilitates integration with game engines (such as the open-source Unity engine), where objects are 
+updated only at predefined points in time. In the "update" function, the kernel is responsible for checking the current time 
+(as some time has passed since the last call to the "up-date" function), and process all the events generated by objects. This 
+means that events generated in between two of these points are not processed immediately, but queued and their processing delayed 
+until the next processing time.
+
+\subsubsection{Semantics}
+The Statecharts language has been around for a long time. In that time, its basic structures have almost not changed. In its 
+original definition [(TODO)], Harel left many of the semantic choices undefined. Since then, many semantics have been defined, 
+such as the one used in Statemate [(TODO)]. More recently, Esmaeilsabzali et al. [(TODO)] have performed a study of big-step 
+modelling languages, such as Statecharts, and defined a set of semantic variation points, with which the different Statecharts 
+execution semantics can be classified. Central to their discussion is the notion of a "big step". The execution of a Statecharts 
+model is a sequence of big steps. A big step is a unit of interaction between a model and its environment. A big step takes input 
+from the environment (at the beginning of the big step), and produces output to the environment (after the big step has taken 
+place). Input cannot change during the big step. A big step consists of 0 or more small steps. A small step is an unordered set 
+of 1 or more transition executions, but in our case, a small step always consists of exactly one transition execution. Small steps 
+are grouped in so-called combo steps. A combo step is a maximal sequence of small steps, such that it only contains transitions 
+that are orthogonal to each other.
+
+The SCCD compiler allows to choose which semantics to use based on a number of semantic variation points. This gives modellers 
+more control to fine-tune the application to their needs. The semantic variation points are:
+\begin{itemize}
+    \item \textbf{Big Step Maximality} specifies when a big step ends: either after one combo step executed (Take One), or when 
+    no more combo steps can be executed (Take Many).
+    \item \textbf{Internal Event Lifeline} specifies when an internally raised event becomes available: either in the next small 
+    step (immediately), in the next combo step (which only makes sense in combination with the Take Many option), or the event is 
+    queued and treated as an external event (making it available in the next big step).
+    \item \textbf{Input Event Lifeline} specifies when an input event is available during a big step: either throughout the first 
+    small step, the first combo step, or throughout the whole big step.
+    \item \textbf{Priority} specifies what to do when two transitions are enabled at the same time, where the source state of one 
+    of the transitions is the ancestor of the source state of the other transition. Either the transition of the ancestor gets 
+    priority (Source-Parent), or the transition of the (indirect) child gets priority (Source-Child).
+\end{itemize}
+
 
 \section{DEVS Formalism}
 The Discrete Event System Specification (DEVS)
@@ -328,7 +497,7 @@ that allows hierarchical DEVS models to be easily defined. The simulation engine
 of both the model architecture and the SE follows.
 
 \subsubsection{Model Architecture}
-The model architecture implemented in DEVS.py is a canvas from which hierarchical DEVS mod- els can be easily described. It consists 
+The model architecture implemented in DEVS.py is a canvas from which hierarchical DEVS models can be easily described. It consists 
 of a number of classes arranged to capture the essence of hierarchical DEVS. A model is described in a dedicated file by deriving 
 coupled and/or atomic- DEVS descriptive classes from this architecture. These atomic models are then arranged hierarchically through 
 composition. Methods and attributes form the standard interface that allows an SE, such as the one described in the next sub-section, 
@@ -375,3 +544,24 @@ destination port. A coupling is rejected and an error message issued if the coup
 
 The source and destination ports are instances of the class Port. This class defines channels where events may pass between DEVS models. 
 These channels are defined in the Port's inLine and outLine attributes.
+
+Consider the example of the situation illustrated in Figure (TODO). There exists a descriptive class SomeDEVS for a DEVS (either atomic 
+or coupled) with an input and output port locally known as IN and OUT. We want to connect the input port to the output port of the 
+SimpleGenerator atomic- DEVS described above: both DEVS must of course be children of the same coupled-DEVS for the coupling to be 
+performed. The coupled-DEVS descriptive class is defined below.
+
+% TODO: code
+
+Note that the parameter to the constructor is used to parameterize the SimpleGenerator atomic- DEVS. As for atomic-DEVS, the constructor 
+first calls the parent class' constructor. Note also that the coupled-DEVS itself has an output port. The first coupling is an internal 
+coupling, while the second is an external output coupling. This is a complete definition for a coupled-DEVS descriptive class. The 
+default select function is used.
+
+Once all the descriptive classes in the hierarchical DEVS model have been defined, the whole model can be build by instantiating the 
+root DEVS. This is possible since the hierarchical representation of the model is built by composition rather than aggregation.
+
+As a final warning, note that recursive definitions are illegal, since they are incompatible with a tree structure. As a trivial example, 
+a coupled-DEVS' descriptive class SomeCoupledDEVS cannot call in its constructor the addSubModel method with an instance of 
+SomeCoupledDEVS. This is mentionned since such recursive constructs will not be detected.
+
+\subsubsection{Simulation Engine}

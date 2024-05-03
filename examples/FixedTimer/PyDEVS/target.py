@@ -13,9 +13,8 @@ from pypdevs.simulator import *
 from sccd.runtime.libs.ui import ui
 from time import time
 
-CANVAS_WIDTH = 500
-CANVAS_HEIGHT = 250
-FONT_SIZE = 50
+CANVAS_WIDTH = 800
+CANVAS_HEIGHT = 550
 
 # package "Timer (Eventloop Version)"
 
@@ -33,38 +32,22 @@ class MainAppInstance(RuntimeClassBase):
         # build Statechart structure
         self.build_statechart_structure()
         
+        # user defined attributes
+        self.window_id = None
+        self.canvas_id = None
+        self.clock_id = None
+        self.actual_clock_id = None
+        self.button_id = None
+        
         # call user defined constructor
         MainAppInstance.user_defined_constructor(self)
+        self.inports["field_ui"] = ('field_ui', len(atomdevs.instances))
     
     def user_defined_constructor(self):
-        self.canvas = ui.append_canvas(ui.window,CANVAS_WIDTH,CANVAS_HEIGHT,{'background':'#222222'})
-        self.clock_text = self.canvas.element.create_text(
-            CANVAS_WIDTH / 2,
-            CANVAS_HEIGHT / 2,
-            text='0.0', 
-            anchor='center',
-            font=("TkDefaultFont", FONT_SIZE)
-            )
-        self.actual_clock_text = self.canvas.element.create_text(
-            CANVAS_WIDTH / 2, 
-            (CANVAS_HEIGHT / 2) + FONT_SIZE, 
-            text='0.0', 
-            anchor='center',
-            font=("TkDefaultFont", FONT_SIZE)
-        )
-        interrupt_button = ui.append_button(ui.window, 'INTERRUPT');
-        continue_button = ui.append_button(ui.window, 'CONTINUE');
-        #ui.bind_event(interrupt_button.element, ui.EVENTS.MOUSE_CLICK, self.controller, 'interrupt_clicked');
-        #ui.bind_event(continue_button.element, ui.EVENTS.MOUSE_CLICK, self.controller, 'continue_clicked');
+        pass
     
     def user_defined_destructor(self):
         pass
-    
-    
-    # user defined method
-    def update_timers(self):
-        self.canvas.element.itemconfigure(self.clock_text, text=str('%.2f' % (self.getSimulatedTime() / 1000.0)))
-        self.canvas.element.itemconfigure(self.actual_clock_text, text='%.2f' % (time() / 1000.0))
     
     
     # builds Statechart structure
@@ -73,19 +56,84 @@ class MainAppInstance(RuntimeClassBase):
         # state <root>
         self.states[""] = State(0, "", self)
         
+        # state /creating_window
+        self.states["/creating_window"] = State(1, "/creating_window", self)
+        self.states["/creating_window"].setEnter(self._creating_window_enter)
+        
+        # state /creating_canvas
+        self.states["/creating_canvas"] = State(2, "/creating_canvas", self)
+        self.states["/creating_canvas"].setEnter(self._creating_canvas_enter)
+        
+        # state /creating_clock_text
+        self.states["/creating_clock_text"] = State(3, "/creating_clock_text", self)
+        self.states["/creating_clock_text"].setEnter(self._creating_clock_text_enter)
+        
+        # state /creating_actual_clock_text
+        self.states["/creating_actual_clock_text"] = State(4, "/creating_actual_clock_text", self)
+        self.states["/creating_actual_clock_text"].setEnter(self._creating_actual_clock_text_enter)
+        
+        # state /creating_interrupt_button
+        self.states["/creating_interrupt_button"] = State(5, "/creating_interrupt_button", self)
+        self.states["/creating_interrupt_button"].setEnter(self._creating_interrupt_button_enter)
+        
+        # state /creating_resume_button
+        self.states["/creating_resume_button"] = State(6, "/creating_resume_button", self)
+        self.states["/creating_resume_button"].setEnter(self._creating_resume_button_enter)
+        
         # state /running
-        self.states["/running"] = State(1, "/running", self)
+        self.states["/running"] = State(7, "/running", self)
         self.states["/running"].setEnter(self._running_enter)
         self.states["/running"].setExit(self._running_exit)
         
         # state /interrupted
-        self.states["/interrupted"] = State(2, "/interrupted", self)
+        self.states["/interrupted"] = State(8, "/interrupted", self)
         
         # add children
+        self.states[""].addChild(self.states["/creating_window"])
+        self.states[""].addChild(self.states["/creating_canvas"])
+        self.states[""].addChild(self.states["/creating_clock_text"])
+        self.states[""].addChild(self.states["/creating_actual_clock_text"])
+        self.states[""].addChild(self.states["/creating_interrupt_button"])
+        self.states[""].addChild(self.states["/creating_resume_button"])
         self.states[""].addChild(self.states["/running"])
         self.states[""].addChild(self.states["/interrupted"])
         self.states[""].fixTree()
-        self.states[""].default_state = self.states["/running"]
+        self.states[""].default_state = self.states["/creating_window"]
+        
+        # transition /creating_window
+        _creating_window_0 = Transition(self, self.states["/creating_window"], [self.states["/creating_canvas"]])
+        _creating_window_0.setAction(self._creating_window_0_exec)
+        _creating_window_0.setTrigger(Event("window_created", None))
+        self.states["/creating_window"].addTransition(_creating_window_0)
+        
+        # transition /creating_canvas
+        _creating_canvas_0 = Transition(self, self.states["/creating_canvas"], [self.states["/creating_clock_text"]])
+        _creating_canvas_0.setAction(self._creating_canvas_0_exec)
+        _creating_canvas_0.setTrigger(Event("canvas_created", None))
+        self.states["/creating_canvas"].addTransition(_creating_canvas_0)
+        
+        # transition /creating_clock_text
+        _creating_clock_text_0 = Transition(self, self.states["/creating_clock_text"], [self.states["/creating_actual_clock_text"]])
+        _creating_clock_text_0.setAction(self._creating_clock_text_0_exec)
+        _creating_clock_text_0.setTrigger(Event("text_created", None))
+        self.states["/creating_clock_text"].addTransition(_creating_clock_text_0)
+        
+        # transition /creating_actual_clock_text
+        _creating_actual_clock_text_0 = Transition(self, self.states["/creating_actual_clock_text"], [self.states["/creating_interrupt_button"]])
+        _creating_actual_clock_text_0.setAction(self._creating_actual_clock_text_0_exec)
+        _creating_actual_clock_text_0.setTrigger(Event("text_created", None))
+        self.states["/creating_actual_clock_text"].addTransition(_creating_actual_clock_text_0)
+        
+        # transition /creating_interrupt_button
+        _creating_interrupt_button_0 = Transition(self, self.states["/creating_interrupt_button"], [self.states["/creating_resume_button"]])
+        _creating_interrupt_button_0.setTrigger(Event("button_created", None))
+        self.states["/creating_interrupt_button"].addTransition(_creating_interrupt_button_0)
+        
+        # transition /creating_resume_button
+        _creating_resume_button_0 = Transition(self, self.states["/creating_resume_button"], [self.states["/running"]])
+        _creating_resume_button_0.setAction(self._creating_resume_button_0_exec)
+        _creating_resume_button_0.setTrigger(Event("button_created", None))
+        self.states["/creating_resume_button"].addTransition(_creating_resume_button_0)
         
         # transition /running
         _running_0 = Transition(self, self.states["/running"], [self.states["/running"]])
@@ -107,14 +155,59 @@ class MainAppInstance(RuntimeClassBase):
         _interrupted_1.setTrigger(Event("continue_clicked", self.getInPortName("ui")))
         self.states["/interrupted"].addTransition(_interrupted_1)
     
+    def _creating_window_enter(self):
+        self.big_step.outputEvent(Event("create_window", self.getOutPortName("ui"), [800, 600, "Fixed Timer", self.inports['field_ui']]))
+    
+    def _creating_canvas_enter(self):
+        self.big_step.outputEvent(Event("create_canvas", self.getOutPortName("ui"), [self.window_id, CANVAS_WIDTH, CANVAS_HEIGHT, {'background':'#222222'}, self.inports['field_ui']]))
+    
+    def _creating_clock_text_enter(self):
+        self.big_step.outputEvent(Event("create_text", self.getOutPortName("ui"), [self.canvas_id, 50, 50, '00:00', self.inports['field_ui']]))
+    
+    def _creating_actual_clock_text_enter(self):
+        self.big_step.outputEvent(Event("create_text", self.getOutPortName("ui"), [self.canvas_id, 50, 100, '00:00', self.inports['field_ui']]))
+    
+    def _creating_interrupt_button_enter(self):
+        self.big_step.outputEvent(Event("create_button", self.getOutPortName("ui"), [self.window_id, 'INTERRUPT', self.inports['field_ui']]))
+    
+    def _creating_resume_button_enter(self):
+        self.big_step.outputEvent(Event("create_button", self.getOutPortName("ui"), [self.window_id, 'RESUME', self.inports['field_ui']]))
+    
     def _running_enter(self):
         self.addTimer(0, 0.05)
     
     def _running_exit(self):
         self.removeTimer(0)
     
+    def _creating_window_0_exec(self, parameters):
+        window_id = parameters[0]
+        self.window_id = window_id
+        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [window_id, ui.EVENTS.WINDOW_CLOSE, 'window_close', self.inports['field_ui']]))
+        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [window_id, ui.EVENTS.KEY_PRESS, 'key_press', self.inports['field_ui']]))
+    
+    def _creating_canvas_0_exec(self, parameters):
+        canvas_id = parameters[0]
+        self.canvas_id = canvas_id
+        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [canvas_id, ui.EVENTS.MOUSE_RIGHT_CLICK, 'right_click', self.inports['field_ui']]))
+        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [canvas_id, ui.EVENTS.MOUSE_MOVE, 'mouse_move', self.inports['field_ui']]))
+        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [canvas_id, ui.EVENTS.MOUSE_RELEASE, 'mouse_release', self.inports['field_ui']]))
+    
+    def _creating_clock_text_0_exec(self, parameters):
+        text_id = parameters[0]
+        self.clock_id = text_id
+    
+    def _creating_actual_clock_text_0_exec(self, parameters):
+        text_id = parameters[0]
+        self.actual_clock_id = text_id
+    
+    def _creating_resume_button_0_exec(self, parameters):
+        button_id = parameters[0]
+        self.button_id = button_id
+        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [button_id, ui.EVENTS.MOUSE_CLICK, "mouse_click", self.inports['field_ui']]))
+    
     def _running_0_exec(self, parameters):
-        self.update_timers()
+        self.big_step.outputEvent(Event("update_text", self.getOutPortName("ui"), [self.canvas_id, self.clock_id, str('%.2f' % (self.getSimulatedTime() / 1000.0)), self.inports['field_ui']]))
+        self.big_step.outputEvent(Event("update_text", self.getOutPortName("ui"), [self.canvas_id, self.actual_clock_id, str('%.2f' % (self.getSimulatedTime() / 1000.0)), self.inports['field_ui']]))
     
     def _running_1_exec(self, parameters):
         self.update_timers()
@@ -127,7 +220,7 @@ class MainAppInstance(RuntimeClassBase):
     
     def initializeStatechart(self):
         # enter default state
-        self.default_targets = self.states["/running"].getEffectiveTargetStates()
+        self.default_targets = self.states["/creating_window"].getEffectiveTargetStates()
         RuntimeClassBase.initializeStatechart(self)
 
 class MainApp(AtomicDEVS, ObjectManagerBase):
@@ -138,6 +231,7 @@ class MainApp(AtomicDEVS, ObjectManagerBase):
         self.name = "MainApp"
         self.obj_manager_out = self.addOutPort("obj_manager_out")
         self.outputs = {}
+        self.field_ui = self.addInPort("field_ui")
         self.obj_manager_in = self.addInPort("obj_manager_in")
         self.input = self.addInPort("input")
         self.instances.append(MainAppInstance(self))
@@ -147,6 +241,8 @@ class MainApp(AtomicDEVS, ObjectManagerBase):
         self.simulated_time = (self.simulated_time + self.elapsed)
         self.next_time = 0
         all_inputs = []
+        if self.field_ui in inputs:
+            all_inputs.extend(inputs[self.field_ui])
         if self.obj_manager_in in inputs:
             all_inputs.extend(inputs[self.obj_manager_in])
         if self.input in inputs:
@@ -169,11 +265,19 @@ class MainApp(AtomicDEVS, ObjectManagerBase):
                 ev = Event("instance_started", None, [f"{input[0]}[{len(self.instances)-1}]"], input[2].instance)
                 self.to_send.append((input[0], input[1], ev))
             elif input[2].name == "delete_instance":
-                pass
-            elif input[2].name == "associate_instance":
-                pass
-            elif input[2].name == "disassociate_instance":
-                pass
+                for index in input[2].parameters[1]:
+                    i = self.instances[index]
+                    for assoc_name in i.associations:
+                        if not (assoc_name == "parent"):
+                            traversal_list = self.processAssociationReference(assoc_name)
+                            instances = self.getInstances(i["instance"], traversal_list)
+                            if len(instances) > 0:
+                                pass
+                    i.user_defined_destructor()
+                    i.stop()
+                self.instances = [self.instances[i] for i in range(len(self.instances)) if i not in input[2].parameters[1]]
+                ev = Event("instance_deleted", None, input[2].parameters[1], input[2].instance)
+                self.to_send.append((input[1], input[0], ev))
             elif input[2].name == "instance_created":
                 instance = self.instances[input[2].instance]
                 instance.addEvent(input[2])
@@ -181,11 +285,11 @@ class MainApp(AtomicDEVS, ObjectManagerBase):
                 instance = self.instances[input[2].instance]
                 instance.addEvent(input[2])
             elif input[2].name == "instance_deleted":
-                pass
-            elif input[2].name == "instance_associated":
-                pass
-            elif input[2].name == "instance_disassociated":
-                pass
+                instance = self.instances[input[2].instance]
+                for association in instance.associations.items():
+                    if association[1].to_class == input[0]:
+                        for index in input[2].parameters:
+                            association[1].removeInstance(index)
             else:
                 ev = input[2]
                 self.addInput(ev)

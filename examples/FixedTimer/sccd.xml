@@ -13,14 +13,16 @@
     <class name="MainApp" default="true">
         <attribute name="window_id" />
         <attribute name="canvas_id" />
-        <attribute name="text_id" />
+        <attribute name="clock_id" />
+        <attribute name="actual_clock_id" />
+        <attribute name="button_id" />
         <inport name="field_ui"/>
         <scxml initial="creating_window">
             <state id="creating_window">
                 <onentry>
                     <raise port="ui" event="create_window">
-                        <parameter expr="800"/><!-- width -->
-                        <parameter expr="600"/><!-- height -->
+                        <parameter expr="CANVAS_WIDTH"/><!-- width -->
+                        <parameter expr="CANVAS_HEIGHT"/><!-- height -->
                         <parameter expr='"Fixed Timer"'/><!-- title -->
                         <parameter expr="self.inports['field_ui']"/><!-- inport for response -->
                     </raise>
@@ -51,7 +53,7 @@
                     <raise port="ui" event="create_canvas">
                         <parameter expr="self.window_id"/><!-- window_id -->
                         <parameter expr="CANVAS_WIDTH"/><!-- width -->
-                        <parameter expr="CANVAS_HEIGHT"/><!-- height -->
+                        <parameter expr="CANVAS_HEIGHT - 200"/><!-- height -->
                         <parameter expr="{'background':'#222222'}"/><!-- style -->
                         <parameter expr="self.inports['field_ui']"/><!-- inport for response -->
                     </raise>
@@ -89,16 +91,31 @@
                         <parameter expr="self.canvas_id" />
                         <parameter expr="50" />
                         <parameter expr="50" />
-                        <parameter expr="'00:00'" />
+                        <parameter expr="''" />
+                        <parameter expr="self.inports['field_ui']" />
+                    </raise>
+                </onentry>
+                <transition event="text_created" target="../creating_actual_clock_text">
+                    <parameter name="text_id" type="int" />
+                    <script>
+                        self.clock_id = text_id
+                    </script>
+                </transition>
+            </state>
+            <state id="creating_actual_clock_text">
+                <onentry>
+                    <raise port="ui" event="create_text">
+                        <parameter expr="self.canvas_id" />
+                        <parameter expr="50" />
+                        <parameter expr="100" />
+                        <parameter expr="''" />
                         <parameter expr="self.inports['field_ui']" />
                     </raise>
                 </onentry>
                 <transition event="text_created" target="../creating_interrupt_button">
                     <parameter name="text_id" type="int" />
                     <script>
-                        <![CDATA[
-                        self.text_id = text_id
-                        ]]>
+                        self.actual_clock_id = text_id
                     </script>
                 </transition>
             </state>
@@ -110,46 +127,42 @@
                         <parameter expr="self.inports['field_ui']" />
                     </raise>
                 </onentry>
-                <transition event="button_created" target="../creating_resume_button">
-                </transition>
-            </state>
-            <state id="creating_resume_button">
-                <onentry>
-                    <raise port="ui" event="create_button">
-                        <parameter expr="self.window_id" />
-                        <parameter expr="'RESUME'" />
-                        <parameter expr="self.inports['field_ui']" />
-                    </raise>
-                </onentry>
                 <transition event="button_created" target="../running">
+                    <parameter name="button_id" type="int"/>
+                    <script>
+                        self.button_id = button_id
+                    </script> 
+                    <raise port="ui" event="bind_event">
+                        <parameter expr="button_id"/><!-- widget_id -->
+                        <parameter expr="ui.EVENTS.MOUSE_CLICK"/><!-- tk_event -->
+                        <parameter expr='"mouse_click"'/><!-- sccd_event_name -->
+                        <parameter expr="self.inports['field_ui']"/><!-- inport for response -->
+                    </raise>
                 </transition>
             </state>
             <state id="running">
                 <transition target="." after="0.05">
                     <raise port="ui" event="update_text">
                         <parameter expr="self.canvas_id" />
-                        <parameter expr="self.text_id" />
+                        <parameter expr="self.clock_id" />
+                        <parameter expr="str('%.2f' % (self.getSimulatedTime() / 1000.0))" />
+                        <parameter expr="self.inports['field_ui']" />
+                    </raise>
+                    <raise port="ui" event="update_text">
+                        <parameter expr="self.canvas_id" />
+                        <parameter expr="self.actual_clock_id" />
                         <parameter expr="str('%.2f' % (self.getSimulatedTime() / 1000.0))" />
                         <parameter expr="self.inports['field_ui']" />
                     </raise>
                 </transition>
-                <transition target="../interrupted" event="interrupt_clicked" port="ui">
-                    <script>
-                        self.update_timers()
-                    </script>
+                <transition port='button_ui' event="mouse_click" target='../interrupted' cond="button == ui.MOUSE_BUTTONS.LEFT">
+                    <parameter name="x" />
+                    <parameter name="y" />
+                    <parameter name="button" />
                 </transition>
             </state>
             <state id="interrupted">
-                <transition target="." event="interrupt_clicked" port="ui">
-                    <script>
-                        self.update_timers()
-                    </script>
-                </transition>
-                <transition target="../running" event="continue_clicked" port="ui">
-                    <script>
-                        self.update_timers()
-                    </script>
-                </transition>
+
             </state>
         </scxml>
     </class>
