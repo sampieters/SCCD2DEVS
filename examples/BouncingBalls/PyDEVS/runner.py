@@ -1,5 +1,5 @@
 import tkinter as tk
-import examples.BouncingBalls.PyDEVS.target as target
+import examples.BouncingBalls.PyDEVS.tuned_target as target
 from sccd.runtime.libs.ui_v2 import UI
 from sccd.runtime.DEVS_loop import DEVSSimulator
 

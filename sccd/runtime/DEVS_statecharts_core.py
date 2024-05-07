@@ -68,7 +68,7 @@ class Association(object):
             index = self.instances_to_ids[instance]
             del self.instances[index]
             del self.instances_to_ids[instance]
-            self.size -= 1
+            #self.size -= 1
             return index
         else:
             raise AssociationException("Not allowed to remove the instance from the association.")
@@ -682,7 +682,8 @@ class ObjectManagerBase(object):
         self.to_send = []
 
         self.events = EventQueue()
-        self.instances = []
+        self.instances = {}
+        self.next_instance = 0
         self.instance_times = []
         self.eventless = set()
         self.regex_pattern = re.compile("^([a-zA-Z_]\w*)(?:\[(\d+)\])?$")
@@ -755,12 +756,13 @@ class ObjectManagerBase(object):
             #TODO: get the first field, should be dynamically
             #temp = None
 
+            # TODO: instance is now given in parameters
             temp = e.instance
             if temp is None:
                 temp = self.processAssociationReference(e.parameters[0])[0]
                 temp = temp[1]
-            target_instance = list(self.instances)[temp]
-            #target_instance = self.State[0]
+            #target_instance = list(self.instances)[temp]
+            target_instance = self.instances[temp]
             if target_instance == None:
                 self.broadcast(e, event_time - self.simulated_time)
             else:
@@ -815,13 +817,22 @@ class ObjectManagerBase(object):
             raise ParameterException ("The start instance event needs 2 parameters.")  
         else:
             source = parameters[0]
+            source_index = None
+            try:
+                source_traversal_list = self.processAssociationReference(source.association_name)
+                source_index = source_traversal_list[0][1]
+            except:
+                source_index = 0 
+                
             traversal_list = self.processAssociationReference(parameters[1])
 
             # TODO: This does not work as the mainapp should start the field instance now, but this is not working yet
             for i in self.getInstances(source, traversal_list):
                 #i["instance"].start()
                 # TODO: start instance over a link from mainapp to field
-                self.to_send.append((i['assoc_name'], i['to_class'], Event("start_instance", None, [], i['instance'])))
+                #ev = Event("start_instance", None, [], i['instance'])
+                ev = Event("start_instance", None, [i['path']], source_index)
+                self.to_send.append((self.name, i['to_class'], ev))
 
 
 
@@ -850,7 +861,7 @@ class ObjectManagerBase(object):
         association_name = parameters[1]
 
         index = 0
-        for inst in self.instances:
+        for (key, inst) in self.instances.items():
             index += len(inst.associations[association_name].instances)
 
 
@@ -858,12 +869,10 @@ class ObjectManagerBase(object):
         instances = self.getInstances(source, traversal_list)
         
         association = source.associations[association_name]
-
+        # TODO: eveything inside the assocation is still wrong, len(instances) can't be 
         if association.allowedToAdd():
             ''' allow subclasses to be instantiated '''
             class_name = association.to_class if len(parameters) == 2 else parameters[2]
-
-            new_instance = association_name + f"[{len(instances)}]"
 
             try:
                 new_index = association.addInstance(index)
@@ -911,12 +920,17 @@ class ObjectManagerBase(object):
             #    i["instance"].stop()
                 
             #source.addEvent(Event("instance_deleted", parameters = [parameters[1]]))
-
-            index = self.processAssociationReference(source.association_name)
-            index = index[0][1]
-
-
-            params = list(association.instances.values())
+            index = None
+            try:
+                index = self.processAssociationReference(source.association_name)
+                index = index[0][1]
+                params = list(association.instances.values())
+            except:
+                index = self.processAssociationReference(association_name)
+                params = [index[0][1]]
+                # TODO: This is only for the default, don't know if it will work always --> beter check source with instances 
+                index = 0
+            
 
             self.to_send.append((self.name, association.to_class, Event("delete_instance", None, [parameters[1], params], index)))
 
@@ -1011,7 +1025,7 @@ class ObjectManagerBase(object):
             for i in self.getInstances(source, traversal_list):
                 # TODO: port cannot be none but don't know yet how to do port 
                 ev = Event(cast_event.name, None, cast_event.parameters, i["instance"])
-                self.to_send.append((i["assoc_name"], i['to_class'], ev))
+                self.to_send.append((self.name, i['to_class'], ev))
 
                 #to_send_event = Event(cast_event.name, i["instance"].narrow_cast_port, cast_event.parameters)
                 #i["instance"].controller.addInput(to_send_event, force_internal=True)
@@ -1073,3 +1087,9 @@ class ObjectManagerBase(object):
 
     def addMyOwnOutputListener(self, listener):
         self.output_listeners.append(listener)
+
+    def my_extTransition(self, input):
+        pass
+
+    def my_intTransition(self):
+        pass
