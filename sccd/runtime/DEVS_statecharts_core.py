@@ -675,10 +675,17 @@ class SmallStepState(object):
         return len(self.candidates) > 0
 
 class ObjectManagerBase(AtomicDEVS):    
-    def __init__(self):
+    def __init__(self, name):
+        AtomicDEVS.__init__(self, name)
+        self.elapsed = 0
+        self.obj_manager_in = self.addInPort("obj_manager_in")
+        self.obj_manager_out = self.addOutPort("obj_manager_out")
+        self.outputs = {}
+        self.next_time = INFINITY
+        
+        
+        
         self.input_queue = EventQueue()
-        #self.controller = controller
-
         self.simulated_time = 0
         self.to_send = []
 
@@ -1123,3 +1130,32 @@ class ObjectManagerBase(AtomicDEVS):
     
     def timeAdvance(self):
         return self.next_time
+
+class TheObjectManager(AtomicDEVS):
+    def __init__(self, name):
+        AtomicDEVS.__init__(self, name)
+        self.output = {}
+    
+    def extTransition(self, inputs):
+        all_inputs = inputs[self.input]
+        for input in all_inputs:
+            self.State.to_send.append(input)
+        return self.State
+    
+    def intTransition(self):
+        self.State.to_send = []
+        return self.State
+    
+    def outputFnc(self):
+        out_dict = {}
+        for (source, target, message) in self.State.to_send:
+            if self.output[target] in out_dict:
+                out_dict[self.output[target]].append((source, target, message))
+            else:
+                out_dict[self.output[target]] = [(source, target, message)]
+        return out_dict
+    
+    def timeAdvance(self):
+        if self.State.to_send:
+            return 0
+        return INFINITY

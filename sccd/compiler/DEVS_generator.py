@@ -68,11 +68,11 @@ class DEVSGenerator(Visitor):
         ################################
         # Object Manager
         ################################
-        self.writer.beginClass("ObjectManager", ["AtomicDEVS"])
+        self.writer.beginClass("ObjectManager", ["TheObjectManager"])
         self.writer.beginConstructor()
         self.writer.addFormalParameter("name")
         self.writer.beginMethodBody()
-        self.writer.beginSuperClassConstructorCall("AtomicDEVS")
+        self.writer.beginSuperClassConstructorCall("TheObjectManager")
         self.writer.addActualParameter("name")
         self.writer.endSuperClassConstructorCall()
 
@@ -80,60 +80,12 @@ class DEVSGenerator(Visitor):
         self.writer.addAssignment(GLC.SelfProperty("input"),
                                   GLC.FunctionCall(GLC.SelfProperty("addInPort"), [GLC.String("input")]))
 
-        self.writer.addAssignment(GLC.SelfProperty("output"), "{}")
         for class_name in class_diagram.class_names:
             self.writer.addAssignment(GLC.SelfProperty(f"output[\"{class_name}\"]"),
                                       GLC.FunctionCall(GLC.SelfProperty("addOutPort")))
 
         self.writer.endMethodBody()
         self.writer.endConstructor()
-
-        self.writer.beginMethod("extTransition")
-        self.writer.addFormalParameter("inputs")
-        self.writer.beginMethodBody()
-
-        self.writer.addAssignment("all_inputs", "inputs[self.input]")
-        self.writer.beginForLoopIterateArray("all_inputs", "input")
-        self.writer.add(GLC.FunctionCall(GLC.SelfProperty("State.to_send.append"), ["input"]))
-        self.writer.endForLoopIterateArray()
-        self.writer.add(GLC.ReturnStatement(GLC.SelfProperty("State")))
-
-        self.writer.endMethodBody()
-        self.writer.endMethod()
-
-        self.writer.beginMethod("intTransition")
-        self.writer.beginMethodBody()
-        self.writer.addAssignment(GLC.SelfProperty("State.to_send"), GLC.ArrayExpression())
-
-        self.writer.add(GLC.ReturnStatement(GLC.SelfProperty("State")))
-        self.writer.endMethodBody()
-        self.writer.endMethod()
-
-        self.writer.beginMethod("outputFnc")
-        self.writer.beginMethodBody()
-        self.writer.addAssignment("out_dict", "{}")
-
-        self.writer.beginForLoopIterateArray(GLC.SelfProperty("State.to_send"), "(source, target, message)")
-        self.writer.beginIf(GLC.ArrayContains("out_dict", "self.output[target]"))
-        self.writer.add(GLC.FunctionCall("out_dict[self.output[target]].append", ["(source, target, message)"]))
-        self.writer.endIf()
-        self.writer.beginElse()
-        self.writer.addAssignment(f"out_dict[self.output[target]]", "[(source, target, message)]")
-        self.writer.endElse()
-        self.writer.endForLoopIterateArray()
-
-        self.writer.add(GLC.ReturnStatement("out_dict"))
-        self.writer.endMethodBody()
-        self.writer.endMethod()
-
-        self.writer.beginMethod("timeAdvance")
-        self.writer.beginMethodBody()
-        self.writer.beginIf((GLC.SelfProperty("State.to_send")))
-        self.writer.add(GLC.ReturnStatement("0"))
-        self.writer.endIf()
-        self.writer.add(GLC.ReturnStatement("INFINITY"))
-        self.writer.endMethodBody()
-        self.writer.endMethod()
         self.writer.endClass()
 
         ################################
@@ -389,30 +341,20 @@ class DEVSGenerator(Visitor):
 
     # CLASS -- CONSTRUCTOR
     def visit_Constructor(self, constructor):
+        ################################
+        # Constructor of State Object
+        ################################
+
         self.writer.beginConstructor()
         self.writer.addFormalParameter("name")
 
         self.writer.beginMethodBody()  # constructor body
-
-
-        self.writer.beginSuperClassConstructorCall("AtomicDEVS")
+        self.writer.beginSuperClassConstructorCall("ObjectManagerBase")
         self.writer.addActualParameter("name")
         self.writer.endSuperClassConstructorCall()
 
-        self.writer.beginSuperClassConstructorCall("ObjectManagerBase")
-        self.writer.endSuperClassConstructorCall()
-
-        self.writer.addAssignment(GLC.SelfProperty("elapsed"), "0")
-        self.writer.addAssignment(GLC.SelfProperty("name"), GLC.String(constructor.name))
-
-        self.writer.addAssignment(GLC.SelfProperty("obj_manager_in"),
-                                  GLC.FunctionCall(GLC.SelfProperty("addInPort"), [GLC.String("obj_manager_in")]))
-        self.writer.addAssignment(GLC.SelfProperty("obj_manager_out"),
-                                  GLC.FunctionCall(GLC.SelfProperty("addOutPort"), [GLC.String("obj_manager_out")]))
-
         self.writer.addAssignment(GLC.SelfProperty("input"), GLC.FunctionCall(GLC.SelfProperty("addInPort"), [GLC.String("input")]))
 
-        self.writer.addAssignment(GLC.SelfProperty("outputs"), "{}")
         for association in constructor.parent_class.associations:
             self.writer.addAssignment(GLC.SelfProperty(f"outputs[\"{association.name}\"]"),
                                       GLC.FunctionCall(GLC.SelfProperty("addOutPort"), [GLC.String(association.name)]))
@@ -430,8 +372,6 @@ class DEVSGenerator(Visitor):
             #self.writer.add(GLC.FunctionCall(GLC.SelfProperty("instances.append"), [f"{constructor.parent_class.name}Instance(self)"]))
             self.writer.addAssignment("self.instances[self.next_instance]", f"{constructor.parent_class.name}Instance(self)")
             self.writer.addAssignment("self.next_instance", "self.next_instance + 1")
-
-        self.writer.addAssignment(GLC.SelfProperty("next_time"), "INFINITY")
 
         self.writer.endMethodBody()
         self.writer.endConstructor()

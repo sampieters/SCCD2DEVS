@@ -197,18 +197,11 @@ class MainAppInstance(RuntimeClassBase):
 
 class MainApp(ObjectManagerBase):
     def __init__(self, name):
-        AtomicDEVS.__init__(self, name)
-        ObjectManagerBase.__init__(self)
-        self.elapsed = 0
-        self.name = "MainApp"
-        self.obj_manager_in = self.addInPort("obj_manager_in")
-        self.obj_manager_out = self.addOutPort("obj_manager_out")
+        ObjectManagerBase.__init__(self, name)
         self.input = self.addInPort("input")
-        self.outputs = {}
         self.outputs["fields"] = self.addOutPort("fields")
         self.instances[self.next_instance] = MainAppInstance(self)
         self.next_instance = self.next_instance + 1
-        self.next_time = INFINITY
     
     def constructObject(self, parameters):
         new_instance = MainAppInstance(self)
@@ -471,19 +464,12 @@ class FieldInstance(RuntimeClassBase):
 
 class Field(ObjectManagerBase):
     def __init__(self, name):
-        AtomicDEVS.__init__(self, name)
-        ObjectManagerBase.__init__(self)
-        self.elapsed = 0
-        self.name = "Field"
-        self.obj_manager_in = self.addInPort("obj_manager_in")
-        self.obj_manager_out = self.addOutPort("obj_manager_out")
+        ObjectManagerBase.__init__(self, name)
         self.input = self.addInPort("input")
-        self.outputs = {}
         self.outputs["balls"] = self.addOutPort("balls")
         self.outputs["buttons"] = self.addOutPort("buttons")
         self.outputs["parent"] = self.addOutPort("parent")
         self.field_ui = self.addInPort("field_ui")
-        self.next_time = INFINITY
     
     def constructObject(self, parameters):
         new_instance = FieldInstance(self)
@@ -580,17 +566,10 @@ class ButtonInstance(RuntimeClassBase):
 
 class Button(ObjectManagerBase):
     def __init__(self, name):
-        AtomicDEVS.__init__(self, name)
-        ObjectManagerBase.__init__(self)
-        self.elapsed = 0
-        self.name = "Button"
-        self.obj_manager_in = self.addInPort("obj_manager_in")
-        self.obj_manager_out = self.addOutPort("obj_manager_out")
+        ObjectManagerBase.__init__(self, name)
         self.input = self.addInPort("input")
-        self.outputs = {}
         self.outputs["parent"] = self.addOutPort("parent")
         self.button_ui = self.addInPort("button_ui")
-        self.next_time = INFINITY
     
     def constructObject(self, parameters):
         new_instance = ButtonInstance(self, parameters[2], parameters[3], parameters[4])
@@ -814,17 +793,10 @@ class BallInstance(RuntimeClassBase):
 
 class Ball(ObjectManagerBase):
     def __init__(self, name):
-        AtomicDEVS.__init__(self, name)
-        ObjectManagerBase.__init__(self)
-        self.elapsed = 0
-        self.name = "Ball"
-        self.obj_manager_in = self.addInPort("obj_manager_in")
-        self.obj_manager_out = self.addOutPort("obj_manager_out")
+        ObjectManagerBase.__init__(self, name)
         self.input = self.addInPort("input")
-        self.outputs = {}
         self.outputs["parent"] = self.addOutPort("parent")
         self.ball_ui = self.addInPort("ball_ui")
-        self.next_time = INFINITY
     
     def constructObject(self, parameters):
         new_instance = BallInstance(self, parameters[2], parameters[3], parameters[4])
@@ -834,40 +806,15 @@ class ObjectManagerState:
     def __init__(self):
         self.to_send = [("MainApp", "MainApp", Event("start_instance", None, ["MainApp[0]"], 0))]
 
-class ObjectManager(AtomicDEVS):
+class ObjectManager(TheObjectManager):
     def __init__(self, name):
-        AtomicDEVS.__init__(self, name)
+        TheObjectManager.__init__(self, name)
         self.State = ObjectManagerState()
         self.input = self.addInPort("input")
-        self.output = {}
         self.output["MainApp"] = self.addOutPort()
         self.output["Field"] = self.addOutPort()
         self.output["Button"] = self.addOutPort()
         self.output["Ball"] = self.addOutPort()
-    
-    def extTransition(self, inputs):
-        all_inputs = inputs[self.input]
-        for input in all_inputs:
-            self.State.to_send.append(input)
-        return self.State
-    
-    def intTransition(self):
-        self.State.to_send = []
-        return self.State
-    
-    def outputFnc(self):
-        out_dict = {}
-        for (source, target, message) in self.State.to_send:
-            if self.output[target] in out_dict:
-                out_dict[self.output[target]].append((source, target, message))
-            else:
-                out_dict[self.output[target]] = [(source, target, message)]
-        return out_dict
-    
-    def timeAdvance(self):
-        if self.State.to_send:
-            return 0
-        return INFINITY
 
 class Controller(CoupledDEVS):
     def __init__(self, name):
