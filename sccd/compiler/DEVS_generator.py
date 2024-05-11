@@ -292,7 +292,7 @@ class DEVSGenerator(Visitor):
         self.writer.endSuperClassMethodCall()
 
         for inp in class_node.inports:
-            self.writer.addAssignment(GLC.SelfProperty(f"inports[\"{inp}\"]"), f"(\'{inp}\', len(atomdevs.instances))")
+            self.writer.addAssignment(GLC.SelfProperty(f"inports[\"{inp}\"]"), f"(\'{inp}\', atomdevs.next_instance)")
 
 
         self.writer.endMethodBody()

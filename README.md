@@ -97,5 +97,4 @@ python3 runner.py
 ### Timer
 
 ## TODO
-2) self.inports["elem"] should only be "elem"
-3) Convert DEVui_v2 to ui_v2
+1) Fix bug (when deleting and adding and back deleting, assocation error)

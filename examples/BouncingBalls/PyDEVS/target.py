@@ -237,7 +237,7 @@ class FieldInstance(RuntimeClassBase):
         
         # call user defined constructor
         FieldInstance.user_defined_constructor(self)
-        self.inports["field_ui"] = ('field_ui', len(atomdevs.instances))
+        self.inports["field_ui"] = ('field_ui', atomdevs.next_instance)
     
     def user_defined_constructor(self):
         pass
@@ -511,7 +511,7 @@ class ButtonInstance(RuntimeClassBase):
         
         # call user defined constructor
         ButtonInstance.user_defined_constructor(self, window_id, event_name, button_text)
-        self.inports["button_ui"] = ('button_ui', len(atomdevs.instances))
+        self.inports["button_ui"] = ('button_ui', atomdevs.next_instance)
     
     def user_defined_constructor(self, window_id, event_name, button_text):
         self.window_id = window_id;
@@ -617,7 +617,7 @@ class BallInstance(RuntimeClassBase):
         
         # call user defined constructor
         BallInstance.user_defined_constructor(self, canvas_id, x, y)
-        self.inports["ball_ui"] = ('ball_ui', len(atomdevs.instances))
+        self.inports["ball_ui"] = ('ball_ui', atomdevs.next_instance)
     
     def user_defined_constructor(self, canvas_id, x, y):
         self.canvas_id = canvas_id;

@@ -827,17 +827,10 @@ class ObjectManagerBase(AtomicDEVS):
                 
             traversal_list = self.processAssociationReference(parameters[1])
 
-            # TODO: This does not work as the mainapp should start the field instance now, but this is not working yet
             for i in self.getInstances(source, traversal_list):
-                #i["instance"].start()
-                # TODO: start instance over a link from mainapp to field
-                #ev = Event("start_instance", None, [], i['instance'])
                 ev = Event("start_instance", None, [i['path']], source_index)
                 self.to_send.append((self.name, i['to_class'], ev))
 
-
-
-            #source.addEvent(Event("instance_started", parameters = [parameters[1]]))
         
     def handleBroadCastEvent(self, parameters):
         if len(parameters) != 2:
@@ -849,8 +842,6 @@ class ObjectManagerBase(AtomicDEVS):
             raise ParameterException ("The create event needs at least 2 parameters.")
 
         source = parameters[0]
-
-        # TODO: Added this otherwise the instance of the evet was always the last and you couldnt add a ball in another field, is this right? 
         source_index = None
         try:
             source_index = self.processAssociationReference(source.association_name)
@@ -861,30 +852,18 @@ class ObjectManagerBase(AtomicDEVS):
 
         association_name = parameters[1]
 
-        index = 0
-        for (key, inst) in self.instances.items():
-            index += len(inst.associations[association_name].instances)
-
-
         traversal_list = self.processAssociationReference(association_name)
         instances = self.getInstances(source, traversal_list)
         
         association = source.associations[association_name]
-        # TODO: eveything inside the assocation is still wrong, len(instances) can't be 
         if association.allowedToAdd():
             ''' allow subclasses to be instantiated '''
             class_name = association.to_class if len(parameters) == 2 else parameters[2]
-
-            try:
-                new_index = association.addInstance(index)
-            except AssociationException as exception:
-                raise RuntimeException("Error adding instance to association '" + association_name + "': " + str(exception))
-            
             self.to_send.append((self.name, class_name, Event('create_instance', None, parameters[1:], source_index)))
 
-        else:
-            source.addEvent(Event("instance_creation_error", None, [association_name]))
-            return []
+        #else:
+        #    source.addEvent(Event("instance_creation_error", None, [association_name]))
+        #    return []
 
     def handleCreateAndStartEvent(self, parameters):
         params = self.handleCreateEvent(parameters)
@@ -902,65 +881,17 @@ class ObjectManagerBase(AtomicDEVS):
             
             instances = self.getInstances(source, traversal_list)
             association = source.associations[traversal_list[0][0]]
-
-            #for i in instances:
-            #    try:
-            #        for assoc_name in i["instance"].associations:
-            #            if assoc_name != 'parent':
-            #                traversal_list = self.processAssociationReference(assoc_name)
-            #                instances = self.getInstances(i["instance"], traversal_list)
-            #                if len(instances) > 0:
-            #                    raise RuntimeException("Error removing instance from association %s, still %i children left connected with association %s" % (association_name, len(instances), assoc_name))
-            #        del i["instance"].controller.input_ports[i["instance"].narrow_cast_port]
-            #        association.removeInstance(i["instance"])
-            #        self.instances.discard(i["instance"])
-            #        self.eventless.discard(i["instance"])
-            #    except AssociationException as exception:
-            #        raise RuntimeException("Error removing instance from association '" + association_name + "': " + str(exception))
-            #    i["instance"].user_defined_destructor()
-            #    i["instance"].stop()
-                
-            #source.addEvent(Event("instance_deleted", parameters = [parameters[1]]))
             index = None
             try:
                 index = self.processAssociationReference(source.association_name)
                 index = index[0][1]
                 params = list(association.instances.values())
             except:
+                # TODO: This is only for the default, don't know if it will work always --> beter check source with instances 
                 index = self.processAssociationReference(association_name)
                 params = [index[0][1]]
-                # TODO: This is only for the default, don't know if it will work always --> beter check source with instances 
                 index = 0
-            
-
             self.to_send.append((self.name, association.to_class, Event("delete_instance", None, [parameters[1], params], index)))
-
-            #for assoc in association.instances:
-            #    association.removeInstance(assoc)
-        
-
-
-
-
-
-
-
-
-
-        #if len(parameters) < 2:
-        #    raise ParameterException ("The delete event needs at least 2 parameters.")
-        #else:
-        #    source = parameters[0]
-        #    association_name = parameters[1]
-            
-        #    traversal_list = self.processAssociationReference(association_name)
-        #    instances = self.getInstances(source, traversal_list)
-        #    association = source.associations[traversal_list[0][0]]
-            
-        #    for i in instances:
-        #        # TODO: source association name as index
-        #        self.to_send.append((source.association_name, i['to_class'], Event("delete_instance", None, None, i['instance'])))
-
                 
     def handleAssociateEvent(self, parameters):
         if len(parameters) != 3:
@@ -1024,12 +955,8 @@ class ObjectManagerBase(AtomicDEVS):
             traversal_list = self.processAssociationReference(target)
             cast_event = parameters[2]
             for i in self.getInstances(source, traversal_list):
-                # TODO: port cannot be none but don't know yet how to do port 
                 ev = Event(cast_event.name, None, cast_event.parameters, i["instance"])
                 self.to_send.append((self.name, i['to_class'], ev))
-
-                #to_send_event = Event(cast_event.name, i["instance"].narrow_cast_port, cast_event.parameters)
-                #i["instance"].controller.addInput(to_send_event, force_internal=True)
         
     def getInstances(self, source, traversal_list):
         currents = [{
@@ -1040,14 +967,12 @@ class ObjectManagerBase(AtomicDEVS):
             "assoc_index": None,
             "path": ""
         }]
-        # currents = [source]
         for (name, index) in traversal_list:
             nexts = []
             for current in currents:
                 association = current["instance"].associations[name]
                 if (index >= 0 ):
                     try:
-                        # TODO: instance in nexts was the object but now a reference, can introduce bugs
                         nexts.append({
                             "to_class": association.to_class,
                             "instance": index,
@@ -1061,8 +986,6 @@ class ObjectManagerBase(AtomicDEVS):
                         pass
                 elif (index == -1):
                     for i in association.instances:
-                        # TODO: this does not work anymore if only index
-                        #parent = self.processAssociationReference(association.instances[i])[0]
                         parent = association.instances[i]
                         nexts.append({
                             "to_class": association.to_class,
@@ -1134,6 +1057,19 @@ class ObjectManagerBase(AtomicDEVS):
                 self.to_send.append((input[1], input[0], ev))
             elif input[2].name == "instance_created":
                 instance = self.instances[input[2].instance]
+                
+                test = self.processAssociationReference(input[2].parameters[0])
+                association_name = test[0][0]
+                association_index = test[0][1]
+
+                association = instance.associations[association_name]
+                if association.allowedToAdd():
+                    ''' allow subclasses to be instantiated '''
+                    class_name = association.to_class # TODO: normally the following is behind this: if len(parameters) == 2 else parameters[2]
+                    try:
+                        new_index = association.addInstance(association_index)
+                    except AssociationException as exception:
+                        raise RuntimeException("Error adding instance to association '" + association_name + "': " + str(exception))
                 instance.addEvent(input[2])
             elif input[2].name == "instance_started":
                 instance = self.instances[input[2].instance]
