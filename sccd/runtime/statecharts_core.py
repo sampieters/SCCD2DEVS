@@ -1,7 +1,7 @@
 """
 The classes and functions needed to run (compiled) SCCD models.
 """
-
+from .tracers.tracer import Tracers
 import abc
 import re
 import threading
@@ -484,6 +484,47 @@ class ControllerBase(object):
         
         # accurate timer
         self.accurate_time = AccurateTime()
+
+        # # TODO SAM: tracer
+        self.tracers = []
+    
+    # TODO SAM: Added here, DEVS does simconfig file, when extending SCDD best look at this
+    def setVerbose(self, filename=None):
+        # TODO: Change comments
+        """
+        Sets the use of a verbose tracer.
+
+        Calling this function multiple times will register a tracer for each of them (thus output to multiple files is possible, though more inefficient than simply (manually) copying the file at the end).
+
+        :param filename: string representing the filename to write the trace to, None means stdout
+        """
+        if not isinstance(filename, str) and filename is not None:
+            # TODO: bst not raise a string, 
+            raise "Verbose filename should either be None or a string"
+        self.setCustomTracer("tracerVerbose", "TracerVerbose", [filename])
+    
+    def setCustomTracer(self, tracerfile, tracerclass, args):
+        # TODO: Change comments
+        """
+        Sets the use of a custom tracer, loaded at run time.
+
+        Calling this function multiple times will register a tracer for each of them (thus output to multiple files is possible, though more inefficient than simply (manually) copying the file at the end).
+
+        :param tracerfile: the file containing the tracerclass
+        :param tracerclass: the class to instantiate
+        :param args: arguments to be passed to the tracerclass's constructor
+        """
+        self.tracers.append((tracerfile, tracerclass, args))
+
+
+    def startTracers(self):
+        # TODO: 
+        """
+        Start all tracers
+        """
+        self.tracers.startTracers()
+
+
         
     def getSimulatedTime(self):
         return self.simulated_time
@@ -515,6 +556,13 @@ class ControllerBase(object):
     def start(self):
         self.accurate_time.set_start_time()
         self.simulated_time = 0
+
+        # TODO: SAM start up all tracers
+        tracers = Tracers()
+        for tracer in self.tracers:
+            tracers.registerTracer(tracer, None, None)
+        self.tracers = tracers
+
         self.object_manager.start()
     
     def stop(self):
@@ -549,12 +597,17 @@ class ControllerBase(object):
             target_instance = input_port.instance
             if target_instance == None:
                 self.broadcast(e, event_time - self.simulated_time)
+                self.tracers.tracesInput(input_port, e)
             else:
                 target_instance.addEvent(e, event_time - self.simulated_time)
+                self.tracers.tracesInput(input_port, e)
 
     def outputEvent(self, event):
         for listener in self.output_listeners:
             listener.add(event)
+            #TODO: This is the output event, needs to be traced
+            self.tracers.tracesOutput(listener, event)
+
 
     def addOutputListener(self, ports):
         listener = OutputListener(ports)
@@ -669,6 +722,7 @@ class EventLoopControllerBase(ControllerBase):
                 self.event_loop.clear()
                 self.handleInput()
                 self.object_manager.stepAll()
+                self.tracers.traces(self.getSimulatedTime())   
                 # schedule next timeout
                 earliest_event_time = self.getEarliestEventTime()
                 if earliest_event_time == INFINITY:
@@ -723,6 +777,7 @@ class ThreadsControllerBase(ControllerBase):
             # simulate
             with self.input_condition:
                 self.handleInput()
+
             self.object_manager.stepAll()
             
             # wait until next timeout
@@ -916,6 +971,8 @@ class Transition:
                 self.obj.history_values[h.state_id] = list(filter(f, self.obj.configuration))
         for s in exit_set:
             print_debug('EXIT: %s::%s' % (self.obj.__class__.__name__, s.name))
+            self.obj.controller.tracers.tracesExitState(self.obj.__class__.__name__, s.name)
+
             self.obj.eventless_states -= s.has_eventless_transitions
             # execute exit action(s)
             if s.exit:
@@ -935,6 +992,7 @@ class Transition:
         enter_set = self.__enterSet(targets)
         for s in enter_set:
             print_debug('ENTER: %s::%s' % (self.obj.__class__.__name__, s.name))
+            self.obj.controller.tracers.tracesEnterState(self.obj.__class__.__name__, s.name)
             self.obj.eventless_states += s.has_eventless_transitions
             self.obj.configuration_bitmap |= 2**s.state_id
             # execute enter action(s)
@@ -1022,6 +1080,11 @@ class RuntimeClassBase(object):
         self.narrow_cast_port = self.controller.addInputPort("<narrow_cast>", self)
 
         self.semantics = StatechartSemantics()
+
+        # TODO: SAM Tracer INIT
+        # 2nd is time
+        # TODO: Init cannot be done on the default class because it is in the init of the controller where the tracer is not yet created --> needs fix maybe in SCCD (don't want to touch that)
+        #controller.tracers.tracesInit(self, self.getSimulatedTime())
 
     #to break ties in the heap,
     #compare by number of events in the list

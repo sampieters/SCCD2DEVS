@@ -18,21 +18,50 @@ The complexity of the SCXML structure made it difficult to extract the necessary
 structured approach, we sought alternative solutions to streamline our workflow.
 
 \subsection{Visitor Pattern}
-Upon further investigation, it was discovered that the SCCD compiler (TODO: reference) already implemented a visitor pattern for translating SCXML files into Python and/or Java representations. Leveraging this existing pattern 
-proved to be a significant breakthrough in the translation process. Not only allows the pattern for the traversal of complex data structures without modifying the structure itself, but it also allows for an easy integration of 
-a new language or platform. 
+Upon further investigation, it was discovered that the SCCD compiler already integrates a robust visitor pattern for translating SCXML files into Python and/or Java representations. This discovery marks a significant breakthrough 
+in the translation process, as it not only facilitates the traversal of intricate data structures without altering the structure itself but also enables seamless integration of new languages or platforms.
 
-The compiler will generate an Abstrax Syntax Tree
+The compiler generates an Abstract Syntax Tree (AST), which serves as the foundation for the visitor to traverse each node systematically. This thesis elucidates the profound utility of this approach. Firstly, the visitor parses 
+the tree from the root to the leaf nodes, thereby enabling a chronological description of the output. This sequential traversal allows for the orderly declaration of imports and their subsequent usage, streamlining the code 
+generation process. Furthermore, by compartmentalizing each node, the visitor pattern facilitates the generation of code independent of other nodes, enhancing the modularity and efficiency of the SCCD framework.
+
+Moreover, the visitor pattern's versatility extends to accommodating various platforms, including Thread, UI Event Loop, and Game Loop, for both Python and Java. This inherent adaptability underscores the feasibility of integrating 
+the DEVS formalism seamlessly into the SCCD framework. By developing a visitor tailored for DEVS and integrating it as a platform, extending the SCCD compiler's capabilities becomes a straightforward endeavor.
+
 
 
 \section{Considered Translation Approaches}
 
 \subsection{First approach: Implementing everything into one AtomicDEVS}
+The first approach is to set the entire SCCD code, which includes the controller, ObjectManager and every class, to one AtomicDEVS model. While this could be possible, it was chosen not to do this for several reasons.
 
 \subsection{Second approach: Setting every component to AtomicDEVS}
-
-The first approach was to set every possible component (Controller, ObjectManager and classes) to an AtomicDEVS model. This proved to be impossible with the standard
+Another approach is to set every possible component (Controller, ObjectManager and classes) to an AtomicDEVS model. This proved to be impossible with the standard
 atomicDEVS because in SCCD, statecharts can be created at runtime. The classic AtomicDEVS does not allow to create AtomicDEVS objects at runtime and thus mapping statecharts
 to a corresponding AtomicDEVS is impossible.
 
+\subsection{Chosen approach: TODO}
+The approach that is chosen is to have a Controller component as a CoupledDEVS object and the ObjectManager and class type as an AtomicDEVS object. What is different with the approach explained in \ref{TODO} is that 
+the class type is an AtomicDEVS an not every instance of that type. 
 
+\subsubsection{Controller component}
+This component originated from the SCCD runner. While the controller in the SCCD runner is created to control the runtime of the objects, the controller created in PyDEVS serves merely as a structural object. In the 
+controller the submodels and their couplings are described. This is perfect because the classes in SCCD need to be coupled to each other and the ObjectManager. To couple them, the SCCD to PyDEVS compiler will generate 
+a controller and link every AtomicDEVS to the AtomicDEVS of the ObjectManager.
+
+\subsubsection{ObjectManager component}
+The ObjectManager has the same use cases as the ObjectManager in SCCD. The only difference is that objects can not explicitely be created in this component but rather the Event to do an action gets now forwarded do the 
+specific class component an instance should be created, deleted from. This way the ObjectManager itself still decides if the instance can/may be made or not. Instances can still send events to the ObjectManager with the 
+\"cd\" scope. 
+
+
+When the application is started, the default class
+
+the object manager now thus not create an instance of the default class and starts its associated Statecharts model. But it sends a \"start\_instance\" Event to the default class allowing 
+the default class to start the instance that is already created in the 
+
+From then on, instances can send several events to the object manager to control the set of currently executing objects. The object manager accepts four events. We list them below, including the parameters that have to be sent as part of the event:
+
+\subsubsection{Class component}
+
+\subsubsection{Class Instance component}

@@ -1,21 +1,21 @@
 <?xml version="1.0" ?>
-<diagram author="Simon Van Mierlo" name="Timer (Eventloop Version)">
+<diagram author="Sam Pieters" name="Timer (Eventloop Version)">
     <top>
         from sccd.runtime.libs.ui import ui
-        from time import time
+        import time
 
-        CANVAS_WIDTH = 800
-        CANVAS_HEIGHT = 550
+        CANVAS_WIDTH = 350
+        CANVAS_HEIGHT = 300
     </top>
     
     <inport name="ui" />
-
     <class name="MainApp" default="true">
         <attribute name="window_id" />
         <attribute name="canvas_id" />
         <attribute name="clock_id" />
         <attribute name="actual_clock_id" />
         <attribute name="button_id" />
+        <attribute name="starting_time" />
         <inport name="field_ui"/>
         <scxml initial="creating_window">
             <state id="creating_window">
@@ -32,6 +32,7 @@
                     <script>
                         <![CDATA[
                         self.window_id = window_id
+                        self.starting_time = time.time()
                         ]]>
                     </script>
                     <raise port="ui" event="bind_event">
@@ -65,24 +66,6 @@
                         self.canvas_id = canvas_id
                         ]]>
                     </script>
-                    <raise port="ui" event="bind_event">
-                        <parameter expr="canvas_id"/><!-- widget_id -->
-                        <parameter expr="ui.EVENTS.MOUSE_RIGHT_CLICK"/><!-- tk_event -->
-                        <parameter expr="'right_click'"/><!-- sccd_event_name -->
-                        <parameter expr="self.inports['field_ui']"/><!-- inport for response -->
-                    </raise>
-                    <raise port="ui" event="bind_event">
-                        <parameter expr="canvas_id"/><!-- widget_id -->
-                        <parameter expr="ui.EVENTS.MOUSE_MOVE"/><!-- tk_event -->
-                        <parameter expr="'mouse_move'"/><!-- sccd_event_name -->
-                        <parameter expr="self.inports['field_ui']"/><!-- inport for response -->
-                    </raise>
-                    <raise port="ui" event="bind_event">
-                        <parameter expr="canvas_id"/><!-- widget_id -->
-                        <parameter expr="ui.EVENTS.MOUSE_RELEASE"/><!-- tk_event -->
-                        <parameter expr="'mouse_release'"/><!-- sccd_event_name -->
-                        <parameter expr="self.inports['field_ui']"/><!-- inport for response -->
-                    </raise>
                 </transition>
             </state>
             <state id="creating_clock_text">
@@ -96,6 +79,7 @@
                     </raise>
                 </onentry>
                 <transition event="text_created" target="../creating_actual_clock_text">
+                    <parameter name="canvas_id" type="int"/>
                     <parameter name="text_id" type="int" />
                     <script>
                         self.clock_id = text_id
@@ -113,6 +97,7 @@
                     </raise>
                 </onentry>
                 <transition event="text_created" target="../creating_interrupt_button">
+                    <parameter name="canvas_id" type="int"/>
                     <parameter name="text_id" type="int" />
                     <script>
                         self.actual_clock_id = text_id
@@ -123,7 +108,7 @@
                 <onentry>
                     <raise port="ui" event="create_button">
                         <parameter expr="self.window_id" />
-                        <parameter expr="'INTERRUPT'" />
+                        <parameter expr="'INTERRUPT/CONTINUE'" />
                         <parameter expr="self.inports['field_ui']" />
                     </raise>
                 </onentry>
@@ -151,18 +136,22 @@
                     <raise port="ui" event="update_text">
                         <parameter expr="self.canvas_id" />
                         <parameter expr="self.actual_clock_id" />
-                        <parameter expr="str('%.2f' % (self.getSimulatedTime() / 1000.0))" />
+                        <parameter expr="str('%.2f' % (time.time() - self.starting_time))" />
                         <parameter expr="self.inports['field_ui']" />
                     </raise>
                 </transition>
-                <transition port='button_ui' event="mouse_click" target='../interrupted' cond="button == ui.MOUSE_BUTTONS.LEFT">
+                <transition port='field_ui' event="mouse_click" target='../interrupted' cond="button == ui.MOUSE_BUTTONS.LEFT">
                     <parameter name="x" />
                     <parameter name="y" />
                     <parameter name="button" />
                 </transition>
             </state>
             <state id="interrupted">
-
+                <transition port='field_ui' event="mouse_click" target='../running' cond="button == ui.MOUSE_BUTTONS.LEFT">
+                    <parameter name="x" />
+                    <parameter name="y" />
+                    <parameter name="button" />
+                </transition>
             </state>
         </scxml>
     </class>

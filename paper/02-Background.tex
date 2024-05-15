@@ -3,10 +3,103 @@
 
 \section{Statecharts and Class Diagrams (SCCD)}
 \subsection{The Statechart Formalism}
+Statecharts, originally introduced by D. Harel (\ref{TODO}), are finite state machines extended with hierarchy and 
+orthogonality (parallelism), allowing a complex system to be expressed in a more compact and elegant way.
+
+In order to understand the basics of statecharts, it is useful to first look at higraphs. Higraphs, while normally used 
+for formal mathematical specification, are also used as a basis for statecharts.
+
+Statecharts can be represented as visual objects. While this thesis does not use a visual notation for the statecharts, 
+it is usefull to understand the basics of statecharts. To understand the basics of statecharts, it is useful to first 
+look at higraphs. Higraphs, while normally used for formal mathematical specification, are also used as a basis for 
+statecharts. 
+
+\subsubsection{Higraph}
+A higraph combines notions from several topovisual formalisms.
+
+Topovisual formalisms are a class of graphical representations to model and visualize the topological structure of systems. 
+They primarily focus on depicting the spatial relationships and connectivity between various components or entities within 
+a system. The shapes of the visual objects is not that important in these formalisms.
+
+One of these topovisual formalisms is the formalism of graphs, and the second is the notion of Euler circles, which later 
+evolved into Venn diagrams.
+
+A graph, in its most basic form, is simply a set of points, or nodes, connected by edges or arcs. Its role is to represent 
+a (single) set of elements S and some binary relation R on them. The precise meaning of the relation R is part of the 
+application and has little to do with the mathematical properties of the graph itself. Certain restrictions on the relation 
+R yield special classes of graphs that are of particular interest, such as ones that are connected, directed, acyclic, 
+planar, or bipartite.
+
+A somewhat less widely used extension of graphs is the formalism of hypergraphs. A hypergraph is a graph in which the 
+relation being specified is not necessarily binary. Formally, an edge no longer connects a pair of nodes, but rather a 
+subset thereof.
+\\
+\\
+TODO: Euler circles or Venn diagram
+\\
+\\
+These previous formalisms can be used to create the Highgraph construct. Venn diagrams are used to account for set 
+inclusion and exclusion. Each set is called a blob and is denoted using a rectangle with rounded edges. The nesting of 
+curves denotes set inclusion.
+
+
+
+
+
+\subsubsection{Statecharts}
+Statecharts are a higraph-based extension of standard state-transition diagrams, where the blobs represent states and 
+arrows represent transitions. However, there are different kind of blobs and thus different kind of states. The 
+different kind of states can be seen in Figure \ref{TODO}. The first blob, Figure \ref{TODO}, is called a BASIC-blob 
+which is a state such that it has no sub-OR-blobs, sub-AND-blobs nor any sub-BASIC-blobs. OR-blobs are blobs that have 
+one or more sub-OR-blobs. AND-blobs, Figure \ref{TODO}, have orthogonal components. Orthogonal components of a blob are 
+normally drawn with a dashed line and denote concurrent operations. An example combining all these different kind of 
+blobs can be seen in Figure \ref{TODO}. These blobs only introduce hierarchy in statecharts, the order to specify system 
+dynamics in the diagrams are not yet specified. This is what transitions are used for. A transition is simply an arrow 
+which indicates the system can change its current state from the source state of the transition to the destination state 
+of the transition. Transitions are labeled as follows:
+\begin{equation}
+    e [c]/a
+\end{equation}
+This syntax denotes that the transition fires when event e occurs and condition c is true. The $/a$ usually means one of 
+two different things, depending on the variant of statechart. In some definitions, $/a$ denotes that upon firing the 
+transition, the a event is broadcast throughout the entire statechart, which may trigger more transitions. In the UML 
+definition, $/a$ usually denotes a series of actions (such as computer code) to execute, upon firing the transition. The 
+UML suggests the potential use of a function $GEN(e)$ , which can be one the many steps in a. This function is used to 
+broadcast the event e. Most statechart variants combine these two aspects.
+
+There are different kinds of transitions. First, there is the initial transition. It is the default transitions that 
+fires upon entering any type of blob or the root. They force the diagram to be deterministic by denoting which is the 
+current state upon entering an OR-blob. They are usually drawn as a small filled-in circle with the connected transition 
+pointing towards a blob and may only be labeled with an action (no trigger event $e$).
+
+
+
+
+
+
 
 \subsection{State Chart XML (SCXML)}
 State Chart XML (SCXML) is a general-purpose event-based state machine language that combines concepts from CCXML and Harel 
 State Tables. 
+
+\subsubsection{Core constructs}
+
+\paragraph{$<$scxml$>$}
+The top-level wrapper element, which carries version information. It can consist of the following attributes:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

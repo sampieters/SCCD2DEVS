@@ -604,16 +604,8 @@ class BallInstance(RuntimeClassBase):
         self.vel = {'x': random.uniform(-5.0, 5.0), 'y': random.uniform(-5.0, 5.0)};
         self.pos = {'x': x, 'y': y};
         self.smooth = 0.6; # value between 0 and 1
-        
-        # TODO:
-        #circle = self.canvas.add_circle(x, y, self.r, {'fill':'#000'});
-        #ui.bind_event(circle, ui.EVENTS.MOUSE_PRESS, self.controller, 'mouse_press', self.inports["ball_ui"]);
-        #ui.bind_event(circle, ui.EVENTS.MOUSE_MOVE, self.controller, 'mouse_move', self.inports['ball_ui']);
-        #ui.bind_event(circle, ui.EVENTS.MOUSE_RELEASE, self.controller, 'mouse_release', self.inports['ball_ui']);
-        #self.element = circle;
     
     def user_defined_destructor(self):
-        #self.canvas.remove_element(self.element);
         pass
     
     

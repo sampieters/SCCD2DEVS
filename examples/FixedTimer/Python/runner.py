@@ -18,6 +18,9 @@ if __name__ == '__main__':
 	controller = target.Controller(TkEventLoop(tkroot))
 	ui = UI(tkroot, controller)
 	controller.addMyOwnOutputListener(OutputListener(ui))
+
+	controller.setVerbose(None)
+	
 	controller.start()
 	tkroot.mainloop()
 	
