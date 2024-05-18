@@ -97,4 +97,14 @@ python3 runner.py
 ### Timer
 
 ## TODO
-1) Fix bug (when deleting and adding and back deleting, assocation error)
+
+
+## TO ASK
+1) De tests van bouncingballs --> server was down/traag gisteren
+2) Destroy all verwijdert alles maar simulatie stopt niet --> setTerminationCondition(condition)?
+3) FixedTimerThread werkt niet in DEVS, gevalvan threading ipv Eventloop
+4) if earliest_event_time == INFINITY:
+		if self.finished_callback: self.finished_callback() # TODO: This is not necessarily correct (keep_running necessary?)
+        	return
+Dit gebeurd in sccd soms maar als dit gebeurd in DEVS dan betekend dit dat er een event kan zijn 
+6) Hans example --> Bouncing Elevator Balls

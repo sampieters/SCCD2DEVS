@@ -1,0 +1,390 @@
+<?xml version="1.0" ?>
+<diagram author="Sam Pieters" name="Elevator Balls">
+    <top>
+        from sccd.runtime.libs.ui import ui
+        import random
+        import time
+
+        CANVAS_WIDTH = 800
+        CANVAS_HEIGHT = 550
+    </top>
+    <inport name="ui" />
+    <outport name="ui" />
+    <class name="MainApp" default="true">
+        <relationships>
+            <association name="elevator" class="Elevator" />
+        </relationships>
+        <attribute name="window_id" />
+        <attribute name="canvas_id" />
+        <attribute name="floor_dimensions" />
+        <atrribute name="floor_height" />
+        <inport name="field_ui"/>
+        <scxml initial="creating_window">
+            <state id="creating_window">
+                <onentry>
+                    <raise port="ui" event="create_window">
+                        <parameter expr="CANVAS_WIDTH"/><!-- width -->
+                        <parameter expr="CANVAS_HEIGHT"/><!-- height -->
+                        <parameter expr='"Bouncing Balls Elevator"'/><!-- title -->
+                        <parameter expr="self.inports['field_ui']"/><!-- inport for response -->
+                    </raise>
+                </onentry>
+                <transition event="window_created" target="../creating_canvas">
+                    <parameter name="window_id" type="int" />
+                    <script>
+                        self.window_id = window_id
+                    </script>
+                    <raise port="ui" event="bind_event">
+                        <parameter expr="window_id"/><!-- widget_id -->
+                        <parameter expr="ui.EVENTS.WINDOW_CLOSE"/><!-- tk_event -->
+                        <parameter expr="'window_close'"/><!-- sccd_event_name -->
+                        <parameter expr="self.inports['field_ui']"/><!-- inport for response -->
+                    </raise>
+                    <raise port="ui" event="bind_event">
+                        <parameter expr="window_id"/><!-- widget_id -->
+                        <parameter expr="ui.EVENTS.KEY_PRESS"/><!-- tk_event -->
+                        <parameter expr="'key_press'"/><!-- sccd_event_name -->
+                        <parameter expr="self.inports['field_ui']"/><!-- inport for response -->
+                    </raise>
+                </transition>
+            </state>
+            <state id="creating_canvas">
+                <onentry>
+                    <raise port="ui" event="create_canvas">
+                        <parameter expr="self.window_id"/><!-- window_id -->
+                        <parameter expr="CANVAS_WIDTH"/><!-- width -->
+                        <parameter expr="CANVAS_HEIGHT - 200"/><!-- height -->
+                        <parameter expr="{'background':'#fff'}"/><!-- style -->
+                        <parameter expr="self.inports['field_ui']"/><!-- inport for response -->
+                    </raise>
+                </onentry>
+                <transition event="canvas_created" target="../create_elevator">
+                    <parameter name="canvas_id" type="int"/>
+                    <script>
+                        self.canvas_id = canvas_id
+                    </script>
+                </transition>
+            </state>
+            <state id="create_elevator">
+                <transition target="../creating">
+                    <raise scope="cd" event="create_instance">
+                        <parameter expr='"elevator"' />
+                        <parameter expr='"Elevator"' />
+                        <parameter expr="self.canvas_id" />
+                    </raise>
+                </transition>
+            </state>
+            <state id="creating">
+                <transition event="instance_created" target="../waiting">
+                    <parameter name="association_name" type="string"/>
+                    <raise scope="cd" event="start_instance">
+                        <parameter expr="association_name" />
+                    </raise>
+                    <raise scope="narrow" event="set_association_name" target="association_name">
+                        <parameter expr="association_name" />
+                        <parameter expr="self.canvas_id" />
+                        <parameter expr="self.window_id" />
+                    </raise>
+                </transition>
+            </state>
+            <state id="waiting">
+            </state>
+        </scxml>
+    </class>
+
+    <class name="Elevator">
+        <attribute name="window_id" />
+        <attribute name="canvas_id" />
+        <attribute name="elevator_id" />
+        <atrribute name="pos" />
+        <inport name="elevator_ui"/>
+        <relationships>
+            <association name="balls" class="Ball" />
+            <association name="parent" class="MainApp" min="1" max="1" />
+        </relationships>
+        <constructor>
+            <parameter name="canvas_id" />
+            <body>
+                <![CDATA[
+                self.canvas_id = canvas_id;
+                self.dim = {'x': 80, 'y': 150};
+                self.vel = {'x': 0, 'y': -2};
+                self.pos = {'x': 400, 'y': 75};
+                self.smooth = 0.6; # value between 0 and 1
+                ]]>
+            </body>
+        </constructor>
+        <scxml initial="root">
+            <state id="root" initial="waiting">
+                <state id="waiting">
+                    <transition event="set_association_name" target="../creating_elevator">
+                        <parameter name="association_name" type="str" />
+                        <parameter name="canvas_id" type="int" />
+                        <parameter name="window_id" type="int" />
+                        <script>
+                            self.association_name = association_name
+                            self.canvas_id = canvas_id
+                            self.window_id = window_id
+                        </script>
+                    </transition>
+                </state>
+                <state id="creating_elevator">
+                    <onentry>
+                        <raise port="ui" event="create_rectangle">
+                            <parameter expr="self.canvas_id" />
+                            <parameter expr="self.pos['x']"/>
+                            <parameter expr="self.pos['y']"/>
+                            <parameter expr="self.dim['x']" />
+                            <parameter expr="self.dim['y']"/>
+                            <parameter expr="{'fill':'white', 'outline': 'black'}"/><!-- style -->
+                            <parameter expr="self.inports['elevator_ui']"/><!-- inport for response -->
+                        </raise>
+                    </onentry>
+                    <transition event="rectangle_created" target="../running">
+                        <parameter name="canvas_id" type="int" />
+                        <parameter name="rect_id" type="int" />
+                        <script>
+                            self.elevator_id = rect_id
+                        </script>
+                        <raise port="ui" event="bind_event">
+                            <parameter expr="canvas_id"/><!-- widget_id -->
+                            <parameter expr="ui.EVENTS.MOUSE_RIGHT_CLICK"/><!-- tk_event -->
+                            <parameter expr="'right_click'"/><!-- sccd_event_name -->
+                            <parameter expr="self.inports['elevator_ui']"/><!-- inport for response -->
+                        </raise>
+                    </transition>
+                </state>
+                <state id="running">
+                    <transition after="0.03" target=".">
+                        <script>
+                            <![CDATA[
+                            # Invert velocity when colliding with canvas border:
+                            if self.pos['y']-(self.dim['y']/2) <= 0 or self.pos['y']+(self.dim['y']/2) >= CANVAS_HEIGHT:
+                                self.vel['y'] = -self.vel['y'];
+                            ]]>
+                        </script>
+                        <raise port="ui" event="move_element">
+                            <parameter expr="self.canvas_id"/>
+                            <parameter expr="self.elevator_id"/>
+                            <parameter expr="self.vel['x']"/>
+                            <parameter expr="self.vel['y']"/>
+                        </raise>
+                        <script>
+                            self.pos['x'] += self.vel['x']
+                            self.pos['y'] += self.vel['y']
+                        </script>
+                        <raise scope="narrow" event="update_bounds" target="'balls'">
+                            <parameter expr="self.pos" />
+                            <parameter expr="self.dim" />
+                            <parameter expr="self.vel" />
+                        </raise>
+                    </transition>
+                    <transition port="elevator_ui" event="right_click" target=".">
+                        <parameter name="x" />
+                        <parameter name="y" />
+                        <parameter name="button" />
+                        <raise scope="cd" event="create_instance">
+                            <parameter expr='"balls"' />
+                            <parameter expr='"Ball"' />
+                            <parameter expr="self.canvas_id" />
+                            <parameter expr="x" />
+                            <parameter expr="y" />
+                        </raise>
+                    </transition>
+                    <transition event="instance_created" target=".">
+                        <parameter name="association_name" type="string"/>
+                        <raise scope="cd" event="start_instance">
+                            <parameter expr="association_name" />
+                        </raise>
+                        <raise scope="narrow" event="set_association_name" target="association_name">
+                            <parameter expr="association_name" />
+                        </raise>
+                    </transition>
+                </state>
+            </state>
+        </scxml>
+    </class>
+
+    <class name="Ball">
+        <attribute name="canvas_id" />
+        <atrribute name="circle_id" />
+        <attribute name="pos" />
+        <inport name="ball_ui" />
+        <relationships>
+            <association name="parent" class="Elevator" min="1" max="1" />
+        </relationships>
+        <constructor>
+            <parameter name="canvas_id" />
+            <parameter name="x" />
+            <parameter name="y" />
+            <body>
+                <![CDATA[
+                self.canvas_id = canvas_id;
+                self.r = 5.0;
+                self.vel = {'x': random.uniform(-5.0, 5.0), 'y': random.uniform(-5.0, 5.0)};
+                self.pos = {'x': x, 'y': y};
+                self.smooth = 0.6; # value between 0 and 1
+                ]]>
+            </body>
+        </constructor>
+        <destructor>
+        </destructor>
+        <scxml initial="main_behaviour">
+            <state id="main_behaviour" initial="initializing">
+                <state id="initializing">
+                    <transition event="set_association_name" target="../creating_circle">
+                        <parameter name="association_name" type="str" />
+                        <script>
+                            self.association_name = association_name
+                        </script>
+                    </transition>
+                </state>
+                <state id="creating_circle">
+                    <onentry>
+                        <raise port="ui" event="create_circle">
+                            canvas_id, x, y, r, style, res_port
+                            <parameter expr="self.canvas_id"/><!-- canvas_id -->
+                            <parameter expr="self.pos['x']"/><!-- x -->
+                            <parameter expr="self.pos['y']"/><!-- y -->
+                            <parameter expr="self.r"/><!-- r -->
+                            <parameter expr="{'fill':'#000'}"/><!-- style -->
+                            <parameter expr="self.inports['ball_ui']"/><!-- inport for response -->
+                        </raise>
+                    </onentry>
+                    <transition event="circle_created" target="../bouncing">
+                        <parameter name="canvas_id"/>
+                        <parameter name="circle_id"/>
+                        <script>
+                            self.circle_id = circle_id
+                        </script>
+                        <raise port="ui" event="bind_canvas_event">
+                            <parameter expr="self.canvas_id"/>
+                            <parameter expr="circle_id"/>
+                            <parameter expr="ui.EVENTS.MOUSE_PRESS"/>
+                            <parameter expr="'mouse_press'"/>
+                            <parameter expr="self.inports['ball_ui']"/>
+                        </raise>
+                        <raise port="ui" event="bind_canvas_event">
+                            <parameter expr="self.canvas_id"/>
+                            <parameter expr="circle_id"/>
+                            <parameter expr="ui.EVENTS.MOUSE_MOVE"/>
+                            <parameter expr="'mouse_move'"/>
+                            <parameter expr="self.inports['ball_ui']"/>
+                        </raise>
+                        <raise port="ui" event="bind_canvas_event">
+                            <parameter expr="self.canvas_id"/>
+                            <parameter expr="circle_id"/>
+                            <parameter expr="ui.EVENTS.MOUSE_RELEASE"/>
+                            <parameter expr="'mouse_release'"/>
+                            <parameter expr="self.inports['ball_ui']"/>
+                        </raise>
+                    </transition>
+                </state>
+                <state id="bouncing">
+                    <transition after="0.02" target=".">
+                        <script>
+                            <![CDATA[
+                            # Invert velocity when colliding with canvas border:
+                            if self.pos['x']-self.r <= self.rect_pos['x'] - (self.rect_dim['x'] / 2) or self.pos['x']+self.r >= self.rect_pos['x'] + (self.rect_dim['x'] / 2):
+                                self.vel['x'] = -self.vel['x'] + self.rect_vel['x'];
+                            if self.pos['y']-self.r <= self.rect_pos['y'] - (self.rect_dim['y'] / 2) or self.pos['y']+self.r >= self.rect_pos['y'] + (self.rect_dim['y'] / 2):
+                                self.vel['y'] = -self.vel['y'] + self.rect_vel['y'];
+                            ]]>
+                        </script>
+                        <raise port="ui" event="move_element">
+                            <parameter expr="self.canvas_id"/>
+                            <parameter expr="self.circle_id"/>
+                            <parameter expr="self.vel['x']"/>
+                            <parameter expr="self.vel['y']"/>
+                        </raise>
+                        <script>
+                            self.pos['x'] += self.vel['x']
+                            self.pos['y'] += self.vel['y']
+                        </script>
+                    </transition>
+                    <transition port="ball_ui" event="mouse_press" target="../selected" cond="button == ui.MOUSE_BUTTONS.LEFT">
+                        <parameter name="x" />
+                        <parameter name="y" />
+                        <parameter name="button" />
+                        <raise port="ui" event="set_element_color">
+                            <parameter expr="self.canvas_id"/>
+                            <parameter expr="self.circle_id"/>
+                            <parameter expr="'#ff0'"/>
+                        </raise>
+                    </transition>
+                    <transition event="update_bounds" target=".">
+                        <parameter name="pos" type="dict" />
+                        <parameter name="dim" type="dict" />
+                        <parameter name="vel" type="dict" />
+                        <script>
+                            self.rect_pos = pos
+                            self.rect_dim = dim
+                            self.rect_vel = vel
+                        </script>
+                    </transition>
+                </state>
+                <state id="dragging">
+                    <transition port="ball_ui" event="mouse_move" target=".">
+                        <parameter name="x" />
+                        <parameter name="y" />
+                        <parameter name="button" />
+                        <script>
+                            <![CDATA[
+                            # Always keep ball within canvas:
+                            x = min(max(0+self.r, x), CANVAS_WIDTH-self.r)
+                            y = min(max(0+self.r, y), CANVAS_HEIGHT-self.r)
+
+                            dx = x - self.pos['x']
+                            dy = y - self.pos['y']
+
+                            self.vel = {
+                                'x': (1-self.smooth)*dx + self.smooth*self.vel['x'],
+                                'y': (1-self.smooth)*dy + self.smooth*self.vel['y']
+                            }
+
+                            self.pos = {'x': x, 'y': y}
+                            ]]>
+                        </script>
+                        <raise port="ui" event="set_element_pos">
+                            <parameter expr="self.canvas_id"/>
+                            <parameter expr="self.circle_id"/>
+                            <parameter expr="x-self.r"/>
+                            <parameter expr="y-self.r"/>
+                        </raise>
+                    </transition>
+                    <transition port="ball_ui" event="mouse_release" target="../bouncing">
+                        <parameter name="x" />
+                        <parameter name="y" />
+                        <raise port="ui" event="set_element_color">
+                            <parameter expr="self.canvas_id"/>
+                            <parameter expr="self.circle_id"/>
+                            <parameter expr="'#f00'"/>
+                        </raise>
+                    </transition>
+                </state>
+                <state id='selected'>
+                    <transition port="ball_ui" event="mouse_press" target="../dragging" cond="button == ui.MOUSE_BUTTONS.LEFT">
+                        <parameter name="x" />
+                        <parameter name="y" />
+                        <parameter name="button" />
+                        <script>
+                            <![CDATA[
+                            self.mouse_pos = {'x':x, 'y':y};
+                            ]]>
+                        </script>
+                    </transition>
+                    <transition event="delete_self" target='../../deleted'>                    
+                        <raise event="delete_ball" scope="narrow" target="'parent'">
+                            <parameter expr='self.association_name' />
+                        </raise>
+                        <raise port="ui" event="destroy_element">
+                            <parameter expr="self.canvas_id" />
+                            <parameter expr="self.element_id" />
+                        </raise>
+                    </transition>
+                </state>
+            </state>
+            <state id='deleted' />
+        </scxml>
+    </class>
+</diagram>

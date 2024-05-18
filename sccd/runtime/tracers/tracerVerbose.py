@@ -15,11 +15,10 @@ class TracerVerbose(BaseTracer):
         :param filename: file to save the trace to, can be None for output to stdout
         """
         super(TracerVerbose, self).__init__()
-        #if server.getName() == 0:
-        #    self.filename = filename
-        #else:
-        self.filename = None
-        self.prevtime = (-1, -1)
+        self.filename = filename
+        self.prevtime = -1
+        self.text = ""
+
 
     def startTracer(self, recover):
         """
@@ -48,42 +47,41 @@ class TracerVerbose(BaseTracer):
         :param text: the text that was traced
         """
         string = ""
-        #if time > self.prevtime:
-        string = ("\n__  Current Time: %10.6f " + "_"*42 + " \n") % (time / 1000)
+        if time > self.prevtime:
+            string = ("__  Current Time: %10.6f " + "_"*42 + " \n") % (time / 1000)
         self.prevtime = time
-
-        print(string)
-        #string += "%s\n" % text
-        #try:
-        #    self.verb_file.write(string)
-        #except TypeError:
-        #    self.verb_file.write(string.encode())
+        string += self.text + "\n"
+        try:
+            self.verb_file.write(string)
+        except TypeError:
+            self.verb_file.write(string.encode())
+        self.text = ""
     
     def traceExitState(self, StateChart, State):
-        text = "\n"
-        text += "\EXIT STATE in model <%s>\n" % StateChart
-        text += "\t\tState: %s\n" % str(State)
+        self.text += "\n"
+        self.text += "EXIT STATE in model <%s>\n" % StateChart
+        self.text += "\t\tState: %s\n" % str(State)
         # TODO: This should be different because can also be written to a file, the DEVS implementation uses a server which i'm not going to do
-        print(text)
+        #print(text)
 
     def traceEnterState(self, StateChart, State):
-        text = "\n"
-        text += "\ENTER STATE in model <%s>\n" % StateChart
-        text += "\t\tState: %s\n" % str(State)
-        print(text)
+        self.text += "\n"
+        self.text += "ENTER STATE in model <%s>\n" % StateChart
+        self.text += "\t\tState: %s\n" % str(State)
+        #print(text)
     
     def traceOutput(self, listener, event):
-        text = "\n"
-        text += "OUTPUT EVENT to port <%s>\n" % event.port
-        text += "\t\Event: %s\n" % str(event)
-        print(text)
+        self.text += "\n"
+        self.text += "OUTPUT EVENT to port <%s>\n" % event.port
+        self.text += "\t\Event: %s\n" % str(event)
+        #print(text)
 
     def traceInput(self, listener, event):
-        text = "\n"
-        text += "INPUT EVENT from port <%s>\n" % event.port
-        text += "\t\Type: %s\n" % listener.virtual_name
-        text += "\t\Event: %s\n" % str(event)
-        print(text)
+        self.text += "\n"
+        self.text += "INPUT EVENT from port <%s>\n" % event.port
+        self.text += "\t\Type: %s\n" % listener.virtual_name
+        self.text += "\t\Event: %s\n" % str(event)
+        #print(text)
 
     def traceTransition(self, aStateChart):
         """

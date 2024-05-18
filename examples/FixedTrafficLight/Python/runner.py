@@ -1,8 +1,17 @@
-'''
-Created on 27-jul.-2014
+import tkinter as tk
+import target as target
+from sccd.runtime.libs.ui import ui
+from sccd.runtime.statecharts_core import Event
+from sccd.runtime.tkinter_eventloop import *
 
-@author: Simon
-'''
+if __name__ == '__main__':
+	ui.window = tk.Tk()
+
+	controller = target.Controller(TkEventLoop(ui.window))
+	controller.start()
+	ui.window.mainloop()
+
+
 import tkinter as tk
 import target as target
 from sccd.runtime.libs.ui_v2 import UI
@@ -24,7 +33,8 @@ if __name__ == '__main__':
 	ui = UI(tkroot, controller)
 	controller.addMyOwnOutputListener(OutputListener(ui))
 
-	controller.setVerbose("./examples/BouncingBalls/Python/trace.txt")
-
+	controller.setVerbose(None)
+	
 	controller.start()
 	tkroot.mainloop()
+	

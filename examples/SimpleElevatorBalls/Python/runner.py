@@ -1,8 +1,3 @@
-'''
-Created on 27-jul.-2014
-
-@author: Simon
-'''
 import tkinter as tk
 import target as target
 from sccd.runtime.libs.ui_v2 import UI
@@ -24,7 +19,8 @@ if __name__ == '__main__':
 	ui = UI(tkroot, controller)
 	controller.addMyOwnOutputListener(OutputListener(ui))
 
-	controller.setVerbose("./examples/BouncingBalls/Python/trace.txt")
-
+	controller.setVerbose(None)
+	
 	controller.start()
 	tkroot.mainloop()
+	
