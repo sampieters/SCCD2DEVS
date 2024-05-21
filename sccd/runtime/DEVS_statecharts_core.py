@@ -9,6 +9,13 @@ import threading
 
 ELSE_GUARD = "ELSE_GUARD"
 
+def get_private_port(text):
+    match = re.search(r'private_\d+_(\w+)', text)
+
+    if match:
+        result = match.group(1)
+        return result
+
 class RuntimeException(Exception):
     """
     Base class for runtime exceptions.
@@ -382,6 +389,7 @@ class RuntimeClassBase(object):
         self.configuration_bitmap = 0
         self.transition_mem = {}
         self.config_mem = {}
+
 
         #self.narrow_cast_port = self.controller.addInputPort("<narrow_cast>", self)
 
@@ -1023,7 +1031,7 @@ class ObjectManagerBase(AtomicDEVS):
         raise "Something went wrong "
 
     def extTransition(self, inputs):
-        self.simulated_time = (self.simulated_time + self.elapsed)
+        self.simulated_time += self.elapsed
         self.next_time = 0
         all_inputs = []
         for input_list in inputs.values():
@@ -1031,6 +1039,8 @@ class ObjectManagerBase(AtomicDEVS):
         for input in all_inputs:
             if isinstance(input, str):
                 tem = eval(input)
+                tem.instance = self.port_mappings[tem.port]
+                tem.port = get_private_port(tem.port)
                 self.addInput(tem)
             elif input[2].name == "create_instance":
                 new_instance = self.constructObject(input[2].parameters)
@@ -1159,3 +1169,31 @@ class TheObjectManager(AtomicDEVS):
         if self.State.to_send:
             return 0
         return INFINITY
+    
+# TODO: port class as wrapper to define the in and out ports the same as in SCCD
+class Ports:
+    private_port_counter = 0
+
+    inports = {}
+    outports = {}
+
+    @classmethod
+    def addOutputPort(self, virtual_name, instance=None):
+        if instance == None:
+            port_name = virtual_name
+        else:
+            port_name = "private_" + str(self.private_port_counter) + "_" + virtual_name
+            self.outports[port_name] = instance
+            self.private_port_counter += 1
+        return port_name
+
+    @classmethod
+    def addInputPort(self, virtual_name, instance=None):
+        if instance == None:
+            port_name = virtual_name
+        else:
+            port_name = "private_" + str(self.private_port_counter) + "_" + virtual_name
+            self.inports[port_name] = instance
+            self.private_port_counter += 1
+        return port_name
+

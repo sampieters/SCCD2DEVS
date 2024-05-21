@@ -524,8 +524,6 @@ class ControllerBase(object):
         """
         self.tracers.startTracers()
 
-
-        
     def getSimulatedTime(self):
         return self.simulated_time
         

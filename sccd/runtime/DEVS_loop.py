@@ -1,11 +1,24 @@
 from pypdevs.simulator import Simulator
+import re
+
+def get_port(text):
+	match = re.search(r'private_\d+_(\w+)', text)
+
+	if match:
+		result = match.group(1)
+		return result
+	else:
+		return None
+
 
 class DEVSSimulator(Simulator):
 	def __init__(self, model):
 		Simulator.__init__(self, model)	
 	
 	def addInput(self, event):
-		event_string = f"Event(\"{event.name}\",\"{event.port[0]}\",{event.parameters},{event.port[1]})"
+		port_name = get_port(event.port)
+
+		event_string = f"Event(\"{event.name}\",\"{event.port}\",{event.parameters})"
 		event_string = event_string.replace(" ", "")
-		interrupt_string = f"{event.port[0]} {event_string}"
+		interrupt_string = f"{port_name} {event_string}"
 		self.realtime_interrupt(interrupt_string)
