@@ -199,6 +199,7 @@ class MainApp(ObjectManagerBase):
     def __init__(self, name):
         ObjectManagerBase.__init__(self, name)
         self.input = self.addInPort("input")
+        self.output = self.addOutPort("ui")
         self.outputs["fields"] = self.addOutPort("fields")
         self.instances[self.next_instance] = MainAppInstance(self)
         self.next_instance = self.next_instance + 1
@@ -480,6 +481,7 @@ class Field(ObjectManagerBase):
     def __init__(self, name):
         ObjectManagerBase.__init__(self, name)
         self.input = self.addInPort("input")
+        self.output = self.addOutPort("ui")
         self.outputs["balls"] = self.addOutPort("balls")
         self.outputs["buttons"] = self.addOutPort("buttons")
         self.outputs["parent"] = self.addOutPort("parent")
@@ -593,6 +595,7 @@ class Button(ObjectManagerBase):
     def __init__(self, name):
         ObjectManagerBase.__init__(self, name)
         self.input = self.addInPort("input")
+        self.output = self.addOutPort("ui")
         self.outputs["parent"] = self.addOutPort("parent")
         self.button_ui = self.addInPort("button_ui")
 
@@ -631,6 +634,7 @@ class BallInstance(RuntimeClassBase):
         port_name = Ports.addInputPort("ball_ui", self)
         atomdevs.addInPort(port_name)
         atomdevs.port_mappings[port_name] = atomdevs.next_instance
+
 
         self.inports["ball_ui"] = port_name
     
@@ -823,6 +827,7 @@ class Ball(ObjectManagerBase):
     def __init__(self, name):
         ObjectManagerBase.__init__(self, name)
         self.input = self.addInPort("input")
+        self.output = self.addOutPort("ui")
         self.outputs["parent"] = self.addOutPort("parent")
         self.ball_ui = self.addInPort("ball_ui")
 
@@ -849,8 +854,8 @@ class ObjectManager(TheObjectManager):
 class Controller(CoupledDEVS):
     def __init__(self, name):
         CoupledDEVS.__init__(self, name)
-        self.ui = self.addInPort("ui")
-        self.addOutPort("ui")
+        self.in_ui = self.addInPort("ui")
+        self.out_ui = self.addOutPort("ui")
 
         Ports.addInputPort("ui")
         Ports.addOutputPort("ui")
@@ -875,3 +880,8 @@ class Controller(CoupledDEVS):
         self.connectPorts(self.atomic3.obj_manager_out, self.objectmanager.input)
         self.connectPorts(self.objectmanager.output["Ball"], self.atomic3.obj_manager_in)
         self.connectPorts(self.atomic3.outputs["parent"], self.atomic1.input)
+
+        self.connectPorts(self.atomic0.output, self.out_ui)
+        self.connectPorts(self.atomic1.output, self.out_ui)
+        self.connectPorts(self.atomic2.output, self.out_ui)
+        self.connectPorts(self.atomic3.output, self.out_ui)

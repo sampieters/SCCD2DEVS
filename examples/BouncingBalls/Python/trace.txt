@@ -1,0 +1,2879 @@
+__  Current Time:   0.000000 __________________________________________ 
+
+EXIT STATE in model <MainApp>
+		State: /running/root/main_behaviour/initializing
+
+ENTER STATE in model <MainApp>
+		State: /running/root/main_behaviour/running
+
+EXIT STATE in model <MainApp>
+		State: /running/root/cd_behaviour/waiting
+
+ENTER STATE in model <MainApp>
+		State: /running/root/cd_behaviour/creating
+
+
+EXIT STATE in model <MainApp>
+		State: /running/root/cd_behaviour/creating
+
+ENTER STATE in model <MainApp>
+		State: /running/root/cd_behaviour/waiting
+
+__  Current Time:   0.008000 __________________________________________ 
+
+
+INPUT EVENT from port <private_1_<narrow_cast>>
+	\Type: <narrow_cast>
+	\Event: (event name: set_association_name; port: private_1_<narrow_cast>; parameters: ['fields[0]'])
+
+EXIT STATE in model <Field>
+		State: /root/waiting
+
+ENTER STATE in model <Field>
+		State: /root/creating_window
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: create_window; port: ui; parameters: [800, 600, 'BouncingBalls', 'private_2_field_ui'])
+
+__  Current Time:   0.030000 __________________________________________ 
+
+INPUT EVENT from port <private_2_field_ui>
+	\Type: field_ui
+	\Event: (event name: window_created; port: private_2_field_ui; parameters: [0])
+
+EXIT STATE in model <Field>
+		State: /root/creating_window
+
+ENTER STATE in model <Field>
+		State: /root/creating_canvas
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: bind_event; port: ui; parameters: [0, 'WM_DELETE_WINDOW', 'window_close', 'private_2_field_ui'])
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: bind_event; port: ui; parameters: [0, '<Key>', 'key_press', 'private_2_field_ui'])
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: create_canvas; port: ui; parameters: [0, 800, 550, {'background': '#eee'}, 'private_2_field_ui'])
+
+__  Current Time:   0.062000 __________________________________________ 
+
+INPUT EVENT from port <private_2_field_ui>
+	\Type: field_ui
+	\Event: (event name: canvas_created; port: private_2_field_ui; parameters: [1])
+
+EXIT STATE in model <Field>
+		State: /root/creating_canvas
+
+ENTER STATE in model <Field>
+		State: /root/creating_button
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: bind_event; port: ui; parameters: [1, '<Button-2>', 'right_click', 'private_2_field_ui'])
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: bind_event; port: ui; parameters: [1, '<Motion>', 'mouse_move', 'private_2_field_ui'])
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: bind_event; port: ui; parameters: [1, '<ButtonRelease>', 'mouse_release', 'private_2_field_ui'])
+
+
+EXIT STATE in model <Field>
+		State: /root/creating_button
+
+ENTER STATE in model <Field>
+		State: /root/running
+
+ENTER STATE in model <Field>
+		State: /root/running/main_behaviour
+
+ENTER STATE in model <Field>
+		State: /root/running/main_behaviour/running
+
+ENTER STATE in model <Field>
+		State: /root/running/deleting_behaviour
+
+ENTER STATE in model <Field>
+		State: /root/running/deleting_behaviour/running
+
+ENTER STATE in model <Field>
+		State: /root/running/child_behaviour
+
+ENTER STATE in model <Field>
+		State: /root/running/child_behaviour/listening
+
+ENTER STATE in model <Field>
+		State: /root/running/deleting_balls_behaviour
+
+ENTER STATE in model <Field>
+		State: /root/running/deleting_balls_behaviour/listening
+
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: create_button; port: ui; parameters: [0, 'create_new_field', 'private_4_button_ui'])
+
+__  Current Time:   0.069000 __________________________________________ 
+
+INPUT EVENT from port <private_4_button_ui>
+	\Type: button_ui
+	\Event: (event name: button_created; port: private_4_button_ui; parameters: [2])
+
+EXIT STATE in model <Button>
+		State: /creating_button
+
+ENTER STATE in model <Button>
+		State: /running
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: bind_event; port: ui; parameters: [2, '<Button>', 'mouse_click', 'private_4_button_ui'])
+
+__  Current Time:   0.714000 __________________________________________ 
+
+INPUT EVENT from port <private_2_field_ui>
+	\Type: field_ui
+	\Event: (event name: mouse_move; port: private_2_field_ui; parameters: [370, 22, '??'])
+
+__  Current Time:   0.721000 __________________________________________ 
+
+INPUT EVENT from port <private_2_field_ui>
+	\Type: field_ui
+	\Event: (event name: mouse_move; port: private_2_field_ui; parameters: [370, 26, '??'])
+
+__  Current Time:   0.729000 __________________________________________ 
+
+INPUT EVENT from port <private_2_field_ui>
+	\Type: field_ui
+	\Event: (event name: mouse_move; port: private_2_field_ui; parameters: [370, 32, '??'])
+
+__  Current Time:   0.737000 __________________________________________ 
+
+INPUT EVENT from port <private_2_field_ui>
+	\Type: field_ui
+	\Event: (event name: mouse_move; port: private_2_field_ui; parameters: [370, 40, '??'])
+
+__  Current Time:   0.746000 __________________________________________ 
+
+INPUT EVENT from port <private_2_field_ui>
+	\Type: field_ui
+	\Event: (event name: mouse_move; port: private_2_field_ui; parameters: [370, 45, '??'])
+
+__  Current Time:   0.753000 __________________________________________ 
+
+INPUT EVENT from port <private_2_field_ui>
+	\Type: field_ui
+	\Event: (event name: mouse_move; port: private_2_field_ui; parameters: [369, 62, '??'])
+
+__  Current Time:   0.762000 __________________________________________ 
+
+INPUT EVENT from port <private_2_field_ui>
+	\Type: field_ui
+	\Event: (event name: mouse_move; port: private_2_field_ui; parameters: [369, 75, '??'])
+
+__  Current Time:   0.880000 __________________________________________ 
+
+INPUT EVENT from port <private_2_field_ui>
+	\Type: field_ui
+	\Event: (event name: right_click; port: private_2_field_ui; parameters: [369, 75, 2])
+
+EXIT STATE in model <Field>
+		State: /root/running/main_behaviour/running
+
+ENTER STATE in model <Field>
+		State: /root/running/main_behaviour/creating_ball
+
+
+EXIT STATE in model <Field>
+		State: /root/running/main_behaviour/creating_ball
+
+ENTER STATE in model <Field>
+		State: /root/running/main_behaviour/running
+
+__  Current Time:   0.881000 __________________________________________ 
+
+
+INPUT EVENT from port <private_5_<narrow_cast>>
+	\Type: <narrow_cast>
+	\Event: (event name: set_association_name; port: private_5_<narrow_cast>; parameters: ['balls[0]'])
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/initializing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/creating_circle
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: create_circle; port: ui; parameters: [1, 369, 75, 20.0, {'fill': '#000'}, 'private_6_ball_ui'])
+
+__  Current Time:   0.882000 __________________________________________ 
+
+INPUT EVENT from port <private_6_ball_ui>
+	\Type: ball_ui
+	\Event: (event name: circle_created; port: private_6_ball_ui; parameters: [1, 1])
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/creating_circle
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: bind_canvas_event; port: ui; parameters: [1, 1, '<ButtonPress>', 'mouse_press', 'private_6_ball_ui'])
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: bind_canvas_event; port: ui; parameters: [1, 1, '<Motion>', 'mouse_move', 'private_6_ball_ui'])
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: bind_canvas_event; port: ui; parameters: [1, 1, '<ButtonRelease>', 'mouse_release', 'private_6_ball_ui'])
+
+__  Current Time:   0.902000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   0.922000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   0.942000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   0.962000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   0.982000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   0.988000 __________________________________________ 
+
+INPUT EVENT from port <private_2_field_ui>
+	\Type: field_ui
+	\Event: (event name: mouse_release; port: private_2_field_ui; parameters: [369, 75, 2])
+
+__  Current Time:   1.002000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.022000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.042000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.062000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.082000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.102000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.122000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.142000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.162000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.182000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.202000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.222000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.242000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.262000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.282000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.290000 __________________________________________ 
+
+INPUT EVENT from port <private_2_field_ui>
+	\Type: field_ui
+	\Event: (event name: right_click; port: private_2_field_ui; parameters: [369, 75, 2])
+
+EXIT STATE in model <Field>
+		State: /root/running/main_behaviour/running
+
+ENTER STATE in model <Field>
+		State: /root/running/main_behaviour/creating_ball
+
+
+EXIT STATE in model <Field>
+		State: /root/running/main_behaviour/creating_ball
+
+ENTER STATE in model <Field>
+		State: /root/running/main_behaviour/running
+
+__  Current Time:   1.291000 __________________________________________ 
+
+
+INPUT EVENT from port <private_7_<narrow_cast>>
+	\Type: <narrow_cast>
+	\Event: (event name: set_association_name; port: private_7_<narrow_cast>; parameters: ['balls[1]'])
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/initializing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/creating_circle
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: create_circle; port: ui; parameters: [1, 369, 75, 20.0, {'fill': '#000'}, 'private_8_ball_ui'])
+
+
+INPUT EVENT from port <private_8_ball_ui>
+	\Type: ball_ui
+	\Event: (event name: circle_created; port: private_8_ball_ui; parameters: [1, 2])
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/creating_circle
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: bind_canvas_event; port: ui; parameters: [1, 2, '<ButtonPress>', 'mouse_press', 'private_8_ball_ui'])
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: bind_canvas_event; port: ui; parameters: [1, 2, '<Motion>', 'mouse_move', 'private_8_ball_ui'])
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: bind_canvas_event; port: ui; parameters: [1, 2, '<ButtonRelease>', 'mouse_release', 'private_8_ball_ui'])
+
+__  Current Time:   1.302000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.311000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   1.322000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.331000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   1.342000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.351000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   1.362000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.371000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   1.382000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.391000 __________________________________________ 
+
+INPUT EVENT from port <private_2_field_ui>
+	\Type: field_ui
+	\Event: (event name: mouse_release; port: private_2_field_ui; parameters: [369, 75, 2])
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   1.394000 __________________________________________ 
+
+__  Current Time:   1.402000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.411000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   1.422000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.431000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   1.442000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.451000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   1.462000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.471000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   1.482000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.491000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   1.502000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.511000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   1.522000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.531000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   1.542000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.551000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   1.562000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.571000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   1.582000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.591000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   1.602000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.611000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   1.622000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.631000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   1.642000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.651000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   1.662000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.671000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   1.682000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.691000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   1.702000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.711000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   1.722000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.731000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   1.742000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.751000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   1.762000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.771000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   1.782000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.791000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   1.802000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.811000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   1.822000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.831000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   1.842000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.851000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   1.862000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.871000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   1.882000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.891000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   1.902000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.911000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   1.922000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.931000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   1.942000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.951000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   1.962000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.971000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   1.982000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   1.991000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   2.002000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.011000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   2.022000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.031000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   2.042000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.051000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   2.062000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.071000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   2.082000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.091000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   2.102000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.111000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   2.122000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.131000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   2.142000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.151000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   2.162000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.171000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   2.182000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.191000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   2.202000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.211000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   2.222000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.231000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   2.242000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.251000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   2.262000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.271000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   2.282000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.291000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   2.302000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.311000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   2.322000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.331000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   2.342000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.351000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   2.362000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.371000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   2.382000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.391000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, -1.011232865583521])
+
+__  Current Time:   2.402000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.411000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   2.422000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.431000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   2.442000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, -4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.451000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   2.462000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.471000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   2.482000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.491000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   2.502000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.511000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   2.522000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.531000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   2.542000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.551000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   2.562000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.571000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   2.582000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.591000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   2.602000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.611000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   2.622000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.631000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   2.642000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.651000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   2.662000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.671000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   2.682000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.691000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   2.702000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.711000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   2.722000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.731000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   2.742000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.751000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   2.762000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.771000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   2.782000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.791000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   2.802000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.811000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   2.822000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.831000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   2.842000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.851000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   2.862000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.871000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   2.882000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.891000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   2.902000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.911000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   2.922000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.931000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   2.942000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.951000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   2.962000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.971000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   2.982000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   2.991000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   3.002000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   3.011000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   3.022000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   3.031000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   3.042000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   3.051000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   3.062000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   3.071000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   3.082000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   3.091000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   3.102000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   3.111000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   3.122000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   3.131000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   3.142000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   3.151000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   3.162000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   3.171000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   3.182000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   3.191000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, -3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   3.202000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   3.211000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, 3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   3.222000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   3.231000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, 3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   3.242000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   3.251000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, 3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   3.262000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   3.271000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, 3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   3.282000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   3.291000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, 3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   3.302000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   3.311000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, 3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   3.322000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   3.331000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, 3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   3.342000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   3.351000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, 3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   3.362000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   3.371000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, 3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   3.382000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   3.391000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, 3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   3.402000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   3.411000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, 3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   3.422000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+
+__  Current Time:   3.431000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 2, 3.6790810056111423, 1.011232865583521])
+
+__  Current Time:   3.442000 __________________________________________ 
+
+EXIT STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+ENTER STATE in model <Ball>
+		State: /main_behaviour/bouncing
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: move_element; port: ui; parameters: [1, 1, 4.499225804577316, 1.0799624347755898])
+

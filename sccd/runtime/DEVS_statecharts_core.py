@@ -691,7 +691,7 @@ class ObjectManagerBase(AtomicDEVS):
         self.outputs = {}
         self.next_time = INFINITY
         
-        
+        self.port_mappings = {}
         
         self.input_queue = EventQueue()
         self.simulated_time = 0
@@ -808,8 +808,10 @@ class ObjectManagerBase(AtomicDEVS):
         self.handlers[e.getName()](e.getParameters())
 
     def outputEvent(self, event):
-        for listener in self.output_listeners:
-            listener.add(event)
+        self.to_send.append((self.name, None, event))
+        #for listener in self.output_listeners:
+        #    self.to_send.append((self.name, None, event))
+        #   listener.add(event)
 
     def processAssociationReference(self, input_string):
         if len(input_string) == 0:
@@ -1130,7 +1132,7 @@ class ObjectManagerBase(AtomicDEVS):
             else:
                 the_port = None
                 for port in self.OPorts:
-                    if port.name == sending[0]:
+                    if port.name == sending[2].port:
                         the_port = port
                 if the_port in to_dict:
                     to_dict[the_port].append(sending)
@@ -1145,6 +1147,8 @@ class TheObjectManager(AtomicDEVS):
     def __init__(self, name):
         AtomicDEVS.__init__(self, name)
         self.output = {}
+
+        self.to_send = []
     
     def extTransition(self, inputs):
         all_inputs = inputs[self.input]
