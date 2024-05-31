@@ -34,6 +34,8 @@ class MainAppInstance(RuntimeClassBase):
         
         # call user defined constructor
         MainAppInstance.user_defined_constructor(self)
+        port_name = Ports.addInputPort("<narrow_cast>", self)
+        atomdevs.addInPort(port_name)
     
     def user_defined_constructor(self):
         self.nr_of_fields = 0
@@ -203,8 +205,6 @@ class MainApp(ObjectManagerBase):
         self.outputs["fields"] = self.addOutPort("fields")
         self.instances[self.next_instance] = MainAppInstance(self)
         self.next_instance = self.next_instance + 1
-        port_name = Ports.addInputPort("<narrow_cast>", 0)
-        self.addInPort(port_name)
     
     def constructObject(self, parameters):
         new_instance = MainAppInstance(self)
@@ -233,19 +233,12 @@ class FieldInstance(RuntimeClassBase):
         
         # call user defined constructor
         FieldInstance.user_defined_constructor(self)
-        #self.inports["field_ui"] = ('field_ui', atomdevs.next_instance)
-
-
         port_name = Ports.addInputPort("<narrow_cast>", self)
         atomdevs.addInPort(port_name)
-
         port_name = Ports.addInputPort("field_ui", self)
         atomdevs.addInPort(port_name)
         atomdevs.port_mappings[port_name] = atomdevs.next_instance
-
-
         self.inports["field_ui"] = port_name
-
     
     def user_defined_constructor(self):
         pass
@@ -486,8 +479,6 @@ class Field(ObjectManagerBase):
         self.outputs["buttons"] = self.addOutPort("buttons")
         self.outputs["parent"] = self.addOutPort("parent")
         self.field_ui = self.addInPort("field_ui")
-
-        self.port_mappings = {}
     
     def constructObject(self, parameters):
         new_instance = FieldInstance(self)
@@ -515,15 +506,11 @@ class ButtonInstance(RuntimeClassBase):
         
         # call user defined constructor
         ButtonInstance.user_defined_constructor(self, window_id, event_name, button_text)
-        #self.inports["button_ui"] = ('button_ui', atomdevs.next_instance)
-
         port_name = Ports.addInputPort("<narrow_cast>", self)
         atomdevs.addInPort(port_name)
-
         port_name = Ports.addInputPort("button_ui", self)
         atomdevs.addInPort(port_name)
         atomdevs.port_mappings[port_name] = atomdevs.next_instance
-
         self.inports["button_ui"] = port_name
     
     def user_defined_constructor(self, window_id, event_name, button_text):
@@ -598,8 +585,6 @@ class Button(ObjectManagerBase):
         self.output = self.addOutPort("ui")
         self.outputs["parent"] = self.addOutPort("parent")
         self.button_ui = self.addInPort("button_ui")
-
-        self.port_mappings = {}
     
     def constructObject(self, parameters):
         new_instance = ButtonInstance(self, parameters[2], parameters[3], parameters[4])
@@ -626,16 +611,11 @@ class BallInstance(RuntimeClassBase):
         
         # call user defined constructor
         BallInstance.user_defined_constructor(self, canvas_id, x, y)
-        #self.inports["ball_ui"] = ('ball_ui', atomdevs.next_instance)
-
         port_name = Ports.addInputPort("<narrow_cast>", self)
         atomdevs.addInPort(port_name)
-
         port_name = Ports.addInputPort("ball_ui", self)
         atomdevs.addInPort(port_name)
         atomdevs.port_mappings[port_name] = atomdevs.next_instance
-
-
         self.inports["ball_ui"] = port_name
     
     def user_defined_constructor(self, canvas_id, x, y):
@@ -830,8 +810,6 @@ class Ball(ObjectManagerBase):
         self.output = self.addOutPort("ui")
         self.outputs["parent"] = self.addOutPort("parent")
         self.ball_ui = self.addInPort("ball_ui")
-
-        self.port_mappings = {}
     
     def constructObject(self, parameters):
         new_instance = BallInstance(self, parameters[2], parameters[3], parameters[4])
@@ -853,14 +831,13 @@ class ObjectManager(TheObjectManager):
 
 class Controller(CoupledDEVS):
     def __init__(self, name):
+        self.terminate = False
+
         CoupledDEVS.__init__(self, name)
         self.in_ui = self.addInPort("ui")
-        self.out_ui = self.addOutPort("ui")
-
         Ports.addInputPort("ui")
+        self.out_ui = self.addOutPort("ui")
         Ports.addOutputPort("ui")
-
-
         self.objectmanager = self.addSubModel(ObjectManager("ObjectManager"))
         self.atomic0 = self.addSubModel(MainApp("MainApp"))
         self.atomic1 = self.addSubModel(Field("Field"))
@@ -880,7 +857,6 @@ class Controller(CoupledDEVS):
         self.connectPorts(self.atomic3.obj_manager_out, self.objectmanager.input)
         self.connectPorts(self.objectmanager.output["Ball"], self.atomic3.obj_manager_in)
         self.connectPorts(self.atomic3.outputs["parent"], self.atomic1.input)
-
         self.connectPorts(self.atomic0.output, self.out_ui)
         self.connectPorts(self.atomic1.output, self.out_ui)
         self.connectPorts(self.atomic2.output, self.out_ui)

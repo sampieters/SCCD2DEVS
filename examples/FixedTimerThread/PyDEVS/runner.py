@@ -1,10 +1,10 @@
-import target as target
+import target as best_target
 from sccd.runtime.DEVS_statecharts_core import Event
 import threading
 
 
 if __name__ == '__main__':
-    controller = target.Controller() 
+    controller = best_target.Controller() 
     
     def raw_inputter():
         while 1:
@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
 
 import tkinter as tk
-import examples.BouncingBalls.PyDEVS.target as target
+import examples.BouncingBalls.PyDEVS.best_target as best_target
 from sccd.runtime.libs.ui_v2 import UI
 from sccd.runtime.DEVS_loop import DEVSSimulator
 
@@ -43,7 +43,7 @@ class OutputListener:
 			method(*event.parameters)
 
 if __name__ == '__main__':
-	model = target.Controller(name="controller")
+	model = best_target.Controller(name="controller")
 	refs = {"ui": model.ui, "field_ui": model.atomic1.field_ui, "button_ui": model.atomic2.button_ui, "ball_ui": model.atomic3.ball_ui}
 
 

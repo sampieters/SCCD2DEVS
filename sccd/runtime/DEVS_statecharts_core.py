@@ -808,7 +808,11 @@ class ObjectManagerBase(AtomicDEVS):
         self.handlers[e.getName()](e.getParameters())
 
     def outputEvent(self, event):
-        self.to_send.append((self.name, None, event))
+        self.to_send.append(event)
+        #self.to_send.append((self.name, None, event))
+
+
+
         #for listener in self.output_listeners:
         #    self.to_send.append((self.name, None, event))
         #   listener.add(event)
@@ -1113,18 +1117,20 @@ class ObjectManagerBase(AtomicDEVS):
         self.handleInput()
         self.stepAll()
         next_earliest = min(self.getEarliestEventTime(), self.input_queue.getEarliestTime())
-        if not (len(self.to_send) == 0):
+        if next_earliest != INFINITY:
+            self.next_time = next_earliest - earliest
+        elif not (len(self.to_send) == 0):
             self.next_time = 0
         elif next_earliest == INFINITY:
             self.next_time = INFINITY
-        else:
-            self.next_time = next_earliest - earliest
+        #else:
+        #    self.next_time = next_earliest - earliest
         return self.instances
 
     def outputFnc(self):
         to_dict = {}
         for sending in self.to_send:
-            if sending[2].port == None:
+            if isinstance(sending, tuple) and sending[2].port == None:
                 if self.obj_manager_out in to_dict:
                     to_dict[self.obj_manager_out].append(sending)
                 else:
@@ -1132,7 +1138,7 @@ class ObjectManagerBase(AtomicDEVS):
             else:
                 the_port = None
                 for port in self.OPorts:
-                    if port.name == sending[2].port:
+                    if port.name == sending.port:
                         the_port = port
                 if the_port in to_dict:
                     to_dict[the_port].append(sending)

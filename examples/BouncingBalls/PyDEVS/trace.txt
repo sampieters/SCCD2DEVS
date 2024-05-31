@@ -27,11 +27,6 @@ __  Current Time:   0.000000 __________________________________________
 		Next scheduled internal transition at time 0.000000
 
 
-	INITIAL CONDITIONS in model <controller.listener>
-		Initial State: None
-		Next scheduled internal transition at time inf
-
-
 __  Current Time:   0.000000 __________________________________________ 
 
 
@@ -41,12 +36,12 @@ __  Current Time:   0.000000 __________________________________________
 				('MainApp', 'MainApp', (event name: start_instance; port: None; parameters: ['MainApp[0]']))
 			port <input>:
 			port <private_0_<narrow_cast>>:
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.MainAppInstance object at 0x10550d940>}
+		New State: {0: <examples.BouncingBalls.PyDEVS.target.MainAppInstance object at 0x10ef09b20>}
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <controller.ObjectManager>
-		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x1054487a0>
+		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x10e947a10>
 		Output Port Configuration:
 			port <port1>:
 				('MainApp', 'MainApp', (event name: start_instance; port: None; parameters: ['MainApp[0]']))
@@ -63,15 +58,16 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))
-		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x1054487a0>
+		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x10e947a10>
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <controller.MainApp>
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.MainAppInstance object at 0x10550d940>}
+		New State: {0: <examples.BouncingBalls.PyDEVS.target.MainAppInstance object at 0x10ef09b20>}
 		Output Port Configuration:
 			port <obj_manager_out>:
 				('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))
+			port <ui>:
 			port <fields>:
 		Next scheduled internal transition at time 0.000000
 
@@ -85,15 +81,16 @@ __  Current Time:   0.000000 __________________________________________
 				('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))
 			port <input>: 
 			port <private_0_<narrow_cast>>: 
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.MainAppInstance object at 0x10550d940>}
+		New State: {0: <examples.BouncingBalls.PyDEVS.target.MainAppInstance object at 0x10ef09b20>}
 		Output Port Configuration:
 			port <obj_manager_out>:
+			port <ui>:
 			port <fields>:
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <controller.ObjectManager>
-		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x1054487a0>
+		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x10e947a10>
 		Output Port Configuration:
 			port <port1>:
 				('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))
@@ -110,15 +107,16 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				('MainApp', 'Field', (event name: create_instance; port: None; parameters: ['fields']))
-		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x1054487a0>
+		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x10e947a10>
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <controller.MainApp>
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.MainAppInstance object at 0x10550d940>}
+		New State: {0: <examples.BouncingBalls.PyDEVS.target.MainAppInstance object at 0x10ef09b20>}
 		Output Port Configuration:
 			port <obj_manager_out>:
 				('MainApp', 'Field', (event name: create_instance; port: None; parameters: ['fields']))
+			port <ui>:
 			port <fields>:
 		Next scheduled internal transition at time inf
 
@@ -134,12 +132,12 @@ __  Current Time:   0.000000 __________________________________________
 			port <field_ui>:
 			port <private_1_<narrow_cast>>:
 			port <private_2_field_ui>:
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x1055e5a00>}
+		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x10ee88440>}
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <controller.ObjectManager>
-		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x1054487a0>
+		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x10e947a10>
 		Output Port Configuration:
 			port <port1>:
 			port <port2>:
@@ -156,15 +154,16 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				('Field', 'MainApp', (event name: instance_created; port: None; parameters: ['fields[0]']))
-		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x1054487a0>
+		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x10e947a10>
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <controller.Field>
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x1055e5a00>}
+		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x10ee88440>}
 		Output Port Configuration:
 			port <obj_manager_out>:
 				('Field', 'MainApp', (event name: instance_created; port: None; parameters: ['fields[0]']))
+			port <ui>:
 			port <balls>:
 			port <buttons>:
 			port <parent>:
@@ -180,12 +179,12 @@ __  Current Time:   0.000000 __________________________________________
 				('Field', 'MainApp', (event name: instance_created; port: None; parameters: ['fields[0]']))
 			port <input>:
 			port <private_0_<narrow_cast>>:
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.MainAppInstance object at 0x10550d940>}
+		New State: {0: <examples.BouncingBalls.PyDEVS.target.MainAppInstance object at 0x10ef09b20>}
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <controller.ObjectManager>
-		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x1054487a0>
+		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x10e947a10>
 		Output Port Configuration:
 			port <port1>:
 				('Field', 'MainApp', (event name: instance_created; port: None; parameters: ['fields[0]']))
@@ -199,9 +198,10 @@ __  Current Time:   0.000000 __________________________________________
 
 
 	INTERNAL TRANSITION in model <controller.MainApp>
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.MainAppInstance object at 0x10550d940>}
+		New State: {0: <examples.BouncingBalls.PyDEVS.target.MainAppInstance object at 0x10ef09b20>}
 		Output Port Configuration:
 			port <obj_manager_out>:
+			port <ui>:
 			port <fields>:
 		Next scheduled internal transition at time 0.000000
 
@@ -210,9 +210,10 @@ __  Current Time:   0.000000 __________________________________________
 
 
 	INTERNAL TRANSITION in model <controller.MainApp>
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.MainAppInstance object at 0x10550d940>}
+		New State: {0: <examples.BouncingBalls.PyDEVS.target.MainAppInstance object at 0x10ef09b20>}
 		Output Port Configuration:
 			port <obj_manager_out>:
+			port <ui>:
 			port <fields>:
 		Next scheduled internal transition at time 0.000000
 
@@ -225,16 +226,17 @@ __  Current Time:   0.000000 __________________________________________
 			port <input>:
 				('MainApp', 'Field', (event name: start_instance; port: None; parameters: ['fields[0]']))
 				('MainApp', 'Field', (event name: set_association_name; port: None; parameters: ['fields[0]']))
-		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x1054487a0>
+		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x10e947a10>
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <controller.MainApp>
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.MainAppInstance object at 0x10550d940>}
+		New State: {0: <examples.BouncingBalls.PyDEVS.target.MainAppInstance object at 0x10ef09b20>}
 		Output Port Configuration:
 			port <obj_manager_out>:
 				('MainApp', 'Field', (event name: start_instance; port: None; parameters: ['fields[0]']))
 				('MainApp', 'Field', (event name: set_association_name; port: None; parameters: ['fields[0]']))
+			port <ui>:
 			port <fields>:
 		Next scheduled internal transition at time inf
 
@@ -251,12 +253,12 @@ __  Current Time:   0.000000 __________________________________________
 			port <field_ui>:
 			port <private_1_<narrow_cast>>:
 			port <private_2_field_ui>:
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x1055e5a00>}
+		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x10ee88440>}
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <controller.ObjectManager>
-		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x1054487a0>
+		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x10e947a10>
 		Output Port Configuration:
 			port <port1>:
 			port <port2>:
@@ -274,19 +276,20 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				('Field', 'MainApp', (event name: instance_started; port: None; parameters: ['fields[0]']))
-		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x1054487a0>
+		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x10e947a10>
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <controller.Field>
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x1055e5a00>}
+		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x10ee88440>}
 		Output Port Configuration:
 			port <obj_manager_out>:
 				('Field', 'MainApp', (event name: instance_started; port: None; parameters: ['fields[0]']))
+			port <ui>:
 			port <balls>:
 			port <buttons>:
 			port <parent>:
-		Next scheduled internal transition at time inf
+		Next scheduled internal transition at time 0.000000
 
 
 __  Current Time:   0.000000 __________________________________________ 
@@ -298,12 +301,24 @@ __  Current Time:   0.000000 __________________________________________
 				('Field', 'MainApp', (event name: instance_started; port: None; parameters: ['fields[0]']))
 			port <input>:
 			port <private_0_<narrow_cast>>:
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.MainAppInstance object at 0x10550d940>}
+		New State: {0: <examples.BouncingBalls.PyDEVS.target.MainAppInstance object at 0x10ef09b20>}
 		Next scheduled internal transition at time 0.000000
 
 
+	INTERNAL TRANSITION in model <controller.Field>
+		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x10ee88440>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: create_window; port: ui; parameters: [800, 600, 'BouncingBalls', 'private_2_field_ui'])
+			port <balls>:
+			port <buttons>:
+			port <parent>:
+		Next scheduled internal transition at time inf
+
+
 	INTERNAL TRANSITION in model <controller.ObjectManager>
-		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x1054487a0>
+		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x10e947a10>
 		Output Port Configuration:
 			port <port1>:
 				('Field', 'MainApp', (event name: instance_started; port: None; parameters: ['fields[0]']))
@@ -317,14 +332,15 @@ __  Current Time:   0.000000 __________________________________________
 
 
 	INTERNAL TRANSITION in model <controller.MainApp>
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.MainAppInstance object at 0x10550d940>}
+		New State: {0: <examples.BouncingBalls.PyDEVS.target.MainAppInstance object at 0x10ef09b20>}
 		Output Port Configuration:
 			port <obj_manager_out>:
+			port <ui>:
 			port <fields>:
 		Next scheduled internal transition at time inf
 
 
-__  Current Time:   0.050940 __________________________________________ 
+__  Current Time:   6.117143 __________________________________________ 
 
 
 	EXTERNAL TRANSITION in model <controller.Field>
@@ -335,24 +351,42 @@ __  Current Time:   0.050940 __________________________________________
 				Event("window_created","private_2_field_ui",[0])
 			port <private_1_<narrow_cast>>:
 			port <private_2_field_ui>:
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x1055e5a00>}
-		Next scheduled internal transition at time 0.050940
+		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x10ee88440>}
+		Next scheduled internal transition at time 6.117143
 
 
-__  Current Time:   0.050940 __________________________________________ 
+__  Current Time:   6.117143 __________________________________________ 
 
 
 	INTERNAL TRANSITION in model <controller.Field>
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x1055e5a00>}
+		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x10ee88440>}
 		Output Port Configuration:
 			port <obj_manager_out>:
+			port <ui>:
+			port <balls>:
+			port <buttons>:
+			port <parent>:
+		Next scheduled internal transition at time 6.117143
+
+
+__  Current Time:   6.117143 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.Field>
+		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x10ee88440>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: bind_event; port: ui; parameters: [0, 'WM_DELETE_WINDOW', 'window_close', 'private_2_field_ui'])
+				(event name: bind_event; port: ui; parameters: [0, '<Key>', 'key_press', 'private_2_field_ui'])
+				(event name: create_canvas; port: ui; parameters: [0, 800, 550, {'background': '#eee'}, 'private_2_field_ui'])
 			port <balls>:
 			port <buttons>:
 			port <parent>:
 		Next scheduled internal transition at time inf
 
 
-__  Current Time:   0.070622 __________________________________________ 
+__  Current Time:   6.121296 __________________________________________ 
 
 
 	EXTERNAL TRANSITION in model <controller.Field>
@@ -363,59 +397,65 @@ __  Current Time:   0.070622 __________________________________________
 				Event("canvas_created","private_2_field_ui",[1])
 			port <private_1_<narrow_cast>>:
 			port <private_2_field_ui>:
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x1055e5a00>}
-		Next scheduled internal transition at time 0.070622
+		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x10ee88440>}
+		Next scheduled internal transition at time 6.121296
 
 
-__  Current Time:   0.070622 __________________________________________ 
-
-
-	INTERNAL TRANSITION in model <controller.Field>
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x1055e5a00>}
-		Output Port Configuration:
-			port <obj_manager_out>:
-			port <balls>:
-			port <buttons>:
-			port <parent>:
-		Next scheduled internal transition at time 0.070622
-
-
-__  Current Time:   0.070622 __________________________________________ 
+__  Current Time:   6.121296 __________________________________________ 
 
 
 	INTERNAL TRANSITION in model <controller.Field>
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x1055e5a00>}
+		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x10ee88440>}
 		Output Port Configuration:
 			port <obj_manager_out>:
+			port <ui>:
 			port <balls>:
 			port <buttons>:
 			port <parent>:
-		Next scheduled internal transition at time 0.070622
+		Next scheduled internal transition at time 6.121296
 
 
-__  Current Time:   0.070622 __________________________________________ 
+__  Current Time:   6.121296 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.Field>
+		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x10ee88440>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: bind_event; port: ui; parameters: [1, '<Button-2>', 'right_click', 'private_2_field_ui'])
+				(event name: bind_event; port: ui; parameters: [1, '<Motion>', 'mouse_move', 'private_2_field_ui'])
+				(event name: bind_event; port: ui; parameters: [1, '<ButtonRelease>', 'mouse_release', 'private_2_field_ui'])
+			port <balls>:
+			port <buttons>:
+			port <parent>:
+		Next scheduled internal transition at time 6.121296
+
+
+__  Current Time:   6.121296 __________________________________________ 
 
 
 	EXTERNAL TRANSITION in model <controller.ObjectManager>
 		Input Port Configuration:
 			port <input>:
 				('Field', 'Button', (event name: create_instance; port: None; parameters: ['buttons', 'Button', 0, 'create_new_field', 'Spawn New Window']))
-		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x1054487a0>
-		Next scheduled internal transition at time 0.070622
+		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x10e947a10>
+		Next scheduled internal transition at time 6.121296
 
 
 	INTERNAL TRANSITION in model <controller.Field>
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x1055e5a00>}
+		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x10ee88440>}
 		Output Port Configuration:
 			port <obj_manager_out>:
 				('Field', 'Button', (event name: create_instance; port: None; parameters: ['buttons', 'Button', 0, 'create_new_field', 'Spawn New Window']))
+			port <ui>:
 			port <balls>:
 			port <buttons>:
 			port <parent>:
 		Next scheduled internal transition at time inf
 
 
-__  Current Time:   0.070622 __________________________________________ 
+__  Current Time:   6.121296 __________________________________________ 
 
 
 	EXTERNAL TRANSITION in model <controller.Button>
@@ -426,12 +466,12 @@ __  Current Time:   0.070622 __________________________________________
 			port <button_ui>:
 			port <private_3_<narrow_cast>>:
 			port <private_4_button_ui>:
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.ButtonInstance object at 0x1055e5730>}
-		Next scheduled internal transition at time 0.070622
+		New State: {0: <examples.BouncingBalls.PyDEVS.target.ButtonInstance object at 0x10ee89610>}
+		Next scheduled internal transition at time 6.121296
 
 
 	INTERNAL TRANSITION in model <controller.ObjectManager>
-		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x1054487a0>
+		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x10e947a10>
 		Output Port Configuration:
 			port <port1>:
 			port <port2>:
@@ -441,27 +481,28 @@ __  Current Time:   0.070622 __________________________________________
 		Next scheduled internal transition at time inf
 
 
-__  Current Time:   0.070622 __________________________________________ 
+__  Current Time:   6.121296 __________________________________________ 
 
 
 	EXTERNAL TRANSITION in model <controller.ObjectManager>
 		Input Port Configuration:
 			port <input>:
 				('Button', 'Field', (event name: instance_created; port: None; parameters: ['buttons[0]']))
-		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x1054487a0>
-		Next scheduled internal transition at time 0.070622
+		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x10e947a10>
+		Next scheduled internal transition at time 6.121296
 
 
 	INTERNAL TRANSITION in model <controller.Button>
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.ButtonInstance object at 0x1055e5730>}
+		New State: {0: <examples.BouncingBalls.PyDEVS.target.ButtonInstance object at 0x10ee89610>}
 		Output Port Configuration:
 			port <obj_manager_out>:
 				('Button', 'Field', (event name: instance_created; port: None; parameters: ['buttons[0]']))
+			port <ui>:
 			port <parent>:
 		Next scheduled internal transition at time inf
 
 
-__  Current Time:   0.070622 __________________________________________ 
+__  Current Time:   6.121296 __________________________________________ 
 
 
 	EXTERNAL TRANSITION in model <controller.Field>
@@ -472,12 +513,12 @@ __  Current Time:   0.070622 __________________________________________
 			port <field_ui>:
 			port <private_1_<narrow_cast>>:
 			port <private_2_field_ui>:
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x1055e5a00>}
-		Next scheduled internal transition at time 0.070622
+		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x10ee88440>}
+		Next scheduled internal transition at time 6.121296
 
 
 	INTERNAL TRANSITION in model <controller.ObjectManager>
-		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x1054487a0>
+		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x10e947a10>
 		Output Port Configuration:
 			port <port1>:
 			port <port2>:
@@ -487,65 +528,41 @@ __  Current Time:   0.070622 __________________________________________
 		Next scheduled internal transition at time inf
 
 
-__  Current Time:   0.070622 __________________________________________ 
+__  Current Time:   6.121296 __________________________________________ 
 
 
 	INTERNAL TRANSITION in model <controller.Field>
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x1055e5a00>}
+		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x10ee88440>}
 		Output Port Configuration:
 			port <obj_manager_out>:
+			port <ui>:
 			port <balls>:
 			port <buttons>:
 			port <parent>:
-		Next scheduled internal transition at time 0.070622
+		Next scheduled internal transition at time 6.121296
 
 
-__  Current Time:   0.070622 __________________________________________ 
+__  Current Time:   6.121296 __________________________________________ 
 
 
 	INTERNAL TRANSITION in model <controller.Field>
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x1055e5a00>}
+		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x10ee88440>}
 		Output Port Configuration:
 			port <obj_manager_out>:
+			port <ui>:
 			port <balls>:
 			port <buttons>:
 			port <parent>:
-		Next scheduled internal transition at time 0.070622
+		Next scheduled internal transition at time 6.121296
 
 
-__  Current Time:   0.070622 __________________________________________ 
+__  Current Time:   6.121296 __________________________________________ 
 
 
 	EXTERNAL TRANSITION in model <controller.ObjectManager>
 		Input Port Configuration:
 			port <input>:
 				('Field', 'Button', (event name: start_instance; port: None; parameters: ['buttons[0]']))
-		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x1054487a0>
-		Next scheduled internal transition at time 0.070622
-
-
-	INTERNAL TRANSITION in model <controller.Field>
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x1055e5a00>}
-		Output Port Configuration:
-			port <obj_manager_out>:
-				('Field', 'Button', (event name: start_instance; port: None; parameters: ['buttons[0]']))
-			port <balls>:
-			port <buttons>:
-			port <parent>:
-		Next scheduled internal transition at time inf
-
-
-__  Current Time:   0.070622 __________________________________________ 
-
-
-	EXTERNAL TRANSITION in model <controller.Button>
-		Input Port Configuration:
-			port <obj_manager_in>:
-				('Field', 'Button', (event name: start_instance; port: None; parameters: ['buttons[0]']))
-			port <input>:
-			port <button_ui>:
-			port <private_3_<narrow_cast>>:
-			port <private_4_button_ui>:
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.ButtonInstance object at 0x1055e5730>}
-		Next scheduled internal transition at time 0.070622
+		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x10e947a10>
+		Next scheduled internal transition at time 6.121296
 

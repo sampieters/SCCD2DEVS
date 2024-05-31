@@ -9,6 +9,7 @@
     </top>
     
     <inport name="ui" />
+    <outport name="ui"/>
     <class name="MainApp" default="true">
         <attribute name="window_id" />
         <attribute name="canvas_id" />

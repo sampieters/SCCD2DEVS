@@ -7,13 +7,11 @@ class OutputListener:
 	def __init__(self, ui):
 		self.ui = ui
 
-	def add(self, event):
-		if event.port == "ui":
-			method = getattr(self.ui, event.name)
-			method(*event.parameters)
-
-def my_function(event):
-    print("Observed the following event: " + str(event))
+	def add(self, events):
+		for event in events:
+			if event.port == "ui":
+				method = getattr(self.ui, event.name)
+				method(*event.parameters)
 
 if __name__ == '__main__':
 	model = target.Controller(name="controller")
@@ -21,15 +19,17 @@ if __name__ == '__main__':
 
 	tkroot = tk.Tk()
 	tkroot.withdraw()
-	sim = DEVSSimulator(model)
+	sim = DEVSSimulator(model, refs)
 	sim.setRealTime(True)
 	#sim.setRealTimeInputFile("./examples/BouncingBalls/input_trace.txt")
-	sim.setRealTimePorts(refs)
-	#sim.setVerbose("./examples/BouncingBalls/PyDEVS/trace.txt")
-	sim.setListenPorts(model.out_ui, my_function)
+	sim.setVerbose("./examples/BouncingBalls/PyDEVS/trace.txt")
+	
 	sim.setRealTimePlatformTk(tkroot)
 
 	ui = UI(tkroot, sim)
+
+	listener = OutputListener(ui)
+	sim.setListenPorts(model.out_ui, listener.add)
 	#model.atomic1.addMyOwnOutputListener(OutputListener(ui))
 	#model.atomic2.addMyOwnOutputListener(OutputListener(ui))
 	#model.atomic3.addMyOwnOutputListener(OutputListener(ui))

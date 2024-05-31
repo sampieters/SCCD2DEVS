@@ -12,12 +12,12 @@ def get_port(text):
 
 
 class DEVSSimulator(Simulator):
-	def __init__(self, model):
-		Simulator.__init__(self, model)	
+	def __init__(self, model, inputs):
+		super().__init__(model)
+		self.setRealTimePorts(inputs)	
 	
 	def addInput(self, event):
 		port_name = get_port(event.port)
-
 		event_string = f"Event(\"{event.name}\",\"{event.port}\",{event.parameters})"
 		event_string = event_string.replace(" ", "")
 		interrupt_string = f"{port_name} {event_string}"

@@ -10,8 +10,8 @@ from sccd.runtime.DEVS_statecharts_core import *
 from sccd.runtime.libs.ui import ui
 import time
 
-CANVAS_WIDTH = 800
-CANVAS_HEIGHT = 550
+CANVAS_WIDTH = 350
+CANVAS_HEIGHT = 300
 
 # package "Timer (Eventloop Version)"
 
@@ -39,7 +39,12 @@ class MainAppInstance(RuntimeClassBase):
         
         # call user defined constructor
         MainAppInstance.user_defined_constructor(self)
-        self.inports["field_ui"] = ('field_ui', atomdevs.next_instance)
+        port_name = Ports.addInputPort("<narrow_cast>", self)
+        atomdevs.addInPort(port_name)
+        port_name = Ports.addInputPort("field_ui", self)
+        atomdevs.addInPort(port_name)
+        atomdevs.port_mappings[port_name] = atomdevs.next_instance
+        self.inports["field_ui"] = port_name
     
     def user_defined_constructor(self):
         pass
@@ -129,9 +134,15 @@ class MainAppInstance(RuntimeClassBase):
         _running_0.setTrigger(Event("_0after"))
         self.states["/running"].addTransition(_running_0)
         _running_1 = Transition(self, self.states["/running"], [self.states["/interrupted"]])
-        _running_1.setTrigger(Event("mouse_click", self.getInPortName("button_ui")))
+        _running_1.setTrigger(Event("mouse_click", self.getInPortName("field_ui")))
         _running_1.setGuard(self._running_1_guard)
         self.states["/running"].addTransition(_running_1)
+        
+        # transition /interrupted
+        _interrupted_0 = Transition(self, self.states["/interrupted"], [self.states["/running"]])
+        _interrupted_0.setTrigger(Event("mouse_click", self.getInPortName("field_ui")))
+        _interrupted_0.setGuard(self._interrupted_0_guard)
+        self.states["/interrupted"].addTransition(_interrupted_0)
     
     def _creating_window_enter(self):
         self.big_step.outputEvent(Event("create_window", self.getOutPortName("ui"), [CANVAS_WIDTH, CANVAS_HEIGHT, "Fixed Timer", self.inports['field_ui']]))
@@ -146,7 +157,7 @@ class MainAppInstance(RuntimeClassBase):
         self.big_step.outputEvent(Event("create_text", self.getOutPortName("ui"), [self.canvas_id, 50, 100, '', self.inports['field_ui']]))
     
     def _creating_interrupt_button_enter(self):
-        self.big_step.outputEvent(Event("create_button", self.getOutPortName("ui"), [self.window_id, 'INTERRUPT', self.inports['field_ui']]))
+        self.big_step.outputEvent(Event("create_button", self.getOutPortName("ui"), [self.window_id, 'INTERRUPT/CONTINUE', self.inports['field_ui']]))
     
     def _running_enter(self):
         self.addTimer(0, 0.05)
@@ -164,9 +175,6 @@ class MainAppInstance(RuntimeClassBase):
     def _creating_canvas_0_exec(self, parameters):
         canvas_id = parameters[0]
         self.canvas_id = canvas_id
-        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [canvas_id, ui.EVENTS.MOUSE_RIGHT_CLICK, 'right_click', self.inports['field_ui']]))
-        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [canvas_id, ui.EVENTS.MOUSE_MOVE, 'mouse_move', self.inports['field_ui']]))
-        self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [canvas_id, ui.EVENTS.MOUSE_RELEASE, 'mouse_release', self.inports['field_ui']]))
     
     def _creating_clock_text_0_exec(self, parameters):
         canvas_id = parameters[0]
@@ -193,6 +201,12 @@ class MainAppInstance(RuntimeClassBase):
         button = parameters[2]
         return button == ui.MOUSE_BUTTONS.LEFT
     
+    def _interrupted_0_guard(self, parameters):
+        x = parameters[0]
+        y = parameters[1]
+        button = parameters[2]
+        return button == ui.MOUSE_BUTTONS.LEFT
+    
     def initializeStatechart(self):
         # enter default state
         self.default_targets = self.states["/creating_window"].getEffectiveTargetStates()
@@ -202,6 +216,7 @@ class MainApp(ObjectManagerBase):
     def __init__(self, name):
         ObjectManagerBase.__init__(self, name)
         self.input = self.addInPort("input")
+        self.output = self.addOutPort("ui")
         self.field_ui = self.addInPort("field_ui")
         self.instances[self.next_instance] = MainAppInstance(self)
         self.next_instance = self.next_instance + 1
@@ -224,8 +239,12 @@ class ObjectManager(TheObjectManager):
 class Controller(CoupledDEVS):
     def __init__(self, name):
         CoupledDEVS.__init__(self, name)
-        self.ui = self.addInPort("ui")
+        self.in_ui = self.addInPort("ui")
+        Ports.addInputPort("ui")
+        self.out_ui = self.addOutPort("ui")
+        Ports.addOutputPort("ui")
         self.objectmanager = self.addSubModel(ObjectManager("ObjectManager"))
         self.atomic0 = self.addSubModel(MainApp("MainApp"))
         self.connectPorts(self.atomic0.obj_manager_out, self.objectmanager.input)
         self.connectPorts(self.objectmanager.output["MainApp"], self.atomic0.obj_manager_in)
+        self.connectPorts(self.atomic0.output, self.out_ui)

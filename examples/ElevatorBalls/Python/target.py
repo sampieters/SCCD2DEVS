@@ -165,7 +165,7 @@ class Elevator(RuntimeClassBase):
         self.is_open = False;
         
         self.dim = {'x': 80, 'y': 150};
-        self.vel = {'x': 0, 'y': 0};
+        self.vel = {'x': 0, 'y': -2};
         self.pos = {'x': 400, 'y': 75};
         self.smooth = 0.6; # value between 0 and 1
     
@@ -481,11 +481,21 @@ class Ball(RuntimeClassBase):
         self.big_step.outputEvent(Event("bind_canvas_event", self.getOutPortName("ui"), [self.canvas_id, circle_id, ui.EVENTS.MOUSE_RELEASE, 'mouse_release', self.inports['ball_ui']]))
     
     def _main_behaviour_bouncing_0_exec(self, parameters):
-        # Invert velocity when colliding with canvas border:
-        if self.pos['x']-self.r <= self.rect_pos['x'] - (self.rect_dim['x'] / 2) or self.pos['x']+self.r >= self.rect_pos['x'] + (self.rect_dim['x'] / 2):
-            self.vel['x'] = -self.vel['x'] + self.rect_vel['x'];
-        if self.pos['y']-self.r <= self.rect_pos['y'] - (self.rect_dim['y'] / 2) or self.pos['y']+self.r >= self.rect_pos['y'] + (self.rect_dim['y'] / 2):
-            self.vel['y'] = -self.vel['y'] + self.rect_vel['y'];
+        # Check collision with the left and right borders
+        if self.pos['x'] - self.r < self.rect_pos['x'] - (self.rect_dim['x'] / 2):
+            self.pos['x'] = self.rect_pos['x'] - (self.rect_dim['x'] / 2) + self.r  # Correct position
+            self.vel['x'] = -self.vel['x'] + self.rect_vel['x']
+        elif self.pos['x'] + self.r > self.rect_pos['x'] + (self.rect_dim['x'] / 2):
+            self.pos['x'] = self.rect_pos['x'] + (self.rect_dim['x'] / 2) - self.r  # Correct position
+            self.vel['x'] = -self.vel['x'] + self.rect_vel['x']
+        
+        # Check collision with the top and bottom borders
+        if self.pos['y'] - self.r < self.rect_pos['y'] - (self.rect_dim['y'] / 2):
+            self.pos['y'] = self.rect_pos['y'] - (self.rect_dim['y'] / 2) + self.r  # Correct position
+            self.vel['y'] = -self.vel['y'] + self.rect_vel['y']
+        elif self.pos['y'] + self.r > self.rect_pos['y'] + (self.rect_dim['y'] / 2):
+            self.pos['y'] = self.rect_pos['y'] + (self.rect_dim['y'] / 2) - self.r  # Correct position
+            self.vel['y'] = -self.vel['y'] + self.rect_vel['y']
         self.big_step.outputEvent(Event("move_element", self.getOutPortName("ui"), [self.canvas_id, self.circle_id, self.vel['x'], self.vel['y']]))
         self.pos['x'] += self.vel['x']
         self.pos['y'] += self.vel['y']
