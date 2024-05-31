@@ -20,18 +20,13 @@ if __name__ == '__main__':
 	tkroot = tk.Tk()
 	tkroot.withdraw()
 	sim = DEVSSimulator(model, refs)
-	sim.setRealTime(True)
-	#sim.setRealTimeInputFile("./examples/BouncingBalls/input_trace.txt")
-	sim.setVerbose("./examples/BouncingBalls/PyDEVS/trace.txt")
-	
+
+	sim.setVerbose()
 	sim.setRealTimePlatformTk(tkroot)
 
 	ui = UI(tkroot, sim)
 
 	listener = OutputListener(ui)
 	sim.setListenPorts(model.out_ui, listener.add)
-	#model.atomic1.addMyOwnOutputListener(OutputListener(ui))
-	#model.atomic2.addMyOwnOutputListener(OutputListener(ui))
-	#model.atomic3.addMyOwnOutputListener(OutputListener(ui))
 	sim.simulate()
 	tkroot.mainloop()

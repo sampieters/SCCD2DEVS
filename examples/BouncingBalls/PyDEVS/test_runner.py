@@ -2,7 +2,9 @@ import tkinter as tk
 import examples.BouncingBalls.PyDEVS.target as target
 from sccd.runtime.libs.ui_v2 import UI
 from sccd.runtime.DEVS_loop import DEVSSimulator
-from pypdevs.DEVS import AtomicDEVS, CoupledDEVS
+import time
+
+begin_time = time.time()
 
 class OutputListener:
 	def __init__(self, model, log_file):
@@ -16,7 +18,8 @@ class OutputListener:
 	def add(self, events):
 		with open(self.log_file, 'a') as file:
 			for event in events:
-				file.write(f'{event}\n')
+				elapsed_time = time.time() - begin_time
+				file.write(f'{elapsed_time:.3f} {event}\n')
 
 				# IMPORTANT: This is here because we add our own inputs but tkinter will not close properly because of this
 				#if event.name == "destroy_all":
