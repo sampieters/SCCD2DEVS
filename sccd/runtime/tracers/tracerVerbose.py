@@ -1,5 +1,4 @@
 from sccd.runtime.tracers.tracerBase import BaseTracer
-from pypdevs.util import runTraceAtController
 import sys
 
 class TracerVerbose(BaseTracer):
