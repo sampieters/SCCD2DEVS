@@ -9,3 +9,4 @@
 0.064 (event name: bind_event; port: ui; parameters: [2, '<Button>', 'mouse_click', 'private_4_button_ui'])
 1.932 (event name: destroy_window; port: ui; parameters: [0])
 1.984 (event name: destroy_all; port: ui)
+0.011 (event name: create_window; port: ui; parameters: [800, 600, 'BouncingBalls', 'private_2_field_ui'])

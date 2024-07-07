@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 __  Current Time:   0.000000 __________________________________________ 
 
 EXIT STATE in model <MainApp>
@@ -41565,3 +41566,5 @@ ENTER STATE in model <MainApp>
 OUTPUT EVENT to port <ui>
 	\Event: (event name: destroy_all; port: ui)
 
+=======
+>>>>>>> 01dc8f26ed9718ebe6be27e9f6cfa15b7b3067ae

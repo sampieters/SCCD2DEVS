@@ -2,21 +2,6 @@
 __  Current Time:   0.000000 __________________________________________ 
 
 
-	INITIAL CONDITIONS in model <controller.Ball>
-		Initial State: None
-		Next scheduled internal transition at time inf
-
-
-	INITIAL CONDITIONS in model <controller.Button>
-		Initial State: None
-		Next scheduled internal transition at time inf
-
-
-	INITIAL CONDITIONS in model <controller.Field>
-		Initial State: None
-		Next scheduled internal transition at time inf
-
-
 	INITIAL CONDITIONS in model <controller.MainApp>
 		Initial State: None
 		Next scheduled internal transition at time inf
@@ -35,19 +20,18 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_in>:
 				('MainApp', 'MainApp', (event name: start_instance; port: None; parameters: ['MainApp[0]']))
 			port <input>:
+			port <field_ui>:
 			port <private_0_<narrow_cast>>:
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.MainAppInstance object at 0x10ef09b20>}
+			port <private_1_field_ui>:
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <controller.ObjectManager>
-		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x10e947a10>
+		New State: <examples.FixedTimerEventloop.PyDEVS.target.ObjectManagerState object at 0x104b2bef0>
 		Output Port Configuration:
 			port <port1>:
 				('MainApp', 'MainApp', (event name: start_instance; port: None; parameters: ['MainApp[0]']))
-			port <port2>:
-			port <port3>:
-			port <port4>:
 		Next scheduled internal transition at time inf
 
 
@@ -58,115 +42,17 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))
-		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x10e947a10>
+		New State: <examples.FixedTimerEventloop.PyDEVS.target.ObjectManagerState object at 0x104b2bef0>
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <controller.MainApp>
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.MainAppInstance object at 0x10ef09b20>}
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
 		Output Port Configuration:
 			port <obj_manager_out>:
 				('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))
 			port <ui>:
-			port <fields>:
-		Next scheduled internal transition at time 0.000000
-
-
-__  Current Time:   0.000000 __________________________________________ 
-
-
-	CONFLUENT TRANSITION in model <controller.MainApp>
-		Input Port Configuration:
-			port <obj_manager_in>: 
-				('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))
-			port <input>: 
-			port <private_0_<narrow_cast>>: 
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.MainAppInstance object at 0x10ef09b20>}
-		Output Port Configuration:
-			port <obj_manager_out>:
-			port <ui>:
-			port <fields>:
-		Next scheduled internal transition at time 0.000000
-
-
-	INTERNAL TRANSITION in model <controller.ObjectManager>
-		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x10e947a10>
-		Output Port Configuration:
-			port <port1>:
-				('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))
-			port <port2>:
-			port <port3>:
-			port <port4>:
-		Next scheduled internal transition at time inf
-
-
-__  Current Time:   0.000000 __________________________________________ 
-
-
-	EXTERNAL TRANSITION in model <controller.ObjectManager>
-		Input Port Configuration:
-			port <input>:
-				('MainApp', 'Field', (event name: create_instance; port: None; parameters: ['fields']))
-		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x10e947a10>
-		Next scheduled internal transition at time 0.000000
-
-
-	INTERNAL TRANSITION in model <controller.MainApp>
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.MainAppInstance object at 0x10ef09b20>}
-		Output Port Configuration:
-			port <obj_manager_out>:
-				('MainApp', 'Field', (event name: create_instance; port: None; parameters: ['fields']))
-			port <ui>:
-			port <fields>:
-		Next scheduled internal transition at time inf
-
-
-__  Current Time:   0.000000 __________________________________________ 
-
-
-	EXTERNAL TRANSITION in model <controller.Field>
-		Input Port Configuration:
-			port <obj_manager_in>:
-				('MainApp', 'Field', (event name: create_instance; port: None; parameters: ['fields']))
-			port <input>:
-			port <field_ui>:
-			port <private_1_<narrow_cast>>:
-			port <private_2_field_ui>:
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x10ee88440>}
-		Next scheduled internal transition at time 0.000000
-
-
-	INTERNAL TRANSITION in model <controller.ObjectManager>
-		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x10e947a10>
-		Output Port Configuration:
-			port <port1>:
-			port <port2>:
-				('MainApp', 'Field', (event name: create_instance; port: None; parameters: ['fields']))
-			port <port3>:
-			port <port4>:
-		Next scheduled internal transition at time inf
-
-
-__  Current Time:   0.000000 __________________________________________ 
-
-
-	EXTERNAL TRANSITION in model <controller.ObjectManager>
-		Input Port Configuration:
-			port <input>:
-				('Field', 'MainApp', (event name: instance_created; port: None; parameters: ['fields[0]']))
-		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x10e947a10>
-		Next scheduled internal transition at time 0.000000
-
-
-	INTERNAL TRANSITION in model <controller.Field>
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x10ee88440>}
-		Output Port Configuration:
-			port <obj_manager_out>:
-				('Field', 'MainApp', (event name: instance_created; port: None; parameters: ['fields[0]']))
-			port <ui>:
-			port <balls>:
-			port <buttons>:
-			port <parent>:
+				(event name: create_window; port: ui; parameters: [350, 300, 'Fixed Timer', 'private_1_field_ui'])
 		Next scheduled internal transition at time inf
 
 
@@ -176,393 +62,2718 @@ __  Current Time:   0.000000 __________________________________________
 	EXTERNAL TRANSITION in model <controller.MainApp>
 		Input Port Configuration:
 			port <obj_manager_in>:
-				('Field', 'MainApp', (event name: instance_created; port: None; parameters: ['fields[0]']))
-			port <input>:
-			port <private_0_<narrow_cast>>:
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.MainAppInstance object at 0x10ef09b20>}
-		Next scheduled internal transition at time 0.000000
-
-
-	INTERNAL TRANSITION in model <controller.ObjectManager>
-		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x10e947a10>
-		Output Port Configuration:
-			port <port1>:
-				('Field', 'MainApp', (event name: instance_created; port: None; parameters: ['fields[0]']))
-			port <port2>:
-			port <port3>:
-			port <port4>:
-		Next scheduled internal transition at time inf
-
-
-__  Current Time:   0.000000 __________________________________________ 
-
-
-	INTERNAL TRANSITION in model <controller.MainApp>
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.MainAppInstance object at 0x10ef09b20>}
-		Output Port Configuration:
-			port <obj_manager_out>:
-			port <ui>:
-			port <fields>:
-		Next scheduled internal transition at time 0.000000
-
-
-__  Current Time:   0.000000 __________________________________________ 
-
-
-	INTERNAL TRANSITION in model <controller.MainApp>
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.MainAppInstance object at 0x10ef09b20>}
-		Output Port Configuration:
-			port <obj_manager_out>:
-			port <ui>:
-			port <fields>:
-		Next scheduled internal transition at time 0.000000
-
-
-__  Current Time:   0.000000 __________________________________________ 
-
-
-	EXTERNAL TRANSITION in model <controller.ObjectManager>
-		Input Port Configuration:
-			port <input>:
-				('MainApp', 'Field', (event name: start_instance; port: None; parameters: ['fields[0]']))
-				('MainApp', 'Field', (event name: set_association_name; port: None; parameters: ['fields[0]']))
-		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x10e947a10>
-		Next scheduled internal transition at time 0.000000
-
-
-	INTERNAL TRANSITION in model <controller.MainApp>
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.MainAppInstance object at 0x10ef09b20>}
-		Output Port Configuration:
-			port <obj_manager_out>:
-				('MainApp', 'Field', (event name: start_instance; port: None; parameters: ['fields[0]']))
-				('MainApp', 'Field', (event name: set_association_name; port: None; parameters: ['fields[0]']))
-			port <ui>:
-			port <fields>:
-		Next scheduled internal transition at time inf
-
-
-__  Current Time:   0.000000 __________________________________________ 
-
-
-	EXTERNAL TRANSITION in model <controller.Field>
-		Input Port Configuration:
-			port <obj_manager_in>:
-				('MainApp', 'Field', (event name: start_instance; port: None; parameters: ['fields[0]']))
-				('MainApp', 'Field', (event name: set_association_name; port: None; parameters: ['fields[0]']))
+				('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))
 			port <input>:
 			port <field_ui>:
-			port <private_1_<narrow_cast>>:
-			port <private_2_field_ui>:
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x10ee88440>}
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <controller.ObjectManager>
-		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x10e947a10>
+		New State: <examples.FixedTimerEventloop.PyDEVS.target.ObjectManagerState object at 0x104b2bef0>
 		Output Port Configuration:
 			port <port1>:
-			port <port2>:
-				('MainApp', 'Field', (event name: start_instance; port: None; parameters: ['fields[0]']))
-				('MainApp', 'Field', (event name: set_association_name; port: None; parameters: ['fields[0]']))
-			port <port3>:
-			port <port4>:
+				('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))
 		Next scheduled internal transition at time inf
 
 
 __  Current Time:   0.000000 __________________________________________ 
 
 
-	EXTERNAL TRANSITION in model <controller.ObjectManager>
-		Input Port Configuration:
-			port <input>:
-				('Field', 'MainApp', (event name: instance_started; port: None; parameters: ['fields[0]']))
-		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x10e947a10>
-		Next scheduled internal transition at time 0.000000
-
-
-	INTERNAL TRANSITION in model <controller.Field>
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x10ee88440>}
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
 		Output Port Configuration:
 			port <obj_manager_out>:
-				('Field', 'MainApp', (event name: instance_started; port: None; parameters: ['fields[0]']))
 			port <ui>:
-			port <balls>:
-			port <buttons>:
-			port <parent>:
-		Next scheduled internal transition at time 0.000000
+		Next scheduled internal transition at time inf
 
 
-__  Current Time:   0.000000 __________________________________________ 
+__  Current Time:   0.011534 __________________________________________ 
 
 
 	EXTERNAL TRANSITION in model <controller.MainApp>
 		Input Port Configuration:
 			port <obj_manager_in>:
-				('Field', 'MainApp', (event name: instance_started; port: None; parameters: ['fields[0]']))
 			port <input>:
+			port <field_ui>:
+				Event("window_created","private_1_field_ui",[0])
 			port <private_0_<narrow_cast>>:
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.MainAppInstance object at 0x10ef09b20>}
-		Next scheduled internal transition at time 0.000000
+			port <private_1_field_ui>:
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Next scheduled internal transition at time 0.011534
 
 
-	INTERNAL TRANSITION in model <controller.Field>
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x10ee88440>}
-		Output Port Configuration:
-			port <obj_manager_out>:
-			port <ui>:
-				(event name: create_window; port: ui; parameters: [800, 600, 'BouncingBalls', 'private_2_field_ui'])
-			port <balls>:
-			port <buttons>:
-			port <parent>:
-		Next scheduled internal transition at time inf
-
-
-	INTERNAL TRANSITION in model <controller.ObjectManager>
-		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x10e947a10>
-		Output Port Configuration:
-			port <port1>:
-				('Field', 'MainApp', (event name: instance_started; port: None; parameters: ['fields[0]']))
-			port <port2>:
-			port <port3>:
-			port <port4>:
-		Next scheduled internal transition at time inf
-
-
-__  Current Time:   0.000000 __________________________________________ 
+__  Current Time:   0.011534 __________________________________________ 
 
 
 	INTERNAL TRANSITION in model <controller.MainApp>
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.MainAppInstance object at 0x10ef09b20>}
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
 		Output Port Configuration:
 			port <obj_manager_out>:
 			port <ui>:
-			port <fields>:
+		Next scheduled internal transition at time 0.011534
+
+
+__  Current Time:   0.011534 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: bind_event; port: ui; parameters: [0, 'WM_DELETE_WINDOW', 'window_close', 'private_1_field_ui'])
+				(event name: bind_event; port: ui; parameters: [0, '<Key>', 'key_press', 'private_1_field_ui'])
+				(event name: create_canvas; port: ui; parameters: [0, 350, 100, {'background': '#222222'}, 'private_1_field_ui'])
 		Next scheduled internal transition at time inf
 
 
-__  Current Time:   6.117143 __________________________________________ 
+__  Current Time:   0.012756 __________________________________________ 
 
 
-	EXTERNAL TRANSITION in model <controller.Field>
+	EXTERNAL TRANSITION in model <controller.MainApp>
 		Input Port Configuration:
 			port <obj_manager_in>:
 			port <input>:
 			port <field_ui>:
-				Event("window_created","private_2_field_ui",[0])
-			port <private_1_<narrow_cast>>:
-			port <private_2_field_ui>:
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x10ee88440>}
-		Next scheduled internal transition at time 6.117143
+				Event("canvas_created","private_1_field_ui",[1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Next scheduled internal transition at time 0.012756
 
 
-__  Current Time:   6.117143 __________________________________________ 
+__  Current Time:   0.012756 __________________________________________ 
 
 
-	INTERNAL TRANSITION in model <controller.Field>
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x10ee88440>}
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
 		Output Port Configuration:
 			port <obj_manager_out>:
 			port <ui>:
-			port <balls>:
-			port <buttons>:
-			port <parent>:
-		Next scheduled internal transition at time 6.117143
+		Next scheduled internal transition at time 0.012756
 
 
-__  Current Time:   6.117143 __________________________________________ 
+__  Current Time:   0.012756 __________________________________________ 
 
 
-	INTERNAL TRANSITION in model <controller.Field>
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x10ee88440>}
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
 		Output Port Configuration:
 			port <obj_manager_out>:
 			port <ui>:
-				(event name: bind_event; port: ui; parameters: [0, 'WM_DELETE_WINDOW', 'window_close', 'private_2_field_ui'])
-				(event name: bind_event; port: ui; parameters: [0, '<Key>', 'key_press', 'private_2_field_ui'])
-				(event name: create_canvas; port: ui; parameters: [0, 800, 550, {'background': '#eee'}, 'private_2_field_ui'])
-			port <balls>:
-			port <buttons>:
-			port <parent>:
+				(event name: create_text; port: ui; parameters: [1, 50, 50, '', 'private_1_field_ui'])
 		Next scheduled internal transition at time inf
 
 
-__  Current Time:   6.121296 __________________________________________ 
+__  Current Time:   0.014400 __________________________________________ 
 
 
-	EXTERNAL TRANSITION in model <controller.Field>
+	EXTERNAL TRANSITION in model <controller.MainApp>
 		Input Port Configuration:
 			port <obj_manager_in>:
 			port <input>:
 			port <field_ui>:
-				Event("canvas_created","private_2_field_ui",[1])
-			port <private_1_<narrow_cast>>:
-			port <private_2_field_ui>:
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x10ee88440>}
-		Next scheduled internal transition at time 6.121296
+				Event("text_created","private_1_field_ui",[1,1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Next scheduled internal transition at time 0.014400
 
 
-__  Current Time:   6.121296 __________________________________________ 
+__  Current Time:   0.014400 __________________________________________ 
 
 
-	INTERNAL TRANSITION in model <controller.Field>
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x10ee88440>}
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
 		Output Port Configuration:
 			port <obj_manager_out>:
 			port <ui>:
-			port <balls>:
-			port <buttons>:
-			port <parent>:
-		Next scheduled internal transition at time 6.121296
+		Next scheduled internal transition at time 0.014400
 
 
-__  Current Time:   6.121296 __________________________________________ 
+__  Current Time:   0.014400 __________________________________________ 
 
 
-	INTERNAL TRANSITION in model <controller.Field>
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x10ee88440>}
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
 		Output Port Configuration:
 			port <obj_manager_out>:
 			port <ui>:
-				(event name: bind_event; port: ui; parameters: [1, '<Button-2>', 'right_click', 'private_2_field_ui'])
-				(event name: bind_event; port: ui; parameters: [1, '<Motion>', 'mouse_move', 'private_2_field_ui'])
-				(event name: bind_event; port: ui; parameters: [1, '<ButtonRelease>', 'mouse_release', 'private_2_field_ui'])
-			port <balls>:
-			port <buttons>:
-			port <parent>:
-		Next scheduled internal transition at time 6.121296
-
-
-__  Current Time:   6.121296 __________________________________________ 
-
-
-	EXTERNAL TRANSITION in model <controller.ObjectManager>
-		Input Port Configuration:
-			port <input>:
-				('Field', 'Button', (event name: create_instance; port: None; parameters: ['buttons', 'Button', 0, 'create_new_field', 'Spawn New Window']))
-		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x10e947a10>
-		Next scheduled internal transition at time 6.121296
-
-
-	INTERNAL TRANSITION in model <controller.Field>
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x10ee88440>}
-		Output Port Configuration:
-			port <obj_manager_out>:
-				('Field', 'Button', (event name: create_instance; port: None; parameters: ['buttons', 'Button', 0, 'create_new_field', 'Spawn New Window']))
-			port <ui>:
-			port <balls>:
-			port <buttons>:
-			port <parent>:
+				(event name: create_text; port: ui; parameters: [1, 50, 100, '', 'private_1_field_ui'])
 		Next scheduled internal transition at time inf
 
 
-__  Current Time:   6.121296 __________________________________________ 
+__  Current Time:   0.014971 __________________________________________ 
 
 
-	EXTERNAL TRANSITION in model <controller.Button>
+	EXTERNAL TRANSITION in model <controller.MainApp>
 		Input Port Configuration:
 			port <obj_manager_in>:
-				('Field', 'Button', (event name: create_instance; port: None; parameters: ['buttons', 'Button', 0, 'create_new_field', 'Spawn New Window']))
-			port <input>:
-			port <button_ui>:
-			port <private_3_<narrow_cast>>:
-			port <private_4_button_ui>:
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.ButtonInstance object at 0x10ee89610>}
-		Next scheduled internal transition at time 6.121296
-
-
-	INTERNAL TRANSITION in model <controller.ObjectManager>
-		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x10e947a10>
-		Output Port Configuration:
-			port <port1>:
-			port <port2>:
-			port <port3>:
-				('Field', 'Button', (event name: create_instance; port: None; parameters: ['buttons', 'Button', 0, 'create_new_field', 'Spawn New Window']))
-			port <port4>:
-		Next scheduled internal transition at time inf
-
-
-__  Current Time:   6.121296 __________________________________________ 
-
-
-	EXTERNAL TRANSITION in model <controller.ObjectManager>
-		Input Port Configuration:
-			port <input>:
-				('Button', 'Field', (event name: instance_created; port: None; parameters: ['buttons[0]']))
-		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x10e947a10>
-		Next scheduled internal transition at time 6.121296
-
-
-	INTERNAL TRANSITION in model <controller.Button>
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.ButtonInstance object at 0x10ee89610>}
-		Output Port Configuration:
-			port <obj_manager_out>:
-				('Button', 'Field', (event name: instance_created; port: None; parameters: ['buttons[0]']))
-			port <ui>:
-			port <parent>:
-		Next scheduled internal transition at time inf
-
-
-__  Current Time:   6.121296 __________________________________________ 
-
-
-	EXTERNAL TRANSITION in model <controller.Field>
-		Input Port Configuration:
-			port <obj_manager_in>:
-				('Button', 'Field', (event name: instance_created; port: None; parameters: ['buttons[0]']))
 			port <input>:
 			port <field_ui>:
-			port <private_1_<narrow_cast>>:
-			port <private_2_field_ui>:
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x10ee88440>}
-		Next scheduled internal transition at time 6.121296
+				Event("text_created","private_1_field_ui",[1,2])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Next scheduled internal transition at time 0.014971
 
 
-	INTERNAL TRANSITION in model <controller.ObjectManager>
-		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x10e947a10>
+__  Current Time:   0.014971 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
 		Output Port Configuration:
-			port <port1>:
-			port <port2>:
-				('Button', 'Field', (event name: instance_created; port: None; parameters: ['buttons[0]']))
-			port <port3>:
-			port <port4>:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.014971
+
+
+__  Current Time:   0.014971 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: create_button; port: ui; parameters: [0, 'INTERRUPT/CONTINUE', 'private_1_field_ui'])
 		Next scheduled internal transition at time inf
 
 
-__  Current Time:   6.121296 __________________________________________ 
+__  Current Time:   0.015961 __________________________________________ 
 
 
-	INTERNAL TRANSITION in model <controller.Field>
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x10ee88440>}
-		Output Port Configuration:
-			port <obj_manager_out>:
-			port <ui>:
-			port <balls>:
-			port <buttons>:
-			port <parent>:
-		Next scheduled internal transition at time 6.121296
-
-
-__  Current Time:   6.121296 __________________________________________ 
-
-
-	INTERNAL TRANSITION in model <controller.Field>
-		New State: {0: <examples.BouncingBalls.PyDEVS.target.FieldInstance object at 0x10ee88440>}
-		Output Port Configuration:
-			port <obj_manager_out>:
-			port <ui>:
-			port <balls>:
-			port <buttons>:
-			port <parent>:
-		Next scheduled internal transition at time 6.121296
-
-
-__  Current Time:   6.121296 __________________________________________ 
-
-
-	EXTERNAL TRANSITION in model <controller.ObjectManager>
+	EXTERNAL TRANSITION in model <controller.MainApp>
 		Input Port Configuration:
+			port <obj_manager_in>:
 			port <input>:
-				('Field', 'Button', (event name: start_instance; port: None; parameters: ['buttons[0]']))
-		New State: <examples.BouncingBalls.PyDEVS.target.ObjectManagerState object at 0x10e947a10>
-		Next scheduled internal transition at time 6.121296
+			port <field_ui>:
+				Event("button_created","private_1_field_ui",[2])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Next scheduled internal transition at time 0.015961
+
+
+__  Current Time:   0.015961 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.065961
+
+
+__  Current Time:   0.065961 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: bind_event; port: ui; parameters: [2, '<Button>', 'mouse_click', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.115961
+
+
+__  Current Time:   0.115961 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.07', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.06', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.165961
+
+
+__  Current Time:   0.165961 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.12', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.11', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.215961
+
+
+__  Current Time:   0.215961 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.17', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.16', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.265961
+
+
+__  Current Time:   0.265961 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.22', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.21', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.315961
+
+
+__  Current Time:   0.315961 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.27', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.26', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.365961
+
+
+__  Current Time:   0.365961 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.32', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.31', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.415961
+
+
+__  Current Time:   0.415961 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.37', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.36', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.465961
+
+
+__  Current Time:   0.465961 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.42', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.41', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.515961
+
+
+__  Current Time:   0.515961 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.47', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.46', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.565961
+
+
+__  Current Time:   0.565961 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.52', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.51', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.615961
+
+
+__  Current Time:   0.615961 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.57', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.55', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.665961
+
+
+__  Current Time:   0.665961 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.62', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.61', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.715961
+
+
+__  Current Time:   0.715961 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.67', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.65', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.765961
+
+
+__  Current Time:   0.765961 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.72', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.71', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.815961
+
+
+__  Current Time:   0.815961 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.77', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.76', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.865961
+
+
+__  Current Time:   0.865961 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.82', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.81', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.915961
+
+
+__  Current Time:   0.915961 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.87', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.86', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.965961
+
+
+__  Current Time:   0.965961 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.92', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.91', 'private_1_field_ui'])
+		Next scheduled internal transition at time 1.015961
+
+
+__  Current Time:   1.015961 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.97', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.96', 'private_1_field_ui'])
+		Next scheduled internal transition at time 1.065961
+
+
+__  Current Time:   1.065961 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '1.02', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '1.01', 'private_1_field_ui'])
+		Next scheduled internal transition at time 1.115961
+
+
+__  Current Time:   1.115961 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '1.07', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '1.06', 'private_1_field_ui'])
+		Next scheduled internal transition at time 1.165961
+
+
+__  Current Time:   1.165961 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '1.12', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '1.11', 'private_1_field_ui'])
+		Next scheduled internal transition at time 1.215961
+
+
+__  Current Time:   1.215961 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '1.17', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '1.15', 'private_1_field_ui'])
+		Next scheduled internal transition at time 1.265961
+
+
+__  Current Time:   1.265961 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '1.22', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '1.21', 'private_1_field_ui'])
+		Next scheduled internal transition at time 1.315961
+
+
+__  Current Time:   1.315961 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '1.27', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '1.26', 'private_1_field_ui'])
+		Next scheduled internal transition at time 1.365961
+
+
+__  Current Time:   1.357945 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("mouse_click","private_1_field_ui",[151,71,1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Next scheduled internal transition at time 1.357945
+
+
+__  Current Time:   1.357945 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '1.32', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '1.31', 'private_1_field_ui'])
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   3.034062 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("mouse_click","private_1_field_ui",[151,71,1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Next scheduled internal transition at time 3.034062
+
+
+__  Current Time:   3.034062 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 3.084062
+
+
+__  Current Time:   3.084062 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 3.134062
+
+
+__  Current Time:   3.134062 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '3.08', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '3.07', 'private_1_field_ui'])
+		Next scheduled internal transition at time 3.184062
+
+
+__  Current Time:   3.184062 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '3.13', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '3.13', 'private_1_field_ui'])
+		Next scheduled internal transition at time 3.234062
+
+
+__  Current Time:   3.234062 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '3.18', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '3.17', 'private_1_field_ui'])
+		Next scheduled internal transition at time 3.284062
+
+
+__  Current Time:   3.284062 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '3.23', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '3.23', 'private_1_field_ui'])
+		Next scheduled internal transition at time 3.334062
+
+
+__  Current Time:   3.334062 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '3.28', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '3.27', 'private_1_field_ui'])
+		Next scheduled internal transition at time 3.384062
+
+
+__  Current Time:   3.384062 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '3.33', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '3.33', 'private_1_field_ui'])
+		Next scheduled internal transition at time 3.434062
+
+
+__  Current Time:   3.434062 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '3.38', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '3.37', 'private_1_field_ui'])
+		Next scheduled internal transition at time 3.484062
+
+
+__  Current Time:   3.465252 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("mouse_click","private_1_field_ui",[151,71,1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Next scheduled internal transition at time 3.465252
+
+
+__  Current Time:   3.465252 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '3.43', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '3.43', 'private_1_field_ui'])
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   4.291165 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("mouse_click","private_1_field_ui",[151,71,1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Next scheduled internal transition at time 4.291165
+
+
+__  Current Time:   4.291165 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 4.341165
+
+
+__  Current Time:   4.341165 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 4.391165
+
+
+__  Current Time:   4.391165 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '4.34', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '4.33', 'private_1_field_ui'])
+		Next scheduled internal transition at time 4.441165
+
+
+__  Current Time:   4.441165 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '4.39', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '4.38', 'private_1_field_ui'])
+		Next scheduled internal transition at time 4.491165
+
+
+__  Current Time:   4.491165 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '4.44', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '4.43', 'private_1_field_ui'])
+		Next scheduled internal transition at time 4.541165
+
+
+__  Current Time:   4.541165 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '4.49', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '4.48', 'private_1_field_ui'])
+		Next scheduled internal transition at time 4.591165
+
+
+__  Current Time:   4.591165 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '4.54', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '4.53', 'private_1_field_ui'])
+		Next scheduled internal transition at time 4.641165
+
+
+__  Current Time:   4.641165 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '4.59', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '4.59', 'private_1_field_ui'])
+		Next scheduled internal transition at time 4.691165
+
+
+__  Current Time:   4.691165 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '4.64', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '4.63', 'private_1_field_ui'])
+		Next scheduled internal transition at time 4.741165
+
+
+__  Current Time:   4.741165 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '4.69', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '4.68', 'private_1_field_ui'])
+		Next scheduled internal transition at time 4.791165
+
+
+__  Current Time:   4.791165 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '4.74', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '4.73', 'private_1_field_ui'])
+		Next scheduled internal transition at time 4.841165
+
+
+__  Current Time:   4.839114 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("mouse_click","private_1_field_ui",[151,71,1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Next scheduled internal transition at time 4.839114
+
+
+__  Current Time:   4.839114 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '4.79', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '4.78', 'private_1_field_ui'])
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   5.615787 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("mouse_click","private_1_field_ui",[151,71,1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Next scheduled internal transition at time 5.615787
+
+
+__  Current Time:   5.615787 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 5.665787
+
+
+__  Current Time:   5.665787 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 5.715787
+
+
+__  Current Time:   5.715787 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '5.67', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '5.65', 'private_1_field_ui'])
+		Next scheduled internal transition at time 5.765787
+
+
+__  Current Time:   5.765787 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '5.72', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '5.71', 'private_1_field_ui'])
+		Next scheduled internal transition at time 5.815787
+
+
+__  Current Time:   5.815787 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '5.77', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '5.76', 'private_1_field_ui'])
+		Next scheduled internal transition at time 5.865787
+
+
+__  Current Time:   5.865787 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '5.82', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '5.82', 'private_1_field_ui'])
+		Next scheduled internal transition at time 5.915787
+
+
+__  Current Time:   5.915787 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '5.87', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '5.85', 'private_1_field_ui'])
+		Next scheduled internal transition at time 5.965787
+
+
+__  Current Time:   5.965787 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '5.92', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '5.91', 'private_1_field_ui'])
+		Next scheduled internal transition at time 6.015787
+
+
+__  Current Time:   6.015787 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '5.97', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '5.96', 'private_1_field_ui'])
+		Next scheduled internal transition at time 6.065787
+
+
+__  Current Time:   6.065787 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '6.02', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '6.00', 'private_1_field_ui'])
+		Next scheduled internal transition at time 6.115787
+
+
+__  Current Time:   6.115787 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '6.07', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '6.05', 'private_1_field_ui'])
+		Next scheduled internal transition at time 6.165787
+
+
+__  Current Time:   6.165787 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '6.12', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '6.11', 'private_1_field_ui'])
+		Next scheduled internal transition at time 6.215787
+
+
+__  Current Time:   6.183059 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("mouse_click","private_1_field_ui",[152,71,1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Next scheduled internal transition at time 6.183059
+
+
+__  Current Time:   6.183059 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '6.17', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '6.16', 'private_1_field_ui'])
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   6.944131 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("mouse_click","private_1_field_ui",[152,71,1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Next scheduled internal transition at time 6.944131
+
+
+__  Current Time:   6.944131 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 6.994131
+
+
+__  Current Time:   6.994131 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 7.044131
+
+
+__  Current Time:   7.044131 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '6.99', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '6.98', 'private_1_field_ui'])
+		Next scheduled internal transition at time 7.094131
+
+
+__  Current Time:   7.094131 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '7.04', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '7.04', 'private_1_field_ui'])
+		Next scheduled internal transition at time 7.144131
+
+
+__  Current Time:   7.144131 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '7.09', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '7.09', 'private_1_field_ui'])
+		Next scheduled internal transition at time 7.194131
+
+
+__  Current Time:   7.194131 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '7.14', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '7.13', 'private_1_field_ui'])
+		Next scheduled internal transition at time 7.244131
+
+
+__  Current Time:   7.244131 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '7.19', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '7.18', 'private_1_field_ui'])
+		Next scheduled internal transition at time 7.294131
+
+
+__  Current Time:   7.294131 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '7.24', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '7.23', 'private_1_field_ui'])
+		Next scheduled internal transition at time 7.344131
+
+
+__  Current Time:   7.344131 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '7.29', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '7.28', 'private_1_field_ui'])
+		Next scheduled internal transition at time 7.394131
+
+
+__  Current Time:   7.394131 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '7.34', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '7.33', 'private_1_field_ui'])
+		Next scheduled internal transition at time 7.444131
+
+
+__  Current Time:   7.444131 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '7.39', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '7.38', 'private_1_field_ui'])
+		Next scheduled internal transition at time 7.494131
+
+
+__  Current Time:   7.494131 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '7.44', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '7.43', 'private_1_field_ui'])
+		Next scheduled internal transition at time 7.544131
+
+
+__  Current Time:   7.544131 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '7.49', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '7.48', 'private_1_field_ui'])
+		Next scheduled internal transition at time 7.594131
+
+
+__  Current Time:   7.588637 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("mouse_click","private_1_field_ui",[152,71,1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Next scheduled internal transition at time 7.588637
+
+
+__  Current Time:   7.588637 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '7.54', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '7.53', 'private_1_field_ui'])
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   8.230364 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("mouse_click","private_1_field_ui",[152,71,1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Next scheduled internal transition at time 8.230364
+
+
+__  Current Time:   8.230364 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 8.280364
+
+
+__  Current Time:   8.280364 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 8.330364
+
+
+__  Current Time:   8.330364 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '8.28', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '8.27', 'private_1_field_ui'])
+		Next scheduled internal transition at time 8.380364
+
+
+__  Current Time:   8.380364 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '8.33', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '8.32', 'private_1_field_ui'])
+		Next scheduled internal transition at time 8.430364
+
+
+__  Current Time:   8.430364 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '8.38', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '8.37', 'private_1_field_ui'])
+		Next scheduled internal transition at time 8.480364
+
+
+__  Current Time:   8.480364 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '8.43', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '8.43', 'private_1_field_ui'])
+		Next scheduled internal transition at time 8.530364
+
+
+__  Current Time:   8.530364 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '8.48', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '8.47', 'private_1_field_ui'])
+		Next scheduled internal transition at time 8.580364
+
+
+__  Current Time:   8.580364 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '8.53', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '8.52', 'private_1_field_ui'])
+		Next scheduled internal transition at time 8.630364
+
+
+__  Current Time:   8.630364 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '8.58', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '8.57', 'private_1_field_ui'])
+		Next scheduled internal transition at time 8.680364
+
+
+__  Current Time:   8.680364 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '8.63', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '8.62', 'private_1_field_ui'])
+		Next scheduled internal transition at time 8.730364
+
+
+__  Current Time:   8.730364 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '8.68', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '8.68', 'private_1_field_ui'])
+		Next scheduled internal transition at time 8.780364
+
+
+__  Current Time:   8.780364 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '8.73', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '8.72', 'private_1_field_ui'])
+		Next scheduled internal transition at time 8.830364
+
+
+__  Current Time:   8.830364 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '8.78', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '8.77', 'private_1_field_ui'])
+		Next scheduled internal transition at time 8.880364
+
+
+__  Current Time:   8.880364 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '8.83', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '8.82', 'private_1_field_ui'])
+		Next scheduled internal transition at time 8.930364
+
+
+__  Current Time:   8.884109 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("mouse_click","private_1_field_ui",[152,71,1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Next scheduled internal transition at time 8.884109
+
+
+__  Current Time:   8.884109 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '8.88', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '8.87', 'private_1_field_ui'])
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   9.578831 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("mouse_click","private_1_field_ui",[152,71,1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Next scheduled internal transition at time 9.578831
+
+
+__  Current Time:   9.578831 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 9.628831
+
+
+__  Current Time:   9.628831 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 9.678831
+
+
+__  Current Time:   9.678831 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '9.63', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '9.62', 'private_1_field_ui'])
+		Next scheduled internal transition at time 9.728831
+
+
+__  Current Time:   9.728831 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '9.68', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '9.67', 'private_1_field_ui'])
+		Next scheduled internal transition at time 9.778831
+
+
+__  Current Time:   9.778831 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '9.73', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '9.72', 'private_1_field_ui'])
+		Next scheduled internal transition at time 9.828831
+
+
+__  Current Time:   9.828831 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '9.78', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '9.77', 'private_1_field_ui'])
+		Next scheduled internal transition at time 9.878831
+
+
+__  Current Time:   9.878831 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '9.83', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '9.82', 'private_1_field_ui'])
+		Next scheduled internal transition at time 9.928831
+
+
+__  Current Time:   9.928831 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '9.88', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '9.87', 'private_1_field_ui'])
+		Next scheduled internal transition at time 9.978831
+
+
+__  Current Time:   9.978831 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '9.93', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '9.92', 'private_1_field_ui'])
+		Next scheduled internal transition at time 10.028831
+
+
+__  Current Time:  10.028831 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '9.98', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '9.97', 'private_1_field_ui'])
+		Next scheduled internal transition at time 10.078831
+
+
+__  Current Time:  10.078831 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '10.03', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '10.02', 'private_1_field_ui'])
+		Next scheduled internal transition at time 10.128831
+
+
+__  Current Time:  10.128831 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '10.08', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '10.07', 'private_1_field_ui'])
+		Next scheduled internal transition at time 10.178831
+
+
+__  Current Time:  10.178831 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '10.13', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '10.12', 'private_1_field_ui'])
+		Next scheduled internal transition at time 10.228831
+
+
+__  Current Time:  10.228831 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '10.18', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '10.17', 'private_1_field_ui'])
+		Next scheduled internal transition at time 10.278831
+
+
+__  Current Time:  10.278831 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '10.23', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '10.22', 'private_1_field_ui'])
+		Next scheduled internal transition at time 10.328831
+
+
+__  Current Time:  10.290483 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("mouse_click","private_1_field_ui",[152,71,1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Next scheduled internal transition at time 10.290483
+
+
+__  Current Time:  10.290483 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '10.28', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '10.27', 'private_1_field_ui'])
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:  10.929598 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("mouse_click","private_1_field_ui",[152,71,1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Next scheduled internal transition at time 10.929598
+
+
+__  Current Time:  10.929598 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 10.979598
+
+
+__  Current Time:  10.979598 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 11.029598
+
+
+__  Current Time:  11.029598 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '10.98', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '10.97', 'private_1_field_ui'])
+		Next scheduled internal transition at time 11.079598
+
+
+__  Current Time:  11.079598 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '11.03', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '11.02', 'private_1_field_ui'])
+		Next scheduled internal transition at time 11.129598
+
+
+__  Current Time:  11.129598 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '11.08', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '11.07', 'private_1_field_ui'])
+		Next scheduled internal transition at time 11.179598
+
+
+__  Current Time:  11.179598 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '11.13', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '11.13', 'private_1_field_ui'])
+		Next scheduled internal transition at time 11.229598
+
+
+__  Current Time:  11.229598 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '11.18', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '11.17', 'private_1_field_ui'])
+		Next scheduled internal transition at time 11.279598
+
+
+__  Current Time:  11.279598 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '11.23', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '11.22', 'private_1_field_ui'])
+		Next scheduled internal transition at time 11.329598
+
+
+__  Current Time:  11.329598 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '11.28', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '11.27', 'private_1_field_ui'])
+		Next scheduled internal transition at time 11.379598
+
+
+__  Current Time:  11.379598 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '11.33', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '11.32', 'private_1_field_ui'])
+		Next scheduled internal transition at time 11.429598
+
+
+__  Current Time:  11.429598 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '11.38', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '11.37', 'private_1_field_ui'])
+		Next scheduled internal transition at time 11.479598
+
+
+__  Current Time:  11.479598 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '11.43', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '11.42', 'private_1_field_ui'])
+		Next scheduled internal transition at time 11.529598
+
+
+__  Current Time:  11.529598 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '11.48', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '11.47', 'private_1_field_ui'])
+		Next scheduled internal transition at time 11.579598
+
+
+__  Current Time:  11.579598 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '11.53', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '11.52', 'private_1_field_ui'])
+		Next scheduled internal transition at time 11.629598
+
+
+__  Current Time:  11.600634 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("mouse_click","private_1_field_ui",[152,71,1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Next scheduled internal transition at time 11.600634
+
+
+__  Current Time:  11.600634 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '11.58', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '11.57', 'private_1_field_ui'])
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:  12.304939 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("mouse_click","private_1_field_ui",[152,71,1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Next scheduled internal transition at time 12.304939
+
+
+__  Current Time:  12.304939 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 12.354939
+
+
+__  Current Time:  12.354939 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 12.404939
+
+
+__  Current Time:  12.404939 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '12.35', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '12.34', 'private_1_field_ui'])
+		Next scheduled internal transition at time 12.454939
+
+
+__  Current Time:  12.454939 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '12.40', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '12.40', 'private_1_field_ui'])
+		Next scheduled internal transition at time 12.504939
+
+
+__  Current Time:  12.504939 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '12.45', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '12.45', 'private_1_field_ui'])
+		Next scheduled internal transition at time 12.554939
+
+
+__  Current Time:  12.554939 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '12.50', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '12.50', 'private_1_field_ui'])
+		Next scheduled internal transition at time 12.604939
+
+
+__  Current Time:  12.604939 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '12.55', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '12.54', 'private_1_field_ui'])
+		Next scheduled internal transition at time 12.654939
+
+
+__  Current Time:  12.654939 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '12.60', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '12.60', 'private_1_field_ui'])
+		Next scheduled internal transition at time 12.704939
+
+
+__  Current Time:  12.704939 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '12.65', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '12.65', 'private_1_field_ui'])
+		Next scheduled internal transition at time 12.754939
+
+
+__  Current Time:  12.754939 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '12.70', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '12.69', 'private_1_field_ui'])
+		Next scheduled internal transition at time 12.804939
+
+
+__  Current Time:  12.804939 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '12.75', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '12.74', 'private_1_field_ui'])
+		Next scheduled internal transition at time 12.854939
+
+
+__  Current Time:  12.854939 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '12.80', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '12.80', 'private_1_field_ui'])
+		Next scheduled internal transition at time 12.904939
+
+
+__  Current Time:  12.904939 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '12.85', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '12.84', 'private_1_field_ui'])
+		Next scheduled internal transition at time 12.954939
+
+
+__  Current Time:  12.914886 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("mouse_click","private_1_field_ui",[152,71,1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Next scheduled internal transition at time 12.914886
+
+
+__  Current Time:  12.914886 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '12.90', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '12.90', 'private_1_field_ui'])
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:  13.776242 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("mouse_click","private_1_field_ui",[152,71,1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Next scheduled internal transition at time 13.776242
+
+
+__  Current Time:  13.776242 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 13.826242
+
+
+__  Current Time:  13.826242 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 13.876242
+
+
+__  Current Time:  13.876242 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '13.83', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '13.81', 'private_1_field_ui'])
+		Next scheduled internal transition at time 13.926242
+
+
+__  Current Time:  13.926242 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '13.88', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '13.87', 'private_1_field_ui'])
+		Next scheduled internal transition at time 13.976242
+
+
+__  Current Time:  13.976242 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '13.93', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '13.92', 'private_1_field_ui'])
+		Next scheduled internal transition at time 14.026242
+
+
+__  Current Time:  14.026242 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '13.98', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '13.97', 'private_1_field_ui'])
+		Next scheduled internal transition at time 14.076242
+
+
+__  Current Time:  14.076242 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '14.03', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '14.02', 'private_1_field_ui'])
+		Next scheduled internal transition at time 14.126242
+
+
+__  Current Time:  14.126242 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '14.08', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '14.07', 'private_1_field_ui'])
+		Next scheduled internal transition at time 14.176242
+
+
+__  Current Time:  14.176242 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '14.13', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '14.12', 'private_1_field_ui'])
+		Next scheduled internal transition at time 14.226242
+
+
+__  Current Time:  14.226242 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '14.18', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '14.17', 'private_1_field_ui'])
+		Next scheduled internal transition at time 14.276242
+
+
+__  Current Time:  14.276242 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '14.23', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '14.22', 'private_1_field_ui'])
+		Next scheduled internal transition at time 14.326242
+
+
+__  Current Time:  14.326242 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '14.28', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '14.27', 'private_1_field_ui'])
+		Next scheduled internal transition at time 14.376242
+
+
+__  Current Time:  14.376242 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '14.33', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '14.32', 'private_1_field_ui'])
+		Next scheduled internal transition at time 14.426242
+
+
+__  Current Time:  14.406997 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("mouse_click","private_1_field_ui",[152,71,1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Next scheduled internal transition at time 14.406997
+
+
+__  Current Time:  14.406997 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '14.38', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '14.37', 'private_1_field_ui'])
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:  15.282609 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("mouse_click","private_1_field_ui",[152,71,1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Next scheduled internal transition at time 15.282609
+
+
+__  Current Time:  15.282609 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 15.332609
+
+
+__  Current Time:  15.332609 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 15.382609
+
+
+__  Current Time:  15.382609 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '15.33', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '15.32', 'private_1_field_ui'])
+		Next scheduled internal transition at time 15.432609
+
+
+__  Current Time:  15.432609 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '15.38', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '15.37', 'private_1_field_ui'])
+		Next scheduled internal transition at time 15.482609
+
+
+__  Current Time:  15.482609 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '15.43', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '15.42', 'private_1_field_ui'])
+		Next scheduled internal transition at time 15.532609
+
+
+__  Current Time:  15.532609 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '15.48', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '15.48', 'private_1_field_ui'])
+		Next scheduled internal transition at time 15.582609
+
+
+__  Current Time:  15.582609 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '15.53', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '15.53', 'private_1_field_ui'])
+		Next scheduled internal transition at time 15.632609
+
+
+__  Current Time:  15.632609 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '15.58', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '15.58', 'private_1_field_ui'])
+		Next scheduled internal transition at time 15.682609
+
+
+__  Current Time:  15.682609 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '15.63', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '15.63', 'private_1_field_ui'])
+		Next scheduled internal transition at time 15.732609
+
+
+__  Current Time:  15.732609 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '15.68', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '15.67', 'private_1_field_ui'])
+		Next scheduled internal transition at time 15.782609
+
+
+__  Current Time:  15.782609 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '15.73', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '15.72', 'private_1_field_ui'])
+		Next scheduled internal transition at time 15.832609
+
+
+__  Current Time:  15.832609 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '15.78', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '15.78', 'private_1_field_ui'])
+		Next scheduled internal transition at time 15.882609
+
+
+__  Current Time:  15.882609 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '15.83', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '15.83', 'private_1_field_ui'])
+		Next scheduled internal transition at time 15.932609
+
+
+__  Current Time:  15.932609 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '15.88', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '15.87', 'private_1_field_ui'])
+		Next scheduled internal transition at time 15.982609
+
+
+__  Current Time:  15.982609 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '15.93', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '15.92', 'private_1_field_ui'])
+		Next scheduled internal transition at time 16.032609
+
+
+__  Current Time:  16.032609 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '15.98', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '15.98', 'private_1_field_ui'])
+		Next scheduled internal transition at time 16.082609
+
+
+__  Current Time:  16.082609 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '16.03', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '16.03', 'private_1_field_ui'])
+		Next scheduled internal transition at time 16.132609
+
+
+__  Current Time:  16.132609 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '16.08', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '16.07', 'private_1_field_ui'])
+		Next scheduled internal transition at time 16.182609
+
+
+__  Current Time:  16.182609 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '16.13', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '16.12', 'private_1_field_ui'])
+		Next scheduled internal transition at time 16.232609
+
+
+__  Current Time:  16.232609 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '16.18', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '16.18', 'private_1_field_ui'])
+		Next scheduled internal transition at time 16.282609
+
+
+__  Current Time:  16.282609 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '16.23', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '16.23', 'private_1_field_ui'])
+		Next scheduled internal transition at time 16.332609
+
+
+__  Current Time:  16.332609 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '16.28', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '16.27', 'private_1_field_ui'])
+		Next scheduled internal transition at time 16.382609
+
+
+__  Current Time:  16.382609 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <examples.FixedTimerEventloop.PyDEVS.target.MainAppInstance object at 0x104b856d0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '16.33', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '16.32', 'private_1_field_ui'])
+		Next scheduled internal transition at time 16.432609
 

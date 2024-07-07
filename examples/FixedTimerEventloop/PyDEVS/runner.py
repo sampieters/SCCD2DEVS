@@ -11,9 +11,9 @@ class OutputListener:
 
 	def add(self, events):
 		for event in events:
-			if event[2].port == "ui":
-				method = getattr(self.ui, event[2].name)
-				method(*event[2].parameters)
+			if event.port == "ui":
+				method = getattr(self.ui, event.name)
+				method(*event.parameters)
 
 if __name__ == '__main__':
 	model = target.Controller(name="controller")
@@ -21,7 +21,7 @@ if __name__ == '__main__':
 
 	tkroot = tk.Tk()
 	tkroot.withdraw()
-	sim = DEVSSimulator(model)
+	sim = DEVSSimulator(model, refs)
 	sim.setRealTime(True)
 	#sim.setRealTimeInputFile("./examples/BouncingBalls/input_trace.txt")
 	sim.setRealTimePorts(refs)
