@@ -4,8 +4,7 @@
         from sccd.runtime.libs.ui import ui
         import time
 
-        CANVAS_WIDTH = 350
-        CANVAS_HEIGHT = 300
+        CANVAS_DIMS = (350, 300)
     </top>
     
     <inport name="ui" />
@@ -22,10 +21,10 @@
             <state id="creating_window">
                 <onentry>
                     <raise port="ui" event="create_window">
-                        <parameter expr="CANVAS_WIDTH"/><!-- width -->
-                        <parameter expr="CANVAS_HEIGHT"/><!-- height -->
-                        <parameter expr='"Fixed Timer"'/><!-- title -->
-                        <parameter expr="self.inports['field_ui']"/><!-- inport for response -->
+                        <parameter expr="CANVAS_DIMS[0]"/>
+                        <parameter expr="CANVAS_DIMS[1]"/>
+                        <parameter expr='"Fixed Timer"'/>
+                        <parameter expr="self.inports['field_ui']"/>
                     </raise>
                 </onentry>
                 <transition event="window_created" target="../creating_canvas">
@@ -37,27 +36,27 @@
                         ]]>
                     </script>
                     <raise port="ui" event="bind_event">
-                        <parameter expr="window_id"/><!-- widget_id -->
-                        <parameter expr="ui.EVENTS.WINDOW_CLOSE"/><!-- tk_event -->
-                        <parameter expr="'window_close'"/><!-- sccd_event_name -->
-                        <parameter expr="self.inports['field_ui']"/><!-- inport for response -->
+                        <parameter expr="window_id"/>
+                        <parameter expr="ui.EVENTS.WINDOW_CLOSE"/>
+                        <parameter expr="'window_close'"/>
+                        <parameter expr="self.inports['field_ui']"/>
                     </raise>
                     <raise port="ui" event="bind_event">
-                        <parameter expr="window_id"/><!-- widget_id -->
-                        <parameter expr="ui.EVENTS.KEY_PRESS"/><!-- tk_event -->
-                        <parameter expr="'key_press'"/><!-- sccd_event_name -->
-                        <parameter expr="self.inports['field_ui']"/><!-- inport for response -->
+                        <parameter expr="window_id"/>
+                        <parameter expr="ui.EVENTS.KEY_PRESS"/>
+                        <parameter expr="'key_press'"/>
+                        <parameter expr="self.inports['field_ui']"/>
                     </raise>
                 </transition>
             </state>
             <state id="creating_canvas">
                 <onentry>
                     <raise port="ui" event="create_canvas">
-                        <parameter expr="self.window_id"/><!-- window_id -->
-                        <parameter expr="CANVAS_WIDTH"/><!-- width -->
-                        <parameter expr="CANVAS_HEIGHT - 200"/><!-- height -->
-                        <parameter expr="{'background':'#222222'}"/><!-- style -->
-                        <parameter expr="self.inports['field_ui']"/><!-- inport for response -->
+                        <parameter expr="self.window_id"/>
+                        <parameter expr="CANVAS_DIMS[0]"/>
+                        <parameter expr="CANVAS_DIMS[1] - 200"/>
+                        <parameter expr="{'background':'#222222'}"/>
+                        <parameter expr="self.inports['field_ui']"/>
                     </raise>
                 </onentry>
                 <transition event="canvas_created" target="../creating_clock_text">
@@ -119,10 +118,10 @@
                         self.button_id = button_id
                     </script> 
                     <raise port="ui" event="bind_event">
-                        <parameter expr="button_id"/><!-- widget_id -->
-                        <parameter expr="ui.EVENTS.MOUSE_CLICK"/><!-- tk_event -->
-                        <parameter expr='"mouse_click"'/><!-- sccd_event_name -->
-                        <parameter expr="self.inports['field_ui']"/><!-- inport for response -->
+                        <parameter expr="button_id"/>
+                        <parameter expr="ui.EVENTS.MOUSE_CLICK"/>
+                        <parameter expr='"mouse_click"'/>
+                        <parameter expr="self.inports['field_ui']"/>
                     </raise>
                 </transition>
             </state>

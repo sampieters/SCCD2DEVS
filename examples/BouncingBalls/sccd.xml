@@ -1,15 +1,13 @@
 <?xml version="1.1" ?>
-<diagram author="Simon Van Mierlo+Raphael Mannadiar" name="Bouncing_Balls_Python_Version">
+<diagram author="Sam Pieters" name="Bouncing_Balls_DEVS_Version">
     <description>
         Tkinter frame with bouncing balls in it.
     </description>
     <top>
         from sccd.runtime.libs import ui_v2 as ui
-        from sccd.runtime.libs.utils import utils
         import random
 
-        CANVAS_WIDTH = 800
-        CANVAS_HEIGHT = 550
+        CANVAS_DIMS = (800, 550)
     </top>
     <inport name="ui"/>
     <outport name="ui"/>
@@ -101,38 +99,34 @@
                     <transition event="set_association_name" target="../creating_window">
                         <parameter name="association_name" type="str" />
                         <script>
-                            <![CDATA[
                             self.association_name = association_name
-                            ]]>
                         </script>
                     </transition>
                 </state>
                 <state id="creating_window">
                     <onentry>
                         <raise port="ui" event="create_window">
-                            <parameter expr="800"/><!-- width -->
-                            <parameter expr="600"/><!-- height -->
-                            <parameter expr='"BouncingBalls"'/><!-- title -->
+                            <parameter expr="800"/>                     <!-- width -->
+                            <parameter expr="600"/>                     <!-- height -->
+                            <parameter expr='"BouncingBalls"'/>         <!-- title -->
                             <parameter expr="self.inports['field_ui']"/><!-- inport for response -->
                         </raise>
                     </onentry>
                     <transition event="window_created" target="../creating_canvas">
                         <parameter name="window_id" type="int" />
                         <script>
-                            <![CDATA[
                             self.window_id = window_id
-                            ]]>
                         </script>
                         <raise port="ui" event="bind_event">
-                            <parameter expr="window_id"/><!-- widget_id -->
-                            <parameter expr="ui.EVENTS.WINDOW_CLOSE"/><!-- tk_event -->
-                            <parameter expr="'window_close'"/><!-- sccd_event_name -->
+                            <parameter expr="window_id"/>               <!-- widget_id -->
+                            <parameter expr="ui.EVENTS.WINDOW_CLOSE"/>  <!-- tk_event -->
+                            <parameter expr="'window_close'"/>          <!-- sccd_event_name -->
                             <parameter expr="self.inports['field_ui']"/><!-- inport for response -->
                         </raise>
                         <raise port="ui" event="bind_event">
-                            <parameter expr="window_id"/><!-- widget_id -->
-                            <parameter expr="ui.EVENTS.KEY_PRESS"/><!-- tk_event -->
-                            <parameter expr="'key_press'"/><!-- sccd_event_name -->
+                            <parameter expr="window_id"/>               <!-- widget_id -->
+                            <parameter expr="ui.EVENTS.KEY_PRESS"/>     <!-- tk_event -->
+                            <parameter expr="'key_press'"/>             <!-- sccd_event_name -->
                             <parameter expr="self.inports['field_ui']"/><!-- inport for response -->
                         </raise>
                     </transition>
@@ -140,31 +134,29 @@
                 <state id="creating_canvas">
                     <onentry>
                         <raise port="ui" event="create_canvas">
-                            <parameter expr="self.window_id"/><!-- window_id -->
-                            <parameter expr="CANVAS_WIDTH"/><!-- width -->
-                            <parameter expr="CANVAS_HEIGHT"/><!-- height -->
-                            <parameter expr="{'background':'#eee'}"/><!-- style -->
+                            <parameter expr="self.window_id"/>          <!-- window_id -->
+                            <parameter expr="CANVAS_DIMS[0]"/>          <!-- width -->
+                            <parameter expr="CANVAS_DIMS[1]"/>          <!-- height -->
+                            <parameter expr="{'background':'#eee'}"/>   <!-- style -->
                             <parameter expr="self.inports['field_ui']"/><!-- inport for response -->
                         </raise>
                     </onentry>
                     <transition event="canvas_created" target="../creating_button">
                         <parameter name="canvas_id" type="int"/>
                         <script>
-                            <![CDATA[
                             self.canvas_id = canvas_id
-                            ]]>
                         </script>
                         <raise port="ui" event="bind_event">
-                            <parameter expr="canvas_id"/><!-- widget_id -->
-                            <parameter expr="ui.EVENTS.MOUSE_RIGHT_CLICK"/><!-- tk_event -->
-                            <parameter expr="'right_click'"/><!-- sccd_event_name -->
-                            <parameter expr="self.inports['field_ui']"/><!-- inport for response -->
+                            <parameter expr="canvas_id"/>                   <!-- widget_id -->
+                            <parameter expr="ui.EVENTS.MOUSE_RIGHT_CLICK"/> <!-- tk_event -->
+                            <parameter expr="'right_click'"/>               <!-- sccd_event_name -->
+                            <parameter expr="self.inports['field_ui']"/>    <!-- inport for response -->
                         </raise>
                         <raise port="ui" event="bind_event">
-                            <parameter expr="canvas_id"/><!-- widget_id -->
-                            <parameter expr="ui.EVENTS.MOUSE_MOVE"/><!-- tk_event -->
-                            <parameter expr="'mouse_move'"/><!-- sccd_event_name -->
-                            <parameter expr="self.inports['field_ui']"/><!-- inport for response -->
+                            <parameter expr="canvas_id"/>                   <!-- widget_id -->
+                            <parameter expr="ui.EVENTS.MOUSE_MOVE"/>        <!-- tk_event -->
+                            <parameter expr="'mouse_move'"/>                <!-- sccd_event_name -->
+                            <parameter expr="self.inports['field_ui']"/>    <!-- inport for response -->
                         </raise>
                         <raise port="ui" event="bind_event">
                             <parameter expr="canvas_id"/><!-- widget_id -->
@@ -336,13 +328,11 @@
             <parameter name="x" />
             <parameter name="y" />
             <body>
-                <![CDATA[
                 self.canvas_id = canvas_id;
                 self.r = 20.0;
                 self.vel = {'x': random.uniform(-5.0, 5.0), 'y': random.uniform(-5.0, 5.0)};
                 self.pos = {'x': x, 'y': y};
                 self.smooth = 0.6; # value between 0 and 1
-                ]]>
             </body>
         </constructor>
         <destructor>
@@ -404,9 +394,9 @@
                         <script>
                             <![CDATA[
                             # Invert velocity when colliding with canvas border:
-                            if self.pos['x']-self.r <= 0 or self.pos['x']+self.r >= CANVAS_WIDTH:
+                            if self.pos['x']-self.r <= 0 or self.pos['x']+self.r >= CANVAS_DIMS[0]:
                                 self.vel['x'] = -self.vel['x'];
-                            if self.pos['y']-self.r <= 0 or self.pos['y']+self.r >= CANVAS_HEIGHT:
+                            if self.pos['y']-self.r <= 0 or self.pos['y']+self.r >= CANVAS_DIMS[1]:
                                 self.vel['y'] = -self.vel['y'];
                             ]]>
                         </script>
@@ -438,10 +428,9 @@
                         <parameter name="y" />
                         <parameter name="button" />
                         <script>
-                            <![CDATA[
                             # Always keep ball within canvas:
-                            x = min(max(0+self.r, x), CANVAS_WIDTH-self.r)
-                            y = min(max(0+self.r, y), CANVAS_HEIGHT-self.r)
+                            x = min(max(0+self.r, x), CANVAS_DIMS[0]-self.r)
+                            y = min(max(0+self.r, y), CANVAS_DIMS[1]-self.r)
 
                             dx = x - self.pos['x']
                             dy = y - self.pos['y']
@@ -450,9 +439,8 @@
                                 'x': (1-self.smooth)*dx + self.smooth*self.vel['x'],
                                 'y': (1-self.smooth)*dy + self.smooth*self.vel['y']
                             }
-
+                            
                             self.pos = {'x': x, 'y': y}
-                            ]]>
                         </script>
                         <raise port="ui" event="set_element_pos">
                             <parameter expr="self.canvas_id"/>
@@ -477,9 +465,7 @@
                         <parameter name="y" />
                         <parameter name="button" />
                         <script>
-                            <![CDATA[
                             self.mouse_pos = {'x':x, 'y':y};
-                            ]]>
                         </script>
                     </transition>
                     <transition event="delete_self" target='../../deleted'>                    

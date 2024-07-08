@@ -225,4 +225,5 @@ class Controller(EventLoopControllerBase):
         if behind_schedule_callback == None: behind_schedule_callback = None
         EventLoopControllerBase.__init__(self, ObjectManager(self), event_loop_callbacks, finished_callback, behind_schedule_callback)
         self.addInputPort("ui")
+        self.addOutputPort("ui")
         self.object_manager.createInstance("MainApp", [])

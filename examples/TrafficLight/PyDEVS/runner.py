@@ -1,24 +1,33 @@
-from pypdevs.simulator import Simulator
-import target as target
-
-from tkinter import *
-from sccd.runtime.libs.DEVui import ui
-
+import tkinter as tk
+import examples.TrafficLight.PyDEVS.target as target
+from sccd.runtime.libs.ui_v2 import UI
+from sccd.runtime.DEVS_loop import DEVSSimulator
 
 
-model = target.Controller(name="controller")
-refs = {"ui": model.ui}
-ui.window = Tk()
-ui.window.withdraw()
+class OutputListener:
+	def __init__(self, ui):
+		self.ui = ui
 
-sim = Simulator(model)
-sim.setRealTime(True)
-sim.setRealTimeInputFile(None)
-sim.setRealTimePorts(refs)
-sim.setVerbose(None)
-sim.setRealTimePlatformTk(ui.window)
+	def add(self, events):
+		for event in events:
+			if event.port == "ui":
+				method = getattr(self.ui, event.name)
+				method(*event.parameters)
 
-ui.simulator = sim
+if __name__ == '__main__':
+	model = target.Controller(name="controller")
+	refs = {"ui": model.in_ui, "field_ui": model.atomic0.field_ui}
 
-sim.simulate()
-ui.window.mainloop()
+	tkroot = tk.Tk()
+	tkroot.withdraw()
+	sim = DEVSSimulator(model, refs)
+
+	sim.setVerbose()
+	sim.setRealTimePlatformTk(tkroot)
+
+	ui = UI(tkroot, sim)
+
+	listener = OutputListener(ui)
+	sim.setListenPorts(model.out_ui, listener.add)
+	sim.simulate()
+	tkroot.mainloop()

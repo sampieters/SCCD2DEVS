@@ -1,175 +1,295 @@
 <?xml version="1.0" ?>
-<diagram author="Raphael Mannadiar" name="Traffic_Light_Python_Version">
+<diagram author="Sam Pieters" name="TrafficLight">
+    <description>
+        Tkinter frame with Traffic light in a single statechart.
+    </description>
     <top>
-        from sccd.runtime.libs.ui import ui
+        from sccd.runtime.libs import ui_v2 as ui
+        CANVAS_DIMS = (100, 350)
+        CANVAS_WIDTH = 100
+        CANVAS_HEIGHT = 350
     </top>
-
     <inport name="ui" />
-
+    <outport name="ui"/>
     <class name="MainApp" default="true">
-        <relationships>
-            <association name="trafficlight" class="TrafficLight" />
-        </relationships>
-        <method name="MainApp">
-            <body>
-                <![CDATA[
-                self.canvas   = ui.append_canvas(ui.window,100,310,{'background':'#eee'});
-                police_button = ui.append_button(ui.window, 'Police interrupt');
-                quit_button   = ui.append_button(ui.window, 'Quit');
-                ui.bind_event(police_button.element, ui.EVENTS.MOUSE_CLICK, self.controller, 'police_interrupt_clicked');
-                ui.bind_event(quit_button.element, ui.EVENTS.MOUSE_CLICK, self.controller, 'quit_clicked');
-                ]]>
-            </body>
-        </method>
-        <scxml initial="initializing">
-            <state id="initializing">
-                <transition target="../creating">
-                    <raise scope="cd" event="create_instance">
-                        <parameter expr='"trafficlight"' />
-                        <parameter expr='"TrafficLight"' />
-                        <parameter expr="self.canvas" />
+        <attribute name="window_id" />
+        <attribute name="canvas_id" />
+        <attribute name="green_id" />
+        <attribute name="yellow_id" />
+        <attribute name="red_id" />
+        <attribute name="police_button_id" />
+        <atrribute name="quit_button_id" />
+        <inport name="field_ui"/>
+        <scxml initial="creating_window">
+            <state id="creating_window">
+                <onentry>
+                    <raise port="ui" event="create_window">
+                        <parameter expr="CANVAS_DIMS[0]"/>
+                        <parameter expr="CANVAS_DIMS[1]"/>
+                        <parameter expr='"Fixed Traffic Light"'/>
+                        <parameter expr="self.inports['field_ui']"/>
+                    </raise>
+                </onentry>
+                <transition event="window_created" target="../creating_canvas">
+                    <parameter name="window_id" type="int" />
+                    <script>
+                        self.window_id = window_id
+                    </script>
+                    <raise port="ui" event="bind_event">
+                        <parameter expr="window_id"/>
+                        <parameter expr="ui.EVENTS.WINDOW_CLOSE"/>
+                        <parameter expr="'window_close'"/>
+                        <parameter expr="self.inports['field_ui']"/>
                     </raise>
                 </transition>
             </state>
-            <state id="creating">
-                <transition event="instance_created" target="../initialized">
-                    <parameter name="association_name" type="string"/>
-                    <raise scope="cd" event="start_instance">
-                        <parameter expr="association_name" />
+            <state id="creating_canvas">
+                <onentry>
+                    <raise port="ui" event="create_canvas">
+                        <parameter expr="self.window_id"/>
+                        <parameter expr="CANVAS_DIMS[0]"/>
+                        <parameter expr="CANVAS_DIMS[1] - 100"/>
+                        <parameter expr="{'background':'#222222'}"/>
+                        <parameter expr="self.inports['field_ui']"/>
                     </raise>
-                    <raise scope="narrow" event="set_association_name" target="association_name">
-                        <parameter expr="association_name" />
+                </onentry>
+                <transition event="canvas_created" target="../creating_trafficlight">
+                    <parameter name="canvas_id" type="int"/>
+                    <script>
+                        <![CDATA[
+                        self.canvas_id = canvas_id
+                        ]]>
+                    </script>
+                </transition>
+            </state>
+            <state id="creating_trafficlight" initial="creating_greenlight">
+                <state id="creating_greenlight">
+                    <onentry>
+                        <raise port="ui" event="create_rectangle">
+                            <parameter expr="self.canvas_id" />
+                            <parameter expr="50" />
+                            <parameter expr="50" />
+                            <parameter expr="50" />
+                            <parameter expr="50" />
+                            <parameter expr="{'fill':'#000'}" />
+                            <parameter expr="self.inports['field_ui']" />
+                        </raise>
+                    </onentry>
+                    <transition event="rectangle_created" target="../creating_yellowlight">
+                        <parameter name="canvas_id" type="int"/>
+                        <parameter name="green_id" type="int" />
+                        <script>
+                            self.green_id = green_id
+                        </script>
+                    </transition>
+                </state>
+                <state id="creating_yellowlight">
+                    <onentry>
+                        <raise port="ui" event="create_rectangle">
+                            <parameter expr="self.canvas_id" />
+                            <parameter expr="50" />
+                            <parameter expr="110" />
+                            <parameter expr="50" />
+                            <parameter expr="50" />
+                            <parameter expr="{'fill':'#000'}" />
+                            <parameter expr="self.inports['field_ui']" />
+                        </raise>
+                    </onentry>
+                    <transition event="rectangle_created" target="../creating_redlight">
+                        <parameter name="canvas_id" type="int"/>
+                        <parameter name="yellow_id" type="int" />
+                        <script>
+                            self.yellow_id = yellow_id
+                        </script>
+                    </transition>
+                </state>
+                <state id="creating_redlight">
+                    <onentry>
+                        <raise port="ui" event="create_rectangle">
+                            <parameter expr="self.canvas_id" />
+                            <parameter expr="50" />
+                            <parameter expr="170" />
+                            <parameter expr="50" />
+                            <parameter expr="50" />
+                            <parameter expr="{'fill':'#000'}" />
+                            <parameter expr="self.inports['field_ui']" />
+                        </raise>
+                    </onentry>
+                    <transition event="rectangle_created" target="../../creating_interrupt_button">
+                        <parameter name="canvas_id" type="int"/>
+                        <parameter name="red_id" type="int" />
+                        <script>
+                            self.red_id = red_id
+                        </script>
+                    </transition>
+                </state>
+            </state>
+            <state id="creating_interrupt_button">
+                <onentry>
+                    <raise port="ui" event="create_button">
+                        <parameter expr="self.window_id" />
+                        <parameter expr="'Police Interrupt'" />
+                        <parameter expr="self.inports['field_ui']" />
+                    </raise>
+                </onentry>
+                <transition event="button_created" target="../creating_quit_button">
+                    <parameter name="button_id" type="int"/>
+                    <script>
+                        self.police_button_id = button_id
+                    </script> 
+                    <raise port="ui" event="bind_event">
+                        <parameter expr="button_id"/>
+                        <parameter expr="ui.EVENTS.MOUSE_CLICK"/>
+                        <parameter expr='"interrupt_clicked"'/>
+                        <parameter expr="self.inports['field_ui']"/>
                     </raise>
                 </transition>
             </state>
-            <state id="initialized">
+            <state id="creating_quit_button">
+                <onentry>
+                    <raise port="ui" event="create_button">
+                        <parameter expr="self.window_id" />
+                        <parameter expr="'Quit'" />
+                        <parameter expr="self.inports['field_ui']" />
+                    </raise>
+                </onentry>
+                <transition event="button_created" target="../on">
+                    <parameter name="button_id" type="int"/>
+                    <script>
+                        self.quit_button_id = button_id
+                    </script> 
+                    <raise port="ui" event="bind_event">
+                        <parameter expr="button_id"/>
+                        <parameter expr="ui.EVENTS.MOUSE_CLICK"/>
+                        <parameter expr='"quit_clicked"'/>
+                        <parameter expr="self.inports['field_ui']"/>
+                    </raise>
+                </transition>
             </state>
-        </scxml>
-    </class>
-
-    <class name="TrafficLight">
-        <relationships>
-        </relationships>
-        <method name="TrafficLight">
-            <parameter name="canvas" />
-            <body>
-                <![CDATA[
-                size        = 100;
-                offset      = size+5;
-                self.RED    = 0;
-                self.YELLOW = 1;
-                self.GREEN  = 2;
-                self.colors = ['#f00','#ff0','#0f0']
-                self.lights = [
-                    canvas.add_rectangle(size/2, size/2, size, size, {'fill':'#000'}),
-                    canvas.add_rectangle(size/2, size/2+offset,     size, size, {'fill':'#000'}),
-                    canvas.add_rectangle(size/2, size/2+2*offset, size, size, {'fill':'#000'})];
-                ]]>
-            </body>
-        </method>
-        <method name="clear">
-            <body>
-                <![CDATA[
-                self.lights[self.RED].set_color('#000');
-                self.lights[self.YELLOW].set_color('#000');
-                self.lights[self.GREEN].set_color('#000');
-                ]]>
-            </body>
-        </method>
-        <method name="setGreen">
-            <body>
-                <![CDATA[
-                self.clear();
-                self.lights[self.GREEN].set_color(self.colors[self.GREEN]);
-                ]]>
-            </body>
-        </method>
-        <method name="setYellow">
-            <body>
-                <![CDATA[
-                self.clear();
-                self.lights[self.YELLOW].set_color(self.colors[self.YELLOW]);
-                ]]>
-            </body>
-        </method>
-        <method name="setRed">
-            <body>
-                <![CDATA[
-                self.clear();
-                self.lights[self.RED].set_color(self.colors[self.RED]);
-                ]]>
-            </body>
-        </method>
-        <scxml initial="on">
             <state id="on" initial="normal">
                 <state id="normal" initial="red">
+                    <transition port="field_ui" event="window_close" target="../../deleted" >
+                        <raise port="ui" event="destroy_all" />
+                    </transition>
+                    <transition port='field_ui' event="quit_clicked" target='../../off' cond="button == ui.MOUSE_BUTTONS.LEFT">
+                        <parameter name="x" />
+                        <parameter name="y" />
+                        <parameter name="button" />
+                    </transition>
+                    <transition port='field_ui' event="interrupt_clicked" target='../interrupted' cond="button == ui.MOUSE_BUTTONS.LEFT">
+                        <parameter name="x" />
+                        <parameter name="y" />
+                        <parameter name="button" />
+                        <raise port="ui" event="set_element_color">
+                            <parameter expr="self.canvas_id" />
+                            <parameter expr="self.green_id" />
+                            <parameter expr="'black'" />
+                        </raise>
+                        <raise port="ui" event="set_element_color">
+                            <parameter expr="self.canvas_id" />
+                            <parameter expr="self.yellow_id" />
+                            <parameter expr="'black'" />
+                        </raise>
+                        <raise port="ui" event="set_element_color">
+                            <parameter expr="self.canvas_id" />
+                            <parameter expr="self.red_id" />
+                            <parameter expr="'black'" />
+                        </raise>
+                    </transition>
                     <state id="red">
                         <onentry>
-                            <script>
-                                <![CDATA[
-                                self.setRed();
-                                ]]>
-                            </script>
+                            <raise port="ui" event="set_element_color">
+                                <parameter expr="self.canvas_id" />
+                                <parameter expr="self.yellow_id" />
+                                <parameter expr="'black'" />
+                            </raise>
+                            <raise port="ui" event="set_element_color">
+                                <parameter expr="self.canvas_id" />
+                                <parameter expr="self.red_id" />
+                                <parameter expr="'red'" />
+                            </raise>
                         </onentry>
                         <transition after='3' target='../green'/>
                     </state>
                     <state id="green">
                         <onentry>
-                            <script>
-                                <![CDATA[
-                                self.setGreen();
-                                ]]>
-                            </script>
+                            <raise port="ui" event="set_element_color">
+                                <parameter expr="self.canvas_id" />
+                                <parameter expr="self.red_id" />
+                                <parameter expr="'black'" />
+                            </raise>
+                            <raise port="ui" event="set_element_color">
+                                <parameter expr="self.canvas_id" />
+                                <parameter expr="self.green_id" />
+                                <parameter expr="'green'" />
+                            </raise>
                         </onentry>
                         <transition after='2' target='../yellow'/>
                     </state>
                     <state id="yellow">
                         <onentry>
-                            <script>
-                                <![CDATA[
-                                self.setYellow();
-                                ]]>
-                            </script>
+                            <raise port="ui" event="set_element_color">
+                                <parameter expr="self.canvas_id" />
+                                <parameter expr="self.green_id" />
+                                <parameter expr="'black'" />
+                            </raise>
+                            <raise port="ui" event="set_element_color">
+                                <parameter expr="self.canvas_id" />
+                                <parameter expr="self.yellow_id" />
+                                <parameter expr="'yellow'" />
+                            </raise>
                         </onentry>
-                    <transition after='1' target='../red'/>
+                        <transition after='1' target='../red'/>
                     </state>
-                    <transition event='police_interrupt_clicked' port='ui' target='../interrupted'/>
-                    <history id="history"/>
                 </state>
                 <state id="interrupted" initial="yellow">
                     <state id="yellow">
                         <onentry>
-                            <script>
-                                <![CDATA[
-                                self.setYellow();
-                                ]]>
-                            </script>
+                            <raise port="ui" event="set_element_color">
+                                <parameter expr="self.canvas_id" />
+                                <parameter expr="self.yellow_id" />
+                                <parameter expr="'yellow'" />
+                            </raise>
                         </onentry>
                         <transition after='.5' target='../black'/>
                     </state>
                     <state id="black">
                         <onentry>
-                            <script>
-                                <![CDATA[
-                                self.clear();
-                                ]]>
-                            </script>
+                            <raise port="ui" event="set_element_color">
+                                <parameter expr="self.canvas_id" />
+                                <parameter expr="self.yellow_id" />
+                                <parameter expr="'black'" />
+                            </raise>
                         </onentry>
                         <transition after='.5' target='../yellow'/>
                     </state>
-                    <transition event='police_interrupt_clicked' port='ui' target='../normal/history'/>
+                    <transition port='field_ui' event="interrupt_clicked" target='../normal' cond="button == ui.MOUSE_BUTTONS.LEFT">
+                        <parameter name="x" />
+                        <parameter name="y" />
+                        <parameter name="button" />
+                    </transition>
                 </state>
-                <transition event='quit_clicked' port='ui' target='../off'/>
             </state>
             <state id="off">
                 <onentry>
-                    <script>
-                        <![CDATA[
-                        self.clear();
-                        ]]>
-                    </script>
+                    <raise port="ui" event="set_element_color">
+                        <parameter expr="self.canvas_id" />
+                        <parameter expr="self.green_id" />
+                        <parameter expr="'black'" />
+                    </raise>
+                    <raise port="ui" event="set_element_color">
+                        <parameter expr="self.canvas_id" />
+                        <parameter expr="self.yellow_id" />
+                        <parameter expr="'black'" />
+                    </raise>
+                    <raise port="ui" event="set_element_color">
+                        <parameter expr="self.canvas_id" />
+                        <parameter expr="self.red_id" />
+                        <parameter expr="'black'" />
+                    </raise>
                 </onentry>
             </state>
+            <state id="deleted" />
         </scxml>
     </class>
 </diagram>
