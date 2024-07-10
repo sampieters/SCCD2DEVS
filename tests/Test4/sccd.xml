@@ -1,0 +1,23 @@
+<?xml version="1.1" ?>
+<diagram author="Sam Pieters" name="Input Test">
+    <description>
+        Test 4: Check if the model receives input on the right rime and sends and output event after 0.5 seconds.
+    </description>
+    <inport name="ui"/>
+    <outport name="ui"/>
+    <class name="MainApp" default="true">
+        <scxml initial="state1">
+            <state id="state1">
+                <transition event="input_test_event" target="../state2" />
+            </state>
+            <state id="state2">
+                <onentry>
+                    <raise port="ui" event="test_event">
+                        <parameter expr="str(self.amount)" />
+                        <parameter expr="str('%.2f' % (self.getSimulatedTime() / 1000.0))" />
+                    </raise>
+                </onentry>
+            </state>
+        </scxml>
+    </class>
+</diagram>

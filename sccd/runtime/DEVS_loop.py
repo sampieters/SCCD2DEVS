@@ -12,7 +12,7 @@ def get_port(text):
 
 
 class DEVSSimulator(Simulator):
-	def __init__(self, model, inputs):
+	def __init__(self, model, inputs={}):
 		super().__init__(model)
 		self.setRealTimePorts(inputs)	
 	
