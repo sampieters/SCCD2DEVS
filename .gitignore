@@ -1,3 +1,5 @@
+old_examples/
+
 # Byte-compiled / optimized Python files
 __pycache__/
 *.pyc

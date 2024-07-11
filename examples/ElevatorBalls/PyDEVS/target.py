@@ -230,11 +230,12 @@ class FloorInstance(RuntimeClassBase):
     
     def user_defined_constructor(self, canvas_id, floor_num):
         self.canvas_id = canvas_id;
+        self.floor_num = floor_num;
         
         y_dim = (CANVAS_DIMS[1] - ((FLOORS - 1) * FLOOR_SPACE)) / FLOORS
         
         self.dim = {'x': FLOOR_LENGTH, 'y': y_dim};
-        self.pos = {'x': FLOOR_LENGTH / 2, 'y': (y_dim /2) + (floor_num * (y_dim + FLOOR_SPACE))};
+        self.pos = {'x': FLOOR_LENGTH / 2, 'y': (y_dim /2) + (self.floor_num * (y_dim + FLOOR_SPACE))};
     
     def user_defined_destructor(self):
         pass
@@ -280,6 +281,10 @@ class FloorInstance(RuntimeClassBase):
         _running_create_random_ball_0.setAction(self._running_create_random_ball_0_exec)
         _running_create_random_ball_0.setTrigger(Event("_0after"))
         self.states["/running/create_random_ball"].addTransition(_running_create_random_ball_0)
+        _running_create_random_ball_1 = Transition(self, self.states["/running/create_random_ball"], [self.states["/running/create_random_ball"]])
+        _running_create_random_ball_1.setAction(self._running_create_random_ball_1_exec)
+        _running_create_random_ball_1.setTrigger(Event("delete_ball", None))
+        self.states["/running/create_random_ball"].addTransition(_running_create_random_ball_1)
         
         # transition /running/wait
         _running_wait_0 = Transition(self, self.states["/running/wait"], [self.states["/running/create_random_ball"]])
@@ -291,17 +296,22 @@ class FloorInstance(RuntimeClassBase):
         self.big_step.outputEvent(Event("create_rectangle", self.getOutPortName("ui"), [self.canvas_id, self.pos['x'], self.pos['y'], self.dim['x'], self.dim['y'], {'fill':'white', 'outline': 'black'}, self.inports['floor_ui']]))
     
     def _running_create_random_ball_enter(self):
-        self.addTimer(0, 1)
+        self.addTimer(0, random.randint(2, 10))
     
     def _running_create_random_ball_exit(self):
         self.removeTimer(0)
     
     def _running_create_random_ball_0_exec(self, parameters):
-        self.big_step.outputEventOM(Event("create_instance", None, [self, "balls", "Ball", self.canvas_id, 100, 100]))
+        self.big_step.outputEventOM(Event("create_instance", None, [self, "balls", "Ball", self.canvas_id, self.floor_num, 10, self.pos['y']]))
+    
+    def _running_create_random_ball_1_exec(self, parameters):
+        association_name = parameters[0]
+        self.big_step.outputEventOM(Event("delete_instance", None, [self, association_name]))
     
     def _running_wait_0_exec(self, parameters):
         association_name = parameters[0]
         self.big_step.outputEventOM(Event("start_instance", None, [self, association_name]))
+        self.big_step.outputEventOM(Event("narrow_cast", None, [self, association_name, Event("set_association_name", None, [association_name])]))
     
     def initializeStatechart(self):
         # enter default state
@@ -464,7 +474,7 @@ class ElevatorInstance(RuntimeClassBase):
         x = parameters[0]
         y = parameters[1]
         button = parameters[2]
-        self.big_step.outputEventOM(Event("create_instance", None, [self, "balls", "Ball", self.canvas_id, x, y]))
+        self.big_step.outputEventOM(Event("create_instance", None, [self, "balls", "Ball", self.canvas_id, -1, x, y]))
     
     def _root_running_2_exec(self, parameters):
         association_name = parameters[0]
@@ -490,7 +500,7 @@ class Elevator(ObjectManagerBase):
         return new_instance
 
 class BallInstance(RuntimeClassBase):
-    def __init__(self, atomdevs, canvas_id, x, y):
+    def __init__(self, atomdevs, canvas_id, floor_num, x, y):
         RuntimeClassBase.__init__(self, atomdevs)
         self.associations = {}
         self.associations["parent"] = Association("MainApp", 1, 1)
@@ -509,7 +519,7 @@ class BallInstance(RuntimeClassBase):
         self.pos = None
         
         # call user defined constructor
-        BallInstance.user_defined_constructor(self, canvas_id, x, y)
+        BallInstance.user_defined_constructor(self, canvas_id, floor_num, x, y)
         port_name = Ports.addInputPort("<narrow_cast>", self)
         atomdevs.addInPort(port_name)
         port_name = Ports.addInputPort("ball_ui", self)
@@ -517,8 +527,9 @@ class BallInstance(RuntimeClassBase):
         atomdevs.port_mappings[port_name] = atomdevs.next_instance
         self.inports["ball_ui"] = port_name
     
-    def user_defined_constructor(self, canvas_id, x, y):
+    def user_defined_constructor(self, canvas_id, floor_num, x, y):
         self.canvas_id = canvas_id;
+        self.floor_num = floor_num;
         self.r = 5.0;
         self.vel = {'x': random.uniform(-5.0, 5.0), 'y': random.uniform(-5.0, 5.0)};
         self.pos = {'x': x, 'y': y};
@@ -587,15 +598,20 @@ class BallInstance(RuntimeClassBase):
         _main_behaviour_bouncing_0.setAction(self._main_behaviour_bouncing_0_exec)
         _main_behaviour_bouncing_0.setTrigger(Event("_0after"))
         self.states["/main_behaviour/bouncing"].addTransition(_main_behaviour_bouncing_0)
-        _main_behaviour_bouncing_1 = Transition(self, self.states["/main_behaviour/bouncing"], [self.states["/main_behaviour/selected"]])
+        _main_behaviour_bouncing_1 = Transition(self, self.states["/main_behaviour/bouncing"], [self.states["/main_behaviour/bouncing"]])
         _main_behaviour_bouncing_1.setAction(self._main_behaviour_bouncing_1_exec)
-        _main_behaviour_bouncing_1.setTrigger(Event("mouse_press", self.getInPortName("ball_ui")))
+        _main_behaviour_bouncing_1.setTrigger(None)
         _main_behaviour_bouncing_1.setGuard(self._main_behaviour_bouncing_1_guard)
         self.states["/main_behaviour/bouncing"].addTransition(_main_behaviour_bouncing_1)
-        _main_behaviour_bouncing_2 = Transition(self, self.states["/main_behaviour/bouncing"], [self.states["/main_behaviour/bouncing"]])
+        _main_behaviour_bouncing_2 = Transition(self, self.states["/main_behaviour/bouncing"], [self.states["/main_behaviour/selected"]])
         _main_behaviour_bouncing_2.setAction(self._main_behaviour_bouncing_2_exec)
-        _main_behaviour_bouncing_2.setTrigger(Event("update_bounds", None))
+        _main_behaviour_bouncing_2.setTrigger(Event("mouse_press", self.getInPortName("ball_ui")))
+        _main_behaviour_bouncing_2.setGuard(self._main_behaviour_bouncing_2_guard)
         self.states["/main_behaviour/bouncing"].addTransition(_main_behaviour_bouncing_2)
+        _main_behaviour_bouncing_3 = Transition(self, self.states["/main_behaviour/bouncing"], [self.states["/main_behaviour/bouncing"]])
+        _main_behaviour_bouncing_3.setAction(self._main_behaviour_bouncing_3_exec)
+        _main_behaviour_bouncing_3.setTrigger(Event("update_bounds", None))
+        self.states["/main_behaviour/bouncing"].addTransition(_main_behaviour_bouncing_3)
         
         # transition /main_behaviour/dragging
         _main_behaviour_dragging_0 = Transition(self, self.states["/main_behaviour/dragging"], [self.states["/main_behaviour/dragging"]])
@@ -640,38 +656,63 @@ class BallInstance(RuntimeClassBase):
         self.big_step.outputEvent(Event("bind_canvas_event", self.getOutPortName("ui"), [self.canvas_id, circle_id, ui.EVENTS.MOUSE_RELEASE, 'mouse_release', self.inports['ball_ui']]))
     
     def _main_behaviour_bouncing_0_exec(self, parameters):
-        # Check collision with the left and right borders
-        if self.pos['x'] - self.r < self.rect_pos['x'] - (self.rect_dim['x'] / 2):
-            self.pos['x'] = self.rect_pos['x'] - (self.rect_dim['x'] / 2) + self.r  # Correct position
-            self.vel['x'] = -self.vel['x'] + self.rect_vel['x']
-        elif self.pos['x'] + self.r > self.rect_pos['x'] + (self.rect_dim['x'] / 2):
-            self.pos['x'] = self.rect_pos['x'] + (self.rect_dim['x'] / 2) - self.r  # Correct position
-            self.vel['x'] = -self.vel['x'] + self.rect_vel['x']
+        if self.floor_num == -1:
+            if self.pos['x'] - self.r < self.rect_pos['x'] - (self.rect_dim['x'] / 2):
+                self.pos['x'] = self.rect_pos['x'] - (self.rect_dim['x'] / 2) + self.r  # Correct position
+                self.vel['x'] = -self.vel['x'] + self.rect_vel['x']
+            elif self.pos['x'] + self.r > self.rect_pos['x'] + (self.rect_dim['x'] / 2):
+                self.pos['x'] = self.rect_pos['x'] + (self.rect_dim['x'] / 2) - self.r  # Correct position
+                self.vel['x'] = -self.vel['x'] + self.rect_vel['x']
         
-        # Check collision with the top and bottom borders
-        if self.pos['y'] - self.r < self.rect_pos['y'] - (self.rect_dim['y'] / 2):
-            self.pos['y'] = self.rect_pos['y'] - (self.rect_dim['y'] / 2) + self.r  # Correct position
-            self.vel['y'] = -self.vel['y'] + self.rect_vel['y']
-        elif self.pos['y'] + self.r > self.rect_pos['y'] + (self.rect_dim['y'] / 2):
-            self.pos['y'] = self.rect_pos['y'] + (self.rect_dim['y'] / 2) - self.r  # Correct position
-            self.vel['y'] = -self.vel['y'] + self.rect_vel['y']
+            # Check collision with the top and bottom borders
+            if self.pos['y'] - self.r < self.rect_pos['y'] - (self.rect_dim['y'] / 2):
+                self.pos['y'] = self.rect_pos['y'] - (self.rect_dim['y'] / 2) + self.r  # Correct position
+                self.vel['y'] = -self.vel['y'] + self.rect_vel['y']
+            elif self.pos['y'] + self.r > self.rect_pos['y'] + (self.rect_dim['y'] / 2):
+                self.pos['y'] = self.rect_pos['y'] + (self.rect_dim['y'] / 2) - self.r  # Correct position
+                self.vel['y'] = -self.vel['y'] + self.rect_vel['y']
+        else:
+            floor_height = (CANVAS_DIMS[1] - ((FLOORS - 1) * FLOOR_SPACE)) / FLOORS
+            floor_dim = {'x': FLOOR_LENGTH, 'y': floor_height};
+            floor_pos = {'x': FLOOR_LENGTH / 2, 'y': (floor_height /2) + (self.floor_num * (floor_height + FLOOR_SPACE))};
+        
+            if self.pos['x'] - self.r < floor_pos['x'] - (floor_dim['x'] / 2):
+                self.pos['x'] = floor_pos['x'] - (floor_dim['x'] / 2) + self.r  # Correct position
+                self.vel['x'] = -self.vel['x']
+            elif self.pos['x'] + self.r > floor_pos['x'] + (floor_dim['x'] / 2):
+                self.pos['x'] = floor_pos['x'] + (floor_dim['x'] / 2) - self.r  # Correct position
+                self.vel['x'] = -self.vel['x']
+        
+            # Check collision with the top and bottom borders
+            if self.pos['y'] - self.r < floor_pos['y'] - (floor_dim['y'] / 2):
+                self.pos['y'] = floor_pos['y'] - (floor_dim['y'] / 2) + self.r  # Correct position
+                self.vel['y'] = -self.vel['y']
+            elif self.pos['y'] + self.r > floor_pos['y'] + (floor_dim['y'] / 2):
+                self.pos['y'] = floor_pos['y'] + (floor_dim['y'] / 2) - self.r  # Correct position
+                self.vel['y'] = -self.vel['y']
         self.big_step.outputEvent(Event("move_element", self.getOutPortName("ui"), [self.canvas_id, self.circle_id, self.vel['x'], self.vel['y']]))
         self.pos['x'] += self.vel['x']
         self.pos['y'] += self.vel['y']
     
     def _main_behaviour_bouncing_1_exec(self, parameters):
+        self.big_step.outputEvent(Event("destroy_element", self.getOutPortName("ui"), [self.canvas_id, self.circle_id]))
+    
+    def _main_behaviour_bouncing_1_guard(self, parameters):
+        return self.pos['x'] - self.r < 6
+    
+    def _main_behaviour_bouncing_2_exec(self, parameters):
         x = parameters[0]
         y = parameters[1]
         button = parameters[2]
         self.big_step.outputEvent(Event("set_element_color", self.getOutPortName("ui"), [self.canvas_id, self.circle_id, '#ff0']))
     
-    def _main_behaviour_bouncing_1_guard(self, parameters):
+    def _main_behaviour_bouncing_2_guard(self, parameters):
         x = parameters[0]
         y = parameters[1]
         button = parameters[2]
         return button == ui.MOUSE_BUTTONS.LEFT
     
-    def _main_behaviour_bouncing_2_exec(self, parameters):
+    def _main_behaviour_bouncing_3_exec(self, parameters):
         pos = parameters[0]
         dim = parameters[1]
         vel = parameters[2]
@@ -733,7 +774,7 @@ class Ball(ObjectManagerBase):
         self.ball_ui = self.addInPort("ball_ui")
     
     def constructObject(self, parameters):
-        new_instance = BallInstance(self, parameters[2], parameters[3], parameters[4])
+        new_instance = BallInstance(self, parameters[2], parameters[3], parameters[4], parameters[5])
         return new_instance
 
 class ObjectManagerState:

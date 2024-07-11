@@ -136,8 +136,14 @@ class UI:
     def set_element_pos(self, canvas_id, element_id, new_x, new_y):
         def callback():
             canvas = self.mapping[canvas_id]
-            x, y, *_ = canvas.bbox(element_id)
-            canvas.move(element_id, new_x-x, new_y-y)
+            bbox = canvas.bbox(element_id)
+            if bbox:
+                x0, y0, x1, y1 = bbox
+                current_x = (x0 + x1) / 2
+                current_y = (y0 + y1) / 2
+                dx = new_x - current_x
+                dy = new_y - current_y
+                canvas.move(element_id, dx, dy)
         # schedule in mainloop
         self.tk.after(0, callback)
 
@@ -158,7 +164,7 @@ class UI:
     def destroy_element(self, canvas_id, element_id, res_port=None):
         def callback():
             canvas = self.mapping[canvas_id]
-            canvas.delete(element.element_id)
+            canvas.delete(element_id)
             if res_port != None:
                 self.controller.addInput(Event("element_destroyed", res_port, [canvas_id, element_id]))
         # schedule in mainloop
