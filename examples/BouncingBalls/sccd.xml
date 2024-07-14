@@ -350,7 +350,6 @@
                 <state id="creating_circle">
                     <onentry>
                         <raise port="ui" event="create_circle">
-                            canvas_id, x, y, r, style, res_port
                             <parameter expr="self.canvas_id"/><!-- canvas_id -->
                             <parameter expr="self.pos['x']"/><!-- x -->
                             <parameter expr="self.pos['y']"/><!-- y -->

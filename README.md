@@ -97,5 +97,5 @@ python3 runner.py
 ### Timer
 
 ## TODO
-1) Is there no < or > in the condition transition
-
+1) How to do in_ui??
+2) Problem with getInstances --> with dissacociate it thinks that it still exists

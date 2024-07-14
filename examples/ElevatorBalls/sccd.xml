@@ -17,6 +17,7 @@
             <association name="floor" class="Floor" min="2"/>
             <association name="controls" class="ElevatorControls" min="1" max="1"/>
             <association name="elevator" class="Elevator" min="1" max="1"/>
+            <association name="ball" class="Ball" />
         </relationships>
         <attribute name="window_id" />
         <attribute name="canvas_id" />
@@ -126,7 +127,7 @@
                 </transition>
             </state>
             <state id="creating">
-                <transition event="instance_created" target="../waiting">
+                <transition event="instance_created" target="../running">
                     <parameter name="association_name" type="string"/>
                     <raise scope="cd" event="start_instance">
                         <parameter expr="association_name" />
@@ -138,7 +139,39 @@
                     </raise>
                 </transition>
             </state>
-            <state id="waiting">
+            <state id="running">
+                <transition event="create_ball" target=".">
+                    <parameter name="floor_num" type="int"/>
+                    <parameter name="x" type="int"/>
+                    <parameter name="y" type="int"/>
+                    <raise scope="cd" event="create_instance">
+                        <parameter expr='"ball"' />
+                        <parameter expr='"Ball"' />
+                        <parameter expr="self.canvas_id" />
+                        <parameter expr="floor_num" />
+                        <parameter expr="x" />
+                        <parameter expr="y" />
+                    </raise>
+                </transition>
+                <transition event='instance_created' target='.'>
+                    <parameter name="association_name" type="string"/>
+                    <raise scope="cd" event="start_instance">
+                        <parameter expr="association_name" />
+                    </raise>
+                    <raise scope="narrow" event="set_association_name" target="association_name">
+                        <parameter expr="association_name" />
+                    </raise>
+                </transition>
+                <transition event='update_bounds' target='.'>
+                    <parameter name="pos" type="dict"/>
+                    <parameter name="dim" type="dict"/>
+                    <parameter name="vel" type="int"/>
+                    <raise scope="broad" event="update_bounds">
+                        <parameter expr="pos" />
+                        <parameter expr="dim" />
+                        <parameter expr="vel" />
+                    </raise>
+                </transition>
             </state>
         </scxml>
     </class>
@@ -150,7 +183,6 @@
         <atrribute name="pos" />
         <inport name="floor_ui"/>
         <relationships>
-            <association name="balls" class="Ball" />
             <association name="parent" class="MainApp" min="1" max="1" />
         </relationships>
         <constructor>
@@ -164,7 +196,12 @@
                 y_dim = (CANVAS_DIMS[1] - ((FLOORS - 1) * FLOOR_SPACE)) / FLOORS
 
                 self.dim = {'x': FLOOR_LENGTH, 'y': y_dim};
-                self.pos = {'x': FLOOR_LENGTH / 2, 'y': (y_dim /2) + (self.floor_num * (y_dim + FLOOR_SPACE))};
+
+
+                # start position from the bottom instead of from the top
+                # self.pos = {'x': FLOOR_LENGTH / 2, 'y': (y_dim /2) + (self.floor_num * (y_dim + FLOOR_SPACE))};
+
+                self.pos = {'x': FLOOR_LENGTH / 2, 'y': CANVAS_DIMS[1] - (y_dim /2) - ( self.floor_num * (y_dim + FLOOR_SPACE)  )};
                 ]]>
             </body>
         </constructor>
@@ -186,25 +223,11 @@
             </state>
             <state id="running" initial="create_random_ball">
                 <state id="create_random_ball" >
-                    <transition after="random.randint(2, 10)" target="../wait">
-                        <raise scope="cd" event="create_instance">
-                            <parameter expr='"balls"' />
-                            <parameter expr='"Ball"' />
-                            <parameter expr="self.canvas_id" />
+                    <transition after="random.randint(2, 10)" target=".">
+                        <raise scope="narrow" event="create_ball" target="'parent'">
                             <parameter expr="self.floor_num" />
                             <parameter expr="10" />
                             <parameter expr="self.pos['y']" />
-                        </raise>
-                    </transition>
-                </state>
-                <state id="wait">
-                    <transition event="instance_created" target="../create_random_ball">
-                        <parameter name="association_name" type="string"/>
-                        <raise scope="cd" event="start_instance">
-                            <parameter expr="association_name" />
-                        </raise>
-                        <raise scope="narrow" event="set_association_name" target="association_name">
-                            <parameter expr="association_name" />
                         </raise>
                     </transition>
                 </state>
@@ -216,15 +239,14 @@
         <inport name="control_ui"/>
         <relationships>
             <association name="button" class="ElevatorButton" />
-            <association name="balls" class="Ball" />
             <association name="parent" class="Elevator" min="1" max="1" />
         </relationships>
         <constructor>
             <parameter name="canvas_id" />
             <body>
                 self.canvas_id = canvas_id;
-                self.button_num = FLOORS;
-                self.dim = {'x': 120, 'y': (50 + (FLOORS * 30))}
+                self.button_num = (FLOORS - 1);
+                self.dim = {'x': 120, 'y': (50 + ((FLOORS - 1) * 30))}
                 self.pos = {'x': CANVAS_DIMS[0] - ((self.dim['x'] / 2) + 10), 'y': (self.dim['y'] / 2) + 10}
             </body>
         </constructor>
@@ -247,12 +269,6 @@
                             <parameter expr="20"/>
                             <parameter expr="'Elevator Controls'"/>
                             <parameter expr="self.inports['control_ui']"/><!-- inport for response -->
-                        </raise>
-                        <raise port="ui" event="bind_event">
-                            <parameter expr="self.canvas_id"/>                   <!-- widget_id -->
-                            <parameter expr="ui.EVENTS.MOUSE_MOVE"/>        <!-- tk_event -->
-                            <parameter expr="'mouse_move'"/>                <!-- sccd_event_name -->
-                            <parameter expr="self.inports['control_ui']"/>    <!-- inport for response -->
                         </raise>
                     </onentry>
                     <transition target="../create_buttons" />
@@ -322,7 +338,7 @@
                     <raise port="ui" event="create_circle">
                         <parameter expr="self.canvas_id" />
                         <parameter expr="CANVAS_DIMS[0] - 70"/>
-                        <parameter expr="45 + (30 * (FLOORS - self.number)) "/>
+                        <parameter expr="45 + (30 * (FLOORS - 1 - self.number)) "/>
                         <parameter expr="10" />
                         <parameter expr="{'fill':'black', 'outline': 'black'}"/><!-- style -->
                         <parameter expr="self.inports['button_ui']"/><!-- inport for response -->
@@ -330,7 +346,7 @@
                     <raise port="ui" event="create_text">
                         <parameter expr="self.canvas_id" />
                         <parameter expr="CANVAS_DIMS[0] - 70"/>
-                        <parameter expr="45 + (30 * (FLOORS - self.number)) "/>
+                        <parameter expr="45 + (30 * (FLOORS - 1 - self.number)) "/>
                         <parameter expr="str(self.number)"/>
                         <parameter expr="self.inports['button_ui']"/><!-- inport for response -->
                     </raise>
@@ -342,10 +358,10 @@
                         self.button_id = circle_id
                     </script>
                     <raise port="ui" event="bind_canvas_event">
-                        <parameter expr="canvas_id"/>
+                        <parameter expr="self.canvas_id"/>
                         <parameter expr="circle_id"/><!-- widget_id -->
                         <parameter expr="ui.EVENTS.MOUSE_PRESS"/><!-- tk_event -->
-                        <parameter expr="'button_click'"/><!-- sccd_event_name -->
+                        <parameter expr="'clicked'"/><!-- sccd_event_name -->
                         <parameter expr="self.inports['button_ui']"/><!-- inport for response -->
                     </raise>
                     <raise port="ui" event="bind_canvas_event">
@@ -358,13 +374,10 @@
                 </transition>
             </state>
             <state id="running">
-                <transition port='button_ui' event="button_click" target='.' cond="button == ui.MOUSE_BUTTONS.LEFT">
+                <transition port='button_ui' event="clicked" target='.' cond="button == ui.MOUSE_BUTTONS.LEFT">
                     <parameter name="x" />
                     <parameter name="y" />
                     <parameter name="button" />
-                    <raise event="button_pressed" scope="narrow" target="'parent'">
-                        <parameter expr="self.number" />
-                    </raise>
                     <raise port="ui" event="set_element_color">
                         <parameter expr="self.canvas_id"/>
                         <parameter expr="self.button_id"/>
@@ -382,7 +395,7 @@
         <atrribute name="pos" />
         <inport name="elevator_ui"/>
         <relationships>
-            <association name="balls" class="Ball" />
+            <association name="floors" class="Floors" min="1" max="1" />
             <association name="parent" class="MainApp" min="1" max="1" />
         </relationships>
         <constructor>
@@ -436,13 +449,19 @@
                         </script>
                     </transition>
                 </state>
-                <state id="running" initial="waiting">
-                    <state id="waiting">
-                        <transition event="move_elevator" target="../move">
-                            <parameter name="position" type="int"/>
+                <state id="running" initial="idle">
+                    <state id="idle">
+                        <transition after="5" target="../move">
                         </transition>
                     </state>
                     <state id="move">
+                        <onentry>
+                            <raise scope="narrow" event="update_bounds" target="'parent'">
+                                <parameter expr="self.pos" />
+                                <parameter expr="self.dim" />
+                                <parameter expr="self.vel" />
+                            </raise>
+                        </onentry>
                         <transition after="0.02" target=".">
                             <raise port="ui" event="set_element_pos">
                                 <parameter expr="self.canvas_id"/>
@@ -454,7 +473,7 @@
                                 self.pos['y'] += self.vel
                             </script>
                         </transition>
-                        <transition target="../waiting" cond="(self.pos['y'] - (self.dim['y']/2)) &lt; 0">
+                        <transition target="../idle" cond="(self.pos['y'] - (self.dim['y']/2)) &lt; 0">
                         </transition>
                     </state>
                 </state>
@@ -478,7 +497,15 @@
             <body>
                 <![CDATA[
                 self.canvas_id = canvas_id;
+
+
                 self.floor_num = floor_num;
+
+                self.elevator_floor = 0;
+                self.elevator_open = True;
+                self.rect_pos = None;
+                self.rect_dim = None;
+
                 self.r = 5.0;
                 self.vel = {'x': random.uniform(-5.0, 5.0), 'y': random.uniform(-5.0, 5.0)};
                 self.pos = {'x': x, 'y': y};
@@ -501,7 +528,6 @@
                 <state id="creating_circle">
                     <onentry>
                         <raise port="ui" event="create_circle">
-                            canvas_id, x, y, r, style, res_port
                             <parameter expr="self.canvas_id"/><!-- canvas_id -->
                             <parameter expr="self.pos['x']"/><!-- x -->
                             <parameter expr="self.pos['y']"/><!-- y -->
@@ -516,27 +542,6 @@
                         <script>
                             self.circle_id = circle_id
                         </script>
-                        <raise port="ui" event="bind_canvas_event">
-                            <parameter expr="self.canvas_id"/>
-                            <parameter expr="circle_id"/>
-                            <parameter expr="ui.EVENTS.MOUSE_PRESS"/>
-                            <parameter expr="'mouse_press'"/>
-                            <parameter expr="self.inports['ball_ui']"/>
-                        </raise>
-                        <raise port="ui" event="bind_canvas_event">
-                            <parameter expr="self.canvas_id"/>
-                            <parameter expr="circle_id"/>
-                            <parameter expr="ui.EVENTS.MOUSE_MOVE"/>
-                            <parameter expr="'mouse_move'"/>
-                            <parameter expr="self.inports['ball_ui']"/>
-                        </raise>
-                        <raise port="ui" event="bind_canvas_event">
-                            <parameter expr="self.canvas_id"/>
-                            <parameter expr="circle_id"/>
-                            <parameter expr="ui.EVENTS.MOUSE_RELEASE"/>
-                            <parameter expr="'mouse_release'"/>
-                            <parameter expr="self.inports['ball_ui']"/>
-                        </raise>
                     </transition>
                 </state>
                 <state id="bouncing">
@@ -545,34 +550,40 @@
                             <![CDATA[
                             if self.floor_num == -1:
                                 if self.pos['x'] - self.r < self.rect_pos['x'] - (self.rect_dim['x'] / 2):
-                                    self.pos['x'] = self.rect_pos['x'] - (self.rect_dim['x'] / 2) + self.r  # Correct position
-                                    self.vel['x'] = -self.vel['x'] + self.rect_vel['x']
+                                    if self.elevator_open:
+                                        self.floor_num = self.elevator_floor
+                                    else:
+                                        self.pos['x'] = self.rect_pos['x'] - (self.rect_dim['x'] / 2) + self.r
+                                        self.vel['x'] = -self.vel['x']
                                 elif self.pos['x'] + self.r > self.rect_pos['x'] + (self.rect_dim['x'] / 2):
-                                    self.pos['x'] = self.rect_pos['x'] + (self.rect_dim['x'] / 2) - self.r  # Correct position
-                                    self.vel['x'] = -self.vel['x'] + self.rect_vel['x']
+                                    self.pos['x'] = self.rect_pos['x'] + (self.rect_dim['x'] / 2) - self.r
+                                    self.vel['x'] = -self.vel['x']
 
                                 # Check collision with the top and bottom borders
                                 if self.pos['y'] - self.r < self.rect_pos['y'] - (self.rect_dim['y'] / 2):
-                                    self.pos['y'] = self.rect_pos['y'] - (self.rect_dim['y'] / 2) + self.r  # Correct position
-                                    self.vel['y'] = -self.vel['y'] + self.rect_vel['y']
+                                    self.pos['y'] = self.rect_pos['y'] - (self.rect_dim['y'] / 2) + self.r
+                                    self.vel['y'] = -self.vel['y'] + self.rect_vel
                                 elif self.pos['y'] + self.r > self.rect_pos['y'] + (self.rect_dim['y'] / 2):
-                                    self.pos['y'] = self.rect_pos['y'] + (self.rect_dim['y'] / 2) - self.r  # Correct position
-                                    self.vel['y'] = -self.vel['y'] + self.rect_vel['y']
+                                    self.pos['y'] = self.rect_pos['y'] + (self.rect_dim['y'] / 2) - self.r
+                                    self.vel['y'] = -self.vel['y'] + self.rect_vel
                             else:
                                 floor_height = (CANVAS_DIMS[1] - ((FLOORS - 1) * FLOOR_SPACE)) / FLOORS
                                 floor_dim = {'x': FLOOR_LENGTH, 'y': floor_height};
-                                floor_pos = {'x': FLOOR_LENGTH / 2, 'y': (floor_height /2) + (self.floor_num * (floor_height + FLOOR_SPACE))};
+                                floor_pos = {'x': FLOOR_LENGTH / 2, 'y': CANVAS_DIMS[1] - (floor_height /2) - ( self.floor_num * (floor_height + FLOOR_SPACE)  )};
 
                                 if self.pos['x'] - self.r < floor_pos['x'] - (floor_dim['x'] / 2):
-                                    self.pos['x'] = floor_pos['x'] - (floor_dim['x'] / 2) + self.r  # Correct position
+                                    self.pos['x'] = floor_pos['x'] - (floor_dim['x'] / 2) + self.r
                                     self.vel['x'] = -self.vel['x']
                                 elif self.pos['x'] + self.r > floor_pos['x'] + (floor_dim['x'] / 2):
-                                    self.pos['x'] = floor_pos['x'] + (floor_dim['x'] / 2) - self.r  # Correct position
-                                    self.vel['x'] = -self.vel['x']
+                                    if self.elevator_open and (self.elevator_floor == self.floor_num):
+                                        self.floor_num = -1
+                                    else:
+                                        self.pos['x'] = floor_pos['x'] + (floor_dim['x'] / 2) - self.r
+                                        self.vel['x'] = -self.vel['x']
 
                                 # Check collision with the top and bottom borders
                                 if self.pos['y'] - self.r < floor_pos['y'] - (floor_dim['y'] / 2):
-                                    self.pos['y'] = floor_pos['y'] - (floor_dim['y'] / 2) + self.r  # Correct position
+                                    self.pos['y'] = floor_pos['y'] - (floor_dim['y'] / 2) + self.r
                                     self.vel['y'] = -self.vel['y']
                                 elif self.pos['y'] + self.r > floor_pos['y'] + (floor_dim['y'] / 2):
                                     self.pos['y'] = floor_pos['y'] + (floor_dim['y'] / 2) - self.r  # Correct position
@@ -605,11 +616,12 @@
                     <transition event="update_bounds" target=".">
                         <parameter name="pos" type="dict" />
                         <parameter name="dim" type="dict" />
-                        <parameter name="vel" type="dict" />
+                        <parameter name="vel" type="int" />
                         <script>
                             self.rect_pos = pos
                             self.rect_dim = dim
                             self.rect_vel = vel
+                            self.elevator_open = False
                         </script>
                     </transition>
                 </state>
@@ -659,14 +671,14 @@
                         <parameter name="button" />
                         <script>
                             <![CDATA[
-                            self.mouse_pos = {'x':x, 'y':y};
+                            self.mouse_pos = {'x': x, 'y': y};
                             ]]>
                         </script>
                     </transition>
                 </state>
                 <state id="ball_delete">
                     <transition event="delete_self" target='../../deleted'>                    
-                        <raise event="delete_ball" scope="narrow" target="'parent'">
+                        <raise event="delete_ball" scope="narrow" target="'floor'">
                             <parameter expr='self.association_name' />
                         </raise>
                         <raise port="ui" event="destroy_element">
@@ -679,5 +691,4 @@
             <state id='deleted' />
         </scxml>
     </class>
-
 </diagram>

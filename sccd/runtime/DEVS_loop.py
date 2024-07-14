@@ -8,7 +8,7 @@ def get_port(text):
 		result = match.group(1)
 		return result
 	else:
-		return None
+		return text
 
 
 class DEVSSimulator(Simulator):
