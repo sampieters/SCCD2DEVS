@@ -1,0 +1,47 @@
+<class name="Echo">
+    <relationships>
+        <association name="to_server" class="Server" min="1" max="1"/>
+    </relationships>
+    <constructor>
+        <parameter name="params"/>
+        <body>
+            <![CDATA[
+            self.source = None
+            ]]>
+        </body>
+    </constructor>
+
+    <scxml initial="init_server">
+        <state id="init_server">
+            <onentry>
+                <raise scope="cd" event="create_instance">
+                    <parameter expr="'to_server'"/>
+                    <parameter expr="'Server'"/>
+                    <parameter expr="''"/>
+                    <parameter expr="8080"/>
+                </raise>
+            </onentry>
+            <transition event="instance_created" target="../wait_for_requests">
+                <parameter name="instancename"/>
+                <raise scope="cd" event="start_instance">
+                    <parameter expr="instancename"/>
+                </raise>
+            </transition>
+        </state>
+
+        <state id="wait_for_requests">
+            <state id="wait">
+                <transition event="HTTP_output" target=".">
+                    <parameter name="source"/>
+                    <parameter name="data"/>
+                    <script>
+                        print("Got input: " + str(data))
+                    </script>
+                    <raise event="HTTP_input" scope="narrow" target="'to_server/%s' % source">
+                        <parameter expr="data"/>
+                    </raise>
+                </transition>
+            </state>
+        </state>
+    </scxml>
+</class>

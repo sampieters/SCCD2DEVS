@@ -1,0 +1,26 @@
+<?xml version="1.1" ?>
+<diagram author="Sam Pieters" name="Global Input Test">
+    <description>
+        Test 5: IDK
+    </description>
+    <inport name="ui"/>
+    <outport name="ui"/>
+    <class name="MainApp" default="true">
+        <scxml initial="state1">
+            <state id="state1">
+                <onentry>
+                    <raise port="ui" event="output_event">
+                        <parameter expr="str('%.2f' % (self.getSimulatedTime() / 1000.0))" />
+                    </raise>
+                </onentry>
+                <transition event="input_event" target="../state2">
+                    <raise port="ui" event="received">
+                        <parameter expr="str('%.2f' % (self.getSimulatedTime() / 1000.0))" />
+                    </raise>
+                </transition>
+            </state>
+            <state id="state2">
+            </state>
+        </scxml>
+    </class>
+</diagram>

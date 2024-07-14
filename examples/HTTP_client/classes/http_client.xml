@@ -1,0 +1,138 @@
+<class name="HTTPClient">
+    <relationships>
+        <association name="parent" class="Prompt" min="1" max="1"/>
+    </relationships>
+    <constructor>
+        <parameter name="hostname"/>
+        <parameter name="port"/>
+        <body>
+            <![CDATA[
+            self.socket = None
+            self.destination = (hostname, port)
+            self.received_data = ""
+            self.send_data = ""
+            self.queue = []
+            self.destinations = []
+            ]]>
+        </body>
+    </constructor>
+    <scxml initial="init">
+        <state id="init">
+            <onentry>
+                <raise scope="output" event="create_socket" output="socket_out"/>
+            </onentry>
+            <transition port="socket_in" event="created_socket" target="../connecting">
+                <parameter name="socket"/>
+                <script>
+                    self.socket = socket
+                </script>
+            </transition>
+        </state>
+        <state id="connecting">
+            <onentry>
+                <raise scope="output" event="connect_socket" output="socket_out">
+                    <parameter expr="self.socket"/>
+                    <parameter expr="self.destination"/>
+                </raise>
+            </onentry>
+            <transition port="socket_in" event="connected_socket" cond="self.socket == socket" target="../connected">
+                <parameter name="socket"/>
+                <raise scope="broad" event="http_client_ready"/>
+            </transition>
+        </state>
+                
+        <parallel id="connected">
+            <state id="listening" initial="listen">
+                <state id="listen">
+                    <onentry>
+                        <raise scope="output" port="socket_out" event="recv_socket">
+                            <parameter expr="self.socket"/>
+                        </raise>
+                    </onentry>
+                    <transition event="received_socket" port="socket_in" cond="(self.socket == socket) and (len(data) > 0)" target=".">
+                        <parameter name="socket"/>
+                        <parameter name="data"/>
+                        <script>
+                            self.received_data += data
+                        </script>
+                    </transition>
+                    <transition event="received_socket" port="socket_in" cond="(self.socket == socket) and (len(data) == 0)" target="../close">
+                        <parameter name="socket"/>
+                        <parameter name="data"/>
+                    </transition>
+                </state>
+                <state id="close">
+                </state>
+            </state>
+
+            <state id="sending" initial="waiting_for_data">
+                <state id="waiting_for_data">
+                    <transition cond="len(self.send_data) > 0" target="../transferring">
+                        <raise scope="output" port="socket_out" event="send_socket">
+                            <parameter expr="self.socket"/>
+                            <parameter expr="self.send_data"/>
+                        </raise>
+                    </transition>
+                </state>
+                <state id="transferring">
+                    <transition event="sent_socket" port="socket_in" cond="self.socket == socket" target="../waiting_for_data">
+                        <parameter name="socket"/>
+                        <parameter name="sent_bytes"/>
+                        <script>
+                            self.send_data = self.send_data[sent_bytes:]
+                        </script>
+                    </transition>
+                </state>
+            </state>
+
+            <state id="queueing">
+                <state id="queueing">
+                    <onentry>
+                    </onentry>
+                    <transition event="HTTP_input" target=".">
+                        <parameter name="data"/>
+                        <parameter name="destination"/>
+                        <script>
+                            self.send_data += "POST / HTTP/1.0\r\n"
+                            self.send_data += "Content-Length: %i\r\n" % len(str(data))
+                            self.send_data += "\r\n"
+                            self.send_data += data
+                            self.destinations.append(destination)
+                        </script>
+                    </transition>
+                </state>
+            </state>
+
+            <state id="parsing" initial="wait_for_header">
+                <state id="wait_for_header">
+                    <transition cond="'\r\n\r\n' in self.received_data" target="../wait_for_payload">
+                        <script>
+                            header, self.received_data = self.received_data.split("\r\n\r\n", 1)
+                            header = header.lower()
+                            if "content-length" in header:
+                                _, after = header.split("content-length:", 1)
+                                after, _ = after.split("\r\n", 1)
+                                after = after.strip()
+                                self.length = int(after)
+                            else:
+                                self.length = float('inf')
+                        </script>
+                    </transition>
+                </state>
+                <state id="wait_for_payload">
+                    <transition cond="len(self.received_data) >= self.length" target="../wait_for_header">
+                        <script>
+                            data = self.received_data[:self.length]
+                            self.received_data = self.received_data[self.length:]
+                            #params = dict([p.split('=') for p in data.split('&amp;')])
+                            #data = {k: urllib.unquote_plus(v) for k, v in params.iteritems()}
+                        </script>
+                        <raise event="HTTP_output" scope="narrow" target="self.destinations.pop(0)">
+                            <parameter expr="data"/>
+                        </raise>
+                    </transition>
+                </state>
+            </state>
+        </parallel>
+    </scxml>
+</class>

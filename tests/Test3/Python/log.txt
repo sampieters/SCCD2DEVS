@@ -1,0 +1,9 @@
+test_event 1 : 1.00 seconds
+test_event 2 : 2.00 seconds
+test_event 3 : 3.00 seconds
+test_event 4 : 4.00 seconds
+test_event 5 : 5.00 seconds
+0.00s - Debugger warning: It seems that frozen modules are being used, which may
+0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+0.00s - to python to disable frozen modules.
+0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.

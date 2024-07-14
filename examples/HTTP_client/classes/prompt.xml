@@ -1,0 +1,58 @@
+<class name="Prompt">
+    <relationships>
+        <association name="to_server" class="HTTPClient" min="1" max="1"/>
+    </relationships>
+    <constructor>
+        <body>
+            self.counter = 0
+        </body>
+    </constructor>
+    <scxml initial="init">
+        <state id="init">
+            <onentry>
+                <raise scope="cd" event="create_instance">
+                    <parameter expr="'to_server'"/>
+                    <parameter expr="'HTTPClient'"/>
+                    <parameter expr="'127.0.0.1'"/>
+                    <parameter expr="8080"/>
+                </raise>
+            </onentry>
+            <transition event="instance_created" target="../initializing">
+                <parameter name="instancename"/>
+                <raise scope="cd" event="start_instance">
+                    <parameter expr="instancename"/>
+                </raise>
+            </transition>
+        </state>
+
+        <state id="initializing">
+            <!-- This is only there because otherwise the thread might stop; this seems like a bug in the runtime though -->
+            <transition after="1.0" target="."/>
+            <transition event="http_client_ready" target="../send_request"/>
+        </state>
+
+        <state id="send_request">
+            <transition after="1" target="../wait_reply">
+                <raise event="HTTP_input" scope="narrow" target="'to_server'">
+                    <parameter expr="str(self.counter)"/>
+                    <parameter expr="'parent'"/>
+                </raise>
+                <script>
+                    print("Sending request: %s" % self.counter)
+                    self.counter += 1
+                </script>
+            </transition>
+        </state>
+
+        <state id="wait_reply">
+            <!-- This is only there because otherwise the thread might stop; this seems like a bug in the runtime though -->
+            <transition after="1.0" target="."/>
+            <transition event="HTTP_output" target="../send_request">
+                <parameter name="data"/>
+                <script>
+                    print("Got response: %s" % data)
+                </script>
+            </transition>
+        </state>
+    </scxml>
+</class>

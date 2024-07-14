@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<diagram author="Yentl Van Tendeloo" name="HTTP client">
+    <description>
+        HTTP client in SCCD
+    </description>
+    <top>
+        import time
+        import os
+        import urllib
+        import sys
+        import json
+    </top>
+
+    <inport name="socket_in"/>
+    <outport name="socket_out"/>
+
+    <class src="classes/prompt.xml" default="true"/>
+    <class src="classes/http_client.xml"/>
+</diagram>

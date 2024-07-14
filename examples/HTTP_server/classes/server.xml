@@ -1,0 +1,110 @@
+<class name="Server">
+    <relationships>
+        <association name="sockets" class="Socket"/>
+        <association name="parent" class="Echo" min="1" max="1"/>
+    </relationships>
+    <constructor>
+        <parameter name="address"/>
+        <parameter name="port"/>
+        <body>
+            <![CDATA[
+            self.socket = None
+            self.address = address
+            self.port = port
+            ]]>
+        </body>
+    </constructor>
+
+    <scxml initial="main">
+        <parallel id="main">
+            <state id="forward">
+                <state id="forward">
+                    <transition event="HTTP_output" target=".">
+                        <parameter name="association_name"/>
+                        <parameter name="data"/>
+                        <script>
+                            print("Forward")
+                        </script>
+                        <raise event="HTTP_output" scope="narrow" target="'parent'">
+                            <parameter expr="association_name"/>
+                            <parameter expr="data"/>
+                        </raise>
+                    </transition>
+                </state>
+            </state>
+
+            <state id="server" initial="init">
+                <state id="init">
+                    <onentry>
+                        <raise scope="output" event="create_socket" port="socket_out"/>
+                    </onentry>
+                    <transition port="socket_in" event="created_socket" target="../binding">
+                        <parameter name="socket"/>
+                        <script>
+                            self.socket = socket
+                        </script>
+                    </transition>
+                </state>
+                <state id="binding">
+                    <onentry>
+                        <raise scope="output" event="bind_socket" port="socket_out">
+                            <parameter expr="self.socket"/>
+                            <parameter expr="(self.address, self.port)"/>
+                        </raise>
+                    </onentry>
+                    <transition port="socket_in" event="bound_socket" cond="self.socket == socket" target="../listening">
+                        <parameter name="socket"/>
+                    </transition>
+                </state>
+                <state id="listening">
+                    <onentry>
+                        <raise scope="output" event="listen_socket" port="socket_out">
+                            <parameter expr="self.socket"/>
+                        </raise>
+                    </onentry>
+                    <transition port="socket_in" event="listened_socket" cond="self.socket == socket" target="../accepting">
+                        <parameter name="socket"/>
+                        <raise scope="output" port="socket_out" event="accept_socket">
+                            <parameter expr="self.socket"/>
+                        </raise>
+                    </transition>
+                </state>
+                <state id="accepting">
+                    <transition port="socket_in" event="accepted_socket" target=".">
+                        <parameter name="socket"/>
+                        <parameter name="connected_socket"/>
+                        <raise scope="cd" event="create_instance">
+                            <parameter expr="'sockets'" />
+                            <parameter expr="'Socket'" />
+                            <parameter expr="connected_socket" />
+                        </raise>
+                        <raise scope="output" port="socket_out" event="accept_socket">
+                            <parameter expr="self.socket"/>
+                        </raise>
+                    </transition>
+                    <transition event="instance_created" target=".">
+                        <parameter name="instancename"/>
+                        <raise scope="cd" event="start_instance">
+                            <parameter expr="instancename" />
+                        </raise>
+                        <raise scope="narrow" event="set_association_name" target="instancename">
+                            <parameter expr="instancename"/>
+                        </raise>
+                    </transition>
+                    <transition after="1.0" target="."/>
+                </state>
+            </state>
+
+            <state id="close_socket">
+                <state id="close">
+                    <transition event="close_socket" target=".">
+                        <parameter name="association_name"/>
+                        <raise scope="cd" event="delete_instance">
+                            <parameter expr="association_name"/>
+                        </raise>
+                    </transition>
+                </state>
+            </state>
+        </parallel>
+    </scxml>
+</class>

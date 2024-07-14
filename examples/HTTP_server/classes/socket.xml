@@ -1,0 +1,157 @@
+<class name="Socket">
+    <relationships>
+        <association name="parent" class="Server" min="1" max="1"/>
+    </relationships>
+
+    <constructor>
+        <parameter name="my_socket"/>
+        <body>
+            <![CDATA[
+            self.socket = my_socket
+            self.received_data = ""
+            self.send_data = ""
+            self.closed = False
+            self.association_name = None
+            ]]>
+        </body>
+    </constructor>
+    <scxml initial="init">
+        <state id="init">
+            <transition event="set_association_name" target="../connected">
+                <parameter name="association_name"/>
+                <script>
+                    self.association_name = association_name
+                </script>
+            </transition>
+        </state>
+        <parallel id="connected">
+            <state id="listening" initial="listen">
+                <state id="listen">
+                    <onentry>
+                        <raise scope="output" port="socket_out" event="recv_socket">
+                            <parameter expr="self.socket"/>
+                        </raise>
+                    </onentry>
+                    <transition event="received_socket" port="socket_in" cond="(self.socket == socket) and (len(data) > 0)" target=".">
+                        <parameter name="socket"/>
+                        <parameter name="data"/>
+                        <script>
+                            self.received_data += data
+                        </script>
+                        <raise event="received_data"/>
+                    </transition>
+                    <transition event="received_socket" port="socket_in" cond="(self.socket == socket) and (len(data) == 0)" target="../closed">
+                        <parameter name="socket"/>
+                        <parameter name="data"/>
+                        <raise event="received_data"/>
+                    </transition>
+                </state>
+                <state id="closed">
+                    <onentry>
+                        <script>
+                            self.closed = True
+                        </script>
+                    </onentry>
+                </state>
+            </state>
+
+            <state id="sending" initial="waiting_for_data">
+                <state id="waiting_for_data">
+                    <transition cond="len(self.send_data) > 0" target="../transferring">
+                        <raise scope="output" port="socket_out" event="send_socket">
+                            <parameter expr="self.socket"/>
+                            <parameter expr="self.send_data"/>
+                        </raise>
+                    </transition>
+                </state>
+                <state id="transferring">
+                    <transition event="sent_socket" port="socket_in" cond="self.socket == socket" target="../waiting_for_data">
+                        <parameter name="socket"/>
+                        <parameter name="sent_bytes"/>
+                        <script>
+                            self.send_data = self.send_data[sent_bytes:]
+                        </script>
+                    </transition>
+                </state>
+            </state>
+
+            <state id="queueing">
+                <state id="queueing">
+                    <transition event="HTTP_input" target=".">
+                        <parameter name="data"/>
+                        <script>
+                            #post_data = "&amp;".join(["%s=%s" % (urllib.quote(k), urllib.quote(v)) for k, v in data.iteritems()])
+                            #post_data = "&amp;".join(["%s=%s" % (k, v) for k, v in data.iteritems()])
+                            post_data = data
+                            self.send_data += "HTTP/1.0 200 OK\r\n"
+                            self.send_data += "Content-Length: %s\r\n" % len(post_data)
+                            self.send_data += "Content-Type: %s; charset=UTF-8\r\n" % "text/plain"
+                            self.send_data += "\r\n"
+                            self.send_data += str(post_data)
+                        </script>
+                    </transition>
+                </state>
+            </state>
+
+            <state id="parsing" initial="wait_for_header">
+                <state id="wait_for_header">
+                    <transition cond="'\r\n\r\n' in self.received_data and self.received_data.startswith('POST')" target="../wait_for_payload">
+                        <script>
+                            header, self.received_data = self.received_data.split("\r\n\r\n", 1)
+                            header = header.lower()
+                            if "content-length" in header:
+                                _, after = header.split("content-length:", 1)
+                                after = after.split("\r\n", 1)[0]
+                                after = after.strip()
+                                self.length = int(after)
+                            else:
+                                self.length = float('inf')
+                        </script>
+                    </transition>
+                    <transition cond="self.closed and len(self.received_data) == 0" target="../closing"/>
+                </state>
+                <state id="closing">
+                    <transition after="0.0" target=".">
+                        <raise event="close"/>
+                    </transition>
+                </state>
+                <state id="wait_for_payload">
+                    <transition cond="len(self.received_data) >= self.length or self.closed" target="../wait_for_header">
+                        <script>
+                            if self.length == float('inf'):
+                                data = self.received_data
+                                self.received_data = ""
+                            else:
+                                data = self.received_data[:self.length]
+                                self.received_data = self.received_data[self.length:]
+
+                            print("Got data: " + str(data))
+
+                            # We support POST data only, so everything is in the data
+                            #try:
+                            #    params = dict([p.split('=') for p in data.split('&amp;')])
+                            #    data = {k: urllib.unquote_plus(v) for k, v in params.iteritems()}
+                            #except:
+                            #    data = {}
+                        </script>
+                        <raise event="HTTP_output" scope="narrow" target="'parent'">
+                            <parameter expr="self.association_name"/>
+                            <parameter expr="data"/>
+                        </raise>
+                    </transition>
+                </state>
+            </state>
+            <transition event="close" target="../close"/>
+        </parallel>
+        <state id="close">
+            <onentry>
+                <raise port="socket_out" event="close_socket">
+                    <parameter expr="self.socket"/>
+                </raise>
+                <raise scope="narrow" target="'parent'" event="close_socket">
+                    <parameter expr="self.association_name"/>
+                </raise>
+            </onentry>
+        </state>
+    </scxml>
+</class>

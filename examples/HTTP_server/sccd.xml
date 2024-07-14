@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<diagram author="Yentl Van Tendeloo" name="HTTP Server">
+    <description>
+        Example HTTP echo server.
+    </description>
+    <top>
+        import time
+        import os
+        import urllib
+        import sys
+        import json
+
+        import sys
+    </top>
+
+    <inport name="socket_in"/>
+    <outport name="socket_out"/>
+
+    <class src="classes/echo.xml" default="true"/>
+    <class src="classes/server.xml"/>
+    <class src="classes/socket.xml"/>
+</diagram>

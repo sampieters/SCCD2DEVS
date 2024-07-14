@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<diagram author="Yentl Van Tendeloo+Simon Van Mierlo" name="broken">
+    <description>
+        Broken!
+        Sam: The file was called external input + TODO: don't get what this file needs to do 
+    </description>
+    
+    <inport name="input" />
+
+    <class name="A" default="true">
+        <relationships>
+            <association name="child" class="B" min="0" max="1"/>
+        </relationships>
+
+        <scxml initial="x">
+            <state id="x">
+                <onentry>
+                    <raise scope="cd" event="create_instance">
+                        <parameter expr="'child'"/>
+                        <parameter expr="'B'"/>
+                    </raise>
+                </onentry>
+
+                <transition event="instance_created" target="../ready">
+                    <parameter name="instancename"/>
+                    <script>
+                        self.instancename = instancename
+                    </script>
+                    <raise scope="cd" event="start_instance">
+                        <parameter expr="self.instancename"/>
+                    </raise>
+                </transition>
+            </state>
+            <state id="ready">
+                <transition after="0.001" target=".">
+                    <script>
+                        for _ in range(100000):
+                            pass
+                    </script>
+                </transition>
+                <transition event="close" target="../done">
+                    <raise scope="cd" event="delete_instance">
+                        <parameter expr="self.instancename"/>
+                    </raise>
+                </transition>
+            </state>
+            <state id="done"/>
+        </scxml>
+    </class>
+
+    <class name="B">
+        <relationships>
+            <association name="parent" class="A" min="1" max="1"/>
+        </relationships>
+
+        <scxml initial="z">
+            <state id="z">
+                <transition event="stop" port="input" target=".">
+                    <raise event="close" target="'parent[0]'" />
+                </transition>
+            </state>
+        </scxml>
+    </class>
+
+</diagram>
