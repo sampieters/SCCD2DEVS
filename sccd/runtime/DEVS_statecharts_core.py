@@ -611,8 +611,8 @@ class RuntimeClassBase(object):
             if state.enter:
                 state.enter()
         if self.eventless_states:
-            print("")
             pass
+            # TODO: Check (untill now no problems)
             #self.controller.object_manager.eventless.add(self)
 
 class BigStepState(object):
@@ -994,6 +994,7 @@ class ObjectManagerBase(AtomicDEVS):
                 association = current["instance"].associations[name]
                 if (index >= 0 ):
                     try:
+                        check = association.instances[index]
                         nexts.append({
                             "to_class": association.to_class,
                             "instance": index,
@@ -1076,7 +1077,11 @@ class ObjectManagerBase(AtomicDEVS):
                     i.user_defined_destructor()
                     i.stop()
                 self.instances = {key: value for key, value in self.instances.items() if key not in input[2].parameters[1]}
-                ev = Event("instance_deleted", None, input[2].parameters[1], input[2].instance)
+
+                #if not isinstance(input[2].parameters[1], list):
+                    
+
+                ev = Event("instance_deleted", None, [input[2].parameters[0]], input[2].instance)
                 self.to_send.append((input[1], input[0], ev))
             elif input[2].name == "instance_created":
                 instance = self.instances[input[2].instance]
@@ -1101,7 +1106,8 @@ class ObjectManagerBase(AtomicDEVS):
                 instance = self.instances[input[2].instance]
                 for association in instance.associations.items():
                     if association[1].to_class == input[0]:
-                        for index in input[2].parameters:
+                        for assoc in input[2].parameters:
+                            index = self.processAssociationReference(assoc)[0][1]
                             association[1].removeInstance(index)
                 instance.addEvent(input[2])
             else:

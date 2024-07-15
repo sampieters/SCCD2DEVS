@@ -1,15 +1,14 @@
 <?xml version="1.1" ?>
-<diagram author="Sam Pieters" name="Create and Start Instance Of Multiple Classes">
+<diagram author="Sam Pieters" name="Create and Delete Multiple Instances of the same type (other than the MainApp)">
     <description>
-        TODO
-        Test 10: Check if an instance of multiple classes are created and started successfully
+        # TODO: This is broken in python SCCD, check in PyDEVS
+        Test 13: Check if multiple instances can be deleted after the creation, the instance is not started yet.
     </description>
     <inport name="ui"/>
     <outport name="ui"/>
     <class name="MainApp" default="true">
         <relationships>
             <association name="linkA" class="A" />
-            <association name="linkB" class="B" />
         </relationships>
         <scxml initial="state1">
             <state id="state1">
@@ -25,17 +24,38 @@
                         <parameter expr="str('%.2f' % (self.getSimulatedTime() / 1000.0))" />
                         <parameter expr="association_name" />
                     </raise>
-                    <raise scope="cd" event="start_instance">
+                </transition>
+            </state>
+            <state id="state2">
+                <onentry>
+                    <raise scope="cd" event="create_instance">
+                        <parameter expr='"linkA"' />
+                        <parameter expr='"A"' />
+                    </raise>
+                </onentry>
+                <transition event='instance_created' target='../state3'>
+                    <parameter name="association_name" type="string"/>
+                    <raise port="ui" event="instance_created_succesfully">
+                        <parameter expr="str('%.2f' % (self.getSimulatedTime() / 1000.0))" />
                         <parameter expr="association_name" />
                     </raise>
                 </transition>
             </state>
-            <state id="state2">
-                <transition event='instance_started' target='.'>
-                    <parameter name="association_name" type="string"/>
-                    <raise port="ui" event="instance_started_succesfully">
+            <state id="state3">
+                <onentry>
+                    <raise scope="cd" event="delete_instance">
+                        <parameter expr="'linkA[1]'" />
+                    </raise>
+                    <raise scope="cd" event="delete_instance">
+                        <parameter expr="'linkA[0]'" />
+                    </raise>
+                </onentry>
+
+                <transition event='instance_deleted' target='.'>
+                    <parameter name="deleted_links" type="string"/>
+                    <raise port="ui" event="instance_deleted_succesfully">
                         <parameter expr="str('%.2f' % (self.getSimulatedTime() / 1000.0))" />
-                        <parameter expr="association_name" />
+                        <parameter expr="deleted_links" />
                     </raise>
                 </transition>
             </state>
@@ -46,25 +66,7 @@
         <scxml initial="state1">
             <state id="state1">
                 <onentry>
-                    <raise port="ui" event="statechart_started_succesfully">
-                        <parameter expr="str('%.2f' % (self.getSimulatedTime() / 1000.0))" />
-                    </raise>
-                    <raise port="ui" event="constructor_initialized_succesfully">
-                        <parameter expr="str('%.2f' % (self.getSimulatedTime() / 1000.0))" />
-                    </raise>
-                </onentry>
-            </state>
-        </scxml>
-    </class>
-
-    <class name="B">
-        <scxml initial="state1">
-            <state id="state1">
-                <onentry>
-                    <raise port="ui" event="statechart_started_succesfully">
-                        <parameter expr="str('%.2f' % (self.getSimulatedTime() / 1000.0))" />
-                    </raise>
-                    <raise port="ui" event="constructor_initialized_succesfully">
+                    <raise port="ui" event="not_possible">
                         <parameter expr="str('%.2f' % (self.getSimulatedTime() / 1000.0))" />
                     </raise>
                 </onentry>

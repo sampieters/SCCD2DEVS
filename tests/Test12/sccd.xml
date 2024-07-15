@@ -1,7 +1,7 @@
 <?xml version="1.1" ?>
-<diagram author="Sam Pieters" name="Dissasociate an instance">
+<diagram author="Sam Pieters" name="Create and Delete an Instance (other than the MainApp)">
     <description>
-        Test 12: Dissasociate an instance
+        Test 12: Check if an instance can be deleted after the creation, the instance is not started yet.
     </description>
     <inport name="ui"/>
     <outport name="ui"/>
@@ -9,11 +9,6 @@
         <relationships>
             <association name="linkA" class="A" />
         </relationships>
-        <constructor>
-            <body>
-                self.association_name = None
-            </body>
-        </constructor>
         <scxml initial="state1">
             <state id="state1">
                 <onentry>
@@ -24,48 +19,23 @@
                 </onentry>
                 <transition event='instance_created' target='../state2'>
                     <parameter name="association_name" type="string"/>
-                    <script>
-                        self.association_name = association_name
-                    </script>
                     <raise port="ui" event="instance_created_succesfully">
                         <parameter expr="str('%.2f' % (self.getSimulatedTime() / 1000.0))" />
                         <parameter expr="association_name" />
                     </raise>
-                    <raise scope="cd" event="start_instance">
+                    <raise scope="cd" event="delete_instance">
                         <parameter expr="association_name" />
                     </raise>
                 </transition>
             </state>
             <state id="state2">
-                <transition event='instance_started' target='../state3'>
-                    <parameter name="association_name" type="string"/>
-                    <raise port="ui" event="instance_started_succesfully">
-                        <parameter expr="str('%.2f' % (self.getSimulatedTime() / 1000.0))" />
-                        <parameter expr="association_name" />
-                    </raise>
-                    <raise scope="narrow" event="link_check" target="association_name">
-                        <parameter expr="association_name" />
-                    </raise>
-                </transition>
-            </state>
-            <state id="state3">
-                <onentry>
-                    <raise scope="cd" event='disassociate_instance'>
-                        <parameter expr='"linkA"' />
-                    </raise>
-                </onentry>
-                <transition event='instance_disassociated' target='../state4'>
-                    <parameter name='deleted_links' />
-                    <raise port="ui" event="instance_disassociated_succesfully">
+                <transition event='instance_deleted' target='.'>
+                    <parameter name="deleted_links" type="string"/>
+                    <raise port="ui" event="instance_deleted_succesfully">
                         <parameter expr="str('%.2f' % (self.getSimulatedTime() / 1000.0))" />
                         <parameter expr="deleted_links" />
                     </raise>
                 </transition>
-            </state>
-            <state id="state4">
-                <onentry>
-                    <raise scope="narrow" event="sanity_check" target="self.association_name" />
-                </onentry>
             </state>
         </scxml>
     </class>
@@ -74,25 +44,10 @@
         <scxml initial="state1">
             <state id="state1">
                 <onentry>
-                    <raise port="ui" event="statechart_started_succesfully">
-                        <parameter expr="str('%.2f' % (self.getSimulatedTime() / 1000.0))" />
-                    </raise>
-                </onentry>
-                <transition target="../state2" />
-            </state>
-            <state id="state2">
-                <transition event="link_check" target=".">
-                    <parameter name='link_name' />
-                    <raise port="ui" event="instance_linked_succesfully">
-                        <parameter expr="str('%.2f' % (self.getSimulatedTime() / 1000.0))" />
-                        <parameter expr="link_name" />
-                    </raise>
-                </transition>
-                <transition event="sanity_check" target=".">
                     <raise port="ui" event="not_possible">
                         <parameter expr="str('%.2f' % (self.getSimulatedTime() / 1000.0))" />
                     </raise>
-                </transition>
+                </onentry>
             </state>
         </scxml>
     </class>
