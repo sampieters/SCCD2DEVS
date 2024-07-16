@@ -1,4 +1,4 @@
-import tests.Test3.PyDEVS.target as target
+import target as target
 from sccd.runtime.DEVS_loop import DEVSSimulator
 
 class OutputListener:
@@ -13,7 +13,7 @@ if __name__ == '__main__':
 	refs = {"ui": model.in_ui}
 	sim = DEVSSimulator(model, refs)
 
-	listener = OutputListener()
-	sim.setListenPorts(model.out_ui, listener.add)
+	#listener = OutputListener()
+	#sim.setListenPorts(model.out_ui, listener.add)
 	sim.simulate()
 

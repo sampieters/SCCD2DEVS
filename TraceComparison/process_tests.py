@@ -1,9 +1,17 @@
 import os
-import shutil
+import re
 import subprocess
-import filecmp
+import importlib.util
+from sccd.runtime.DEVS_loop import DEVSSimulator
 
-def convert_sccd_to_target(test_path, target_dir, tool_name):
+
+def import_target_module(module_name, file_path):
+    spec = importlib.util.spec_from_file_location(module_name, file_path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+def compile_to_target(test_path, target_dir, tool_name):
     """
     Convert sccd.xml to target.py for the specified tool.
     """
@@ -37,74 +45,78 @@ def convert_sccd_to_target(test_path, target_dir, tool_name):
         print(f"Error converting {sccd_file} for {tool_name}: {result.stderr}")
     return result.returncode
 
-def run_runner_script(test_path, target_dir, tool):
-    """
-    Run the runner.py script in the context of the generated package.
-    """
-    runner_script = os.path.join(test_path, target_dir, 'runner.py')
-    if not os.path.exists(runner_script):
-        # Path to default runner.py
-        runner_path = ""
-        if tool == 'python':
-            runner_path = os.path.join("TraceComparison", "Python_runner.py")
-        elif tool == 'pypDEVS':
-            runner_path = os.path.join("TraceComparison", "DEVS_runner.py")
-        else:
-            return None
-        # Copy default runner.py to target_dir
-        shutil.copy(runner_path, os.path.join(test_path, target_dir, 'runner.py'))
-    
-    command = ["python", runner_script]
-    result = subprocess.run(command, capture_output=True, text=True)
-    if result.returncode != 0:
-        print(f"Error running {runner_script}: {result.stderr}")
-    return result.stdout, result.stderr
+def run_python_sccd(full_directory):
+    python_target = os.path.join(full_directory, "Python", "target.py")
 
-def compare_logs(log1, log2):
-    """
-    Compare two log files and return if they are the same.
-    """
-    return filecmp.cmp(log1, log2, shallow=False)
+    # Dynamically import the target module
+    target = import_target_module("target", python_target)
 
-def process_test(test_name, test_path):
-    """
-    Process a single test by converting, running, and comparing logs.
-    """
-    # Convert sccd.xml to target.py for Python and PyDEVS
-    if convert_sccd_to_target(test_path, 'Python', 'python') != 0:
-        return
-    if convert_sccd_to_target(test_path, 'PyDEVS', 'pypDEVS') != 0:
-        return
+    controller = target.Controller()
+    controller.keep_running = False
+
+    # Create the full path for the log file
+    log_file_path = os.path.join(full_directory, "Python", "log.txt")
+
+    # Set verbose to the log file path
+    controller.setVerbose(log_file_path)
+
+    controller.start()
+
+
+    controller.tracers.stopTracers()
+
+def run_pydevs_sccd(full_directory):
+    pydevs_target = os.path.join(full_directory, "PyDEVS", "target.py")
+    # Dynamically import the target module
+    target = import_target_module("target", pydevs_target)
+    model = target.Controller(name="controller")
+    refs = {"ui": model.in_ui}
+    sim = DEVSSimulator(model, refs)
+    sim.setRealTime(True)
+
+	# Create the full path for the log file
+    log_file_path = os.path.join(full_directory, "PyDEVS", "log.txt")
+
+	# Set verbose to the log file path
+    sim.setVerbose(log_file_path)
+
+    sim.simulate()
+
+def natural_sort_key(s):
+    # Split the string into a list of strings and numbers
+    return [int(text) if text.isdigit() else text.lower() for text in re.split(r'(\d+)', s)]
+
+def check_traces(full_directory):
+    pydevs_log = os.path.join(full_directory, "PyDEVS", "log.txt")
+    python_log = os.path.join(full_directory, "Python", "log.txt")
+
     
-    # Run the runner.py script in the context of the generated package
-    python_log, python_error = run_runner_script(test_path, 'Python', 'python')
-    pydevs_log, pydevs_error = run_runner_script(test_path, 'PyDEVS', 'pypDEVS')
-    
-    # Save logs to files
-    #python_log_file = os.path.join(test_path, 'Python', 'log.txt')
-    #pydevs_log_file = os.path.join(test_path, 'PyDEVS', 'log.txt')
-    
-    #with open(python_log_file, 'w') as f:
-    #    f.write(python_log)
-    #    f.write(python_error)
-    
-    #with open(pydevs_log_file, 'w') as f:
-    #    f.write(pydevs_log)
-    #    f.write(pydevs_error)
-    
-    # Compare logs
-    #if compare_logs(python_log_file, pydevs_log_file):
-    #    print(f"Logs for test {test_name} match.")
-    #else:
-    #    print(f"Logs for test {test_name} do not match.")
+
+
 
 if __name__ == '__main__':
     tests_directory = "./tests"
-    # Read and sort directory names
-    test_dirs = sorted([d for d in os.listdir(tests_directory) if os.path.isdir(os.path.join(tests_directory, d))])
+
+    with os.scandir(tests_directory) as entries:
+        sorted_entries = sorted(entries, key=lambda entry: entry.name)
+        sorted_items = [entry.name for entry in sorted_entries]
     
-    for test_name in test_dirs:
-        test_path = os.path.join(tests_directory, test_name)
-        if os.path.isdir(test_path):
-            print(f"Processing {test_name}...")
-            process_test(test_name, test_path)
+    # Read directory names
+    all_test_dirs = [d for d in os.listdir(tests_directory) if os.path.isdir(os.path.join(tests_directory, d))]
+    # Sort the list of directories using natural sort
+    sorted_dirs = sorted(all_test_dirs, key=natural_sort_key)
+    
+    for directory_name in sorted_dirs:
+        full_directory = os.path.join(tests_directory, directory_name)
+        if os.path.isdir(full_directory):
+            print(f"Processing {directory_name}...")
+            if compile_to_target(full_directory, 'Python', 'python') != 0:
+                raise RuntimeError("Could not compile to python model")
+            if compile_to_target(full_directory, 'PyDEVS', 'pypDEVS') != 0:
+                raise RuntimeError("Could not compile to pyDEVS model")
+            run_python_sccd(full_directory)
+            run_pydevs_sccd(full_directory)
+
+            check_traces(full_directory)
+
+

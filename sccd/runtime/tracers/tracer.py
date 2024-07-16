@@ -100,16 +100,14 @@ class Tracers(object):
         for tracer in self.tracers:
             tracer.traceEnterState(StateChartName, StateName)
 
-    def tracesOutput(self, listener, event):
+    def tracesOutput(self, event):
         """
         Perform all tracing actions for an external transition
         
         :param aDEVS: the model that transitioned
         """
-        if listener is None:
-            return
         for tracer in self.tracers:
-            tracer.traceOutput(listener, event)
+            tracer.traceOutput(event)
 
     def tracesInput(self, listener, event):
         if listener is None:

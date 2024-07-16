@@ -1,20 +1,32 @@
-import tests.Test7.PyDEVS.target as target
+import target as target
 from sccd.runtime.DEVS_loop import DEVSSimulator
-from sccd.runtime.statecharts_core import Event
+
+import os
 
 class OutputListener:
 	def add(self, events):
 		for event in events:
 			if event.port == "ui":
-				print(event.name, ", received on:", event.parameters[0], "seconds, parameters:", event.parameters[1:])
+				print(event.name, ":", event.parameters[0], "seconds")
 				
 
 if __name__ == '__main__':
-	controller = target.Controller(name="controller")
-	refs = {"ui": controller.in_ui}
-	sim = DEVSSimulator(controller, refs)
+	model = target.Controller(name="controller")
+	refs = {"ui": model.in_ui}
+	sim = DEVSSimulator(model, refs)
+	sim.setRealTime(True)
+
+	# Get the directory where the currently running Python file is located
+	current_file_directory = os.path.dirname(os.path.abspath(__file__))
+
+	# Create the full path for the log file
+	log_file_path = os.path.join(current_file_directory, "new_log.txt")
+
+	# Set verbose to the log file path
+	sim.setVerbose(log_file_path)
 
 	listener = OutputListener()
-	sim.setListenPorts(controller.out_ui, listener.add)
+	sim.setListenPorts(model.out_ui, listener.add)
 	sim.simulate()
+
 

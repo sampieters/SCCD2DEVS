@@ -564,7 +564,8 @@ class ControllerBase(object):
         self.object_manager.start()
     
     def stop(self):
-        pass
+        #TODO
+        self.tracers.stopTracers()
 
     def addInput(self, input_event_list, time_offset = 0, force_internal=False):
         # force_internal is for narrow_cast events, otherwise these would arrive as external events (on the current wall-clock time)
@@ -601,10 +602,10 @@ class ControllerBase(object):
                 self.tracers.tracesInput(input_port, e)
 
     def outputEvent(self, event):
+        #TODO: This is the output event, needs to be traced
+        self.tracers.tracesOutput(event)
         for listener in self.output_listeners:
             listener.add(event)
-            #TODO: This is the output event, needs to be traced
-            self.tracers.tracesOutput(listener, event)
 
 
     def addOutputListener(self, ports):
@@ -777,6 +778,8 @@ class ThreadsControllerBase(ControllerBase):
                 self.handleInput()
 
             self.object_manager.stepAll()
+            self.tracers.traces(self.getSimulatedTime()) 
+            
             
             # wait until next timeout
             earliest_event_time = self.getEarliestEventTime()

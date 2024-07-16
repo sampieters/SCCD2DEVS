@@ -30,7 +30,8 @@
                 self.num_floors = 0
                 self.button_num = FLOORS
 
-                self.next_elevator_pos = None
+                self.elevator_pos = None
+                self.elevator_dim = None
             </body>
         </constructor>
         <scxml initial="creating_window">
@@ -168,6 +169,8 @@
                         <parameter expr="floor_num" />
                         <parameter expr="x" />
                         <parameter expr="y" />
+                        <parameter expr="self.elevator_pos" />
+                        <parameter expr="self.elevator_dim" />
                     </raise>
                 </transition>
                 <transition event='instance_created' target='.'>
@@ -183,10 +186,14 @@
                     <parameter name="pos" type="dict"/>
                     <parameter name="dim" type="dict"/>
                     <parameter name="vel" type="int"/>
-                    <raise scope="broad" event="update_bounds">
+                    <raise scope="broad" event="update_elevator_bounds">
                         <parameter expr="pos" />
                         <parameter expr="dim" />
                         <parameter expr="vel" />
+                        <script>
+                            self.elevator_pos = pos
+                            self.elevator_dim = dim
+                        </script>
                     </raise>
                 </transition>
                 <transition event='button_pressed' target='.'>
@@ -401,10 +408,12 @@
                                     self.vel = -2
                                 else:
                                     self.vel = 2
+
+                                self.current_floor = floor_number
                                 
                                 height = (CANVAS_DIMS[1] - 150)
                                 y_dim = (height - ((FLOORS - 1) * FLOOR_SPACE)) / FLOORS
-                                self.next_pos['y'] = height - (y_dim /2) - (floor_number * (y_dim + FLOOR_SPACE));
+                                self.next_pos['y'] = height - (y_dim /2) - (self.current_floor * (y_dim + FLOOR_SPACE));
                             </script>
                         </transition>
                     </state>
@@ -427,7 +436,7 @@
                                 self.pos['y'] += self.vel
                             </script>
                         </transition>
-                        <transition target="../idle" cond="(self.pos['y']) &lt; self.next_pos['y']">
+                        <transition target="../idle" cond="(self.vel &gt; 0 and self.pos['y'] &gt; self.next_pos['y']) or (self.vel &lt; 0 and self.pos['y'] &lt; self.next_pos['y'])">
                             <raise scope="narrow" event="open_elevator" target="'parent'" />
                         </transition>
                     </state>
@@ -449,6 +458,8 @@
             <parameter name="floor_num" />
             <parameter name="x" />
             <parameter name="y" />
+            <parameter name="elevator_pos" />
+            <parameter name="elevator_dim" />
             <body>
                 <![CDATA[
                 self.canvas_id = canvas_id;
@@ -458,8 +469,8 @@
 
                 self.elevator_floor = 0;
                 self.elevator_open = True;
-                self.rect_pos = None;
-                self.rect_dim = None;
+                self.rect_pos = elevator_pos;
+                self.rect_dim = elevator_dim;
 
                 self.r = 5.0;
                 self.vel = {'x': random.uniform(-5.0, 5.0), 'y': random.uniform(-5.0, 5.0)};
@@ -563,7 +574,7 @@
                         </script>
                     </transition>
                     <transition target="../ball_delete" cond="self.pos['x'] - self.r &lt; 2" />
-                    <transition event="update_bounds" target=".">
+                    <transition event="update_elevator_bounds" target=".">
                         <parameter name="pos" type="dict" />
                         <parameter name="dim" type="dict" />
                         <parameter name="vel" type="int" />

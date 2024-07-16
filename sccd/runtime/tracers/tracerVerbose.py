@@ -69,7 +69,7 @@ class TracerVerbose(BaseTracer):
         self.text += "\t\tState: %s\n" % str(State)
         #print(text)
     
-    def traceOutput(self, listener, event):
+    def traceOutput(self, event):
         self.text += "\n"
         self.text += "OUTPUT EVENT to port <%s>\n" % event.port
         self.text += "\t\Event: %s\n" % str(event)

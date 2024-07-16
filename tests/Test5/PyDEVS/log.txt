@@ -1,51 +1,87 @@
-output_event , received on: 0.00 seconds
-0.00s - Debugger warning: It seems that frozen modules are being used, which may
-0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
-0.00s - to python to disable frozen modules.
-0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
-Traceback (most recent call last):
-  File "/Users/sampieters/.vscode/extensions/ms-python.debugpy-2024.8.0-darwin-arm64/bundled/libs/debugpy/_vendored/pydevd/pydevd.py", line 3489, in <module>
-    main()
-  File "/Users/sampieters/.vscode/extensions/ms-python.debugpy-2024.8.0-darwin-arm64/bundled/libs/debugpy/_vendored/pydevd/pydevd.py", line 3482, in main
-    globals = debugger.run(setup['file'], None, None, is_module)
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/sampieters/.vscode/extensions/ms-python.debugpy-2024.8.0-darwin-arm64/bundled/libs/debugpy/_vendored/pydevd/pydevd.py", line 2510, in run
-    return self._exec(is_module, entry_point_fn, module_name, file, globals, locals)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/sampieters/.vscode/extensions/ms-python.debugpy-2024.8.0-darwin-arm64/bundled/libs/debugpy/_vendored/pydevd/pydevd.py", line 2517, in _exec
-    globals = pydevd_runpy.run_path(file, globals, '__main__')
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/sampieters/.vscode/extensions/ms-python.debugpy-2024.8.0-darwin-arm64/bundled/libs/debugpy/_vendored/pydevd/_pydevd_bundle/pydevd_runpy.py", line 321, in run_path
-    return _run_module_code(code, init_globals, run_name,
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/sampieters/.vscode/extensions/ms-python.debugpy-2024.8.0-darwin-arm64/bundled/libs/debugpy/_vendored/pydevd/_pydevd_bundle/pydevd_runpy.py", line 135, in _run_module_code
-    _run_code(code, mod_globals, init_globals,
-  File "/Users/sampieters/.vscode/extensions/ms-python.debugpy-2024.8.0-darwin-arm64/bundled/libs/debugpy/_vendored/pydevd/_pydevd_bundle/pydevd_runpy.py", line 124, in _run_code
-    exec(code, run_globals)
-  File "./tests/Test5/PyDEVS/runner.py", line 21, in <module>
-    sim.simulate()
-  File "/Users/sampieters/Desktop/VSCodeProjects/PythonProjects/SCCD2DEVS/pypdevs/simulator.py", line 618, in simulate
-    self.real_simulate()
-  File "/Users/sampieters/Desktop/VSCodeProjects/PythonProjects/SCCD2DEVS/pypdevs/simulator.py", line 736, in real_simulate
-    self.controller.getProxy(locations[0]).simulate_sync()
-  File "/Users/sampieters/Desktop/VSCodeProjects/PythonProjects/SCCD2DEVS/pypdevs/MPIRedirect.py", line 226, in localcall
-    return LocalRedirect.localCall(self, name, *args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/sampieters/Desktop/VSCodeProjects/PythonProjects/SCCD2DEVS/pypdevs/MPIRedirect.py", line 202, in localCall
-    return func(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/sampieters/Desktop/VSCodeProjects/PythonProjects/SCCD2DEVS/pypdevs/controller.py", line 175, in simulate_sync
-    BaseSimulator.simulate_sync(self)
-  File "/Users/sampieters/Desktop/VSCodeProjects/PythonProjects/SCCD2DEVS/pypdevs/basesimulator.py", line 1312, in simulate_sync
-    self.simulate()
-  File "/Users/sampieters/Desktop/VSCodeProjects/PythonProjects/SCCD2DEVS/pypdevs/controller.py", line 188, in simulate
-    BaseSimulator.simulate(self)
-  File "/Users/sampieters/Desktop/VSCodeProjects/PythonProjects/SCCD2DEVS/pypdevs/basesimulator.py", line 1336, in simulate
-    self.runsim()
-  File "/Users/sampieters/Desktop/VSCodeProjects/PythonProjects/SCCD2DEVS/pypdevs/basesimulator.py", line 1143, in runsim
-    if self.realtime and self.realtimeWait():
-                         ^^^^^^^^^^^^^^^^^^^
-  File "/Users/sampieters/Desktop/VSCodeProjects/PythonProjects/SCCD2DEVS/pypdevs/basesimulator.py", line 1128, in realtimeWait
-    for p, z in event_port.routing_outline:
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^
-AttributeError: 'Port' object has no attribute 'routing_outline'
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	INITIAL CONDITIONS in model <controller.MainApp>
+		Initial State: None
+		Next scheduled internal transition at time inf
+
+
+	INITIAL CONDITIONS in model <controller.ObjectManager>
+		Initial State: None
+		Next scheduled internal transition at time 0.000000
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+				('MainApp', 'MainApp', (event name: start_instance; port: None; parameters: ['MainApp[0]']))
+			port <input>:
+			port <private_4_<narrow_cast>>:
+		New State: {0: <target.MainAppInstance object at 0x107125700>}
+		Next scheduled internal transition at time 0.000000
+
+
+	INTERNAL TRANSITION in model <controller.ObjectManager>
+		New State: <target.ObjectManagerState object at 0x107125610>
+		Output Port Configuration:
+			port <port1>:
+				('MainApp', 'MainApp', (event name: start_instance; port: None; parameters: ['MainApp[0]']))
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.ObjectManager>
+		Input Port Configuration:
+			port <input>:
+				('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))
+		New State: <target.ObjectManagerState object at 0x107125610>
+		Next scheduled internal transition at time 0.000000
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x107125700>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+				('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))
+			port <ui>:
+				(event name: output_event; port: ui; parameters: ['0.00'])
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+				('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))
+			port <input>:
+			port <private_4_<narrow_cast>>:
+		New State: {0: <target.MainAppInstance object at 0x107125700>}
+		Next scheduled internal transition at time 0.000000
+
+
+	INTERNAL TRANSITION in model <controller.ObjectManager>
+		New State: <target.ObjectManagerState object at 0x107125610>
+		Output Port Configuration:
+			port <port1>:
+				('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x107125700>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time inf
+

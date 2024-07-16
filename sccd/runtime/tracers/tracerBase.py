@@ -37,7 +37,7 @@ class BaseTracer:
 	def traceEnterState(self, StateChart, State):
 		pass
 	
-	def traceOutput(self, listener, event):
+	def traceOutput(self, event):
 		pass 
 
 	def traceInput(self, listener, event):

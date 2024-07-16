@@ -19,10 +19,10 @@ if __name__ == '__main__':
 		"ui": model.in_ui,  
 		"field_ui": model.atomic0.field_ui, 
 		"floor_ui": model.atomic1.floor_ui, 
-		"control_ui": model.atomic2.control_ui,
-		"button_ui": model.atomic3.button_ui,
-		"elevator_ui": model.atomic4.elevator_ui, 
-		"ball_ui": model.atomic5.ball_ui
+		#"control_ui": model.atomic2.control_ui,
+		"button_ui": model.atomic2.button_ui,
+		"elevator_ui": model.atomic3.elevator_ui, 
+		"ball_ui": model.atomic4.ball_ui
 		}
 
 	tkroot = tk.Tk()

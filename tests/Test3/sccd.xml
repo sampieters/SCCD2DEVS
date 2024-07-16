@@ -9,7 +9,7 @@
         <constructor>
             <body>
                 self.amount = 1
-            </body>
+            </body> 
         </constructor>
         <scxml initial="state1">
             <state id="state1">
