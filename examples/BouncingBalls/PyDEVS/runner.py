@@ -1,5 +1,5 @@
 import tkinter as tk
-import examples.BouncingBalls.PyDEVS.target as target
+import target as target
 from sccd.runtime.libs.ui_v2 import UI
 from sccd.runtime.DEVS_loop import DEVSSimulator
 
@@ -21,7 +21,7 @@ if __name__ == '__main__':
 	tkroot.withdraw()
 	sim = DEVSSimulator(model, refs)
 
-	sim.setVerbose()
+	#sim.setVerbose()
 	sim.setRealTimePlatformTk(tkroot)
 
 	ui = UI(tkroot, sim)

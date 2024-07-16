@@ -1,7 +1,8 @@
 <?xml version="1.1" ?>
-<diagram author="Sam Pieters" name="Dissasociate multiple instances">
+<diagram author="Sam Pieters" name="Dissasociate and associate an instance">
     <description>
-        Test 23: Dissasociate multiple instances
+        TODO: Does not work as I think it does
+        Test 13: Dissasociate an instance and then associate an instance again
     </description>
     <inport name="ui"/>
     <outport name="ui"/>
@@ -37,28 +38,7 @@
                 </transition>
             </state>
             <state id="state2">
-                <onentry>
-                    <raise scope="cd" event="create_instance">
-                        <parameter expr='"linkA"' />
-                        <parameter expr='"A"' />
-                    </raise>
-                </onentry>
-                <transition event='instance_created' target='../state3'>
-                    <parameter name="association_name" type="string"/>
-                    <script>
-                        self.association_name = association_name
-                    </script>
-                    <raise port="ui" event="instance_created_succesfully">
-                        <parameter expr="str('%.2f' % (self.getSimulatedTime() / 1000.0))" />
-                        <parameter expr="association_name" />
-                    </raise>
-                    <raise scope="cd" event="start_instance">
-                        <parameter expr="association_name" />
-                    </raise>
-                </transition>
-            </state>
-            <state id="state3">
-                <transition event='instance_started' target='../state4'>
+                <transition event='instance_started' target='../state3'>
                     <parameter name="association_name" type="string"/>
                     <raise port="ui" event="instance_started_succesfully">
                         <parameter expr="str('%.2f' % (self.getSimulatedTime() / 1000.0))" />
@@ -69,13 +49,13 @@
                     </raise>
                 </transition>
             </state>
-            <state id="state4">
+            <state id="state3">
                 <onentry>
                     <raise scope="cd" event='disassociate_instance'>
                         <parameter expr='"linkA"' />
                     </raise>
                 </onentry>
-                <transition event='instance_disassociated' target='../state5'>
+                <transition event='instance_disassociated' target='../state4'>
                     <parameter name='deleted_links' />
                     <raise port="ui" event="instance_disassociated_succesfully">
                         <parameter expr="str('%.2f' % (self.getSimulatedTime() / 1000.0))" />
@@ -83,10 +63,23 @@
                     </raise>
                 </transition>
             </state>
-            <state id="state5">
+            <state id="state4">
                 <onentry>
                     <raise scope="narrow" event="sanity_check" target="self.association_name" />
                 </onentry>
+                <transition target='../state5'>
+                    <raise scope="cd" event='associate_instance'>
+                        <parameter expr='self.association_name' />
+                        <parameter expr='"linkA"' />
+                    </raise>
+                </transition>
+            </state>
+            <state id="state5">
+                <transition event='instance_associated' target='.'>
+                    <parameter name='created_links' />
+                    <raise scope="narrow" event="sanity_check" target="created_links" />
+                </transition>
+
             </state>
         </scxml>
     </class>

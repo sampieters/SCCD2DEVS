@@ -730,8 +730,8 @@ class ObjectManagerBase(AtomicDEVS):
     # broadcast an event to all instances
     def broadcast(self, source, new_event, time_offset = 0):
         for i in self.instances:
-            if i != source:
-                i.addEvent(new_event, time_offset)
+            if self.instances[i] != source:
+                self.instances[i].addEvent(new_event, time_offset)
         
     def stepAll(self):
         self.step()
@@ -809,13 +809,6 @@ class ObjectManagerBase(AtomicDEVS):
 
     def outputEvent(self, event):
         self.to_send.append(event)
-        #self.to_send.append((self.name, None, event))
-
-
-
-        #for listener in self.output_listeners:
-        #    self.to_send.append((self.name, None, event))
-        #   listener.add(event)
 
     def processAssociationReference(self, input_string):
         if len(input_string) == 0:
@@ -994,7 +987,8 @@ class ObjectManagerBase(AtomicDEVS):
                 association = current["instance"].associations[name]
                 if (index >= 0 ):
                     try:
-                        check = association.instances[index]
+                        # TODO: check if this check works
+                        check = association.instances_to_ids[index]
                         nexts.append({
                             "to_class": association.to_class,
                             "instance": index,
@@ -1072,17 +1066,22 @@ class ObjectManagerBase(AtomicDEVS):
                         if not (assoc_name == "parent"):
                             traversal_list = self.processAssociationReference(assoc_name)
                             #instances = self.getInstances(i["instance"], traversal_list)
-                            #if len(instances) > 0:
-                            #    pass
+                            instances = self.getInstances(i, traversal_list)
+                            if len(instances) > 0:
+                                raise RuntimeException("Error removing instance from association %s, still %i children left connected with association %s" % (association_name, len(instances), assoc_name))
                     i.user_defined_destructor()
                     i.stop()
-                self.instances = {key: value for key, value in self.instances.items() if key not in input[2].parameters[1]}
 
                 #if not isinstance(input[2].parameters[1], list):
-                    
 
-                ev = Event("instance_deleted", None, [input[2].parameters[0]], input[2].instance)
+                self.instances = {key: value for key, value in self.instances.items() if key not in input[2].parameters[1]}
+                
+                    
+                ev = Event("instance_deleted", None, [input[2].parameters[0], input[2].parameters[1]], input[2].instance)
+                    #ev = Event("instance_deleted", None, input[2].parameters[1], input[2].instance)
+                #ev = Event("instance_deleted", None, [input[2].parameters[0]], input[2].instance)
                 self.to_send.append((input[1], input[0], ev))
+                
             elif input[2].name == "instance_created":
                 instance = self.instances[input[2].instance]
                 
@@ -1103,13 +1102,51 @@ class ObjectManagerBase(AtomicDEVS):
                 instance = self.instances[input[2].instance]
                 instance.addEvent(input[2])
             elif input[2].name == "instance_deleted":
-                instance = self.instances[input[2].instance]
-                for association in instance.associations.items():
-                    if association[1].to_class == input[0]:
-                        for assoc in input[2].parameters:
-                            index = self.processAssociationReference(assoc)[0][1]
-                            association[1].removeInstance(index)
-                instance.addEvent(input[2])
+                source = self.instances[input[2].instance]
+                association_name = input[2].parameters[0]
+
+                traversal_list = self.processAssociationReference(association_name)
+                instances = self.getInstances(source, traversal_list)
+                association = source.associations[traversal_list[0][0]]
+
+                for index, instance in enumerate(instances):
+                    try:
+                        #for assoc_name in i["instance"].associations:
+                        #    if assoc_name != 'parent':
+                        #        traversal_list = self.processAssociationReference(assoc_name)
+                        #        instances = self.getInstances(i["instance"], traversal_list)
+                        #        if len(instances) > 0:
+                        #            raise RuntimeException("Error removing instance from association %s, still %i children left connected with association %s" % (association_name, len(instances), assoc_name))
+                        #del i["instance"].controller.input_ports[i["instance"].narrow_cast_port]
+                        association.removeInstance(instance["instance"])
+                        #self.instances.discard(i["instance"])
+                        #self.eventless.discard(i["instance"])
+                        #instances.pop(index, None)
+                        #self.eventless.discard(i)
+                    except AssociationException as exception:
+                        raise RuntimeException("Error removing instance from association '" + association_name + "': " + str(exception))
+                
+                #instances = []
+                
+                source.addEvent(Event("instance_deleted", parameters = [input[2].parameters[1]]))
+
+
+
+                #instance = self.instances[input[2].instance]
+
+                #assoc_link = input[2].parameters[0]
+                #assoc_name, assoc_index = self.processAssociationReference(assoc_link)[0]
+
+                #associations = instance.associations[assoc_link]
+
+                #for association in instance.associations.items():
+                #    if association[1].to_class == input[0]:
+                #for index in input[2].parameters[1]:
+                #    associations.removeInstance(index)
+                            #index = self.processAssociationReference(assoc)[0][1]
+                    #association[1].removeInstance(index)
+                            #association[1].removeInstance(input[2].instance)
+                #instance.addEvent(input[2])
             else:
                 ev = input[2]
                 self.addInput(ev)
