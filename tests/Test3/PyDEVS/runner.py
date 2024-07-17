@@ -12,8 +12,11 @@ if __name__ == '__main__':
 	model = target.Controller(name="controller")
 	refs = {"ui": model.in_ui}
 	sim = DEVSSimulator(model, refs)
-
-	#listener = OutputListener()
-	#sim.setListenPorts(model.out_ui, listener.add)
+	sim.setVerbose(None)
 	sim.simulate()
+    #sim.setRealTime(True)
 
+	# Set verbose to the log file path
+    #sim.setVerbose("./tests/Test3/PyDEVS/log.txt")
+
+    
