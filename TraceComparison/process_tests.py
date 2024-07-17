@@ -72,7 +72,7 @@ def run_pydevs_sccd(full_directory):
     model = target.Controller(name="controller")
     refs = {"ui": model.in_ui}
     sim = DEVSSimulator(model, refs)
-    sim.setRealTime(True)
+    sim.setRealTime(False)
 
 	# Create the full path for the log file
     log_file_path = os.path.join(full_directory, "PyDEVS", "log.txt")
@@ -86,11 +86,70 @@ def natural_sort_key(s):
     # Split the string into a list of strings and numbers
     return [int(text) if text.isdigit() else text.lower() for text in re.split(r'(\d+)', s)]
 
+def extract_pattern(log_file_path, pattern):
+    """
+    Extract lines from a log file that match a given pattern.
+
+    Args:
+        log_file_path (str): Path to the log file.
+        pattern (str): Regular expression pattern to match lines.
+
+    Returns:
+        list: List of matched lines.
+    """
+    with open(log_file_path, 'r') as log_file:
+        lines = log_file.readlines()
+
+    matched_lines = [line.strip() for line in lines if re.search(pattern, line)]
+    return matched_lines
+
+def extract_devs_output_events(log_file_path):
+    pattern = r'^\s*\(event name:.*\)$'
+    return extract_pattern(log_file_path, pattern)
+
+def extract_python_output_events(log_file_path):
+    pattern = r'^\s*\\Event: \(event name:.*\)$'
+    events = extract_pattern(log_file_path, pattern)
+    # Remove everything before '(' in each string
+    return [event[event.index('('):] for event in events]
+
+
+
 def check_traces(full_directory):
+    # ANSI color escape codes
+    RED = '\033[91m'    # Red color
+    GREEN = '\033[92m'  # Green color
+    YELLOW = '\033[93m' # Yellow color
+    ENDC = '\033[0m'   # Reset color to default
+
     pydevs_log = os.path.join(full_directory, "PyDEVS", "log.txt")
     python_log = os.path.join(full_directory, "Python", "log.txt")
 
+    pydevs_output_events = extract_devs_output_events(pydevs_log)
+    python_output_events = extract_python_output_events(python_log)
+
+
+    if len(pydevs_output_events) != len(python_output_events):
+        print(f"Difference in length: {len(pydevs_output_events)} vs {len(python_output_events)}")
+        return
     
+    if len(pydevs_output_events) == 0 and len(python_output_events) == 0:
+        print(YELLOW + "No trace events of current type(s) are found! Do more detailed tests" + ENDC)
+        return
+
+
+    differences_found = False
+    for index, (item1, item2) in enumerate(zip(pydevs_output_events, python_output_events)):
+        if item1 != item2:
+            print(f"Difference at index {index}:")
+            print(f"   List 1 ({len(pydevs_output_events)} elements): {item1}")
+            print(f"   List 2 ({len(python_output_events)} elements): {item2}")
+            differences_found = True
+
+    if differences_found:
+        print(RED  + "Failed" + ENDC)
+    else:
+        print(GREEN + "Passed" + ENDC)
 
 
 

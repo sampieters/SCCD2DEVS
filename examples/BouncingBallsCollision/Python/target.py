@@ -215,7 +215,7 @@ class Field(RuntimeClassBase):
         Field.user_defined_constructor(self)
     
     def user_defined_constructor(self):
-        pass
+        self.balls = []
     
     def user_defined_destructor(self):
         pass
@@ -338,10 +338,14 @@ class Field(RuntimeClassBase):
         self.states["/root/running/main_behaviour/running"].addTransition(_root_running_main_behaviour_running_0)
         
         # transition /root/running/main_behaviour/creating_ball
-        _root_running_main_behaviour_creating_ball_0 = Transition(self, self.states["/root/running/main_behaviour/creating_ball"], [self.states["/root/running/main_behaviour/running"]])
+        _root_running_main_behaviour_creating_ball_0 = Transition(self, self.states["/root/running/main_behaviour/creating_ball"], [self.states["/root/running/main_behaviour/creating_ball"]])
         _root_running_main_behaviour_creating_ball_0.setAction(self._root_running_main_behaviour_creating_ball_0_exec)
         _root_running_main_behaviour_creating_ball_0.setTrigger(Event("instance_created", None))
         self.states["/root/running/main_behaviour/creating_ball"].addTransition(_root_running_main_behaviour_creating_ball_0)
+        _root_running_main_behaviour_creating_ball_1 = Transition(self, self.states["/root/running/main_behaviour/creating_ball"], [self.states["/root/running/main_behaviour/running"]])
+        _root_running_main_behaviour_creating_ball_1.setAction(self._root_running_main_behaviour_creating_ball_1_exec)
+        _root_running_main_behaviour_creating_ball_1.setTrigger(Event("init_params", None))
+        self.states["/root/running/main_behaviour/creating_ball"].addTransition(_root_running_main_behaviour_creating_ball_1)
         
         # transition /root/running/deleting_behaviour/running
         _root_running_deleting_behaviour_running_0 = Transition(self, self.states["/root/running/deleting_behaviour/running"], [self.states["/root/running/deleting_behaviour/running"]])
@@ -417,7 +421,14 @@ class Field(RuntimeClassBase):
     def _root_running_main_behaviour_creating_ball_0_exec(self, parameters):
         association_name = parameters[0]
         self.big_step.outputEventOM(Event("start_instance", None, [self, association_name]))
-        self.big_step.outputEventOM(Event("narrow_cast", None, [self, association_name, Event("set_association_name", None, [association_name])]))
+        self.big_step.outputEventOM(Event("narrow_cast", None, [self, association_name, Event("get_init_params", None, [association_name])]))
+    
+    def _root_running_main_behaviour_creating_ball_1_exec(self, parameters):
+        link_id = parameters[0]
+        ball_r = parameters[1]
+        ball_vel = parameters[2]
+        ball_pos = parameters[3]
+        self.balls.append({'id': link_id, 'r': ball_r, 'vel': ball_vel, 'pos': ball_pos})
     
     def _root_running_deleting_behaviour_running_0_exec(self, parameters):
         association_name = parameters[0]
@@ -610,7 +621,7 @@ class Ball(RuntimeClassBase):
         # transition /main_behaviour/initializing
         _main_behaviour_initializing_0 = Transition(self, self.states["/main_behaviour/initializing"], [self.states["/main_behaviour/creating_circle"]])
         _main_behaviour_initializing_0.setAction(self._main_behaviour_initializing_0_exec)
-        _main_behaviour_initializing_0.setTrigger(Event("set_association_name", None))
+        _main_behaviour_initializing_0.setTrigger(Event("get_init_params", None))
         self.states["/main_behaviour/initializing"].addTransition(_main_behaviour_initializing_0)
         
         # transition /main_behaviour/creating_circle
@@ -663,6 +674,7 @@ class Ball(RuntimeClassBase):
     def _main_behaviour_initializing_0_exec(self, parameters):
         association_name = parameters[0]
         self.association_name = association_name
+        self.big_step.outputEventOM(Event("narrow_cast", None, [self, 'parent', Event("init_params", None, [self.association_name, self.r, self.vel, self.pos])]))
     
     def _main_behaviour_creating_circle_0_exec(self, parameters):
         canvas_id = parameters[0]

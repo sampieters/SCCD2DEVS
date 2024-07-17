@@ -93,6 +93,11 @@
             <association name="buttons" class="Button" />
             <association name="parent" class="MainApp" min="1" max="1" />
         </relationships>
+        <constructor>
+            <body>
+                self.balls = []
+            </body>
+        </constructor>
         <scxml initial="root">
             <state id="root" initial="waiting">
                 <state id="waiting">
@@ -208,14 +213,23 @@
                             </transition>
                         </state>
                         <state id="creating_ball">
-                            <transition event="instance_created" target="../running">
+                            <transition event="instance_created" target=".">
                                 <parameter name="association_name" type="string"/>
                                 <raise scope="cd" event="start_instance">
                                     <parameter expr="association_name" />
                                 </raise>
-                                <raise scope="narrow" event="set_association_name" target="association_name">
+                                <raise scope="narrow" event="get_init_params" target="association_name">
                                     <parameter expr="association_name" />
                                 </raise>
+                            </transition>
+                            <transition event="init_params" target='../running'>
+                                <parameter name="link_id" />
+                                <parameter name="ball_r" />
+                                <parameter name="ball_vel" />
+                                <parameter name="ball_pos" />
+                                <script>
+                                    self.balls.append({'id': link_id, 'r': ball_r, 'vel': ball_vel, 'pos': ball_pos})
+                                </script>
                             </transition>
                         </state>
                     </state>
@@ -226,6 +240,11 @@
                                 <raise scope="cd" event="delete_instance">
                                     <parameter expr='association_name' />
                                 </raise>
+                            </transition>
+                            <transition event="move_ball" target='.'>
+                                <parameter name="association_name"/>
+                                <parameter name="ball_pos"/>
+                                <parameter name="ball_vel"/>
                             </transition>
                         </state>
                     </state>
@@ -340,11 +359,17 @@
         <scxml initial="main_behaviour">
             <state id="main_behaviour" initial="initializing">
                 <state id="initializing">
-                    <transition event="set_association_name" target="../creating_circle">
+                    <transition event="get_init_params" target="../creating_circle">
                         <parameter name="association_name" type="str" />
                         <script>
                             self.association_name = association_name
                         </script>
+                        <raise event="init_params" scope="narrow" target="'parent'">
+                            <parameter expr="self.association_name" />
+                            <parameter expr="self.r" />
+                            <parameter expr="self.vel" />
+                            <parameter expr="self.pos" />
+                        </raise>
                     </transition>
                 </state>
                 <state id="creating_circle">
@@ -388,7 +413,6 @@
                     </transition>
                 </state>
                 <state id="bouncing">
-                    <!-- <transition after="(20 - self.getSimulatedTime() % 20) / 1000.0" target="."> -->
                     <transition after="0.02" target=".">
                         <script>
                             <![CDATA[
@@ -404,6 +428,11 @@
                             <parameter expr="self.circle_id"/>
                             <parameter expr="self.vel['x']"/>
                             <parameter expr="self.vel['y']"/>
+                        </raise>
+                        <raise event="move_ball" scope="narrow" target="'parent'">
+                            <parameter expr="self.association_name"/>
+                            <parameter expr="self.pos"/>
+                            <parameter expr="self.vel"/>
                         </raise>
                         <script>
                             self.pos['x'] += self.vel['x']

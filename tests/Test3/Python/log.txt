@@ -1,0 +1,87 @@
+__  Current Time:   0.000000 __________________________________________ 
+
+__  Current Time:   1.000000 __________________________________________ 
+
+EXIT STATE in model <MainApp>
+		State: /state1
+
+ENTER STATE in model <MainApp>
+		State: /state2
+
+EXIT STATE in model <MainApp>
+		State: /state2
+
+ENTER STATE in model <MainApp>
+		State: /state1
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: test_event; port: ui; parameters: ['1', '1.00'])
+
+__  Current Time:   2.000000 __________________________________________ 
+
+EXIT STATE in model <MainApp>
+		State: /state1
+
+ENTER STATE in model <MainApp>
+		State: /state2
+
+EXIT STATE in model <MainApp>
+		State: /state2
+
+ENTER STATE in model <MainApp>
+		State: /state1
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: test_event; port: ui; parameters: ['2', '2.00'])
+
+__  Current Time:   3.000000 __________________________________________ 
+
+EXIT STATE in model <MainApp>
+		State: /state1
+
+ENTER STATE in model <MainApp>
+		State: /state2
+
+EXIT STATE in model <MainApp>
+		State: /state2
+
+ENTER STATE in model <MainApp>
+		State: /state1
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: test_event; port: ui; parameters: ['3', '3.00'])
+
+__  Current Time:   4.000000 __________________________________________ 
+
+EXIT STATE in model <MainApp>
+		State: /state1
+
+ENTER STATE in model <MainApp>
+		State: /state2
+
+EXIT STATE in model <MainApp>
+		State: /state2
+
+ENTER STATE in model <MainApp>
+		State: /state1
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: test_event; port: ui; parameters: ['4', '4.00'])
+
+__  Current Time:   5.000000 __________________________________________ 
+
+EXIT STATE in model <MainApp>
+		State: /state1
+
+ENTER STATE in model <MainApp>
+		State: /state2
+
+EXIT STATE in model <MainApp>
+		State: /state2
+
+ENTER STATE in model <MainApp>
+		State: /end
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: test_event; port: ui; parameters: ['5', '5.00'])
+
