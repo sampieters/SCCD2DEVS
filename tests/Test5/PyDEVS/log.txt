@@ -21,12 +21,12 @@ __  Current Time:   0.000000 __________________________________________
 				('MainApp', 'MainApp', (event name: start_instance; port: None; parameters: ['MainApp[0]']))
 			port <input>:
 			port <private_5_<narrow_cast>>:
-		New State: {0: <target.MainAppInstance object at 0x10486d160>}
+		New State: {0: <target.MainAppInstance object at 0x10426a180>}
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <controller.ObjectManager>
-		New State: <target.ObjectManagerState object at 0x10486e840>
+		New State: <target.ObjectManagerState object at 0x10426fb60>
 		Output Port Configuration:
 			port <port1>:
 				('MainApp', 'MainApp', (event name: start_instance; port: None; parameters: ['MainApp[0]']))
@@ -40,12 +40,12 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))
-		New State: <target.ObjectManagerState object at 0x10486e840>
+		New State: <target.ObjectManagerState object at 0x10426fb60>
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <controller.MainApp>
-		New State: {0: <target.MainAppInstance object at 0x10486d160>}
+		New State: {0: <target.MainAppInstance object at 0x10426a180>}
 		Output Port Configuration:
 			port <obj_manager_out>:
 				('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))
@@ -63,12 +63,12 @@ __  Current Time:   0.000000 __________________________________________
 				('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))
 			port <input>:
 			port <private_5_<narrow_cast>>:
-		New State: {0: <target.MainAppInstance object at 0x10486d160>}
+		New State: {0: <target.MainAppInstance object at 0x10426a180>}
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <controller.ObjectManager>
-		New State: <target.ObjectManagerState object at 0x10486e840>
+		New State: <target.ObjectManagerState object at 0x10426fb60>
 		Output Port Configuration:
 			port <port1>:
 				('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))
@@ -79,7 +79,7 @@ __  Current Time:   0.000000 __________________________________________
 
 
 	INTERNAL TRANSITION in model <controller.MainApp>
-		New State: {0: <target.MainAppInstance object at 0x10486d160>}
+		New State: {0: <target.MainAppInstance object at 0x10426a180>}
 		Output Port Configuration:
 			port <obj_manager_out>:
 			port <ui>:
