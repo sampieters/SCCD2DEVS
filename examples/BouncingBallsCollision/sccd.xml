@@ -91,13 +91,36 @@
         <relationships>
             <association name="balls" class="Ball" />
             <association name="buttons" class="Button" />
+            <association name="collisions" class="CollisionPhysics" />
             <association name="parent" class="MainApp" min="1" max="1" />
         </relationships>
         <constructor>
             <body>
-                self.balls = []
+                self.balls = {}
+                self.collisions = []
             </body>
         </constructor>
+        <method name="distance">
+            <parameter name="point1" />
+            <parameter name="point2" />
+            <body>
+                return ((point1['x'] - point2['x']) ** 2 + (point1['y'] - point2['y']) ** 2) ** 0.5
+            </body>
+        </method>
+        <method name="check_collision">
+            <parameter name="ball1" />
+            <parameter name="ball2" />
+            <body>
+                <![CDATA[
+                    # Calculate the distance between the centers of the two balls
+                    dist = self.distance(ball1['pos'], ball2['pos'])
+                    # Calculate the sum of the radii
+                    radii_sum = ball1['r'] + ball2['r']
+                    # Check if they are colliding
+                    return dist <= radii_sum
+                ]]>
+            </body>
+        </method>
         <scxml initial="root">
             <state id="root" initial="waiting">
                 <state id="waiting">
@@ -228,7 +251,7 @@
                                 <parameter name="ball_vel" />
                                 <parameter name="ball_pos" />
                                 <script>
-                                    self.balls.append({'id': link_id, 'r': ball_r, 'vel': ball_vel, 'pos': ball_pos})
+                                    self.balls[link_id] = {'r': ball_r, 'vel': ball_vel, 'pos': ball_pos}
                                 </script>
                             </transition>
                         </state>
@@ -242,9 +265,36 @@
                                 </raise>
                             </transition>
                             <transition event="move_ball" target='.'>
-                                <parameter name="association_name"/>
+                                <parameter name="link_id"/>
                                 <parameter name="ball_pos"/>
                                 <parameter name="ball_vel"/>
+                                <script>
+                                    # Update the position and velocity
+                                    self.balls[link_id]['pos'] = ball_pos
+                                    self.balls[link_id]['vel'] = ball_vel
+                                    
+                                    # Check for collisions
+                                    collisions = []
+                                    for other_id, other_ball in self.balls.items():
+                                        if other_id != link_id:  # Don't check collision with itself
+                                            if self.check_collision(self.balls[link_id], other_ball):
+                                                self.collisions.append((link_id, other_id))
+                                </script>
+                            </transition>
+                            <transition cond="self.collisions" target=".">
+                                <raise scope="cd" event="create_instance">
+                                    <parameter expr='"collisions"' />
+                                    <parameter expr='"CollisionPhysics"' />
+                                    <parameter expr="self.collisions[-1][0]" />
+                                    <parameter expr="self.collisions[-1][1]" />
+                                </raise>
+                                <raise scope="cd" event="start_instance" >
+                                </raise>
+
+                                <script>
+                                    print("COLLISION")
+                                    self.collisions = []
+                                </script>
                             </transition>
                         </state>
                     </state>
@@ -508,6 +558,76 @@
                 </state>
             </state>
             <state id='deleted' />
+        </scxml>
+    </class>
+
+    <class name="CollisionPhysics">
+        <atrribute name="ball1_info" />
+        <attribute name="ball2_info" />
+        <inport name="physics_ui" />
+        <relationships>
+            <association name="parent" class="Field" min="1" max="1" />
+        </relationships>
+        <constructor>
+            <parameter name="ball1_info" />
+            <parameter name="ball2_info" />
+            <body>
+                self.ball1_info = ball1_info
+                self.ball2_info = ball2_info
+            </body>
+        </constructor>
+        <method name="resolve_velocity">
+            <parameter name="vel" />
+            <parameter name="normal" />
+            <body>
+                # Resolve the velocity into normal and tangential components.
+                normal_velocity = np.dot(vel, normal) * normal
+                tangential_velocity = vel - normal_velocity
+                return normal_velocity, tangential_velocity
+            </body>
+        </method>
+        <method name="handle_collision">
+            <body>
+                pos1 = np.array(ball1['pos'])
+                vel1 = np.array(ball1['vel'])
+                r1 = ball1['r']
+
+                pos2 = np.array(ball2['pos'])
+                vel2 = np.array(ball2['vel'])
+                r2 = ball2['r']
+
+                # Calculate the normal vector from the center of ball1 to the center of ball2
+                normal = pos2 - pos1
+                normal = normal / np.linalg.norm(normal)  # Normalize the normal vector
+
+                # Calculate the relative velocity
+                relative_velocity = vel1 - vel2
+
+                # Calculate the velocities in the normal direction
+                vel1_normal, vel1_tangential = self.resolve_velocity(vel1, normal)
+                vel2_normal, vel2_tangential = self.resolve_velocity(vel2, normal)
+
+                # Calculate new normal velocities after collision (1D elastic collision formula)
+                vel1_normal_new = ((r1 - r2) * vel1_normal + 2 * r2 * vel2_normal) / (r1 + r2)
+                vel2_normal_new = ((r2 - r1) * vel2_normal + 2 * r1 * vel1_normal) / (r1 + r2)
+
+                # Combine the new normal and original tangential components
+                vel1_new = vel1_normal_new + vel1_tangential
+                vel2_new = vel2_normal_new + vel2_tangential
+
+                # Update the velocities in the balls
+                ball1['vel'] = vel1_new.tolist()
+                ball2['vel'] = vel2_new.tolist()
+            </body>
+        </method>
+        <destructor>
+        </destructor>
+        <scxml initial="running">
+            <state id="running">
+                <onentry>
+
+                </onentry>
+            </state>
         </scxml>
     </class>
 </diagram>

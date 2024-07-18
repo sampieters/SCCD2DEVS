@@ -62,7 +62,6 @@ def run_python_sccd(full_directory):
 
     controller.start()
 
-
     controller.tracers.stopTracers()
 
 def run_pydevs_sccd(full_directory):
@@ -113,15 +112,7 @@ def extract_python_output_events(log_file_path):
     # Remove everything before '(' in each string
     return [event[event.index('('):] for event in events]
 
-
-
 def check_traces(full_directory):
-    # ANSI color escape codes
-    RED = '\033[91m'    # Red color
-    GREEN = '\033[92m'  # Green color
-    YELLOW = '\033[93m' # Yellow color
-    ENDC = '\033[0m'   # Reset color to default
-
     pydevs_log = os.path.join(full_directory, "PyDEVS", "log.txt")
     python_log = os.path.join(full_directory, "Python", "log.txt")
 
@@ -130,13 +121,10 @@ def check_traces(full_directory):
 
 
     if len(pydevs_output_events) != len(python_output_events):
-        print(f"Difference in length: {len(pydevs_output_events)} vs {len(python_output_events)}")
-        return
-    
-    if len(pydevs_output_events) == 0 and len(python_output_events) == 0:
-        print(YELLOW + "No trace events of current type(s) are found! Do more detailed tests" + ENDC)
-        return
+        return 0
 
+    if len(pydevs_output_events) == 0 and len(python_output_events) == 0:
+        return 2
 
     differences_found = False
     for index, (item1, item2) in enumerate(zip(pydevs_output_events, python_output_events)):
@@ -147,13 +135,17 @@ def check_traces(full_directory):
             differences_found = True
 
     if differences_found:
-        print(RED  + "Failed" + ENDC)
+        return 0
     else:
-        print(GREEN + "Passed" + ENDC)
-
-
+        return 1
 
 if __name__ == '__main__':
+    # ANSI color escape codes
+    RED = '\033[91m'    # Red color
+    GREEN = '\033[92m'  # Green color
+    YELLOW = '\033[93m' # Yellow color
+    ENDC = '\033[0m'    # Reset color to default
+
     tests_directory = "./tests"
 
     with os.scandir(tests_directory) as entries:
@@ -165,6 +157,7 @@ if __name__ == '__main__':
     # Sort the list of directories using natural sort
     sorted_dirs = sorted(all_test_dirs, key=natural_sort_key)
     
+    results = []
     for directory_name in sorted_dirs:
         full_directory = os.path.join(tests_directory, directory_name)
         if os.path.isdir(full_directory):
@@ -176,6 +169,19 @@ if __name__ == '__main__':
             run_python_sccd(full_directory)
             run_pydevs_sccd(full_directory)
 
-            check_traces(full_directory)
+            result = check_traces(full_directory)
+            results.append(result)
 
+            if result == 0:
+                print(RED + "Failed" + ENDC)
+            elif result == 1:
+                print(GREEN + "Passed" + ENDC)
+            else:
+                print(YELLOW + "Check deeper" + ENDC)
+
+    # Print summary
+    print("\nTest Summary:")
+    print(f"Passed: {GREEN}{results.count(1)}{ENDC}")
+    print(f"Failed: {RED}{results.count(0)}{ENDC}")
+    print(f"Check deeper: {YELLOW}{results.count(2)}{ENDC}")
 

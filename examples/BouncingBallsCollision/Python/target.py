@@ -215,10 +215,26 @@ class Field(RuntimeClassBase):
         Field.user_defined_constructor(self)
     
     def user_defined_constructor(self):
-        self.balls = []
+        self.balls = {}
+        self.collisions = []
     
     def user_defined_destructor(self):
         pass
+    
+    
+    # user defined method
+    def distance(self, point1, point2):
+        return ((point1['x'] - point2['x']) ** 2 + (point1['y'] - point2['y']) ** 2) ** 0.5
+    
+    
+    # user defined method
+    def check_collision(self, ball1, ball2):
+        # Calculate the distance between the centers of the two balls
+        dist = self.distance(ball1['pos'], ball2['pos'])
+        # Calculate the sum of the radii
+        radii_sum = ball1['r'] + ball2['r']
+        # Check if they are colliding
+        return dist <= radii_sum
     
     
     # builds Statechart structure
@@ -352,6 +368,15 @@ class Field(RuntimeClassBase):
         _root_running_deleting_behaviour_running_0.setAction(self._root_running_deleting_behaviour_running_0_exec)
         _root_running_deleting_behaviour_running_0.setTrigger(Event("delete_ball", None))
         self.states["/root/running/deleting_behaviour/running"].addTransition(_root_running_deleting_behaviour_running_0)
+        _root_running_deleting_behaviour_running_1 = Transition(self, self.states["/root/running/deleting_behaviour/running"], [self.states["/root/running/deleting_behaviour/running"]])
+        _root_running_deleting_behaviour_running_1.setAction(self._root_running_deleting_behaviour_running_1_exec)
+        _root_running_deleting_behaviour_running_1.setTrigger(Event("move_ball", None))
+        self.states["/root/running/deleting_behaviour/running"].addTransition(_root_running_deleting_behaviour_running_1)
+        _root_running_deleting_behaviour_running_2 = Transition(self, self.states["/root/running/deleting_behaviour/running"], [self.states["/root/running/deleting_behaviour/running"]])
+        _root_running_deleting_behaviour_running_2.setAction(self._root_running_deleting_behaviour_running_2_exec)
+        _root_running_deleting_behaviour_running_2.setTrigger(None)
+        _root_running_deleting_behaviour_running_2.setGuard(self._root_running_deleting_behaviour_running_2_guard)
+        self.states["/root/running/deleting_behaviour/running"].addTransition(_root_running_deleting_behaviour_running_2)
         
         # transition /root/running/child_behaviour/listening
         _root_running_child_behaviour_listening_0 = Transition(self, self.states["/root/running/child_behaviour/listening"], [self.states["/root/running/child_behaviour/listening"]])
@@ -428,11 +453,33 @@ class Field(RuntimeClassBase):
         ball_r = parameters[1]
         ball_vel = parameters[2]
         ball_pos = parameters[3]
-        self.balls.append({'id': link_id, 'r': ball_r, 'vel': ball_vel, 'pos': ball_pos})
+        self.balls[link_id] = {'r': ball_r, 'vel': ball_vel, 'pos': ball_pos}
     
     def _root_running_deleting_behaviour_running_0_exec(self, parameters):
         association_name = parameters[0]
         self.big_step.outputEventOM(Event("delete_instance", None, [self, association_name]))
+    
+    def _root_running_deleting_behaviour_running_1_exec(self, parameters):
+        link_id = parameters[0]
+        ball_pos = parameters[1]
+        ball_vel = parameters[2]
+        # Update the position and velocity
+        self.balls[link_id]['pos'] = ball_pos
+        self.balls[link_id]['vel'] = ball_vel
+        
+        # Check for collisions
+        collisions = []
+        for other_id, other_ball in self.balls.items():
+            if other_id != link_id:  # Don't check collision with itself
+                if self.check_collision(self.balls[link_id], other_ball):
+                    self.collisions.append((link_id, other_id))
+    
+    def _root_running_deleting_behaviour_running_2_exec(self, parameters):
+        print("COLLISION")
+        selected.collisions = []
+    
+    def _root_running_deleting_behaviour_running_2_guard(self, parameters):
+        return self.collisions
     
     def _root_running_child_behaviour_listening_0_exec(self, parameters):
         event_name = parameters[0]
@@ -691,6 +738,7 @@ class Ball(RuntimeClassBase):
         if self.pos['y']-self.r <= 0 or self.pos['y']+self.r >= CANVAS_DIMS[1]:
             self.vel['y'] = -self.vel['y'];
         self.big_step.outputEvent(Event("move_element", self.getOutPortName("ui"), [self.canvas_id, self.circle_id, self.vel['x'], self.vel['y']]))
+        self.big_step.outputEventOM(Event("narrow_cast", None, [self, 'parent', Event("move_ball", None, [self.association_name, self.pos, self.vel])]))
         self.pos['x'] += self.vel['x']
         self.pos['y'] += self.vel['y']
     
