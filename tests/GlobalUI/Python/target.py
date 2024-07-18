@@ -79,7 +79,6 @@ class ObjectManager(ObjectManagerBase):
         if class_name == "MainApp":
             instance = MainApp(self.controller)
             instance.associations = {}
-            instance.associations["linkA"] = Association("A", 0, -1)
         else:
             raise Exception("Cannot instantiate class " + class_name)
         return instance

@@ -10,6 +10,7 @@ Tkinter frame with bouncing balls in it.
 from sccd.runtime.statecharts_core import *
 from sccd.runtime.libs import ui_v2 as ui
 import random
+import numpy as np
 
 CANVAS_DIMS = (800, 550)
 
@@ -377,6 +378,18 @@ class Field(RuntimeClassBase):
         _root_running_deleting_behaviour_running_2.setTrigger(None)
         _root_running_deleting_behaviour_running_2.setGuard(self._root_running_deleting_behaviour_running_2_guard)
         self.states["/root/running/deleting_behaviour/running"].addTransition(_root_running_deleting_behaviour_running_2)
+        _root_running_deleting_behaviour_running_3 = Transition(self, self.states["/root/running/deleting_behaviour/running"], [self.states["/root/running/deleting_behaviour/running"]])
+        _root_running_deleting_behaviour_running_3.setAction(self._root_running_deleting_behaviour_running_3_exec)
+        _root_running_deleting_behaviour_running_3.setTrigger(Event("instance_created", None))
+        self.states["/root/running/deleting_behaviour/running"].addTransition(_root_running_deleting_behaviour_running_3)
+        _root_running_deleting_behaviour_running_4 = Transition(self, self.states["/root/running/deleting_behaviour/running"], [self.states["/root/running/deleting_behaviour/running"]])
+        _root_running_deleting_behaviour_running_4.setAction(self._root_running_deleting_behaviour_running_4_exec)
+        _root_running_deleting_behaviour_running_4.setTrigger(Event("update_vel", None))
+        self.states["/root/running/deleting_behaviour/running"].addTransition(_root_running_deleting_behaviour_running_4)
+        _root_running_deleting_behaviour_running_5 = Transition(self, self.states["/root/running/deleting_behaviour/running"], [self.states["/root/running/deleting_behaviour/running"]])
+        _root_running_deleting_behaviour_running_5.setAction(self._root_running_deleting_behaviour_running_5_exec)
+        _root_running_deleting_behaviour_running_5.setTrigger(Event("delete_physics", None))
+        self.states["/root/running/deleting_behaviour/running"].addTransition(_root_running_deleting_behaviour_running_5)
         
         # transition /root/running/child_behaviour/listening
         _root_running_child_behaviour_listening_0 = Transition(self, self.states["/root/running/child_behaviour/listening"], [self.states["/root/running/child_behaviour/listening"]])
@@ -475,11 +488,29 @@ class Field(RuntimeClassBase):
                     self.collisions.append((link_id, other_id))
     
     def _root_running_deleting_behaviour_running_2_exec(self, parameters):
+        self.big_step.outputEventOM(Event("create_instance", None, [self, "collisions", "CollisionPhysics", self.collisions[-1][0], self.collisions[-1][1], self.balls[self.collisions[-1][0]], self.balls[self.collisions[-1][1]]]))
         print("COLLISION")
-        selected.collisions = []
+        self.collisions = self.collisions[:-1]
     
     def _root_running_deleting_behaviour_running_2_guard(self, parameters):
         return self.collisions
+    
+    def _root_running_deleting_behaviour_running_3_exec(self, parameters):
+        association_name = parameters[0]
+        self.big_step.outputEventOM(Event("narrow_cast", None, [self, association_name, Event("set_association_name", None, [association_name])]))
+        self.big_step.outputEventOM(Event("start_instance", None, [self, association_name]))
+    
+    def _root_running_deleting_behaviour_running_4_exec(self, parameters):
+        ball1_id = parameters[0]
+        ball2_id = parameters[1]
+        new_vel1 = parameters[2]
+        new_vel2 = parameters[3]
+        self.big_step.outputEventOM(Event("narrow_cast", None, [self, ball1_id, Event("update_ball_vel", None, [new_vel1])]))
+        self.big_step.outputEventOM(Event("narrow_cast", None, [self, ball2_id, Event("update_ball_vel", None, [new_vel2])]))
+    
+    def _root_running_deleting_behaviour_running_5_exec(self, parameters):
+        association_id = parameters[0]
+        self.big_step.outputEventOM(Event("delete_instance", None, [self, association_id]))
     
     def _root_running_child_behaviour_listening_0_exec(self, parameters):
         event_name = parameters[0]
@@ -682,11 +713,15 @@ class Ball(RuntimeClassBase):
         _main_behaviour_bouncing_0.setAction(self._main_behaviour_bouncing_0_exec)
         _main_behaviour_bouncing_0.setTrigger(Event("_0after"))
         self.states["/main_behaviour/bouncing"].addTransition(_main_behaviour_bouncing_0)
-        _main_behaviour_bouncing_1 = Transition(self, self.states["/main_behaviour/bouncing"], [self.states["/main_behaviour/selected"]])
+        _main_behaviour_bouncing_1 = Transition(self, self.states["/main_behaviour/bouncing"], [self.states["/main_behaviour/bouncing"]])
         _main_behaviour_bouncing_1.setAction(self._main_behaviour_bouncing_1_exec)
-        _main_behaviour_bouncing_1.setTrigger(Event("mouse_press", self.getInPortName("ball_ui")))
-        _main_behaviour_bouncing_1.setGuard(self._main_behaviour_bouncing_1_guard)
+        _main_behaviour_bouncing_1.setTrigger(Event("update_ball_vel", None))
         self.states["/main_behaviour/bouncing"].addTransition(_main_behaviour_bouncing_1)
+        _main_behaviour_bouncing_2 = Transition(self, self.states["/main_behaviour/bouncing"], [self.states["/main_behaviour/selected"]])
+        _main_behaviour_bouncing_2.setAction(self._main_behaviour_bouncing_2_exec)
+        _main_behaviour_bouncing_2.setTrigger(Event("mouse_press", self.getInPortName("ball_ui")))
+        _main_behaviour_bouncing_2.setGuard(self._main_behaviour_bouncing_2_guard)
+        self.states["/main_behaviour/bouncing"].addTransition(_main_behaviour_bouncing_2)
         
         # transition /main_behaviour/dragging
         _main_behaviour_dragging_0 = Transition(self, self.states["/main_behaviour/dragging"], [self.states["/main_behaviour/dragging"]])
@@ -743,12 +778,16 @@ class Ball(RuntimeClassBase):
         self.pos['y'] += self.vel['y']
     
     def _main_behaviour_bouncing_1_exec(self, parameters):
+        new_vel = parameters[0]
+        self.vel = new_vel
+    
+    def _main_behaviour_bouncing_2_exec(self, parameters):
         x = parameters[0]
         y = parameters[1]
         button = parameters[2]
         self.big_step.outputEvent(Event("set_element_color", self.getOutPortName("ui"), [self.canvas_id, self.circle_id, '#ff0']))
     
-    def _main_behaviour_bouncing_1_guard(self, parameters):
+    def _main_behaviour_bouncing_2_guard(self, parameters):
         x = parameters[0]
         y = parameters[1]
         button = parameters[2]
@@ -799,6 +838,130 @@ class Ball(RuntimeClassBase):
         self.default_targets = self.states["/main_behaviour"].getEffectiveTargetStates()
         RuntimeClassBase.initializeStatechart(self)
 
+class CollisionPhysics(RuntimeClassBase):
+    def __init__(self, controller, ball1_id, ball2_id, ball1_info, ball2_info):
+        RuntimeClassBase.__init__(self, controller)
+        
+        self.inports["physics_ui"] = controller.addInputPort("physics_ui", self)
+        
+        self.semantics.big_step_maximality = StatechartSemantics.TakeMany
+        self.semantics.internal_event_lifeline = StatechartSemantics.Queue
+        self.semantics.input_event_lifeline = StatechartSemantics.FirstComboStep
+        self.semantics.priority = StatechartSemantics.SourceParent
+        self.semantics.concurrency = StatechartSemantics.Single
+        
+        # build Statechart structure
+        self.build_statechart_structure()
+        
+        # user defined attributes
+        self.ball2_info = None
+        
+        # call user defined constructor
+        CollisionPhysics.user_defined_constructor(self, ball1_id, ball2_id, ball1_info, ball2_info)
+    
+    def user_defined_constructor(self, ball1_id, ball2_id, ball1_info, ball2_info):
+        self.ball1_id = ball1_id
+        self.ball2_id = ball2_id
+        self.ball1_info = ball1_info
+        self.ball2_info = ball2_info
+    
+    def user_defined_destructor(self):
+        pass
+    
+    
+    # user defined method
+    def resolve_velocity(self, vel, normal):
+        # Resolve the velocity into normal and tangential components.
+        normal_velocity = np.dot(vel, normal) * normal
+        tangential_velocity = vel - normal_velocity
+        return normal_velocity, tangential_velocity
+    
+    
+    # user defined method
+    def handle_collision(self):
+        pos1 = np.array([self.ball1_info['pos']['x'], self.ball1_info['pos']['y']])
+        vel1 = np.array([self.ball1_info['vel']['x'], self.ball1_info['vel']['y']])
+        r1 = self.ball1_info['r']
+        
+        pos2 = np.array([self.ball2_info['pos']['x'], self.ball2_info['pos']['y']])
+        vel2 = np.array([self.ball2_info['vel']['x'], self.ball2_info['vel']['y']])
+        r2 = self.ball2_info['r']
+        
+        # Calculate the normal vector from the center of ball1 to the center of ball2
+        normal = pos2 - pos1
+        normal = normal / np.linalg.norm(normal)  # Normalize the normal vector
+        
+        # Calculate the relative velocity
+        relative_velocity = vel1 - vel2
+        
+        # Calculate the velocities in the normal direction
+        vel1_normal, vel1_tangential = self.resolve_velocity(vel1, normal)
+        vel2_normal, vel2_tangential = self.resolve_velocity(vel2, normal)
+        
+        # Calculate new normal velocities after collision (1D elastic collision formula)
+        vel1_normal_new = ((r1 - r2) * vel1_normal + 2 * r2 * vel2_normal) / (r1 + r2)
+        vel2_normal_new = ((r2 - r1) * vel2_normal + 2 * r1 * vel1_normal) / (r1 + r2)
+        
+        # Combine the new normal and original tangential components
+        vel1_new = vel1_normal_new + vel1_tangential
+        vel2_new = vel2_normal_new + vel2_tangential
+        
+        # Update the velocities in the balls
+        self.ball1_info['vel'] = {'x': vel1_new[0], 'y': vel1_new[1]}
+        self.ball2_info['vel'] = {'x': vel2_new[0], 'y': vel2_new[1]}
+    
+    
+    # builds Statechart structure
+    def build_statechart_structure(self):
+        
+        # state <root>
+        self.states[""] = State(0, "", self)
+        
+        # state /creating
+        self.states["/creating"] = State(1, "/creating", self)
+        self.states["/creating"].setEnter(self._creating_enter)
+        
+        # state /running
+        self.states["/running"] = State(2, "/running", self)
+        
+        # state /delete
+        self.states["/delete"] = State(3, "/delete", self)
+        
+        # add children
+        self.states[""].addChild(self.states["/creating"])
+        self.states[""].addChild(self.states["/running"])
+        self.states[""].addChild(self.states["/delete"])
+        self.states[""].fixTree()
+        self.states[""].default_state = self.states["/creating"]
+        
+        # transition /creating
+        _creating_0 = Transition(self, self.states["/creating"], [self.states["/running"]])
+        _creating_0.setAction(self._creating_0_exec)
+        _creating_0.setTrigger(Event("set_association_name", None))
+        self.states["/creating"].addTransition(_creating_0)
+        
+        # transition /running
+        _running_0 = Transition(self, self.states["/running"], [self.states["/delete"]])
+        _running_0.setAction(self._running_0_exec)
+        _running_0.setTrigger(None)
+        self.states["/running"].addTransition(_running_0)
+    
+    def _creating_enter(self):
+        self.handle_collision()
+    
+    def _creating_0_exec(self, parameters):
+        association_name = parameters[0]
+        self.association_name = association_name
+    
+    def _running_0_exec(self, parameters):
+        self.big_step.outputEventOM(Event("narrow_cast", None, [self, 'parent', Event("update_vel", None, [self.ball1_id, self.ball2_id, self.ball1_info['vel'], self.ball2_info['vel']])]))
+        self.big_step.outputEventOM(Event("narrow_cast", None, [self, 'parent', Event("delete_physics", None, [self.association_name])]))
+    
+    def initializeStatechart(self):
+        # enter default state
+        self.default_targets = self.states["/creating"].getEffectiveTargetStates()
+        RuntimeClassBase.initializeStatechart(self)
+
 class ObjectManager(ObjectManagerBase):
     def __init__(self, controller):
         ObjectManagerBase.__init__(self, controller)
@@ -813,6 +976,7 @@ class ObjectManager(ObjectManagerBase):
             instance.associations = {}
             instance.associations["balls"] = Association("Ball", 0, -1)
             instance.associations["buttons"] = Association("Button", 0, -1)
+            instance.associations["collisions"] = Association("CollisionPhysics", 0, -1)
             instance.associations["parent"] = Association("MainApp", 1, 1)
         elif class_name == "Button":
             instance = Button(self.controller, construct_params[0], construct_params[1], construct_params[2])
@@ -820,6 +984,10 @@ class ObjectManager(ObjectManagerBase):
             instance.associations["parent"] = Association("Field", 1, 1)
         elif class_name == "Ball":
             instance = Ball(self.controller, construct_params[0], construct_params[1], construct_params[2])
+            instance.associations = {}
+            instance.associations["parent"] = Association("Field", 1, 1)
+        elif class_name == "CollisionPhysics":
+            instance = CollisionPhysics(self.controller, construct_params[0], construct_params[1], construct_params[2], construct_params[3])
             instance.associations = {}
             instance.associations["parent"] = Association("Field", 1, 1)
         else:

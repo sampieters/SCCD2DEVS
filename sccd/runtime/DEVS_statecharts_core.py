@@ -1128,7 +1128,8 @@ class ObjectManagerBase(AtomicDEVS):
                 
                 #instances = []
                 
-                source.addEvent(Event("instance_deleted", parameters = [input[2].parameters[1]]))
+                # TODO: Changed this, write test to check if this is right
+                source.addEvent(Event("instance_deleted", parameters = [input[2].parameters[0]]))
 
 
 

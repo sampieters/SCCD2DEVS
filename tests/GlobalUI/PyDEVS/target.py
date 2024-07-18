@@ -99,14 +99,12 @@ class ObjectManager(TheObjectManager):
 class Controller(CoupledDEVS):
     def __init__(self, name):
         CoupledDEVS.__init__(self, name)
-        self.in_ui = self.addInPort("in_ui")
-        #Ports.addInputPort("ui")
+        self.in_ui = self.addInPort("ui")
+        Ports.addInputPort("ui")
         self.out_ui = self.addOutPort("ui")
-        #Ports.addOutputPort("ui")
+        Ports.addOutputPort("ui")
         self.objectmanager = self.addSubModel(ObjectManager("ObjectManager"))
         self.atomic0 = self.addSubModel(MainApp("MainApp"))
         self.connectPorts(self.atomic0.obj_manager_out, self.objectmanager.input)
         self.connectPorts(self.objectmanager.output["MainApp"], self.atomic0.obj_manager_in)
         self.connectPorts(self.atomic0.output, self.out_ui)
-
-        self.connectPorts(self.in_ui, self.atomic0.input)

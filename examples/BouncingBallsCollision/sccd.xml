@@ -6,6 +6,7 @@
     <top>
         from sccd.runtime.libs import ui_v2 as ui
         import random
+        import numpy as np
 
         CANVAS_DIMS = (800, 550)
     </top>
@@ -287,14 +288,39 @@
                                     <parameter expr='"CollisionPhysics"' />
                                     <parameter expr="self.collisions[-1][0]" />
                                     <parameter expr="self.collisions[-1][1]" />
+                                    <parameter expr="self.balls[self.collisions[-1][0]]" />
+                                    <parameter expr="self.balls[self.collisions[-1][1]]" />
                                 </raise>
-                                <raise scope="cd" event="start_instance" >
-                                </raise>
-
                                 <script>
-                                    print("COLLISION")
-                                    self.collisions = []
+                                    self.collisions = self.collisions[:-1]
                                 </script>
+                            </transition>
+                            <transition event="instance_created" target=".">
+                                <parameter name="association_name" type="string"/>
+                                <raise event="set_association_name" scope="narrow" target="association_name">
+                                    <parameter expr="association_name" />
+                                </raise>
+                                <raise scope="cd" event="start_instance">
+                                    <parameter expr="association_name" />
+                                </raise>
+                            </transition>
+                            <transition event="update_vel" target=".">
+                                <parameter name="ball1_id" />
+                                <parameter name="ball2_id" />
+                                <parameter name="new_vel1" />
+                                <parameter name="new_vel2" />
+                                <raise event="update_ball_vel" scope="narrow" target="ball1_id">
+                                    <parameter expr="new_vel1" />
+                                </raise>
+                                <raise event="update_ball_vel" scope="narrow" target="ball2_id">
+                                    <parameter expr="new_vel2" />
+                                </raise>
+                            </transition>
+                            <transition event="delete_physics" target=".">
+                                <parameter name="association_id" />
+                                <raise scope="cd" event="delete_instance">
+                                    <parameter expr='association_id' />
+                                </raise>
                             </transition>
                         </state>
                     </state>
@@ -489,6 +515,12 @@
                             self.pos['y'] += self.vel['y']
                         </script>
                     </transition>
+                    <transition event="update_ball_vel" target=".">
+                        <parameter name="new_vel" />
+                        <script>
+                            self.vel = new_vel
+                        </script>
+                    </transition>
                     <transition port="ball_ui" event="mouse_press" target="../selected" cond="button == ui.MOUSE_BUTTONS.LEFT">
                         <parameter name="x" />
                         <parameter name="y" />
@@ -569,9 +601,13 @@
             <association name="parent" class="Field" min="1" max="1" />
         </relationships>
         <constructor>
+            <parameter name="ball1_id" />
+            <parameter name="ball2_id" />
             <parameter name="ball1_info" />
             <parameter name="ball2_info" />
             <body>
+                self.ball1_id = ball1_id
+                self.ball2_id = ball2_id
                 self.ball1_info = ball1_info
                 self.ball2_info = ball2_info
             </body>
@@ -588,13 +624,13 @@
         </method>
         <method name="handle_collision">
             <body>
-                pos1 = np.array(ball1['pos'])
-                vel1 = np.array(ball1['vel'])
-                r1 = ball1['r']
+                pos1 = np.array([self.ball1_info['pos']['x'], self.ball1_info['pos']['y']])
+                vel1 = np.array([self.ball1_info['vel']['x'], self.ball1_info['vel']['y']])
+                r1 = self.ball1_info['r']
 
-                pos2 = np.array(ball2['pos'])
-                vel2 = np.array(ball2['vel'])
-                r2 = ball2['r']
+                pos2 = np.array([self.ball2_info['pos']['x'], self.ball2_info['pos']['y']])
+                vel2 = np.array([self.ball2_info['vel']['x'], self.ball2_info['vel']['y']])
+                r2 = self.ball2_info['r']
 
                 # Calculate the normal vector from the center of ball1 to the center of ball2
                 normal = pos2 - pos1
@@ -616,17 +652,40 @@
                 vel2_new = vel2_normal_new + vel2_tangential
 
                 # Update the velocities in the balls
-                ball1['vel'] = vel1_new.tolist()
-                ball2['vel'] = vel2_new.tolist()
+                self.ball1_info['vel'] = {'x': vel1_new[0], 'y': vel1_new[1]}
+                self.ball2_info['vel'] = {'x': vel2_new[0], 'y': vel2_new[1]}
             </body>
         </method>
         <destructor>
         </destructor>
-        <scxml initial="running">
-            <state id="running">
+        <scxml initial="creating">
+            <state id="creating">
                 <onentry>
-
+                    <script>
+                        self.handle_collision()
+                    </script>
                 </onentry>
+                <transition event="set_association_name" target="../running">
+                    <parameter name="association_name" type="str" />
+                    <script>
+                        self.association_name = association_name
+                    </script>
+                </transition>
+            </state>
+            <state id="running">
+                <transition target="../delete">
+                    <raise event="update_vel" scope="narrow" target="'parent'">
+                        <parameter expr="self.ball1_id" />
+                        <parameter expr="self.ball2_id" />
+                        <parameter expr="self.ball1_info['vel']" />
+                        <parameter expr="self.ball2_info['vel']" />
+                    </raise>
+                    <raise event="delete_physics" scope="narrow" target="'parent'">
+                        <parameter expr="self.association_name" />
+                    </raise>
+                </transition>
+            </state>
+            <state id="delete">
             </state>
         </scxml>
     </class>

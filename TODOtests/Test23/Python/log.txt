@@ -1,0 +1,74 @@
+__  Current Time:   0.000000 __________________________________________ 
+
+EXIT STATE in model <MainApp>
+		State: /state1
+
+ENTER STATE in model <MainApp>
+		State: /state2
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: instance_created_succesfully; port: ui; parameters: ['0.00', 'linkA[0]'])
+
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: statechart_started_succesfully; port: ui; parameters: ['0.00'])
+
+EXIT STATE in model <A>
+		State: /state1
+
+ENTER STATE in model <A>
+		State: /state2
+
+
+EXIT STATE in model <MainApp>
+		State: /state2
+
+ENTER STATE in model <MainApp>
+		State: /state3
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: instance_created_succesfully; port: ui; parameters: ['0.00', 'linkA[1]'])
+
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: statechart_started_succesfully; port: ui; parameters: ['0.00'])
+
+EXIT STATE in model <A>
+		State: /state1
+
+ENTER STATE in model <A>
+		State: /state2
+
+EXIT STATE in model <MainApp>
+		State: /state3
+
+ENTER STATE in model <MainApp>
+		State: /state4
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: instance_started_succesfully; port: ui; parameters: ['0.00', 'linkA[1]'])
+
+
+EXIT STATE in model <MainApp>
+		State: /state4
+
+ENTER STATE in model <MainApp>
+		State: /state5
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: instance_disassociated_succesfully; port: ui; parameters: ['0.00', ['linkA[0]', 'linkA[1]']])
+
+
+INPUT EVENT from port <private_2_<narrow_cast>>
+	\Type: <narrow_cast>
+	\Event: (event name: link_check; port: private_2_<narrow_cast>; parameters: ['linkA[1]'])
+
+EXIT STATE in model <A>
+		State: /state2
+
+ENTER STATE in model <A>
+		State: /state2
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: instance_linked_succesfully; port: ui; parameters: ['0.00', 'linkA[1]'])
+
