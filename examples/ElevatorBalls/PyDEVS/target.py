@@ -55,7 +55,8 @@ class MainAppInstance(RuntimeClassBase):
         self.num_floors = 0
         self.button_num = FLOORS
         
-        self.next_elevator_pos = None
+        self.elevator_pos = None
+        self.elevator_dim = None
     
     def user_defined_destructor(self):
         pass
@@ -270,7 +271,7 @@ class MainAppInstance(RuntimeClassBase):
         floor_num = parameters[0]
         x = parameters[1]
         y = parameters[2]
-        self.big_step.outputEventOM(Event("create_instance", None, [self, "ball", "Ball", self.canvas_id, floor_num, x, y]))
+        self.big_step.outputEventOM(Event("create_instance", None, [self, "ball", "Ball", self.canvas_id, floor_num, x, y, self.elevator_pos, self.elevator_dim]))
     
     def _running_1_exec(self, parameters):
         association_name = parameters[0]
@@ -281,7 +282,7 @@ class MainAppInstance(RuntimeClassBase):
         pos = parameters[0]
         dim = parameters[1]
         vel = parameters[2]
-        self.big_step.outputEventOM(Event("broad_cast", None, [self, Event("update_bounds", None, [pos, dim, vel])]))
+        self.big_step.outputEventOM(Event("broad_cast", None, [self, Event("update_elevator_bounds", None, [pos, dim, vel])]))
     
     def _running_3_exec(self, parameters):
         floor_number = parameters[0]
@@ -688,9 +689,11 @@ class ElevatorInstance(RuntimeClassBase):
         else:
             self.vel = 2
         
+        self.current_floor = floor_number
+        
         height = (CANVAS_DIMS[1] - 150)
         y_dim = (height - ((FLOORS - 1) * FLOOR_SPACE)) / FLOORS
-        self.next_pos['y'] = height - (y_dim /2) - (floor_number * (y_dim + FLOOR_SPACE));
+        self.next_pos['y'] = height - (y_dim /2) - (self.current_floor * (y_dim + FLOOR_SPACE));
     
     def _root_running_move_0_exec(self, parameters):
         self.big_step.outputEvent(Event("set_element_pos", self.getOutPortName("ui"), [self.canvas_id, self.elevator_id, self.pos['x'], self.pos['y']]))
@@ -700,7 +703,7 @@ class ElevatorInstance(RuntimeClassBase):
         self.big_step.outputEventOM(Event("narrow_cast", None, [self, 'parent', Event("open_elevator", None, [])]))
     
     def _root_running_move_1_guard(self, parameters):
-        return (self.pos['y']) < self.next_pos['y']
+        return (self.vel > 0 and self.pos['y'] > self.next_pos['y']) or (self.vel < 0 and self.pos['y'] < self.next_pos['y'])
     
     def initializeStatechart(self):
         # enter default state
@@ -721,7 +724,7 @@ class Elevator(ObjectManagerBase):
         return new_instance
 
 class BallInstance(RuntimeClassBase):
-    def __init__(self, atomdevs, canvas_id, floor_num, x, y):
+    def __init__(self, atomdevs, canvas_id, floor_num, x, y, elevator_pos, elevator_dim):
         RuntimeClassBase.__init__(self, atomdevs)
         self.associations = {}
         self.associations["parent"] = Association("MainApp", 1, 1)
@@ -740,7 +743,7 @@ class BallInstance(RuntimeClassBase):
         self.pos = None
         
         # call user defined constructor
-        BallInstance.user_defined_constructor(self, canvas_id, floor_num, x, y)
+        BallInstance.user_defined_constructor(self, canvas_id, floor_num, x, y, elevator_pos, elevator_dim)
         port_name = Ports.addInputPort("<narrow_cast>", self)
         atomdevs.addInPort(port_name)
         port_name = Ports.addInputPort("ball_ui", self)
@@ -748,7 +751,7 @@ class BallInstance(RuntimeClassBase):
         atomdevs.port_mappings[port_name] = atomdevs.next_instance
         self.inports["ball_ui"] = port_name
     
-    def user_defined_constructor(self, canvas_id, floor_num, x, y):
+    def user_defined_constructor(self, canvas_id, floor_num, x, y, elevator_pos, elevator_dim):
         self.canvas_id = canvas_id;
         
         
@@ -756,8 +759,8 @@ class BallInstance(RuntimeClassBase):
         
         self.elevator_floor = 0;
         self.elevator_open = True;
-        self.rect_pos = None;
-        self.rect_dim = None;
+        self.rect_pos = elevator_pos;
+        self.rect_dim = elevator_dim;
         
         self.r = 5.0;
         self.vel = {'x': random.uniform(-5.0, 5.0), 'y': random.uniform(-5.0, 5.0)};
@@ -833,7 +836,7 @@ class BallInstance(RuntimeClassBase):
         self.states["/main_behaviour/bouncing"].addTransition(_main_behaviour_bouncing_2)
         _main_behaviour_bouncing_3 = Transition(self, self.states["/main_behaviour/bouncing"], [self.states["/main_behaviour/bouncing"]])
         _main_behaviour_bouncing_3.setAction(self._main_behaviour_bouncing_3_exec)
-        _main_behaviour_bouncing_3.setTrigger(Event("update_bounds", None))
+        _main_behaviour_bouncing_3.setTrigger(Event("update_elevator_bounds", None))
         self.states["/main_behaviour/bouncing"].addTransition(_main_behaviour_bouncing_3)
         
         # transition /main_behaviour/ball_delete
@@ -938,7 +941,7 @@ class Ball(ObjectManagerBase):
         self.ball_ui = self.addInPort("ball_ui")
     
     def constructObject(self, parameters):
-        new_instance = BallInstance(self, parameters[2], parameters[3], parameters[4], parameters[5])
+        new_instance = BallInstance(self, parameters[2], parameters[3], parameters[4], parameters[5], parameters[6], parameters[7])
         return new_instance
 
 class ObjectManagerState:

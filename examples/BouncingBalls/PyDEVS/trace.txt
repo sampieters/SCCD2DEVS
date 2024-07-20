@@ -1,0 +1,4917 @@
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	INITIAL CONDITIONS in model <controller.MainApp>
+		Initial State: None
+		Next scheduled internal transition at time inf
+
+
+	INITIAL CONDITIONS in model <controller.ObjectManager>
+		Initial State: None
+		Next scheduled internal transition at time 0.000000
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+				('MainApp', 'MainApp', (event name: start_instance; port: None; parameters: ['MainApp[0]']))
+			port <input>:
+			port <field_ui>:
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Next scheduled internal transition at time 0.000000
+
+
+	INTERNAL TRANSITION in model <controller.ObjectManager>
+		New State: <target.ObjectManagerState object at 0x102bce1b0>
+		Output Port Configuration:
+			port <port1>:
+				('MainApp', 'MainApp', (event name: start_instance; port: None; parameters: ['MainApp[0]']))
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.ObjectManager>
+		Input Port Configuration:
+			port <input>:
+				('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))
+		New State: <target.ObjectManagerState object at 0x102bce1b0>
+		Next scheduled internal transition at time 0.000000
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+				('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))
+			port <ui>:
+				(event name: create_window; port: ui; parameters: [350, 300, 'Fixed Timer', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.000000
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	CONFLUENT TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>: 
+				('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))
+			port <input>: 
+			port <field_ui>: 
+			port <private_0_<narrow_cast>>: 
+			port <private_1_field_ui>: 
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.000000
+
+
+	INTERNAL TRANSITION in model <controller.ObjectManager>
+		New State: <target.ObjectManagerState object at 0x102bce1b0>
+		Output Port Configuration:
+			port <port1>:
+				('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.000000
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   0.011708 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("window_created","private_1_field_ui",[0])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Next scheduled internal transition at time 0.011708
+
+
+__  Current Time:   0.011708 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.011708
+
+
+__  Current Time:   0.011708 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: bind_event; port: ui; parameters: [0, 'WM_DELETE_WINDOW', 'window_close', 'private_1_field_ui'])
+				(event name: bind_event; port: ui; parameters: [0, '<Key>', 'key_press', 'private_1_field_ui'])
+				(event name: create_canvas; port: ui; parameters: [0, 350, 100, {'background': '#222222'}, 'private_1_field_ui'])
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   0.013946 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("canvas_created","private_1_field_ui",[1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Next scheduled internal transition at time 0.013946
+
+
+__  Current Time:   0.013946 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.013946
+
+
+__  Current Time:   0.013946 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: create_text; port: ui; parameters: [1, 50, 50, '', 'private_1_field_ui'])
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   0.016203 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("text_created","private_1_field_ui",[1,1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Next scheduled internal transition at time 0.016203
+
+
+__  Current Time:   0.016203 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.016203
+
+
+__  Current Time:   0.016203 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: create_text; port: ui; parameters: [1, 50, 100, '', 'private_1_field_ui'])
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   0.017277 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("text_created","private_1_field_ui",[1,2])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Next scheduled internal transition at time 0.017277
+
+
+__  Current Time:   0.017277 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.017277
+
+
+__  Current Time:   0.017277 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: create_button; port: ui; parameters: [0, 'INTERRUPT/CONTINUE', 'private_1_field_ui'])
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   0.018835 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("button_created","private_1_field_ui",[2])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Next scheduled internal transition at time 0.018835
+
+
+__  Current Time:   0.018835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.018835
+
+
+__  Current Time:   0.018835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: bind_event; port: ui; parameters: [2, '<Button>', 'mouse_click', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.068835
+
+
+__  Current Time:   0.068835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.068835
+
+
+__  Current Time:   0.068835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.07', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.06', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.118835
+
+
+__  Current Time:   0.118835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.118835
+
+
+__  Current Time:   0.118835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.12', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.11', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.168835
+
+
+__  Current Time:   0.168835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.168835
+
+
+__  Current Time:   0.168835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.17', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.16', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.218835
+
+
+__  Current Time:   0.218835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.218835
+
+
+__  Current Time:   0.218835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.22', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.21', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.268835
+
+
+__  Current Time:   0.268835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.268835
+
+
+__  Current Time:   0.268835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.27', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.26', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.318835
+
+
+__  Current Time:   0.318835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.318835
+
+
+__  Current Time:   0.318835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.32', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.31', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.368835
+
+
+__  Current Time:   0.368835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.368835
+
+
+__  Current Time:   0.368835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.37', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.36', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.418835
+
+
+__  Current Time:   0.418835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.418835
+
+
+__  Current Time:   0.418835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.42', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.41', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.468835
+
+
+__  Current Time:   0.468835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.468835
+
+
+__  Current Time:   0.468835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.47', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.46', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.518835
+
+
+__  Current Time:   0.518835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.518835
+
+
+__  Current Time:   0.518835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.52', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.51', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.568835
+
+
+__  Current Time:   0.568835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.568835
+
+
+__  Current Time:   0.568835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.57', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.56', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.618835
+
+
+__  Current Time:   0.618835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.618835
+
+
+__  Current Time:   0.618835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.62', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.61', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.668835
+
+
+__  Current Time:   0.668835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.668835
+
+
+__  Current Time:   0.668835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.67', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.66', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.718835
+
+
+__  Current Time:   0.718835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.718835
+
+
+__  Current Time:   0.718835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.72', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.71', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.768835
+
+
+__  Current Time:   0.768835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.768835
+
+
+__  Current Time:   0.768835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.77', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.76', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.818835
+
+
+__  Current Time:   0.818835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.818835
+
+
+__  Current Time:   0.818835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.82', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.82', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.868835
+
+
+__  Current Time:   0.868835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.868835
+
+
+__  Current Time:   0.868835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.87', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.87', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.918835
+
+
+__  Current Time:   0.918835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.918835
+
+
+__  Current Time:   0.918835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.92', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.91', 'private_1_field_ui'])
+		Next scheduled internal transition at time 0.968835
+
+
+__  Current Time:   0.968835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.968835
+
+
+__  Current Time:   0.968835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '0.97', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '0.96', 'private_1_field_ui'])
+		Next scheduled internal transition at time 1.018835
+
+
+__  Current Time:   1.018835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 1.018835
+
+
+__  Current Time:   1.018835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '1.02', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '1.01', 'private_1_field_ui'])
+		Next scheduled internal transition at time 1.068835
+
+
+__  Current Time:   1.068835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 1.068835
+
+
+__  Current Time:   1.068835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '1.07', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '1.06', 'private_1_field_ui'])
+		Next scheduled internal transition at time 1.118835
+
+
+__  Current Time:   1.118835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 1.118835
+
+
+__  Current Time:   1.118835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '1.12', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '1.11', 'private_1_field_ui'])
+		Next scheduled internal transition at time 1.168835
+
+
+__  Current Time:   1.168835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 1.168835
+
+
+__  Current Time:   1.168835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '1.17', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '1.16', 'private_1_field_ui'])
+		Next scheduled internal transition at time 1.218835
+
+
+__  Current Time:   1.218835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 1.218835
+
+
+__  Current Time:   1.218835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '1.22', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '1.21', 'private_1_field_ui'])
+		Next scheduled internal transition at time 1.268835
+
+
+__  Current Time:   1.268835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 1.268835
+
+
+__  Current Time:   1.268835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '1.27', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '1.26', 'private_1_field_ui'])
+		Next scheduled internal transition at time 1.318835
+
+
+__  Current Time:   1.318835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 1.318835
+
+
+__  Current Time:   1.318835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '1.32', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '1.31', 'private_1_field_ui'])
+		Next scheduled internal transition at time 1.368835
+
+
+__  Current Time:   1.368835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 1.368835
+
+
+__  Current Time:   1.368835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '1.37', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '1.36', 'private_1_field_ui'])
+		Next scheduled internal transition at time 1.418835
+
+
+__  Current Time:   1.418835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 1.418835
+
+
+__  Current Time:   1.418835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '1.42', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '1.41', 'private_1_field_ui'])
+		Next scheduled internal transition at time 1.468835
+
+
+__  Current Time:   1.468835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 1.468835
+
+
+__  Current Time:   1.468835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '1.47', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '1.46', 'private_1_field_ui'])
+		Next scheduled internal transition at time 1.518835
+
+
+__  Current Time:   1.518835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 1.518835
+
+
+__  Current Time:   1.518835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '1.52', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '1.51', 'private_1_field_ui'])
+		Next scheduled internal transition at time 1.568835
+
+
+__  Current Time:   1.568835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 1.568835
+
+
+__  Current Time:   1.568835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '1.57', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '1.56', 'private_1_field_ui'])
+		Next scheduled internal transition at time 1.618835
+
+
+__  Current Time:   1.618835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 1.618835
+
+
+__  Current Time:   1.618835 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '1.62', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '1.61', 'private_1_field_ui'])
+		Next scheduled internal transition at time 1.668835
+
+
+__  Current Time:   1.623036 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("mouse_click","private_1_field_ui",[224,81,1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Next scheduled internal transition at time 1.623036
+
+
+__  Current Time:   1.623036 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 1.623036
+
+
+__  Current Time:   1.623036 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   2.331868 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("mouse_click","private_1_field_ui",[224,81,1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Next scheduled internal transition at time 2.331868
+
+
+__  Current Time:   2.331868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 2.331868
+
+
+__  Current Time:   2.331868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 2.381868
+
+
+__  Current Time:   2.381868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 2.381868
+
+
+__  Current Time:   2.381868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '2.38', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '2.37', 'private_1_field_ui'])
+		Next scheduled internal transition at time 2.431868
+
+
+__  Current Time:   2.431868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 2.431868
+
+
+__  Current Time:   2.431868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '2.43', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '2.43', 'private_1_field_ui'])
+		Next scheduled internal transition at time 2.481868
+
+
+__  Current Time:   2.481868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 2.481868
+
+
+__  Current Time:   2.481868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '2.48', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '2.48', 'private_1_field_ui'])
+		Next scheduled internal transition at time 2.531868
+
+
+__  Current Time:   2.531868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 2.531868
+
+
+__  Current Time:   2.531868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '2.53', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '2.52', 'private_1_field_ui'])
+		Next scheduled internal transition at time 2.581868
+
+
+__  Current Time:   2.581868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 2.581868
+
+
+__  Current Time:   2.581868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '2.58', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '2.57', 'private_1_field_ui'])
+		Next scheduled internal transition at time 2.631868
+
+
+__  Current Time:   2.631868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 2.631868
+
+
+__  Current Time:   2.631868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '2.63', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '2.62', 'private_1_field_ui'])
+		Next scheduled internal transition at time 2.681868
+
+
+__  Current Time:   2.681868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 2.681868
+
+
+__  Current Time:   2.681868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '2.68', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '2.68', 'private_1_field_ui'])
+		Next scheduled internal transition at time 2.731868
+
+
+__  Current Time:   2.731868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 2.731868
+
+
+__  Current Time:   2.731868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '2.73', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '2.73', 'private_1_field_ui'])
+		Next scheduled internal transition at time 2.781868
+
+
+__  Current Time:   2.781868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 2.781868
+
+
+__  Current Time:   2.781868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '2.78', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '2.77', 'private_1_field_ui'])
+		Next scheduled internal transition at time 2.831868
+
+
+__  Current Time:   2.831868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 2.831868
+
+
+__  Current Time:   2.831868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '2.83', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '2.82', 'private_1_field_ui'])
+		Next scheduled internal transition at time 2.881868
+
+
+__  Current Time:   2.881868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 2.881868
+
+
+__  Current Time:   2.881868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '2.88', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '2.88', 'private_1_field_ui'])
+		Next scheduled internal transition at time 2.931868
+
+
+__  Current Time:   2.931868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 2.931868
+
+
+__  Current Time:   2.931868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '2.93', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '2.93', 'private_1_field_ui'])
+		Next scheduled internal transition at time 2.981868
+
+
+__  Current Time:   2.981868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 2.981868
+
+
+__  Current Time:   2.981868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '2.98', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '2.97', 'private_1_field_ui'])
+		Next scheduled internal transition at time 3.031868
+
+
+__  Current Time:   3.031868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 3.031868
+
+
+__  Current Time:   3.031868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '3.03', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '3.02', 'private_1_field_ui'])
+		Next scheduled internal transition at time 3.081868
+
+
+__  Current Time:   3.081868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 3.081868
+
+
+__  Current Time:   3.081868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '3.08', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '3.07', 'private_1_field_ui'])
+		Next scheduled internal transition at time 3.131868
+
+
+__  Current Time:   3.131868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 3.131868
+
+
+__  Current Time:   3.131868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '3.13', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '3.12', 'private_1_field_ui'])
+		Next scheduled internal transition at time 3.181868
+
+
+__  Current Time:   3.181868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 3.181868
+
+
+__  Current Time:   3.181868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '3.18', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '3.18', 'private_1_field_ui'])
+		Next scheduled internal transition at time 3.231868
+
+
+__  Current Time:   3.231868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 3.231868
+
+
+__  Current Time:   3.231868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '3.23', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '3.23', 'private_1_field_ui'])
+		Next scheduled internal transition at time 3.281868
+
+
+__  Current Time:   3.281868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 3.281868
+
+
+__  Current Time:   3.281868 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '3.28', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '3.27', 'private_1_field_ui'])
+		Next scheduled internal transition at time 3.331868
+
+
+__  Current Time:   3.309172 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("mouse_click","private_1_field_ui",[224,81,1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Next scheduled internal transition at time 3.309172
+
+
+__  Current Time:   3.309172 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 3.309172
+
+
+__  Current Time:   3.309172 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   4.036746 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("mouse_click","private_1_field_ui",[224,81,1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Next scheduled internal transition at time 4.036746
+
+
+__  Current Time:   4.036746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 4.036746
+
+
+__  Current Time:   4.036746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 4.086746
+
+
+__  Current Time:   4.086746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 4.086746
+
+
+__  Current Time:   4.086746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '4.09', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '4.08', 'private_1_field_ui'])
+		Next scheduled internal transition at time 4.136746
+
+
+__  Current Time:   4.136746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 4.136746
+
+
+__  Current Time:   4.136746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '4.14', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '4.13', 'private_1_field_ui'])
+		Next scheduled internal transition at time 4.186746
+
+
+__  Current Time:   4.186746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 4.186746
+
+
+__  Current Time:   4.186746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '4.19', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '4.18', 'private_1_field_ui'])
+		Next scheduled internal transition at time 4.236746
+
+
+__  Current Time:   4.236746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 4.236746
+
+
+__  Current Time:   4.236746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '4.24', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '4.23', 'private_1_field_ui'])
+		Next scheduled internal transition at time 4.286746
+
+
+__  Current Time:   4.286746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 4.286746
+
+
+__  Current Time:   4.286746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '4.29', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '4.28', 'private_1_field_ui'])
+		Next scheduled internal transition at time 4.336746
+
+
+__  Current Time:   4.336746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 4.336746
+
+
+__  Current Time:   4.336746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '4.34', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '4.33', 'private_1_field_ui'])
+		Next scheduled internal transition at time 4.386746
+
+
+__  Current Time:   4.386746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 4.386746
+
+
+__  Current Time:   4.386746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '4.39', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '4.38', 'private_1_field_ui'])
+		Next scheduled internal transition at time 4.436746
+
+
+__  Current Time:   4.436746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 4.436746
+
+
+__  Current Time:   4.436746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '4.44', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '4.43', 'private_1_field_ui'])
+		Next scheduled internal transition at time 4.486746
+
+
+__  Current Time:   4.486746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 4.486746
+
+
+__  Current Time:   4.486746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '4.49', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '4.48', 'private_1_field_ui'])
+		Next scheduled internal transition at time 4.536746
+
+
+__  Current Time:   4.536746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 4.536746
+
+
+__  Current Time:   4.536746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '4.54', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '4.53', 'private_1_field_ui'])
+		Next scheduled internal transition at time 4.586746
+
+
+__  Current Time:   4.586746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 4.586746
+
+
+__  Current Time:   4.586746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '4.59', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '4.58', 'private_1_field_ui'])
+		Next scheduled internal transition at time 4.636746
+
+
+__  Current Time:   4.636746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 4.636746
+
+
+__  Current Time:   4.636746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '4.64', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '4.63', 'private_1_field_ui'])
+		Next scheduled internal transition at time 4.686746
+
+
+__  Current Time:   4.686746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 4.686746
+
+
+__  Current Time:   4.686746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '4.69', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '4.68', 'private_1_field_ui'])
+		Next scheduled internal transition at time 4.736746
+
+
+__  Current Time:   4.736746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 4.736746
+
+
+__  Current Time:   4.736746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '4.74', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '4.73', 'private_1_field_ui'])
+		Next scheduled internal transition at time 4.786746
+
+
+__  Current Time:   4.786746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 4.786746
+
+
+__  Current Time:   4.786746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '4.79', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '4.78', 'private_1_field_ui'])
+		Next scheduled internal transition at time 4.836746
+
+
+__  Current Time:   4.836746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 4.836746
+
+
+__  Current Time:   4.836746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '4.84', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '4.83', 'private_1_field_ui'])
+		Next scheduled internal transition at time 4.886746
+
+
+__  Current Time:   4.886746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 4.886746
+
+
+__  Current Time:   4.886746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '4.89', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '4.88', 'private_1_field_ui'])
+		Next scheduled internal transition at time 4.936746
+
+
+__  Current Time:   4.936746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 4.936746
+
+
+__  Current Time:   4.936746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '4.94', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '4.93', 'private_1_field_ui'])
+		Next scheduled internal transition at time 4.986746
+
+
+__  Current Time:   4.986746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 4.986746
+
+
+__  Current Time:   4.986746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '4.99', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '4.98', 'private_1_field_ui'])
+		Next scheduled internal transition at time 5.036746
+
+
+__  Current Time:   5.036746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 5.036746
+
+
+__  Current Time:   5.036746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '5.04', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '5.03', 'private_1_field_ui'])
+		Next scheduled internal transition at time 5.086746
+
+
+__  Current Time:   5.086746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 5.086746
+
+
+__  Current Time:   5.086746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '5.09', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '5.08', 'private_1_field_ui'])
+		Next scheduled internal transition at time 5.136746
+
+
+__  Current Time:   5.136746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 5.136746
+
+
+__  Current Time:   5.136746 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '5.14', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '5.13', 'private_1_field_ui'])
+		Next scheduled internal transition at time 5.186746
+
+
+__  Current Time:   5.144444 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("mouse_click","private_1_field_ui",[224,81,1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Next scheduled internal transition at time 5.144444
+
+
+__  Current Time:   5.144444 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 5.144444
+
+
+__  Current Time:   5.144444 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   6.386887 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("mouse_click","private_1_field_ui",[224,81,1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Next scheduled internal transition at time 6.386887
+
+
+__  Current Time:   6.386887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 6.386887
+
+
+__  Current Time:   6.386887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 6.436887
+
+
+__  Current Time:   6.436887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 6.436887
+
+
+__  Current Time:   6.436887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '6.44', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '6.43', 'private_1_field_ui'])
+		Next scheduled internal transition at time 6.486887
+
+
+__  Current Time:   6.486887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 6.486887
+
+
+__  Current Time:   6.486887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '6.49', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '6.48', 'private_1_field_ui'])
+		Next scheduled internal transition at time 6.536887
+
+
+__  Current Time:   6.536887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 6.536887
+
+
+__  Current Time:   6.536887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '6.54', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '6.53', 'private_1_field_ui'])
+		Next scheduled internal transition at time 6.586887
+
+
+__  Current Time:   6.586887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 6.586887
+
+
+__  Current Time:   6.586887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '6.59', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '6.58', 'private_1_field_ui'])
+		Next scheduled internal transition at time 6.636887
+
+
+__  Current Time:   6.636887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 6.636887
+
+
+__  Current Time:   6.636887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '6.64', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '6.63', 'private_1_field_ui'])
+		Next scheduled internal transition at time 6.686887
+
+
+__  Current Time:   6.686887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 6.686887
+
+
+__  Current Time:   6.686887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '6.69', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '6.68', 'private_1_field_ui'])
+		Next scheduled internal transition at time 6.736887
+
+
+__  Current Time:   6.736887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 6.736887
+
+
+__  Current Time:   6.736887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '6.74', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '6.73', 'private_1_field_ui'])
+		Next scheduled internal transition at time 6.786887
+
+
+__  Current Time:   6.786887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 6.786887
+
+
+__  Current Time:   6.786887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '6.79', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '6.78', 'private_1_field_ui'])
+		Next scheduled internal transition at time 6.836887
+
+
+__  Current Time:   6.836887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 6.836887
+
+
+__  Current Time:   6.836887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '6.84', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '6.83', 'private_1_field_ui'])
+		Next scheduled internal transition at time 6.886887
+
+
+__  Current Time:   6.886887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 6.886887
+
+
+__  Current Time:   6.886887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '6.89', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '6.88', 'private_1_field_ui'])
+		Next scheduled internal transition at time 6.936887
+
+
+__  Current Time:   6.936887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 6.936887
+
+
+__  Current Time:   6.936887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '6.94', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '6.93', 'private_1_field_ui'])
+		Next scheduled internal transition at time 6.986887
+
+
+__  Current Time:   6.986887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 6.986887
+
+
+__  Current Time:   6.986887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '6.99', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '6.98', 'private_1_field_ui'])
+		Next scheduled internal transition at time 7.036887
+
+
+__  Current Time:   7.036887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 7.036887
+
+
+__  Current Time:   7.036887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '7.04', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '7.03', 'private_1_field_ui'])
+		Next scheduled internal transition at time 7.086887
+
+
+__  Current Time:   7.086887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 7.086887
+
+
+__  Current Time:   7.086887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '7.09', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '7.08', 'private_1_field_ui'])
+		Next scheduled internal transition at time 7.136887
+
+
+__  Current Time:   7.136887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 7.136887
+
+
+__  Current Time:   7.136887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '7.14', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '7.13', 'private_1_field_ui'])
+		Next scheduled internal transition at time 7.186887
+
+
+__  Current Time:   7.186887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 7.186887
+
+
+__  Current Time:   7.186887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '7.19', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '7.18', 'private_1_field_ui'])
+		Next scheduled internal transition at time 7.236887
+
+
+__  Current Time:   7.236887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 7.236887
+
+
+__  Current Time:   7.236887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '7.24', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '7.23', 'private_1_field_ui'])
+		Next scheduled internal transition at time 7.286887
+
+
+__  Current Time:   7.286887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 7.286887
+
+
+__  Current Time:   7.286887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '7.29', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '7.28', 'private_1_field_ui'])
+		Next scheduled internal transition at time 7.336887
+
+
+__  Current Time:   7.336887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 7.336887
+
+
+__  Current Time:   7.336887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '7.34', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '7.33', 'private_1_field_ui'])
+		Next scheduled internal transition at time 7.386887
+
+
+__  Current Time:   7.386887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 7.386887
+
+
+__  Current Time:   7.386887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '7.39', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '7.38', 'private_1_field_ui'])
+		Next scheduled internal transition at time 7.436887
+
+
+__  Current Time:   7.436887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 7.436887
+
+
+__  Current Time:   7.436887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '7.44', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '7.43', 'private_1_field_ui'])
+		Next scheduled internal transition at time 7.486887
+
+
+__  Current Time:   7.486887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 7.486887
+
+
+__  Current Time:   7.486887 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '7.49', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '7.48', 'private_1_field_ui'])
+		Next scheduled internal transition at time 7.536887
+
+
+__  Current Time:   7.525188 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("mouse_click","private_1_field_ui",[224,81,1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Next scheduled internal transition at time 7.525188
+
+
+__  Current Time:   7.525188 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 7.525188
+
+
+__  Current Time:   7.525188 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   8.511850 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("mouse_click","private_1_field_ui",[224,81,1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Next scheduled internal transition at time 8.511850
+
+
+__  Current Time:   8.511850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 8.511850
+
+
+__  Current Time:   8.511850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 8.561850
+
+
+__  Current Time:   8.561850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 8.561850
+
+
+__  Current Time:   8.561850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '8.56', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '8.55', 'private_1_field_ui'])
+		Next scheduled internal transition at time 8.611850
+
+
+__  Current Time:   8.611850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 8.611850
+
+
+__  Current Time:   8.611850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '8.61', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '8.60', 'private_1_field_ui'])
+		Next scheduled internal transition at time 8.661850
+
+
+__  Current Time:   8.661850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 8.661850
+
+
+__  Current Time:   8.661850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '8.66', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '8.66', 'private_1_field_ui'])
+		Next scheduled internal transition at time 8.711850
+
+
+__  Current Time:   8.711850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 8.711850
+
+
+__  Current Time:   8.711850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '8.71', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '8.71', 'private_1_field_ui'])
+		Next scheduled internal transition at time 8.761850
+
+
+__  Current Time:   8.761850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 8.761850
+
+
+__  Current Time:   8.761850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '8.76', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '8.75', 'private_1_field_ui'])
+		Next scheduled internal transition at time 8.811850
+
+
+__  Current Time:   8.811850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 8.811850
+
+
+__  Current Time:   8.811850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '8.81', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '8.80', 'private_1_field_ui'])
+		Next scheduled internal transition at time 8.861850
+
+
+__  Current Time:   8.861850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 8.861850
+
+
+__  Current Time:   8.861850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '8.86', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '8.86', 'private_1_field_ui'])
+		Next scheduled internal transition at time 8.911850
+
+
+__  Current Time:   8.911850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 8.911850
+
+
+__  Current Time:   8.911850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '8.91', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '8.90', 'private_1_field_ui'])
+		Next scheduled internal transition at time 8.961850
+
+
+__  Current Time:   8.961850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 8.961850
+
+
+__  Current Time:   8.961850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '8.96', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '8.95', 'private_1_field_ui'])
+		Next scheduled internal transition at time 9.011850
+
+
+__  Current Time:   9.011850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 9.011850
+
+
+__  Current Time:   9.011850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '9.01', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '9.00', 'private_1_field_ui'])
+		Next scheduled internal transition at time 9.061850
+
+
+__  Current Time:   9.061850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 9.061850
+
+
+__  Current Time:   9.061850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '9.06', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '9.06', 'private_1_field_ui'])
+		Next scheduled internal transition at time 9.111850
+
+
+__  Current Time:   9.111850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 9.111850
+
+
+__  Current Time:   9.111850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '9.11', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '9.11', 'private_1_field_ui'])
+		Next scheduled internal transition at time 9.161850
+
+
+__  Current Time:   9.161850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 9.161850
+
+
+__  Current Time:   9.161850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '9.16', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '9.15', 'private_1_field_ui'])
+		Next scheduled internal transition at time 9.211850
+
+
+__  Current Time:   9.211850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 9.211850
+
+
+__  Current Time:   9.211850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '9.21', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '9.20', 'private_1_field_ui'])
+		Next scheduled internal transition at time 9.261850
+
+
+__  Current Time:   9.261850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 9.261850
+
+
+__  Current Time:   9.261850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '9.26', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '9.26', 'private_1_field_ui'])
+		Next scheduled internal transition at time 9.311850
+
+
+__  Current Time:   9.311850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 9.311850
+
+
+__  Current Time:   9.311850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '9.31', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '9.31', 'private_1_field_ui'])
+		Next scheduled internal transition at time 9.361850
+
+
+__  Current Time:   9.361850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 9.361850
+
+
+__  Current Time:   9.361850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '9.36', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '9.35', 'private_1_field_ui'])
+		Next scheduled internal transition at time 9.411850
+
+
+__  Current Time:   9.411850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 9.411850
+
+
+__  Current Time:   9.411850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '9.41', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '9.40', 'private_1_field_ui'])
+		Next scheduled internal transition at time 9.461850
+
+
+__  Current Time:   9.461850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 9.461850
+
+
+__  Current Time:   9.461850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '9.46', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '9.46', 'private_1_field_ui'])
+		Next scheduled internal transition at time 9.511850
+
+
+__  Current Time:   9.511850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 9.511850
+
+
+__  Current Time:   9.511850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '9.51', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '9.51', 'private_1_field_ui'])
+		Next scheduled internal transition at time 9.561850
+
+
+__  Current Time:   9.561850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 9.561850
+
+
+__  Current Time:   9.561850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '9.56', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '9.55', 'private_1_field_ui'])
+		Next scheduled internal transition at time 9.611850
+
+
+__  Current Time:   9.611850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 9.611850
+
+
+__  Current Time:   9.611850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '9.61', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '9.60', 'private_1_field_ui'])
+		Next scheduled internal transition at time 9.661850
+
+
+__  Current Time:   9.661850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 9.661850
+
+
+__  Current Time:   9.661850 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '9.66', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '9.66', 'private_1_field_ui'])
+		Next scheduled internal transition at time 9.711850
+
+
+__  Current Time:   9.691832 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("mouse_click","private_1_field_ui",[224,81,1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Next scheduled internal transition at time 9.691832
+
+
+__  Current Time:   9.691832 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 9.691832
+
+
+__  Current Time:   9.691832 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:  10.906259 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("mouse_click","private_1_field_ui",[224,81,1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Next scheduled internal transition at time 10.906259
+
+
+__  Current Time:  10.906259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 10.906259
+
+
+__  Current Time:  10.906259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 10.956259
+
+
+__  Current Time:  10.956259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 10.956259
+
+
+__  Current Time:  10.956259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '10.96', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '10.95', 'private_1_field_ui'])
+		Next scheduled internal transition at time 11.006259
+
+
+__  Current Time:  11.006259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 11.006259
+
+
+__  Current Time:  11.006259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '11.01', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '11.00', 'private_1_field_ui'])
+		Next scheduled internal transition at time 11.056259
+
+
+__  Current Time:  11.056259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 11.056259
+
+
+__  Current Time:  11.056259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '11.06', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '11.05', 'private_1_field_ui'])
+		Next scheduled internal transition at time 11.106259
+
+
+__  Current Time:  11.106259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 11.106259
+
+
+__  Current Time:  11.106259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '11.11', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '11.10', 'private_1_field_ui'])
+		Next scheduled internal transition at time 11.156259
+
+
+__  Current Time:  11.156259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 11.156259
+
+
+__  Current Time:  11.156259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '11.16', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '11.15', 'private_1_field_ui'])
+		Next scheduled internal transition at time 11.206259
+
+
+__  Current Time:  11.206259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 11.206259
+
+
+__  Current Time:  11.206259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '11.21', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '11.20', 'private_1_field_ui'])
+		Next scheduled internal transition at time 11.256259
+
+
+__  Current Time:  11.256259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 11.256259
+
+
+__  Current Time:  11.256259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '11.26', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '11.25', 'private_1_field_ui'])
+		Next scheduled internal transition at time 11.306259
+
+
+__  Current Time:  11.306259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 11.306259
+
+
+__  Current Time:  11.306259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '11.31', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '11.30', 'private_1_field_ui'])
+		Next scheduled internal transition at time 11.356259
+
+
+__  Current Time:  11.356259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 11.356259
+
+
+__  Current Time:  11.356259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '11.36', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '11.35', 'private_1_field_ui'])
+		Next scheduled internal transition at time 11.406259
+
+
+__  Current Time:  11.406259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 11.406259
+
+
+__  Current Time:  11.406259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '11.41', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '11.40', 'private_1_field_ui'])
+		Next scheduled internal transition at time 11.456259
+
+
+__  Current Time:  11.456259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 11.456259
+
+
+__  Current Time:  11.456259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '11.46', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '11.45', 'private_1_field_ui'])
+		Next scheduled internal transition at time 11.506259
+
+
+__  Current Time:  11.506259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 11.506259
+
+
+__  Current Time:  11.506259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '11.51', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '11.50', 'private_1_field_ui'])
+		Next scheduled internal transition at time 11.556259
+
+
+__  Current Time:  11.556259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 11.556259
+
+
+__  Current Time:  11.556259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '11.56', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '11.55', 'private_1_field_ui'])
+		Next scheduled internal transition at time 11.606259
+
+
+__  Current Time:  11.606259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 11.606259
+
+
+__  Current Time:  11.606259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '11.61', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '11.60', 'private_1_field_ui'])
+		Next scheduled internal transition at time 11.656259
+
+
+__  Current Time:  11.656259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 11.656259
+
+
+__  Current Time:  11.656259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '11.66', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '11.65', 'private_1_field_ui'])
+		Next scheduled internal transition at time 11.706259
+
+
+__  Current Time:  11.706259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 11.706259
+
+
+__  Current Time:  11.706259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '11.71', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '11.70', 'private_1_field_ui'])
+		Next scheduled internal transition at time 11.756259
+
+
+__  Current Time:  11.756259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 11.756259
+
+
+__  Current Time:  11.756259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '11.76', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '11.75', 'private_1_field_ui'])
+		Next scheduled internal transition at time 11.806259
+
+
+__  Current Time:  11.806259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 11.806259
+
+
+__  Current Time:  11.806259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '11.81', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '11.80', 'private_1_field_ui'])
+		Next scheduled internal transition at time 11.856259
+
+
+__  Current Time:  11.856259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 11.856259
+
+
+__  Current Time:  11.856259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '11.86', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '11.85', 'private_1_field_ui'])
+		Next scheduled internal transition at time 11.906259
+
+
+__  Current Time:  11.906259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 11.906259
+
+
+__  Current Time:  11.906259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '11.91', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '11.90', 'private_1_field_ui'])
+		Next scheduled internal transition at time 11.956259
+
+
+__  Current Time:  11.956259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 11.956259
+
+
+__  Current Time:  11.956259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '11.96', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '11.95', 'private_1_field_ui'])
+		Next scheduled internal transition at time 12.006259
+
+
+__  Current Time:  12.006259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 12.006259
+
+
+__  Current Time:  12.006259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '12.01', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '12.00', 'private_1_field_ui'])
+		Next scheduled internal transition at time 12.056259
+
+
+__  Current Time:  12.056259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 12.056259
+
+
+__  Current Time:  12.056259 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '12.06', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '12.05', 'private_1_field_ui'])
+		Next scheduled internal transition at time 12.106259
+
+
+__  Current Time:  12.065193 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("mouse_click","private_1_field_ui",[224,81,1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Next scheduled internal transition at time 12.065193
+
+
+__  Current Time:  12.065193 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 12.065193
+
+
+__  Current Time:  12.065193 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:  12.788824 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+			port <input>:
+			port <field_ui>:
+				Event("mouse_click","private_1_field_ui",[224,81,1])
+			port <private_0_<narrow_cast>>:
+			port <private_1_field_ui>:
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Next scheduled internal transition at time 12.788824
+
+
+__  Current Time:  12.788824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 12.788824
+
+
+__  Current Time:  12.788824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 12.838824
+
+
+__  Current Time:  12.838824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 12.838824
+
+
+__  Current Time:  12.838824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '12.84', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '12.83', 'private_1_field_ui'])
+		Next scheduled internal transition at time 12.888824
+
+
+__  Current Time:  12.888824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 12.888824
+
+
+__  Current Time:  12.888824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '12.89', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '12.88', 'private_1_field_ui'])
+		Next scheduled internal transition at time 12.938824
+
+
+__  Current Time:  12.938824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 12.938824
+
+
+__  Current Time:  12.938824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '12.94', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '12.93', 'private_1_field_ui'])
+		Next scheduled internal transition at time 12.988824
+
+
+__  Current Time:  12.988824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 12.988824
+
+
+__  Current Time:  12.988824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '12.99', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '12.98', 'private_1_field_ui'])
+		Next scheduled internal transition at time 13.038824
+
+
+__  Current Time:  13.038824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 13.038824
+
+
+__  Current Time:  13.038824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '13.04', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '13.03', 'private_1_field_ui'])
+		Next scheduled internal transition at time 13.088824
+
+
+__  Current Time:  13.088824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 13.088824
+
+
+__  Current Time:  13.088824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '13.09', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '13.08', 'private_1_field_ui'])
+		Next scheduled internal transition at time 13.138824
+
+
+__  Current Time:  13.138824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 13.138824
+
+
+__  Current Time:  13.138824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '13.14', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '13.13', 'private_1_field_ui'])
+		Next scheduled internal transition at time 13.188824
+
+
+__  Current Time:  13.188824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 13.188824
+
+
+__  Current Time:  13.188824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '13.19', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '13.18', 'private_1_field_ui'])
+		Next scheduled internal transition at time 13.238824
+
+
+__  Current Time:  13.238824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 13.238824
+
+
+__  Current Time:  13.238824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '13.24', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '13.23', 'private_1_field_ui'])
+		Next scheduled internal transition at time 13.288824
+
+
+__  Current Time:  13.288824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 13.288824
+
+
+__  Current Time:  13.288824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '13.29', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '13.28', 'private_1_field_ui'])
+		Next scheduled internal transition at time 13.338824
+
+
+__  Current Time:  13.338824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 13.338824
+
+
+__  Current Time:  13.338824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '13.34', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '13.33', 'private_1_field_ui'])
+		Next scheduled internal transition at time 13.388824
+
+
+__  Current Time:  13.388824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 13.388824
+
+
+__  Current Time:  13.388824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '13.39', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '13.38', 'private_1_field_ui'])
+		Next scheduled internal transition at time 13.438824
+
+
+__  Current Time:  13.438824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 13.438824
+
+
+__  Current Time:  13.438824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '13.44', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '13.43', 'private_1_field_ui'])
+		Next scheduled internal transition at time 13.488824
+
+
+__  Current Time:  13.488824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 13.488824
+
+
+__  Current Time:  13.488824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '13.49', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '13.48', 'private_1_field_ui'])
+		Next scheduled internal transition at time 13.538824
+
+
+__  Current Time:  13.538824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 13.538824
+
+
+__  Current Time:  13.538824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '13.54', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '13.53', 'private_1_field_ui'])
+		Next scheduled internal transition at time 13.588824
+
+
+__  Current Time:  13.588824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 13.588824
+
+
+__  Current Time:  13.588824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '13.59', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '13.58', 'private_1_field_ui'])
+		Next scheduled internal transition at time 13.638824
+
+
+__  Current Time:  13.638824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 13.638824
+
+
+__  Current Time:  13.638824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '13.64', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '13.63', 'private_1_field_ui'])
+		Next scheduled internal transition at time 13.688824
+
+
+__  Current Time:  13.688824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 13.688824
+
+
+__  Current Time:  13.688824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '13.69', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '13.68', 'private_1_field_ui'])
+		Next scheduled internal transition at time 13.738824
+
+
+__  Current Time:  13.738824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 13.738824
+
+
+__  Current Time:  13.738824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '13.74', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '13.73', 'private_1_field_ui'])
+		Next scheduled internal transition at time 13.788824
+
+
+__  Current Time:  13.788824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 13.788824
+
+
+__  Current Time:  13.788824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '13.79', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '13.78', 'private_1_field_ui'])
+		Next scheduled internal transition at time 13.838824
+
+
+__  Current Time:  13.838824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 13.838824
+
+
+__  Current Time:  13.838824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '13.84', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '13.83', 'private_1_field_ui'])
+		Next scheduled internal transition at time 13.888824
+
+
+__  Current Time:  13.888824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 13.888824
+
+
+__  Current Time:  13.888824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '13.89', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '13.88', 'private_1_field_ui'])
+		Next scheduled internal transition at time 13.938824
+
+
+__  Current Time:  13.938824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 13.938824
+
+
+__  Current Time:  13.938824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '13.94', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '13.93', 'private_1_field_ui'])
+		Next scheduled internal transition at time 13.988824
+
+
+__  Current Time:  13.988824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 13.988824
+
+
+__  Current Time:  13.988824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '13.99', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '13.98', 'private_1_field_ui'])
+		Next scheduled internal transition at time 14.038824
+
+
+__  Current Time:  14.038824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 14.038824
+
+
+__  Current Time:  14.038824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '14.04', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '14.03', 'private_1_field_ui'])
+		Next scheduled internal transition at time 14.088824
+
+
+__  Current Time:  14.088824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 14.088824
+
+
+__  Current Time:  14.088824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '14.09', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '14.08', 'private_1_field_ui'])
+		Next scheduled internal transition at time 14.138824
+
+
+__  Current Time:  14.138824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 14.138824
+
+
+__  Current Time:  14.138824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '14.14', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '14.13', 'private_1_field_ui'])
+		Next scheduled internal transition at time 14.188824
+
+
+__  Current Time:  14.188824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 14.188824
+
+
+__  Current Time:  14.188824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '14.19', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '14.18', 'private_1_field_ui'])
+		Next scheduled internal transition at time 14.238824
+
+
+__  Current Time:  14.238824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 14.238824
+
+
+__  Current Time:  14.238824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '14.24', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '14.23', 'private_1_field_ui'])
+		Next scheduled internal transition at time 14.288824
+
+
+__  Current Time:  14.288824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 14.288824
+
+
+__  Current Time:  14.288824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '14.29', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '14.28', 'private_1_field_ui'])
+		Next scheduled internal transition at time 14.338824
+
+
+__  Current Time:  14.338824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 14.338824
+
+
+__  Current Time:  14.338824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '14.34', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '14.33', 'private_1_field_ui'])
+		Next scheduled internal transition at time 14.388824
+
+
+__  Current Time:  14.388824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 14.388824
+
+
+__  Current Time:  14.388824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '14.39', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '14.38', 'private_1_field_ui'])
+		Next scheduled internal transition at time 14.438824
+
+
+__  Current Time:  14.438824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 14.438824
+
+
+__  Current Time:  14.438824 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x101383cb0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+				(event name: update_text; port: ui; parameters: [1, 1, '14.44', 'private_1_field_ui'])
+				(event name: update_text; port: ui; parameters: [1, 2, '14.43', 'private_1_field_ui'])
+		Next scheduled internal transition at time 14.488824
+

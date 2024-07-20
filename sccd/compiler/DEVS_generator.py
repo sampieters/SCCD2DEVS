@@ -164,15 +164,19 @@ class DEVSGenerator(Visitor):
         super_classes = []
         if not class_node.super_class_objs:
             if class_node.statechart:
-                super_classes.append("ObjectManagerBase")
+                super_classes.append("RuntimeClassBase")
         if class_node.super_classes:
             for super_class in class_node.super_classes:
-                super_classes.append(super_class)
+                # Check if this is always the case (that the superclass is an instance)
+                super_classes.append(super_class + "Instance")
 
         ################################
         # State Instance (statechart)
         ################################
-        self.writer.beginClass(f"{class_node.name}Instance", ["RuntimeClassBase"])
+
+        # TODO: RuntimeClassBase only if there are no superclasses, if there are then append the superclasses
+
+        self.writer.beginClass(f"{class_node.name}Instance", super_classes)
         self.writer.beginConstructor()
         self.writer.addFormalParameter("atomdevs")
 
@@ -269,11 +273,14 @@ class DEVSGenerator(Visitor):
         for p in constructor.getParams():
             p.accept(self)
         self.writer.beginMethodBody()
+
+        
         for super_class in constructor.parent_class.super_classes:
             # begin call
             if super_class in constructor.parent_class.super_class_objs:
-                self.writer.beginSuperClassMethodCall(super_class, "user_defined_constructor")
+                self.writer.beginSuperClassMethodCall(super_class + "Instance", "user_defined_constructor")
             else:
+                # TODO: How to get in this? 
                 self.writer.beginSuperClassConstructorCall(super_class)
             # write actual parameters
             if super_class in constructor.super_class_parameters:
@@ -331,7 +338,7 @@ class DEVSGenerator(Visitor):
         ################################
         # State Object (keeps list of all instances of that object + controller operations)
         ################################
-        self.writer.beginClass(class_node.name, super_classes)
+        self.writer.beginClass(class_node.name, ["ObjectManagerBase"])
 
         self.writer.beginMethod("constructObject")
 
@@ -409,7 +416,7 @@ class DEVSGenerator(Visitor):
             for super_class in destructor.parent_class.super_classes:
                 # begin call
                 if super_class in destructor.parent_class.super_class_objs:
-                    self.writer.beginSuperClassMethodCall(super_class, "user_defined_destructor")
+                    self.writer.beginSuperClassMethodCall(super_class + "Instance", "user_defined_destructor")
                     self.writer.endSuperClassMethodCall()
                 else:
                     self.writer.beginSuperClassDestructorCall(super_class)

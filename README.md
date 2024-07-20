@@ -99,3 +99,4 @@ python3 runner.py
 ## TODO
 1) How to do in_ui??
 2) Problem with getInstances --> with dissacociate it thinks that it still exists
+3) Nieuwe atomicDEVS tester en coupelen met een coupledDEVS to the new atomicDEVS

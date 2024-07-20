@@ -1,1 +1,0 @@
-0.00 (event name: output_event; port: ui; parameters: ['0.00'])

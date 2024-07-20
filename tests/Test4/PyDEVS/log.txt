@@ -2,12 +2,17 @@
 __  Current Time:   0.000000 __________________________________________ 
 
 
-	INITIAL CONDITIONS in model <controller.MainApp>
+	INITIAL CONDITIONS in model <Tester.Controller.MainApp>
 		Initial State: None
 		Next scheduled internal transition at time inf
 
 
-	INITIAL CONDITIONS in model <controller.ObjectManager>
+	INITIAL CONDITIONS in model <Tester.Controller.ObjectManager>
+		Initial State: None
+		Next scheduled internal transition at time 0.000000
+
+
+	INITIAL CONDITIONS in model <Tester.Tester>
 		Initial State: None
 		Next scheduled internal transition at time 0.000000
 
@@ -15,73 +20,105 @@ __  Current Time:   0.000000 __________________________________________
 __  Current Time:   0.000000 __________________________________________ 
 
 
-	EXTERNAL TRANSITION in model <controller.MainApp>
+	EXTERNAL TRANSITION in model <Tester.Controller.MainApp>
 		Input Port Configuration:
 			port <obj_manager_in>:
-				('MainApp', 'MainApp', (event name: start_instance; port: None; parameters: ['MainApp[0]']))
+				[('MainApp', 'MainApp', (event name: start_instance; port: None; parameters: ['MainApp[0]']))]
 			port <input>:
 			port <private_4_<narrow_cast>>:
-		New State: {0: <target.MainAppInstance object at 0x104269f70>}
+		New State: {0: <target.MainAppInstance object at 0x10480ad80>}
 		Next scheduled internal transition at time 0.000000
 
 
-	INTERNAL TRANSITION in model <controller.ObjectManager>
-		New State: <target.ObjectManagerState object at 0x1041cc620>
+	INTERNAL TRANSITION in model <Tester.Controller.ObjectManager>
+		New State: <target.ObjectManagerState object at 0x103dc3200>
 		Output Port Configuration:
 			port <port1>:
-				('MainApp', 'MainApp', (event name: start_instance; port: None; parameters: ['MainApp[0]']))
+				[('MainApp', 'MainApp', (event name: start_instance; port: None; parameters: ['MainApp[0]']))]
 		Next scheduled internal transition at time inf
 
 
 __  Current Time:   0.000000 __________________________________________ 
 
 
-	EXTERNAL TRANSITION in model <controller.ObjectManager>
+	EXTERNAL TRANSITION in model <Tester.Controller.ObjectManager>
 		Input Port Configuration:
 			port <input>:
-				('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))
-		New State: <target.ObjectManagerState object at 0x1041cc620>
+				[('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))]
+		New State: <target.ObjectManagerState object at 0x103dc3200>
 		Next scheduled internal transition at time 0.000000
 
 
-	INTERNAL TRANSITION in model <controller.MainApp>
-		New State: {0: <target.MainAppInstance object at 0x104269f70>}
+	INTERNAL TRANSITION in model <Tester.Controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x10480ad80>}
 		Output Port Configuration:
 			port <obj_manager_out>:
-				('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))
+				[('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))]
 			port <ui>:
-				(event name: output_event; port: ui; parameters: ['0.00'])
-		Next scheduled internal transition at time inf
-
-
-__  Current Time:   0.000000 __________________________________________ 
-
-
-	EXTERNAL TRANSITION in model <controller.MainApp>
-		Input Port Configuration:
-			port <obj_manager_in>:
-				('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))
-			port <input>:
-			port <private_4_<narrow_cast>>:
-		New State: {0: <target.MainAppInstance object at 0x104269f70>}
+				[(event name: output_event; port: ui; parameters: ['0.00'])]
 		Next scheduled internal transition at time 0.000000
 
 
-	INTERNAL TRANSITION in model <controller.ObjectManager>
-		New State: <target.ObjectManagerState object at 0x1041cc620>
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <Tester.Controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x10480ad80>}
 		Output Port Configuration:
-			port <port1>:
-				('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))
+			port <obj_manager_out>:
+			port <ui>:
 		Next scheduled internal transition at time inf
 
 
 __  Current Time:   0.000000 __________________________________________ 
 
 
-	INTERNAL TRANSITION in model <controller.MainApp>
-		New State: {0: <target.MainAppInstance object at 0x104269f70>}
+	EXTERNAL TRANSITION in model <Tester.Controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+				[('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))]
+			port <input>:
+			port <private_4_<narrow_cast>>:
+		New State: {0: <target.MainAppInstance object at 0x10480ad80>}
+		Next scheduled internal transition at time 0.000000
+
+
+	INTERNAL TRANSITION in model <Tester.Controller.ObjectManager>
+		New State: <target.ObjectManagerState object at 0x103dc3200>
+		Output Port Configuration:
+			port <port1>:
+				[('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))]
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <Tester.Controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x10480ad80>}
 		Output Port Configuration:
 			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.000000
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <Tester.Controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x10480ad80>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <Tester.Tester>
+		New State: None
+		Output Port Configuration:
 			port <ui>:
 		Next scheduled internal transition at time inf
 

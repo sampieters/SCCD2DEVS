@@ -717,6 +717,12 @@ class ObjectManagerBase(AtomicDEVS):
         self.inports = {}
 
         self.lock = threading.Condition()
+
+
+
+
+        # TODO: HELP
+        self.external = False
     
     def getEarliestEventTime(self):
         with self.lock:
@@ -1153,6 +1159,7 @@ class ObjectManagerBase(AtomicDEVS):
                 self.addInput(ev)
         return self.instances
 
+    '''
     def intTransition(self):
         earliest = min(self.getEarliestEventTime(), self.simulated_time + self.input_queue.getEarliestTime())
         if not (earliest == INFINITY):
@@ -1167,8 +1174,32 @@ class ObjectManagerBase(AtomicDEVS):
             self.next_time = 0
         elif next_earliest == INFINITY:
             self.next_time = INFINITY
-        #else:
-        #    self.next_time = next_earliest - earliest
+        return self.instances
+    '''
+    
+    def intTransition(self):
+        self.simulated_time += self.next_time
+
+        self.next_time = min(self.getEarliestEventTime(), self.simulated_time + self.input_queue.getEarliestTime())
+
+        #earliest = min(self.getEarliestEventTime(), self.simulated_time + self.input_queue.getEarliestTime())
+        #if not (earliest == INFINITY):
+            #self.simulated_time = earliest
+        self.to_send = []
+        self.handleInput()
+        self.stepAll()
+        
+
+        self.next_time -= self.simulated_time
+
+        # Clamp to ensure non-negative result
+        self.next_time = max(self.next_time, 0.0)
+        #if next_earliest != INFINITY:
+            #self.next_time = next_earliest - earliest
+        #elif not (len(self.to_send) == 0):
+            #self.next_time = 0
+        #elif next_earliest == INFINITY:
+            #self.next_time = INFINITY
         return self.instances
 
     def outputFnc(self):

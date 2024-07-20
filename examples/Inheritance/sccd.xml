@@ -1,0 +1,42 @@
+<?xml version="1.1" ?>
+<diagram author="Sam Pieters" name="Bouncing_Balls_DEVS_Version">
+    <description>
+        Tkinter frame with bouncing balls in it.
+    </description>
+    <top>
+    </top>
+    <inport name="ui"/>
+    <outport name="ui"/>
+
+    <class name="A">
+        <constructor>
+            <body>
+                self.huh = 21
+            </body>
+        </constructor>
+        <scxml initial="running">
+            <state id="running">
+            </state>
+        </scxml>
+    </class>
+    <class name="B" default="true">
+        <relationships>
+            <inheritance class="A" />
+        </relationships>
+        <constructor>
+            <body>
+                self.nr_of_fields = 0
+            </body>
+        </constructor>
+        <scxml initial="running">
+            <state id="running">
+                <onentry>
+                    <script>
+                        print(self.huh)
+                    </script>
+                </onentry>
+            </state>
+        </scxml>
+    </class>
+
+</diagram>

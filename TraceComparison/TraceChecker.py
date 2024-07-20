@@ -3,6 +3,7 @@ import subprocess
 import importlib.util
 import re
 from sccd.runtime.DEVS_loop import DEVSSimulator
+import Tester
 
 def import_target_module(module_name, file_path):
     spec = importlib.util.spec_from_file_location(module_name, file_path)
@@ -165,6 +166,7 @@ class PydevsSCCDTraceChecker(SCCDTraceChecker):
         return result.returncode
 
     def run(self, directory):
+        '''
         pydevs_target = os.path.join(directory, "PyDEVS", "target.py")
         # Dynamically import the target module
         target = import_target_module("target", pydevs_target)
@@ -179,6 +181,30 @@ class PydevsSCCDTraceChecker(SCCDTraceChecker):
         # Set verbose to the log file path
         sim.setVerbose(log_file_path)
 
+        sim.simulate()
+        '''
+        # Dynamically import the target module
+        pydevs_target = os.path.join(directory, "PyDEVS", "target.py")
+        target = import_target_module("target", pydevs_target)
+
+        # Check if there is an input file
+        input_file = os.path.join(directory, "input.txt")
+        if not os.path.exists(input_file):
+            input_file = None
+
+        test_model = target.Controller("Controller")
+        tester = Tester.Tester(test_model, input_file)
+
+        sim = DEVSSimulator(tester)
+        sim.setRealTime(False)
+        
+        # Create the full path for the log file
+        log_file_path = os.path.join(directory, "PyDEVS", "log.txt")
+
+        # Set verbose to the log file path
+        sim.setVerbose(log_file_path)
+
+        #sim.setClassicDEVS()
         sim.simulate()
 
     def extract_output_events(self, log_file_path):

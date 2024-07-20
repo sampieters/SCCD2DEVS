@@ -1,10 +1,10 @@
-import target as best_target
+import target as target
 from sccd.runtime.DEVS_statecharts_core import Event
 import threading
 
 
 if __name__ == '__main__':
-    controller = best_target.Controller() 
+    controller = target.Controller("Controller") 
     
     def raw_inputter():
         while 1:
@@ -24,38 +24,3 @@ if __name__ == '__main__':
     output_thread.start()
     
     controller.start()
-
-
-
-
-import tkinter as tk
-import examples.BouncingBalls.PyDEVS.best_target as best_target
-from sccd.runtime.libs.ui_v2 import UI
-from sccd.runtime.DEVS_loop import DEVSSimulator
-
-class OutputListener:
-	def __init__(self, ui):
-		self.ui = ui
-
-	def add(self, event):
-		if event.port == "ui":
-			method = getattr(self.ui, event.name)
-			method(*event.parameters)
-
-if __name__ == '__main__':
-	model = best_target.Controller(name="controller")
-	refs = {"ui": model.ui, "field_ui": model.atomic1.field_ui, "button_ui": model.atomic2.button_ui, "ball_ui": model.atomic3.ball_ui}
-
-
-	sim = DEVSSimulator(model)
-	sim.setRealTime(True)
-	sim.setRealTimeInputFile(None)
-	sim.setRealTimePorts(refs)
-	sim.setVerbose(None)
-	#sim.setRealTimePlatformTk(tkroot)
-
-	model.atomic1.addMyOwnOutputListener(OutputListener(ui))
-	model.atomic2.addMyOwnOutputListener(OutputListener(ui))
-	model.atomic3.addMyOwnOutputListener(OutputListener(ui))
-	sim.simulate()
-	#tkroot.mainloop()

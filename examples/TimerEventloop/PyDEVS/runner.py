@@ -1,5 +1,5 @@
 import tkinter as tk
-import examples.FixedTimerEventloop.PyDEVS.target as target
+import target as target
 from sccd.runtime.libs.ui_v2 import UI
 from sccd.runtime.DEVS_loop import DEVSSimulator
 

@@ -10,8 +10,7 @@ from sccd.runtime.statecharts_core import *
 from sccd.runtime.libs.ui import ui
 import time
 
-CANVAS_WIDTH = 350
-CANVAS_HEIGHT = 300
+CANVAS_DIMS = (350, 300)
 
 # package "Timer (Eventloop Version)"
 
@@ -140,10 +139,10 @@ class MainApp(RuntimeClassBase):
         self.states["/interrupted"].addTransition(_interrupted_0)
     
     def _creating_window_enter(self):
-        self.big_step.outputEvent(Event("create_window", self.getOutPortName("ui"), [CANVAS_WIDTH, CANVAS_HEIGHT, "Fixed Timer", self.inports['field_ui']]))
+        self.big_step.outputEvent(Event("create_window", self.getOutPortName("ui"), [CANVAS_DIMS[0], CANVAS_DIMS[1], "Fixed Timer", self.inports['field_ui']]))
     
     def _creating_canvas_enter(self):
-        self.big_step.outputEvent(Event("create_canvas", self.getOutPortName("ui"), [self.window_id, CANVAS_WIDTH, CANVAS_HEIGHT - 200, {'background':'#222222'}, self.inports['field_ui']]))
+        self.big_step.outputEvent(Event("create_canvas", self.getOutPortName("ui"), [self.window_id, CANVAS_DIMS[0], CANVAS_DIMS[1] - 200, {'background':'#222222'}, self.inports['field_ui']]))
     
     def _creating_clock_text_enter(self):
         self.big_step.outputEvent(Event("create_text", self.getOutPortName("ui"), [self.canvas_id, 50, 50, '', self.inports['field_ui']]))

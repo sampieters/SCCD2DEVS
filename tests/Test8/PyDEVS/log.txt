@@ -2,17 +2,22 @@
 __  Current Time:   0.000000 __________________________________________ 
 
 
-	INITIAL CONDITIONS in model <controller.A>
+	INITIAL CONDITIONS in model <Tester.Controller.A>
 		Initial State: None
 		Next scheduled internal transition at time inf
 
 
-	INITIAL CONDITIONS in model <controller.MainApp>
+	INITIAL CONDITIONS in model <Tester.Controller.MainApp>
 		Initial State: None
 		Next scheduled internal transition at time inf
 
 
-	INITIAL CONDITIONS in model <controller.ObjectManager>
+	INITIAL CONDITIONS in model <Tester.Controller.ObjectManager>
+		Initial State: None
+		Next scheduled internal transition at time 0.000000
+
+
+	INITIAL CONDITIONS in model <Tester.Tester>
 		Initial State: None
 		Next scheduled internal transition at time 0.000000
 
@@ -20,21 +25,21 @@ __  Current Time:   0.000000 __________________________________________
 __  Current Time:   0.000000 __________________________________________ 
 
 
-	EXTERNAL TRANSITION in model <controller.MainApp>
+	EXTERNAL TRANSITION in model <Tester.Controller.MainApp>
 		Input Port Configuration:
 			port <obj_manager_in>:
-				('MainApp', 'MainApp', (event name: start_instance; port: None; parameters: ['MainApp[0]']))
+				[('MainApp', 'MainApp', (event name: start_instance; port: None; parameters: ['MainApp[0]']))]
 			port <input>:
 			port <private_10_<narrow_cast>>:
-		New State: {0: <target.MainAppInstance object at 0x104275340>}
+		New State: {0: <target.MainAppInstance object at 0x10480e3f0>}
 		Next scheduled internal transition at time 0.000000
 
 
-	INTERNAL TRANSITION in model <controller.ObjectManager>
-		New State: <target.ObjectManagerState object at 0x102a27b90>
+	INTERNAL TRANSITION in model <Tester.Controller.ObjectManager>
+		New State: <target.ObjectManagerState object at 0x10480d850>
 		Output Port Configuration:
 			port <port1>:
-				('MainApp', 'MainApp', (event name: start_instance; port: None; parameters: ['MainApp[0]']))
+				[('MainApp', 'MainApp', (event name: start_instance; port: None; parameters: ['MainApp[0]']))]
 			port <port2>:
 		Next scheduled internal transition at time inf
 
@@ -42,19 +47,19 @@ __  Current Time:   0.000000 __________________________________________
 __  Current Time:   0.000000 __________________________________________ 
 
 
-	EXTERNAL TRANSITION in model <controller.ObjectManager>
+	EXTERNAL TRANSITION in model <Tester.Controller.ObjectManager>
 		Input Port Configuration:
 			port <input>:
-				('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))
-		New State: <target.ObjectManagerState object at 0x102a27b90>
+				[('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))]
+		New State: <target.ObjectManagerState object at 0x10480d850>
 		Next scheduled internal transition at time 0.000000
 
 
-	INTERNAL TRANSITION in model <controller.MainApp>
-		New State: {0: <target.MainAppInstance object at 0x104275340>}
+	INTERNAL TRANSITION in model <Tester.Controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x10480e3f0>}
 		Output Port Configuration:
 			port <obj_manager_out>:
-				('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))
+				[('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))]
 			port <ui>:
 			port <linkA>:
 		Next scheduled internal transition at time 0.000000
@@ -63,147 +68,96 @@ __  Current Time:   0.000000 __________________________________________
 __  Current Time:   0.000000 __________________________________________ 
 
 
-	CONFLUENT TRANSITION in model <controller.MainApp>
+	EXTERNAL TRANSITION in model <Tester.Controller.ObjectManager>
 		Input Port Configuration:
-			port <obj_manager_in>: 
-				('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))
-			port <input>: 
-			port <private_10_<narrow_cast>>: 
-		New State: {0: <target.MainAppInstance object at 0x104275340>}
+			port <input>:
+				[('MainApp', 'A', (event name: create_instance; port: None; parameters: ['linkA', 'A', 1, 3.14, 'test', [1, 2, 3], {'1': 1, '2': 2, '3': 3}]))]
+		New State: <target.ObjectManagerState object at 0x10480d850>
+		Next scheduled internal transition at time 0.000000
+
+
+	INTERNAL TRANSITION in model <Tester.Controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x10480e3f0>}
 		Output Port Configuration:
 			port <obj_manager_out>:
-				('MainApp', 'A', (event name: create_instance; port: None; parameters: ['linkA', 'A', 1, 3.14, 'test', [1, 2, 3], {'1': 1, '2': 2, '3': 3}]))
+				[('MainApp', 'A', (event name: create_instance; port: None; parameters: ['linkA', 'A', 1, 3.14, 'test', [1, 2, 3], {'1': 1, '2': 2, '3': 3}]))]
 			port <ui>:
 			port <linkA>:
-		Next scheduled internal transition at time 0.000000
-
-
-	CONFLUENT TRANSITION in model <controller.ObjectManager>
-		Input Port Configuration:
-			port <input>: 
-				('MainApp', 'A', (event name: create_instance; port: None; parameters: ['linkA', 'A', 1, 3.14, 'test', [1, 2, 3], {'1': 1, '2': 2, '3': 3}]))
-		New State: <target.ObjectManagerState object at 0x102a27b90>
-		Output Port Configuration:
-			port <port1>:
-				('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))
-			port <port2>:
-		Next scheduled internal transition at time 0.000000
+		Next scheduled internal transition at time inf
 
 
 __  Current Time:   0.000000 __________________________________________ 
 
 
-	EXTERNAL TRANSITION in model <controller.A>
+	EXTERNAL TRANSITION in model <Tester.Controller.A>
 		Input Port Configuration:
 			port <obj_manager_in>:
-				('MainApp', 'A', (event name: create_instance; port: None; parameters: ['linkA', 'A', 1, 3.14, 'test', [1, 2, 3], {'1': 1, '2': 2, '3': 3}]))
+				[('MainApp', 'A', (event name: create_instance; port: None; parameters: ['linkA', 'A', 1, 3.14, 'test', [1, 2, 3], {'1': 1, '2': 2, '3': 3}]))]
 			port <input>:
 			port <private_11_<narrow_cast>>:
-		New State: {0: <target.AInstance object at 0x1042752e0>}
+		New State: {0: <target.AInstance object at 0x104810e60>}
 		Next scheduled internal transition at time 0.000000
 
 
-	INTERNAL TRANSITION in model <controller.MainApp>
-		New State: {0: <target.MainAppInstance object at 0x104275340>}
-		Output Port Configuration:
-			port <obj_manager_out>:
-			port <ui>:
-			port <linkA>:
-		Next scheduled internal transition at time inf
-
-
-	INTERNAL TRANSITION in model <controller.ObjectManager>
-		New State: <target.ObjectManagerState object at 0x102a27b90>
-		Output Port Configuration:
-			port <port1>:
-			port <port2>:
-				('MainApp', 'A', (event name: create_instance; port: None; parameters: ['linkA', 'A', 1, 3.14, 'test', [1, 2, 3], {'1': 1, '2': 2, '3': 3}]))
-		Next scheduled internal transition at time inf
-
-
-__  Current Time:   0.000000 __________________________________________ 
-
-
-	EXTERNAL TRANSITION in model <controller.ObjectManager>
-		Input Port Configuration:
-			port <input>:
-				('A', 'MainApp', (event name: instance_created; port: None; parameters: ['linkA[0]']))
-		New State: <target.ObjectManagerState object at 0x102a27b90>
-		Next scheduled internal transition at time 0.000000
-
-
-	INTERNAL TRANSITION in model <controller.A>
-		New State: {0: <target.AInstance object at 0x1042752e0>}
-		Output Port Configuration:
-			port <obj_manager_out>:
-				('A', 'MainApp', (event name: instance_created; port: None; parameters: ['linkA[0]']))
-			port <ui>:
-		Next scheduled internal transition at time inf
-
-
-__  Current Time:   0.000000 __________________________________________ 
-
-
-	EXTERNAL TRANSITION in model <controller.MainApp>
+	EXTERNAL TRANSITION in model <Tester.Controller.MainApp>
 		Input Port Configuration:
 			port <obj_manager_in>:
-				('A', 'MainApp', (event name: instance_created; port: None; parameters: ['linkA[0]']))
+				[('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))]
 			port <input>:
 			port <private_10_<narrow_cast>>:
-		New State: {0: <target.MainAppInstance object at 0x104275340>}
+		New State: {0: <target.MainAppInstance object at 0x10480e3f0>}
 		Next scheduled internal transition at time 0.000000
 
 
-	INTERNAL TRANSITION in model <controller.ObjectManager>
-		New State: <target.ObjectManagerState object at 0x102a27b90>
+	INTERNAL TRANSITION in model <Tester.Controller.ObjectManager>
+		New State: <target.ObjectManagerState object at 0x10480d850>
 		Output Port Configuration:
 			port <port1>:
-				('A', 'MainApp', (event name: instance_created; port: None; parameters: ['linkA[0]']))
+				[('MainApp', 'MainApp', (event name: instance_started; port: None; parameters: ['MainApp[0]']))]
 			port <port2>:
+				[('MainApp', 'A', (event name: create_instance; port: None; parameters: ['linkA', 'A', 1, 3.14, 'test', [1, 2, 3], {'1': 1, '2': 2, '3': 3}]))]
 		Next scheduled internal transition at time inf
 
 
 __  Current Time:   0.000000 __________________________________________ 
 
 
-	INTERNAL TRANSITION in model <controller.MainApp>
-		New State: {0: <target.MainAppInstance object at 0x104275340>}
-		Output Port Configuration:
-			port <obj_manager_out>:
-			port <ui>:
-			port <linkA>:
-		Next scheduled internal transition at time 0.000000
-
-
-__  Current Time:   0.000000 __________________________________________ 
-
-
-	INTERNAL TRANSITION in model <controller.MainApp>
-		New State: {0: <target.MainAppInstance object at 0x104275340>}
-		Output Port Configuration:
-			port <obj_manager_out>:
-			port <ui>:
-				(event name: instance_created_succesfully; port: ui; parameters: ['0.00', 'linkA[0]'])
-			port <linkA>:
-		Next scheduled internal transition at time 0.000000
-
-
-__  Current Time:   0.000000 __________________________________________ 
-
-
-	EXTERNAL TRANSITION in model <controller.ObjectManager>
+	EXTERNAL TRANSITION in model <Tester.Controller.ObjectManager>
 		Input Port Configuration:
 			port <input>:
-				('MainApp', 'A', (event name: start_instance; port: None; parameters: ['linkA[0]']))
-		New State: <target.ObjectManagerState object at 0x102a27b90>
+				[('A', 'MainApp', (event name: instance_created; port: None; parameters: ['linkA[0]']))]
+		New State: <target.ObjectManagerState object at 0x10480d850>
 		Next scheduled internal transition at time 0.000000
 
 
-	INTERNAL TRANSITION in model <controller.MainApp>
-		New State: {0: <target.MainAppInstance object at 0x104275340>}
+	INTERNAL TRANSITION in model <Tester.Controller.A>
+		New State: {0: <target.AInstance object at 0x104810e60>}
 		Output Port Configuration:
 			port <obj_manager_out>:
-				('MainApp', 'A', (event name: start_instance; port: None; parameters: ['linkA[0]']))
+				[('A', 'MainApp', (event name: instance_created; port: None; parameters: ['linkA[0]']))]
+			port <ui>:
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <Tester.Controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x10480e3f0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+			port <linkA>:
+		Next scheduled internal transition at time 0.000000
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <Tester.Controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x10480e3f0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
 			port <ui>:
 			port <linkA>:
 		Next scheduled internal transition at time inf
@@ -212,65 +166,21 @@ __  Current Time:   0.000000 __________________________________________
 __  Current Time:   0.000000 __________________________________________ 
 
 
-	EXTERNAL TRANSITION in model <controller.A>
+	EXTERNAL TRANSITION in model <Tester.Controller.MainApp>
 		Input Port Configuration:
 			port <obj_manager_in>:
-				('MainApp', 'A', (event name: start_instance; port: None; parameters: ['linkA[0]']))
-			port <input>:
-			port <private_11_<narrow_cast>>:
-		New State: {0: <target.AInstance object at 0x1042752e0>}
-		Next scheduled internal transition at time 0.000000
-
-
-	INTERNAL TRANSITION in model <controller.ObjectManager>
-		New State: <target.ObjectManagerState object at 0x102a27b90>
-		Output Port Configuration:
-			port <port1>:
-			port <port2>:
-				('MainApp', 'A', (event name: start_instance; port: None; parameters: ['linkA[0]']))
-		Next scheduled internal transition at time inf
-
-
-__  Current Time:   0.000000 __________________________________________ 
-
-
-	EXTERNAL TRANSITION in model <controller.ObjectManager>
-		Input Port Configuration:
-			port <input>:
-				('A', 'MainApp', (event name: instance_started; port: None; parameters: ['linkA[0]']))
-		New State: <target.ObjectManagerState object at 0x102a27b90>
-		Next scheduled internal transition at time 0.000000
-
-
-	INTERNAL TRANSITION in model <controller.A>
-		New State: {0: <target.AInstance object at 0x1042752e0>}
-		Output Port Configuration:
-			port <obj_manager_out>:
-				('A', 'MainApp', (event name: instance_started; port: None; parameters: ['linkA[0]']))
-			port <ui>:
-				(event name: statechart_started_succesfully; port: ui; parameters: ['0.00'])
-				(event name: constructor_initialized_succesfully; port: ui; parameters: ['0.00', 1, 3.14, 'test', [1, 2, 3], {'1': 1, '2': 2, '3': 3}])
-		Next scheduled internal transition at time inf
-
-
-__  Current Time:   0.000000 __________________________________________ 
-
-
-	EXTERNAL TRANSITION in model <controller.MainApp>
-		Input Port Configuration:
-			port <obj_manager_in>:
-				('A', 'MainApp', (event name: instance_started; port: None; parameters: ['linkA[0]']))
+				[('A', 'MainApp', (event name: instance_created; port: None; parameters: ['linkA[0]']))]
 			port <input>:
 			port <private_10_<narrow_cast>>:
-		New State: {0: <target.MainAppInstance object at 0x104275340>}
+		New State: {0: <target.MainAppInstance object at 0x10480e3f0>}
 		Next scheduled internal transition at time 0.000000
 
 
-	INTERNAL TRANSITION in model <controller.ObjectManager>
-		New State: <target.ObjectManagerState object at 0x102a27b90>
+	INTERNAL TRANSITION in model <Tester.Controller.ObjectManager>
+		New State: <target.ObjectManagerState object at 0x10480d850>
 		Output Port Configuration:
 			port <port1>:
-				('A', 'MainApp', (event name: instance_started; port: None; parameters: ['linkA[0]']))
+				[('A', 'MainApp', (event name: instance_created; port: None; parameters: ['linkA[0]']))]
 			port <port2>:
 		Next scheduled internal transition at time inf
 
@@ -278,8 +188,8 @@ __  Current Time:   0.000000 __________________________________________
 __  Current Time:   0.000000 __________________________________________ 
 
 
-	INTERNAL TRANSITION in model <controller.MainApp>
-		New State: {0: <target.MainAppInstance object at 0x104275340>}
+	INTERNAL TRANSITION in model <Tester.Controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x10480e3f0>}
 		Output Port Configuration:
 			port <obj_manager_out>:
 			port <ui>:
@@ -290,12 +200,33 @@ __  Current Time:   0.000000 __________________________________________
 __  Current Time:   0.000000 __________________________________________ 
 
 
-	INTERNAL TRANSITION in model <controller.MainApp>
-		New State: {0: <target.MainAppInstance object at 0x104275340>}
+	INTERNAL TRANSITION in model <Tester.Controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x10480e3f0>}
 		Output Port Configuration:
 			port <obj_manager_out>:
 			port <ui>:
-				(event name: instance_started_succesfully; port: ui; parameters: ['0.00', 'linkA[0]'])
+				[(event name: instance_created_succesfully; port: ui; parameters: ['0.00', 'linkA[0]'])]
+			port <linkA>:
+		Next scheduled internal transition at time 0.000000
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <Tester.Controller.ObjectManager>
+		Input Port Configuration:
+			port <input>:
+				[('MainApp', 'A', (event name: start_instance; port: None; parameters: ['linkA[0]']))]
+		New State: <target.ObjectManagerState object at 0x10480d850>
+		Next scheduled internal transition at time 0.000000
+
+
+	INTERNAL TRANSITION in model <Tester.Controller.MainApp>
+		New State: {0: <target.MainAppInstance object at 0x10480e3f0>}
+		Output Port Configuration:
+			port <obj_manager_out>:
+				[('MainApp', 'A', (event name: start_instance; port: None; parameters: ['linkA[0]']))]
+			port <ui>:
 			port <linkA>:
 		Next scheduled internal transition at time inf
 

@@ -489,7 +489,6 @@ class Field(RuntimeClassBase):
     
     def _root_running_deleting_behaviour_running_2_exec(self, parameters):
         self.big_step.outputEventOM(Event("create_instance", None, [self, "collisions", "CollisionPhysics", self.collisions[-1][0], self.collisions[-1][1], self.balls[self.collisions[-1][0]], self.balls[self.collisions[-1][1]]]))
-        print("COLLISION")
         self.collisions = self.collisions[:-1]
     
     def _root_running_deleting_behaviour_running_2_guard(self, parameters):

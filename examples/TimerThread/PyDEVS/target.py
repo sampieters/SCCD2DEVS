@@ -27,6 +27,8 @@ class MainAppInstance(RuntimeClassBase):
         
         # call user defined constructor
         MainAppInstance.user_defined_constructor(self)
+        port_name = Ports.addInputPort("<narrow_cast>", self)
+        atomdevs.addInPort(port_name)
     
     def user_defined_constructor(self):
         self.starting_time = time.time()
@@ -102,6 +104,7 @@ class MainApp(ObjectManagerBase):
     def __init__(self, name):
         ObjectManagerBase.__init__(self, name)
         self.input = self.addInPort("input")
+        self.output = self.addOutPort("ui")
         self.instances[self.next_instance] = MainAppInstance(self)
         self.next_instance = self.next_instance + 1
     
@@ -123,9 +126,12 @@ class ObjectManager(TheObjectManager):
 class Controller(CoupledDEVS):
     def __init__(self, name):
         CoupledDEVS.__init__(self, name)
-        self.input = self.addInPort("input")
-        self.addOutPort("output")
+        self.in_input = self.addInPort("input")
+        Ports.addInputPort("input")
+        self.out_output = self.addOutPort("output")
+        Ports.addOutputPort("output")
         self.objectmanager = self.addSubModel(ObjectManager("ObjectManager"))
         self.atomic0 = self.addSubModel(MainApp("MainApp"))
         self.connectPorts(self.atomic0.obj_manager_out, self.objectmanager.input)
         self.connectPorts(self.objectmanager.output["MainApp"], self.atomic0.obj_manager_in)
+        self.connectPorts(self.atomic0.output, self.out_output)

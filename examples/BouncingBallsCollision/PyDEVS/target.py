@@ -10,6 +10,7 @@ Tkinter frame with bouncing balls in it.
 from sccd.runtime.DEVS_statecharts_core import *
 from sccd.runtime.libs import ui_v2 as ui
 import random
+import numpy as np
 
 CANVAS_DIMS = (800, 550)
 
@@ -214,6 +215,7 @@ class FieldInstance(RuntimeClassBase):
         self.associations = {}
         self.associations["balls"] = Association("Ball", 0, -1)
         self.associations["buttons"] = Association("Button", 0, -1)
+        self.associations["collisions"] = Association("CollisionPhysics", 0, -1)
         self.associations["parent"] = Association("MainApp", 1, 1)
         
         self.semantics.big_step_maximality = StatechartSemantics.TakeMany
@@ -239,10 +241,26 @@ class FieldInstance(RuntimeClassBase):
         self.inports["field_ui"] = port_name
     
     def user_defined_constructor(self):
-        pass
+        self.balls = {}
+        self.collisions = []
     
     def user_defined_destructor(self):
         pass
+    
+    
+    # user defined method
+    def distance(self, point1, point2):
+        return ((point1['x'] - point2['x']) ** 2 + (point1['y'] - point2['y']) ** 2) ** 0.5
+    
+    
+    # user defined method
+    def check_collision(self, ball1, ball2):
+        # Calculate the distance between the centers of the two balls
+        dist = self.distance(ball1['pos'], ball2['pos'])
+        # Calculate the sum of the radii
+        radii_sum = ball1['r'] + ball2['r']
+        # Check if they are colliding
+        return dist <= radii_sum
     
     
     # builds Statechart structure
@@ -362,16 +380,41 @@ class FieldInstance(RuntimeClassBase):
         self.states["/root/running/main_behaviour/running"].addTransition(_root_running_main_behaviour_running_0)
         
         # transition /root/running/main_behaviour/creating_ball
-        _root_running_main_behaviour_creating_ball_0 = Transition(self, self.states["/root/running/main_behaviour/creating_ball"], [self.states["/root/running/main_behaviour/running"]])
+        _root_running_main_behaviour_creating_ball_0 = Transition(self, self.states["/root/running/main_behaviour/creating_ball"], [self.states["/root/running/main_behaviour/creating_ball"]])
         _root_running_main_behaviour_creating_ball_0.setAction(self._root_running_main_behaviour_creating_ball_0_exec)
         _root_running_main_behaviour_creating_ball_0.setTrigger(Event("instance_created", None))
         self.states["/root/running/main_behaviour/creating_ball"].addTransition(_root_running_main_behaviour_creating_ball_0)
+        _root_running_main_behaviour_creating_ball_1 = Transition(self, self.states["/root/running/main_behaviour/creating_ball"], [self.states["/root/running/main_behaviour/running"]])
+        _root_running_main_behaviour_creating_ball_1.setAction(self._root_running_main_behaviour_creating_ball_1_exec)
+        _root_running_main_behaviour_creating_ball_1.setTrigger(Event("init_params", None))
+        self.states["/root/running/main_behaviour/creating_ball"].addTransition(_root_running_main_behaviour_creating_ball_1)
         
         # transition /root/running/deleting_behaviour/running
         _root_running_deleting_behaviour_running_0 = Transition(self, self.states["/root/running/deleting_behaviour/running"], [self.states["/root/running/deleting_behaviour/running"]])
         _root_running_deleting_behaviour_running_0.setAction(self._root_running_deleting_behaviour_running_0_exec)
         _root_running_deleting_behaviour_running_0.setTrigger(Event("delete_ball", None))
         self.states["/root/running/deleting_behaviour/running"].addTransition(_root_running_deleting_behaviour_running_0)
+        _root_running_deleting_behaviour_running_1 = Transition(self, self.states["/root/running/deleting_behaviour/running"], [self.states["/root/running/deleting_behaviour/running"]])
+        _root_running_deleting_behaviour_running_1.setAction(self._root_running_deleting_behaviour_running_1_exec)
+        _root_running_deleting_behaviour_running_1.setTrigger(Event("move_ball", None))
+        self.states["/root/running/deleting_behaviour/running"].addTransition(_root_running_deleting_behaviour_running_1)
+        _root_running_deleting_behaviour_running_2 = Transition(self, self.states["/root/running/deleting_behaviour/running"], [self.states["/root/running/deleting_behaviour/running"]])
+        _root_running_deleting_behaviour_running_2.setAction(self._root_running_deleting_behaviour_running_2_exec)
+        _root_running_deleting_behaviour_running_2.setTrigger(None)
+        _root_running_deleting_behaviour_running_2.setGuard(self._root_running_deleting_behaviour_running_2_guard)
+        self.states["/root/running/deleting_behaviour/running"].addTransition(_root_running_deleting_behaviour_running_2)
+        _root_running_deleting_behaviour_running_3 = Transition(self, self.states["/root/running/deleting_behaviour/running"], [self.states["/root/running/deleting_behaviour/running"]])
+        _root_running_deleting_behaviour_running_3.setAction(self._root_running_deleting_behaviour_running_3_exec)
+        _root_running_deleting_behaviour_running_3.setTrigger(Event("instance_created", None))
+        self.states["/root/running/deleting_behaviour/running"].addTransition(_root_running_deleting_behaviour_running_3)
+        _root_running_deleting_behaviour_running_4 = Transition(self, self.states["/root/running/deleting_behaviour/running"], [self.states["/root/running/deleting_behaviour/running"]])
+        _root_running_deleting_behaviour_running_4.setAction(self._root_running_deleting_behaviour_running_4_exec)
+        _root_running_deleting_behaviour_running_4.setTrigger(Event("update_vel", None))
+        self.states["/root/running/deleting_behaviour/running"].addTransition(_root_running_deleting_behaviour_running_4)
+        _root_running_deleting_behaviour_running_5 = Transition(self, self.states["/root/running/deleting_behaviour/running"], [self.states["/root/running/deleting_behaviour/running"]])
+        _root_running_deleting_behaviour_running_5.setAction(self._root_running_deleting_behaviour_running_5_exec)
+        _root_running_deleting_behaviour_running_5.setTrigger(Event("delete_physics", None))
+        self.states["/root/running/deleting_behaviour/running"].addTransition(_root_running_deleting_behaviour_running_5)
         
         # transition /root/running/child_behaviour/listening
         _root_running_child_behaviour_listening_0 = Transition(self, self.states["/root/running/child_behaviour/listening"], [self.states["/root/running/child_behaviour/listening"]])
@@ -441,11 +484,57 @@ class FieldInstance(RuntimeClassBase):
     def _root_running_main_behaviour_creating_ball_0_exec(self, parameters):
         association_name = parameters[0]
         self.big_step.outputEventOM(Event("start_instance", None, [self, association_name]))
-        self.big_step.outputEventOM(Event("narrow_cast", None, [self, association_name, Event("set_association_name", None, [association_name])]))
+        self.big_step.outputEventOM(Event("narrow_cast", None, [self, association_name, Event("get_init_params", None, [association_name])]))
+    
+    def _root_running_main_behaviour_creating_ball_1_exec(self, parameters):
+        link_id = parameters[0]
+        ball_r = parameters[1]
+        ball_vel = parameters[2]
+        ball_pos = parameters[3]
+        self.balls[link_id] = {'r': ball_r, 'vel': ball_vel, 'pos': ball_pos}
     
     def _root_running_deleting_behaviour_running_0_exec(self, parameters):
         association_name = parameters[0]
         self.big_step.outputEventOM(Event("delete_instance", None, [self, association_name]))
+    
+    def _root_running_deleting_behaviour_running_1_exec(self, parameters):
+        link_id = parameters[0]
+        ball_pos = parameters[1]
+        ball_vel = parameters[2]
+        # Update the position and velocity
+        self.balls[link_id]['pos'] = ball_pos
+        self.balls[link_id]['vel'] = ball_vel
+        
+        # Check for collisions
+        collisions = []
+        for other_id, other_ball in self.balls.items():
+            if other_id != link_id:  # Don't check collision with itself
+                if self.check_collision(self.balls[link_id], other_ball):
+                    self.collisions.append((link_id, other_id))
+    
+    def _root_running_deleting_behaviour_running_2_exec(self, parameters):
+        self.big_step.outputEventOM(Event("create_instance", None, [self, "collisions", "CollisionPhysics", self.collisions[-1][0], self.collisions[-1][1], self.balls[self.collisions[-1][0]], self.balls[self.collisions[-1][1]]]))
+        self.collisions = self.collisions[:-1]
+    
+    def _root_running_deleting_behaviour_running_2_guard(self, parameters):
+        return self.collisions
+    
+    def _root_running_deleting_behaviour_running_3_exec(self, parameters):
+        association_name = parameters[0]
+        self.big_step.outputEventOM(Event("narrow_cast", None, [self, association_name, Event("set_association_name", None, [association_name])]))
+        self.big_step.outputEventOM(Event("start_instance", None, [self, association_name]))
+    
+    def _root_running_deleting_behaviour_running_4_exec(self, parameters):
+        ball1_id = parameters[0]
+        ball2_id = parameters[1]
+        new_vel1 = parameters[2]
+        new_vel2 = parameters[3]
+        self.big_step.outputEventOM(Event("narrow_cast", None, [self, ball1_id, Event("update_ball_vel", None, [new_vel1])]))
+        self.big_step.outputEventOM(Event("narrow_cast", None, [self, ball2_id, Event("update_ball_vel", None, [new_vel2])]))
+    
+    def _root_running_deleting_behaviour_running_5_exec(self, parameters):
+        association_id = parameters[0]
+        self.big_step.outputEventOM(Event("delete_instance", None, [self, association_id]))
     
     def _root_running_child_behaviour_listening_0_exec(self, parameters):
         event_name = parameters[0]
@@ -475,6 +564,7 @@ class Field(ObjectManagerBase):
         self.output = self.addOutPort("ui")
         self.outputs["balls"] = self.addOutPort("balls")
         self.outputs["buttons"] = self.addOutPort("buttons")
+        self.outputs["collisions"] = self.addOutPort("collisions")
         self.outputs["parent"] = self.addOutPort("parent")
         self.field_ui = self.addInPort("field_ui")
     
@@ -672,7 +762,7 @@ class BallInstance(RuntimeClassBase):
         # transition /main_behaviour/initializing
         _main_behaviour_initializing_0 = Transition(self, self.states["/main_behaviour/initializing"], [self.states["/main_behaviour/creating_circle"]])
         _main_behaviour_initializing_0.setAction(self._main_behaviour_initializing_0_exec)
-        _main_behaviour_initializing_0.setTrigger(Event("set_association_name", None))
+        _main_behaviour_initializing_0.setTrigger(Event("get_init_params", None))
         self.states["/main_behaviour/initializing"].addTransition(_main_behaviour_initializing_0)
         
         # transition /main_behaviour/creating_circle
@@ -686,11 +776,15 @@ class BallInstance(RuntimeClassBase):
         _main_behaviour_bouncing_0.setAction(self._main_behaviour_bouncing_0_exec)
         _main_behaviour_bouncing_0.setTrigger(Event("_0after"))
         self.states["/main_behaviour/bouncing"].addTransition(_main_behaviour_bouncing_0)
-        _main_behaviour_bouncing_1 = Transition(self, self.states["/main_behaviour/bouncing"], [self.states["/main_behaviour/selected"]])
+        _main_behaviour_bouncing_1 = Transition(self, self.states["/main_behaviour/bouncing"], [self.states["/main_behaviour/bouncing"]])
         _main_behaviour_bouncing_1.setAction(self._main_behaviour_bouncing_1_exec)
-        _main_behaviour_bouncing_1.setTrigger(Event("mouse_press", self.getInPortName("ball_ui")))
-        _main_behaviour_bouncing_1.setGuard(self._main_behaviour_bouncing_1_guard)
+        _main_behaviour_bouncing_1.setTrigger(Event("update_ball_vel", None))
         self.states["/main_behaviour/bouncing"].addTransition(_main_behaviour_bouncing_1)
+        _main_behaviour_bouncing_2 = Transition(self, self.states["/main_behaviour/bouncing"], [self.states["/main_behaviour/selected"]])
+        _main_behaviour_bouncing_2.setAction(self._main_behaviour_bouncing_2_exec)
+        _main_behaviour_bouncing_2.setTrigger(Event("mouse_press", self.getInPortName("ball_ui")))
+        _main_behaviour_bouncing_2.setGuard(self._main_behaviour_bouncing_2_guard)
+        self.states["/main_behaviour/bouncing"].addTransition(_main_behaviour_bouncing_2)
         
         # transition /main_behaviour/dragging
         _main_behaviour_dragging_0 = Transition(self, self.states["/main_behaviour/dragging"], [self.states["/main_behaviour/dragging"]])
@@ -725,6 +819,7 @@ class BallInstance(RuntimeClassBase):
     def _main_behaviour_initializing_0_exec(self, parameters):
         association_name = parameters[0]
         self.association_name = association_name
+        self.big_step.outputEventOM(Event("narrow_cast", None, [self, 'parent', Event("init_params", None, [self.association_name, self.r, self.vel, self.pos])]))
     
     def _main_behaviour_creating_circle_0_exec(self, parameters):
         canvas_id = parameters[0]
@@ -741,16 +836,21 @@ class BallInstance(RuntimeClassBase):
         if self.pos['y']-self.r <= 0 or self.pos['y']+self.r >= CANVAS_DIMS[1]:
             self.vel['y'] = -self.vel['y'];
         self.big_step.outputEvent(Event("move_element", self.getOutPortName("ui"), [self.canvas_id, self.circle_id, self.vel['x'], self.vel['y']]))
+        self.big_step.outputEventOM(Event("narrow_cast", None, [self, 'parent', Event("move_ball", None, [self.association_name, self.pos, self.vel])]))
         self.pos['x'] += self.vel['x']
         self.pos['y'] += self.vel['y']
     
     def _main_behaviour_bouncing_1_exec(self, parameters):
+        new_vel = parameters[0]
+        self.vel = new_vel
+    
+    def _main_behaviour_bouncing_2_exec(self, parameters):
         x = parameters[0]
         y = parameters[1]
         button = parameters[2]
         self.big_step.outputEvent(Event("set_element_color", self.getOutPortName("ui"), [self.canvas_id, self.circle_id, '#ff0']))
     
-    def _main_behaviour_bouncing_1_guard(self, parameters):
+    def _main_behaviour_bouncing_2_guard(self, parameters):
         x = parameters[0]
         y = parameters[1]
         button = parameters[2]
@@ -813,6 +913,148 @@ class Ball(ObjectManagerBase):
         new_instance = BallInstance(self, parameters[2], parameters[3], parameters[4])
         return new_instance
 
+class CollisionPhysicsInstance(RuntimeClassBase):
+    def __init__(self, atomdevs, ball1_id, ball2_id, ball1_info, ball2_info):
+        RuntimeClassBase.__init__(self, atomdevs)
+        self.associations = {}
+        self.associations["parent"] = Association("Field", 1, 1)
+        
+        self.semantics.big_step_maximality = StatechartSemantics.TakeMany
+        self.semantics.internal_event_lifeline = StatechartSemantics.Queue
+        self.semantics.input_event_lifeline = StatechartSemantics.FirstComboStep
+        self.semantics.priority = StatechartSemantics.SourceParent
+        self.semantics.concurrency = StatechartSemantics.Single
+        
+        # build Statechart structure
+        self.build_statechart_structure()
+        
+        # user defined attributes
+        self.ball2_info = None
+        
+        # call user defined constructor
+        CollisionPhysicsInstance.user_defined_constructor(self, ball1_id, ball2_id, ball1_info, ball2_info)
+        port_name = Ports.addInputPort("<narrow_cast>", self)
+        atomdevs.addInPort(port_name)
+        port_name = Ports.addInputPort("physics_ui", self)
+        atomdevs.addInPort(port_name)
+        atomdevs.port_mappings[port_name] = atomdevs.next_instance
+        self.inports["physics_ui"] = port_name
+    
+    def user_defined_constructor(self, ball1_id, ball2_id, ball1_info, ball2_info):
+        self.ball1_id = ball1_id
+        self.ball2_id = ball2_id
+        self.ball1_info = ball1_info
+        self.ball2_info = ball2_info
+    
+    def user_defined_destructor(self):
+        pass
+    
+    
+    # user defined method
+    def resolve_velocity(self, vel, normal):
+        # Resolve the velocity into normal and tangential components.
+        normal_velocity = np.dot(vel, normal) * normal
+        tangential_velocity = vel - normal_velocity
+        return normal_velocity, tangential_velocity
+    
+    
+    # user defined method
+    def handle_collision(self):
+        pos1 = np.array([self.ball1_info['pos']['x'], self.ball1_info['pos']['y']])
+        vel1 = np.array([self.ball1_info['vel']['x'], self.ball1_info['vel']['y']])
+        r1 = self.ball1_info['r']
+        
+        pos2 = np.array([self.ball2_info['pos']['x'], self.ball2_info['pos']['y']])
+        vel2 = np.array([self.ball2_info['vel']['x'], self.ball2_info['vel']['y']])
+        r2 = self.ball2_info['r']
+        
+        # Calculate the normal vector from the center of ball1 to the center of ball2
+        normal = pos2 - pos1
+        normal = normal / np.linalg.norm(normal)  # Normalize the normal vector
+        
+        # Calculate the relative velocity
+        relative_velocity = vel1 - vel2
+        
+        # Calculate the velocities in the normal direction
+        vel1_normal, vel1_tangential = self.resolve_velocity(vel1, normal)
+        vel2_normal, vel2_tangential = self.resolve_velocity(vel2, normal)
+        
+        # Calculate new normal velocities after collision (1D elastic collision formula)
+        vel1_normal_new = ((r1 - r2) * vel1_normal + 2 * r2 * vel2_normal) / (r1 + r2)
+        vel2_normal_new = ((r2 - r1) * vel2_normal + 2 * r1 * vel1_normal) / (r1 + r2)
+        
+        # Combine the new normal and original tangential components
+        vel1_new = vel1_normal_new + vel1_tangential
+        vel2_new = vel2_normal_new + vel2_tangential
+        
+        # Update the velocities in the balls
+        self.ball1_info['vel'] = {'x': vel1_new[0], 'y': vel1_new[1]}
+        self.ball2_info['vel'] = {'x': vel2_new[0], 'y': vel2_new[1]}
+    
+    
+    # builds Statechart structure
+    def build_statechart_structure(self):
+        
+        # state <root>
+        self.states[""] = State(0, "", self)
+        
+        # state /creating
+        self.states["/creating"] = State(1, "/creating", self)
+        self.states["/creating"].setEnter(self._creating_enter)
+        
+        # state /running
+        self.states["/running"] = State(2, "/running", self)
+        
+        # state /delete
+        self.states["/delete"] = State(3, "/delete", self)
+        
+        # add children
+        self.states[""].addChild(self.states["/creating"])
+        self.states[""].addChild(self.states["/running"])
+        self.states[""].addChild(self.states["/delete"])
+        self.states[""].fixTree()
+        self.states[""].default_state = self.states["/creating"]
+        
+        # transition /creating
+        _creating_0 = Transition(self, self.states["/creating"], [self.states["/running"]])
+        _creating_0.setAction(self._creating_0_exec)
+        _creating_0.setTrigger(Event("set_association_name", None))
+        self.states["/creating"].addTransition(_creating_0)
+        
+        # transition /running
+        _running_0 = Transition(self, self.states["/running"], [self.states["/delete"]])
+        _running_0.setAction(self._running_0_exec)
+        _running_0.setTrigger(None)
+        self.states["/running"].addTransition(_running_0)
+    
+    def _creating_enter(self):
+        self.handle_collision()
+    
+    def _creating_0_exec(self, parameters):
+        association_name = parameters[0]
+        self.association_name = association_name
+    
+    def _running_0_exec(self, parameters):
+        self.big_step.outputEventOM(Event("narrow_cast", None, [self, 'parent', Event("update_vel", None, [self.ball1_id, self.ball2_id, self.ball1_info['vel'], self.ball2_info['vel']])]))
+        self.big_step.outputEventOM(Event("narrow_cast", None, [self, 'parent', Event("delete_physics", None, [self.association_name])]))
+    
+    def initializeStatechart(self):
+        # enter default state
+        self.default_targets = self.states["/creating"].getEffectiveTargetStates()
+        RuntimeClassBase.initializeStatechart(self)
+
+class CollisionPhysics(ObjectManagerBase):
+    def __init__(self, name):
+        ObjectManagerBase.__init__(self, name)
+        self.input = self.addInPort("input")
+        self.output = self.addOutPort("ui")
+        self.outputs["parent"] = self.addOutPort("parent")
+        self.physics_ui = self.addInPort("physics_ui")
+    
+    def constructObject(self, parameters):
+        new_instance = CollisionPhysicsInstance(self, parameters[2], parameters[3], parameters[4], parameters[5])
+        return new_instance
+
 class ObjectManagerState:
     def __init__(self):
         self.to_send = [("MainApp", "MainApp", Event("start_instance", None, ["MainApp[0]"], 0))]
@@ -826,6 +1068,7 @@ class ObjectManager(TheObjectManager):
         self.output["Field"] = self.addOutPort()
         self.output["Button"] = self.addOutPort()
         self.output["Ball"] = self.addOutPort()
+        self.output["CollisionPhysics"] = self.addOutPort()
 
 class Controller(CoupledDEVS):
     def __init__(self, name):
@@ -839,6 +1082,7 @@ class Controller(CoupledDEVS):
         self.atomic1 = self.addSubModel(Field("Field"))
         self.atomic2 = self.addSubModel(Button("Button"))
         self.atomic3 = self.addSubModel(Ball("Ball"))
+        self.atomic4 = self.addSubModel(CollisionPhysics("CollisionPhysics"))
         self.connectPorts(self.atomic0.obj_manager_out, self.objectmanager.input)
         self.connectPorts(self.objectmanager.output["MainApp"], self.atomic0.obj_manager_in)
         self.connectPorts(self.atomic0.outputs["fields"], self.atomic1.input)
@@ -846,6 +1090,7 @@ class Controller(CoupledDEVS):
         self.connectPorts(self.objectmanager.output["Field"], self.atomic1.obj_manager_in)
         self.connectPorts(self.atomic1.outputs["balls"], self.atomic3.input)
         self.connectPorts(self.atomic1.outputs["buttons"], self.atomic2.input)
+        self.connectPorts(self.atomic1.outputs["collisions"], self.atomic4.input)
         self.connectPorts(self.atomic1.outputs["parent"], self.atomic0.input)
         self.connectPorts(self.atomic2.obj_manager_out, self.objectmanager.input)
         self.connectPorts(self.objectmanager.output["Button"], self.atomic2.obj_manager_in)
@@ -853,7 +1098,11 @@ class Controller(CoupledDEVS):
         self.connectPorts(self.atomic3.obj_manager_out, self.objectmanager.input)
         self.connectPorts(self.objectmanager.output["Ball"], self.atomic3.obj_manager_in)
         self.connectPorts(self.atomic3.outputs["parent"], self.atomic1.input)
+        self.connectPorts(self.atomic4.obj_manager_out, self.objectmanager.input)
+        self.connectPorts(self.objectmanager.output["CollisionPhysics"], self.atomic4.obj_manager_in)
+        self.connectPorts(self.atomic4.outputs["parent"], self.atomic1.input)
         self.connectPorts(self.atomic0.output, self.out_ui)
         self.connectPorts(self.atomic1.output, self.out_ui)
         self.connectPorts(self.atomic2.output, self.out_ui)
         self.connectPorts(self.atomic3.output, self.out_ui)
+        self.connectPorts(self.atomic4.output, self.out_ui)

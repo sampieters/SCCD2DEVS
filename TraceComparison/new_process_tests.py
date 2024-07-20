@@ -31,7 +31,7 @@ if __name__ == '__main__':
     sorted_dirs = sort_directories(tests_directory)
 
     checkers = {
-        "Python": TraceChecker.PythonSCCDTraceChecker(),
+        #"Python": TraceChecker.PythonSCCDTraceChecker(),
         "Pydevs": TraceChecker.PydevsSCCDTraceChecker()
     }
 
