@@ -67,15 +67,15 @@ class DEVSGenerator(Visitor):
         ################################
         # Object Manager
         ################################
-        self.writer.beginClass("ObjectManager", ["TheObjectManager"])
+        self.writer.beginClass("ObjectManager", ["ObjectManagerBase"])
         self.writer.beginConstructor()
         self.writer.addFormalParameter("name")
         self.writer.beginMethodBody()
-        self.writer.beginSuperClassConstructorCall("TheObjectManager")
+        self.writer.beginSuperClassConstructorCall("ObjectManagerBase")
         self.writer.addActualParameter("name")
         self.writer.endSuperClassConstructorCall()
 
-        self.writer.addAssignment(GLC.SelfProperty("State"), GLC.FunctionCall("ObjectManagerState"))
+        self.writer.addAssignment(GLC.SelfProperty("state"), GLC.FunctionCall("ObjectManagerState"))
         self.writer.addAssignment(GLC.SelfProperty("input"),
                                   GLC.FunctionCall(GLC.SelfProperty("addInPort"), [GLC.String("input")]))
 
@@ -338,7 +338,7 @@ class DEVSGenerator(Visitor):
         ################################
         # State Object (keeps list of all instances of that object + controller operations)
         ################################
-        self.writer.beginClass(class_node.name, ["ObjectManagerBase"])
+        self.writer.beginClass(class_node.name, ["ClassBase"])
 
         self.writer.beginMethod("constructObject")
 
@@ -369,7 +369,7 @@ class DEVSGenerator(Visitor):
         self.writer.addFormalParameter("name")
 
         self.writer.beginMethodBody()  # constructor body
-        self.writer.beginSuperClassConstructorCall("ObjectManagerBase")
+        self.writer.beginSuperClassConstructorCall("ClassBase")
         self.writer.addActualParameter("name")
         self.writer.endSuperClassConstructorCall()
 

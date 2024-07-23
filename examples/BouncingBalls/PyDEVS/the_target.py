@@ -195,14 +195,14 @@ class MainAppInstance(RuntimeClassBase):
         self.default_targets = self.states["/running"].getEffectiveTargetStates()
         RuntimeClassBase.initializeStatechart(self)
 
-class MainApp(ObjectManagerBase):
+class MainApp(ClassBase):
     def __init__(self, name):
-        ObjectManagerBase.__init__(self, name)
+        ClassBase.__init__(self, name)
         self.input = self.addInPort("input")
         self.output = self.addOutPort("ui")
         self.outputs["fields"] = self.addOutPort("fields")
-        self.instances[self.next_instance] = MainAppInstance(self)
-        self.next_instance = self.next_instance + 1
+        self.state.instances[self.state.next_instance] = MainAppInstance(self)
+        self.state.next_instance = self.state.next_instance + 1
     
     def constructObject(self, parameters):
         new_instance = MainAppInstance(self)
@@ -235,7 +235,7 @@ class FieldInstance(RuntimeClassBase):
         atomdevs.addInPort(port_name)
         port_name = Ports.addInputPort("field_ui", self)
         atomdevs.addInPort(port_name)
-        atomdevs.port_mappings[port_name] = atomdevs.next_instance
+        atomdevs.state.port_mappings[port_name] = atomdevs.state.next_instance
         self.inports["field_ui"] = port_name
     
     def user_defined_constructor(self):
@@ -468,9 +468,9 @@ class FieldInstance(RuntimeClassBase):
         self.default_targets = self.states["/root"].getEffectiveTargetStates()
         RuntimeClassBase.initializeStatechart(self)
 
-class Field(ObjectManagerBase):
+class Field(ClassBase):
     def __init__(self, name):
-        ObjectManagerBase.__init__(self, name)
+        ClassBase.__init__(self, name)
         self.input = self.addInPort("input")
         self.output = self.addOutPort("ui")
         self.outputs["balls"] = self.addOutPort("balls")
@@ -508,7 +508,7 @@ class ButtonInstance(RuntimeClassBase):
         atomdevs.addInPort(port_name)
         port_name = Ports.addInputPort("button_ui", self)
         atomdevs.addInPort(port_name)
-        atomdevs.port_mappings[port_name] = atomdevs.next_instance
+        atomdevs.state.port_mappings[port_name] = atomdevs.state.next_instance
         self.inports["button_ui"] = port_name
     
     def user_defined_constructor(self, window_id, event_name, button_text):
@@ -576,9 +576,9 @@ class ButtonInstance(RuntimeClassBase):
         self.default_targets = self.states["/creating_button"].getEffectiveTargetStates()
         RuntimeClassBase.initializeStatechart(self)
 
-class Button(ObjectManagerBase):
+class Button(ClassBase):
     def __init__(self, name):
-        ObjectManagerBase.__init__(self, name)
+        ClassBase.__init__(self, name)
         self.input = self.addInPort("input")
         self.output = self.addOutPort("ui")
         self.outputs["parent"] = self.addOutPort("parent")
@@ -613,7 +613,7 @@ class BallInstance(RuntimeClassBase):
         atomdevs.addInPort(port_name)
         port_name = Ports.addInputPort("ball_ui", self)
         atomdevs.addInPort(port_name)
-        atomdevs.port_mappings[port_name] = atomdevs.next_instance
+        atomdevs.state.port_mappings[port_name] = atomdevs.state.next_instance
         self.inports["ball_ui"] = port_name
     
     def user_defined_constructor(self, canvas_id, x, y):
@@ -801,9 +801,9 @@ class BallInstance(RuntimeClassBase):
         self.default_targets = self.states["/main_behaviour"].getEffectiveTargetStates()
         RuntimeClassBase.initializeStatechart(self)
 
-class Ball(ObjectManagerBase):
+class Ball(ClassBase):
     def __init__(self, name):
-        ObjectManagerBase.__init__(self, name)
+        ClassBase.__init__(self, name)
         self.input = self.addInPort("input")
         self.output = self.addOutPort("ui")
         self.outputs["parent"] = self.addOutPort("parent")
@@ -817,10 +817,10 @@ class ObjectManagerState:
     def __init__(self):
         self.to_send = [("MainApp", "MainApp", Event("start_instance", None, ["MainApp[0]"], 0))]
 
-class ObjectManager(TheObjectManager):
+class ObjectManager(ObjectManagerBase):
     def __init__(self, name):
-        TheObjectManager.__init__(self, name)
-        self.State = ObjectManagerState()
+        ObjectManagerBase.__init__(self, name)
+        self.state = ObjectManagerState()
         self.input = self.addInPort("input")
         self.output["MainApp"] = self.addOutPort()
         self.output["Field"] = self.addOutPort()
