@@ -1125,12 +1125,24 @@ class BaseSimulator(Solver):
                 # We are outputting on a Coupled DEVS model, so we just find out what its ports are connected to
                 time_diff = time.time() - self.rt_zerotime
                 tn = time_diff / self.realtime_scale
-                for p, z in event_port.routing_outline:
-                    ev = event_value if z is None else z(event_value)
-                    msg = {p: [ev]}
+                
+                # TODO: SAM changed this
+                for p in event_port.outline:
+                    ev = event_value
+                    msg = {p : [ev]}
                     p.host_DEVS.my_input = msg
                     self.transitioning[p.host_DEVS] = 2
                     self.model.time_next = (tn, 1)
+
+
+                #for p, z in event_port.routing_outline:
+                #    ev = event_value if z is None else z(event_value)
+                #    msg = {p: [ev]}
+                #    p.host_DEVS.my_input = msg
+                #    self.transitioning[p.host_DEVS] = 2
+                #    self.model.time_next = (tn, 1)
+
+
             # Transition
             return False
 

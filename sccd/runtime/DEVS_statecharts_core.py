@@ -4,6 +4,8 @@ from sccd.runtime.event_queue import EventQueue
 from pypdevs.infinity import INFINITY
 from pypdevs.DEVS import *
 
+from sccd.runtime.statecharts_core import StatechartSemantics, State, HistoryState, ShallowHistoryState, DeepHistoryState, ParallelState, Transition, BigStepState, ComboStepState, SmallStepState, RuntimeException, AssociationException, Association
+
 from heapq import heappush, heappop, heapify
 import threading
 
@@ -15,210 +17,7 @@ def get_private_port(text):
     if match:
         result = match.group(1)
         return result
-
-class RuntimeException(Exception):
-    """
-    Base class for runtime exceptions.
-    """
-    def __init__(self, message):
-        self.message = message
-    def __str__(self):
-        return repr(self.message)
-
-
-class AssociationException(RuntimeException):
-    """
-    Exception class thrown when an error occurs in a CRUD operation on associations.
-    """
-    pass
-
-
-class Association(object):
-    """
-    Class representing an SCCD association.
-    """
-
-    def __init__(self, to_class, min_card, max_card):
-        """
-        Constructor
-
-       :param to_class: the name of the target class
-       :param min_card: the minimal cardinality
-       :param max_card: the maximal cardinality
-        """
-        self.to_class = to_class
-        self.min_card = min_card
-        self.max_card = max_card
-        self.instances = {}  # maps index (as string) to instance
-        self.instances_to_ids = {}
-        self.size = 0
-        self.next_id = 0
-
-    def allowedToAdd(self):
-        return self.max_card == -1 or self.size < self.max_card
-
-    def allowedToRemove(self):
-        return self.min_card == -1 or self.size > self.min_card
-
-    def addInstance(self, instance):
-        if self.allowedToAdd():
-            new_id = self.next_id
-            self.next_id += 1
-            self.instances[new_id] = instance
-            self.instances_to_ids[instance] = new_id
-            self.size += 1
-            return new_id
-        else:
-            raise AssociationException("Not allowed to add the instance to the association.")
-
-    def removeInstance(self, instance):
-        if self.allowedToRemove():
-            index = self.instances_to_ids[instance]
-            del self.instances[index]
-            del self.instances_to_ids[instance]
-            #self.size -= 1
-            return index
-        else:
-            raise AssociationException("Not allowed to remove the instance from the association.")
-
-    def getInstance(self, index):
-        try:
-            return self.instances[index]
-        except IndexError:
-            raise AssociationException("Invalid index for fetching instance(s) from association.")
-
-
-class StatechartSemantics:
-    # Big Step Maximality
-    TakeOne = 0
-    TakeMany = 1
-    # Concurrency - not implemented yet
-    Single = 0
-    Many = 1
-    # Preemption - not implemented yet
-    NonPreemptive = 0
-    Preemptive = 1
-    # Internal Event Lifeline
-    Queue = 0
-    NextSmallStep = 1
-    NextComboStep = 2
-    # Input Event Lifeline
-    Whole = 0
-    FirstSmallStep = 1
-    FirstComboStep = 2
-    # Priority
-    SourceParent = 0
-    SourceChild = 1
-
-    # TODO: add Memory Protocol options
-
-    def __init__(self):
-        # default semantics:
-        self.big_step_maximality = self.TakeMany
-        self.internal_event_lifeline = self.Queue
-        self.input_event_lifeline = self.FirstComboStep
-        self.priority = self.SourceParent
-        self.concurrency = self.Single
-
-
-class State:
-    def __init__(self, state_id, name, obj):
-        self.state_id = state_id
-        self.name = name
-        self.obj = obj
-
-        self.ancestors = []
-        self.descendants = []
-        self.descendant_bitmap = 0
-        self.children = []
-        self.parent = None
-        self.enter = None
-        self.exit = None
-        self.default_state = None
-        self.transitions = []
-        self.history = []
-        self.has_eventless_transitions = False
-
-    def getEffectiveTargetStates(self):
-        targets = [self]
-        if self.default_state:
-            targets.extend(self.default_state.getEffectiveTargetStates())
-        return targets
-
-    def fixTree(self):
-        for c in self.children:
-            if isinstance(c, HistoryState):
-                self.history.append(c)
-            c.parent = self
-            c.ancestors.append(self)
-            c.ancestors.extend(self.ancestors)
-            c.fixTree()
-        self.descendants.extend(self.children)
-        for c in self.children:
-            self.descendants.extend(c.descendants)
-        for d in self.descendants:
-            self.descendant_bitmap |= 2 ** d.state_id
-
-    def addChild(self, child):
-        self.children.append(child)
-
-    def addTransition(self, transition):
-        self.transitions.append(transition)
-
-    def setEnter(self, enter):
-        self.enter = enter
-
-    def setExit(self, exit):
-        self.exit = exit
-
-    def __repr__(self):
-        return "State(%s)" % (self.state_id)
-
-
-class HistoryState(State):
-    def __init__(self, state_id, name, obj):
-        State.__init__(self, state_id, name, obj)
-
-
-class ShallowHistoryState(HistoryState):
-    def __init__(self, state_id, name, obj):
-        HistoryState.__init__(self, state_id, name, obj)
-
-    def getEffectiveTargetStates(self):
-        if self.state_id in self.obj.history_values:
-            targets = []
-            for hv in self.obj.history_values[self.state_id]:
-                targets.extend(hv.getEffectiveTargetStates())
-            return targets
-        else:
-            # TODO: is it correct that in this case, the parent itself is also entered?
-            return self.parent.getEffectiveTargetStates()
-
-
-class DeepHistoryState(HistoryState):
-    def __init__(self, state_id, name, obj):
-        HistoryState.__init__(self, state_id, name, obj)
-
-    def getEffectiveTargetStates(self):
-        if self.state_id in self.obj.history_values:
-            return self.obj.history_values[self.state_id]
-        else:
-            # TODO: is it correct that in this case, the parent itself is also entered?
-            return self.parent.getEffectiveTargetStates()
-
-
-class ParallelState(State):
-    def __init__(self, state_id, name, obj):
-        State.__init__(self, state_id, name, obj)
-
-    def getEffectiveTargetStates(self):
-        targets = [self]
-        for c in self.children:
-            if not isinstance(c, HistoryState):
-                targets.extend(c.getEffectiveTargetStates())
-        return targets
-
-
+    
 class Transition:
     def __init__(self, obj, source, targets):
         self.guard = None
@@ -371,7 +170,6 @@ class Event(object):
 
 
 class RuntimeClassBase(object):
-
     def __init__(self, controller):
         self.events = EventQueue()
 
@@ -390,13 +188,9 @@ class RuntimeClassBase(object):
         self.transition_mem = {}
         self.config_mem = {}
 
-
-        #self.narrow_cast_port = self.controller.addInputPort("<narrow_cast>", self)
-
         self.semantics = StatechartSemantics()
 
-    # to break ties in the heap,
-    # compare by number of events in the list
+    # to break ties in the heap, compare by number of events in the list
     def __lt__(self, other):
         return len(self.events.event_list) < len(other.events.event_list)
 
@@ -440,11 +234,9 @@ class RuntimeClassBase(object):
         self.configuration_bitmap = sum([2 ** s.state_id for s in states])
 
     def getSimulatedTime(self):
-        # TODO: added to be exactly the same as sccd
         return self.controller.state.simulated_time * 1000
 
     def addTimer(self, index, timeout):
-        #self.timers_to_add[index] = (self.controller.simulated_time + int(timeout * 1000), Event("_%iafter" % index))
         self.timers_to_add[index] = (self.controller.state.simulated_time + timeout, Event("_%iafter" % index))
 
     def removeTimer(self, index):
@@ -470,7 +262,6 @@ class RuntimeClassBase(object):
         for e in self.big_step.output_events_port:
             self.controller.state.outputEvent(e)
         for e in self.big_step.output_events_om:
-            #TODO: is this the same as obbject manager, so cd scope?
             self.controller.state.addEvent(e)
 
     def __set_stable(self, is_stable):
@@ -614,73 +405,6 @@ class RuntimeClassBase(object):
             pass
             # TODO: Check (untill now no problems)
             #self.controller.object_manager.eventless.add(self)
-
-class BigStepState(object):
-    def __init__(self):
-        self.input_events = [] # input events received from environment before beginning of big step (e.g. from object manager, from input port)
-        self.output_events_port = [] # output events to be sent to output port after big step ends.
-        self.output_events_om = [] # output events to be sent to object manager after big step ends.
-        self.has_stepped = True
-
-    def next(self, input_events):
-        self.input_events = input_events
-        self.output_events_port = []
-        self.output_events_om = []
-        self.has_stepped = False
-
-    def outputEvent(self, event):
-        self.output_events_port.append(event)
-
-    def outputEventOM(self, event):
-        self.output_events_om.append(event)
-
-
-class ComboStepState(object):
-    def __init__(self):
-        self.current_events = [] # set of enabled events during combo step
-        self.next_events = [] # internal events that were raised during combo step
-        self.changed_bitmap = 0 # set of all or-states that were the arena of a triggered transition during big step.
-        self.has_stepped = True
-
-    def reset(self):
-        self.current_events = []
-        self.next_events = []
-
-    def next(self):
-        self.current_events = self.next_events
-        self.next_events = []
-        self.changed_bitmap = 0
-        self.has_stepped = False
-
-    def addNextEvent(self, event):
-        self.next_events.append(event)
-
-
-class SmallStepState(object):
-    def __init__(self):
-        self.current_events = [] # set of enabled events during small step
-        self.next_events = [] # events to become 'current' in the next small step
-        self.candidates = [] # document-ordered(!) list of transitions that can potentially be executed concurrently, or preempt each other, depending on concurrency semantics. If no concurrency is used and there are multiple candidates, the first one is chosen. Source states of candidates are *always* orthogonal to each other.
-        self.has_stepped = True
-
-    def reset(self):
-        self.current_events = []
-        self.next_events = []
-
-    def next(self):
-        self.current_events = self.next_events # raised events from previous small step
-        self.next_events = []
-        self.candidates = []
-        self.has_stepped = False
-
-    def addNextEvent(self, event):
-        self.next_events.append(event)
-
-    def addCandidate(self, t, p):
-        self.candidates.append((t, p))
-
-    def hasCandidates(self):
-        return len(self.candidates) > 0
     
 class ClassState():
     def __init__(self, name) -> None:
@@ -758,30 +482,20 @@ class ClassState():
     def handleInput(self):
         while not self.input_queue.isEmpty():
             event_time = self.input_queue.getEarliestTime()
-            e = self.input_queue.pop()
+            event = self.input_queue.pop()
             
-            #TODO: tot nu toe zal dit werken maar niet 
-            #input_port = self.input_ports[e.getPort()]
-            input_port = e.getPort()
-
-            #target_instance = input_port.instance
-            #TODO: get the first field, should be dynamically
-            #temp = None
-
-            # TODO: instance is now given in parameters
-            temp = e.instance
-            if temp is None:
-                temp = self.processAssociationReference(e.parameters[0])[0]
-                temp = temp[1]
-            #target_instance = list(self.instances)[temp]
-            target_instance = self.instances[temp]
-            if target_instance == None:
-                self.broadcast(e, event_time - self.simulated_time)
+            #if event.instance is None:
+            #    event.instance = self.processAssociationReference(event.parameters[0])[0][1]
+            if event.instance is None:
+                target_instance = None
             else:
-                target_instance.addEvent(e, event_time - self.simulated_time)
+                target_instance = self.instances[event.instance]
+            if target_instance == None:
+                self.broadcast(None, event, event_time - self.simulated_time)
+            else:
+                target_instance.addEvent(event, event_time - self.simulated_time)
 
-    def addInput(self, input_event_list, time_offset = 0, force_internal=False):
-        # force_internal is for narrow_cast events, otherwise these would arrive as external events (on the current wall-clock time)
+    def addInput(self, input_event_list, time_offset = 0):
         if not isinstance(input_event_list, list):
             input_event_list = [input_event_list]
 
@@ -792,12 +506,7 @@ class ClassState():
             #if e.getPort() not in self.IPorts:
             #    raise InputException("Input port mismatch, no such port: " + e.getPort() + ".")
                 
-            if force_internal:
-                self.input_queue.add((0 if self.simulated_time is None else self.simulated_time) + time_offset, e)
-            else:
-                # TODO; changed this from self.accurate_time.get_wct() to self.simulated_time
-                #self.input_queue.add((0 if self.simulated_time is None else 0) + time_offset, e)
-                self.input_queue.add((0 if self.simulated_time is None else 0) + time_offset, e)
+            self.input_queue.add((0 if self.simulated_time is None else 0) + time_offset, e)
 
 
     def handleEvent(self, e):
@@ -1012,17 +721,6 @@ class ClassState():
                     raise AssociationReferenceException("Incorrect index in association reference.")
             currents = nexts
         return currents
-    
-    def instantiate(self, class_name, construct_params):
-        pass
-    
-    def createInstance(self, to_class, construct_params = []):
-        instance = self.instantiate(to_class, construct_params)
-        self.instances.add(instance)
-        return instance
-
-    def addMyOwnOutputListener(self, listener):
-        self.output_listeners.append(listener)
 
 class ClassBase(AtomicDEVS):    
     def __init__(self, name):
@@ -1030,7 +728,7 @@ class ClassBase(AtomicDEVS):
         
         self.outputs = {}
         self.state = ClassState(name)
-        self.elapsed = 0
+        #self.elapsed = 0
         self.obj_manager_in = self.addInPort("obj_manager_in")
         self.obj_manager_out = self.addOutPort("obj_manager_out")
 
@@ -1038,16 +736,23 @@ class ClassBase(AtomicDEVS):
         raise "Something went wrong "
 
     def extTransition(self, inputs):
+        # Update simulated time
         self.state.simulated_time += self.elapsed
         self.state.next_time = 0
-        all_inputs = []
-        for input_list in inputs.values():
-            all_inputs.extend(input_list)
+
+        # Collect all inputs
+        all_inputs = [input for input_list in inputs.values() for input in input_list]
         for input in all_inputs:
             if isinstance(input, str):
                 tem = eval(input)
-                tem.instance = self.state.port_mappings[tem.port]
-                tem.port = get_private_port(tem.port)
+
+                # TODO: This works, the instance does not create a ball in bouncing balls but this is probably normal (port != input_port)
+
+                #tem.instance = self.state.port_mappings[tem.port]
+                tem.instance = self.state.port_mappings.setdefault(tem.port, None)
+
+                if tem.instance != None:
+                    tem.port = get_private_port(tem.port)
                 self.state.addInput(tem)
             elif input[2].name == "create_instance":
                 new_instance = self.constructObject(input[2].parameters)
@@ -1119,36 +824,26 @@ class ClassBase(AtomicDEVS):
         return self.state
     
     def intTransition(self):
+        # Update simulated time and clear previous messages 
         self.state.simulated_time += self.state.next_time
-        self.state.next_time = min(self.state.getEarliestEventTime(), self.state.simulated_time + self.state.input_queue.getEarliestTime())
-
         self.state.to_send = []
+        # Calculate the next event time, clamp to ensure non-negative result
+        self.state.next_time = min(self.state.getEarliestEventTime(), self.state.simulated_time + self.state.input_queue.getEarliestTime())
+        self.state.next_time -= self.state.simulated_time
+        self.state.next_time = max(self.state.next_time, 0.0)
+        # Handle incoming inputs and do a step in all statecharts
         self.state.handleInput()
         self.state.stepAll()
-
-        self.state.next_time -= self.state.simulated_time
-
-        # Clamp to ensure non-negative result
-        self.state.next_time = max(self.state.next_time, 0.0)
         return self.state
 
     def outputFnc(self):
         to_dict = {}
         for sending in self.state.to_send:
             if isinstance(sending, tuple) and sending[2].port == None:
-                if self.obj_manager_out in to_dict:
-                    to_dict[self.obj_manager_out].append(sending)
-                else:
-                    to_dict[self.obj_manager_out] = [sending]
+                to_dict.setdefault(self.obj_manager_out, []).append(sending)
             else:
-                the_port = None
-                for port in self.OPorts:
-                    if port.name == sending.port:
-                        the_port = port
-                if the_port in to_dict:
-                    to_dict[the_port].append(sending)
-                else:
-                    to_dict[the_port] = [sending]
+                the_port = next((port for port in self.OPorts if port.name == sending.port), None)
+                to_dict.setdefault(the_port, []).append(sending)
         return to_dict
     
     def timeAdvance(self):
@@ -1203,4 +898,3 @@ class Ports:
             self.inports[port_name] = instance
             self.private_port_counter += 1
         return port_name
-

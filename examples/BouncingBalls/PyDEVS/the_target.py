@@ -34,6 +34,9 @@ class MainAppInstance(RuntimeClassBase):
         MainAppInstance.user_defined_constructor(self)
         port_name = Ports.addInputPort("<narrow_cast>", self)
         atomdevs.addInPort(port_name)
+
+        # TODO: This still needs to be added to the DEVS compiler
+        #atomdevs.state.port_mappings["ui"] = None  
     
     def user_defined_constructor(self):
         self.nr_of_fields = 0
@@ -233,6 +236,10 @@ class FieldInstance(RuntimeClassBase):
         FieldInstance.user_defined_constructor(self)
         port_name = Ports.addInputPort("<narrow_cast>", self)
         atomdevs.addInPort(port_name)
+
+        # TODO: This still needs to be added to the DEVS compiler
+        #atomdevs.state.port_mappings["ui"] = None        
+
         port_name = Ports.addInputPort("field_ui", self)
         atomdevs.addInPort(port_name)
         atomdevs.state.port_mappings[port_name] = atomdevs.state.next_instance
@@ -506,6 +513,10 @@ class ButtonInstance(RuntimeClassBase):
         ButtonInstance.user_defined_constructor(self, window_id, event_name, button_text)
         port_name = Ports.addInputPort("<narrow_cast>", self)
         atomdevs.addInPort(port_name)
+
+        # TODO: This still needs to be added to the DEVS compiler
+        #atomdevs.state.port_mappings["ui"] = None  
+
         port_name = Ports.addInputPort("button_ui", self)
         atomdevs.addInPort(port_name)
         atomdevs.state.port_mappings[port_name] = atomdevs.state.next_instance
@@ -611,6 +622,11 @@ class BallInstance(RuntimeClassBase):
         BallInstance.user_defined_constructor(self, canvas_id, x, y)
         port_name = Ports.addInputPort("<narrow_cast>", self)
         atomdevs.addInPort(port_name)
+
+
+        # TODO: This still needs to be added to the DEVS compiler
+        #atomdevs.state.port_mappings["ui"] = None  
+
         port_name = Ports.addInputPort("ball_ui", self)
         atomdevs.addInPort(port_name)
         atomdevs.state.port_mappings[port_name] = atomdevs.state.next_instance
@@ -835,25 +851,72 @@ class Controller(CoupledDEVS):
         self.out_ui = self.addOutPort("ui")
         Ports.addOutputPort("ui")
         self.objectmanager = self.addSubModel(ObjectManager("ObjectManager"))
-        self.atomic0 = self.addSubModel(MainApp("MainApp"))
-        self.atomic1 = self.addSubModel(Field("Field"))
-        self.atomic2 = self.addSubModel(Button("Button"))
-        self.atomic3 = self.addSubModel(Ball("Ball"))
-        self.connectPorts(self.atomic0.obj_manager_out, self.objectmanager.input)
-        self.connectPorts(self.objectmanager.output["MainApp"], self.atomic0.obj_manager_in)
+        #self.atomic0 = self.addSubModel(MainApp("MainApp"))
+        #self.atomic1 = self.addSubModel(Field("Field"))
+        #self.atomic2 = self.addSubModel(Button("Button"))
+        #self.atomic3 = self.addSubModel(Ball("Ball"))
+
+        self.atomics = [
+            self.addSubModel(MainApp("MainApp")),
+            self.addSubModel(Field("Field")),
+            self.addSubModel(Button("Button")),
+            self.addSubModel(Ball("Ball"))
+        ]
+
+        for atomic in self.atomics:
+            # Connect to object manager
+            self.connectPorts(atomic.obj_manager_out, self.objectmanager.input)
+            self.connectPorts(self.objectmanager.output[atomic.name], atomic.obj_manager_in)
+
+            # TODO: check if this is correct
+            # Connect global input ports
+            for global_in in self.IPorts:
+                self.connectPorts(global_in, atomic.input)
+            
+            # Connect global output ports
+            for global_out in self.OPorts:
+                self.connectPorts(atomic.output, global_out)
+
+
+            
+        self.connectPorts(self.atomics[0].outputs["fields"], self.atomics[1].input)
+        self.connectPorts(self.atomics[1].outputs["balls"], self.atomics[3].input)
+        self.connectPorts(self.atomics[1].outputs["buttons"], self.atomics[2].input)
+        self.connectPorts(self.atomics[1].outputs["parent"], self.atomics[0].input)
+        self.connectPorts(self.atomics[2].outputs["parent"], self.atomics[1].input)
+        self.connectPorts(self.atomics[3].outputs["parent"], self.atomics[1].input)
+        #self.connectPorts(self.atomics[0].output, self.out_ui)
+        #self.connectPorts(self.atomics[1].output, self.out_ui)
+        #self.connectPorts(self.atomics[2].output, self.out_ui)
+        #self.connectPorts(self.atomics[3].output, self.out_ui)
+
+        # TODO
+        #self.connectPorts(self.in_ui, self.atomics[0].input)
+        #self.connectPorts(self.in_ui, self.atomics[1].input)
+        #self.connectPorts(self.in_ui, self.atomics[2].input)
+        #self.connectPorts(self.in_ui, self.atomics[3].input)
+
+
+
+
+        
+        '''
+        #self.connectPorts(self.atomic0.obj_manager_out, self.objectmanager.input)
+        #self.connectPorts(self.objectmanager.output["MainApp"], self.atomic0.obj_manager_in)
         self.connectPorts(self.atomic0.outputs["fields"], self.atomic1.input)
         self.connectPorts(self.atomic1.obj_manager_out, self.objectmanager.input)
-        self.connectPorts(self.objectmanager.output["Field"], self.atomic1.obj_manager_in)
+        #self.connectPorts(self.objectmanager.output["Field"], self.atomic1.obj_manager_in)
         self.connectPorts(self.atomic1.outputs["balls"], self.atomic3.input)
         self.connectPorts(self.atomic1.outputs["buttons"], self.atomic2.input)
         self.connectPorts(self.atomic1.outputs["parent"], self.atomic0.input)
-        self.connectPorts(self.atomic2.obj_manager_out, self.objectmanager.input)
-        self.connectPorts(self.objectmanager.output["Button"], self.atomic2.obj_manager_in)
+        #self.connectPorts(self.atomic2.obj_manager_out, self.objectmanager.input)
+        #self.connectPorts(self.objectmanager.output["Button"], self.atomic2.obj_manager_in)
         self.connectPorts(self.atomic2.outputs["parent"], self.atomic1.input)
-        self.connectPorts(self.atomic3.obj_manager_out, self.objectmanager.input)
-        self.connectPorts(self.objectmanager.output["Ball"], self.atomic3.obj_manager_in)
+        #self.connectPorts(self.atomic3.obj_manager_out, self.objectmanager.input)
+        #self.connectPorts(self.objectmanager.output["Ball"], self.atomic3.obj_manager_in)
         self.connectPorts(self.atomic3.outputs["parent"], self.atomic1.input)
         self.connectPorts(self.atomic0.output, self.out_ui)
         self.connectPorts(self.atomic1.output, self.out_ui)
         self.connectPorts(self.atomic2.output, self.out_ui)
         self.connectPorts(self.atomic3.output, self.out_ui)
+        '''

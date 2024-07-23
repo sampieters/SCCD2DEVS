@@ -1,5 +1,5 @@
 import tkinter as tk
-import target as target
+import the_target as target
 from sccd.runtime.libs.ui_v2 import UI
 from sccd.runtime.DEVS_loop import DEVSSimulator
 
@@ -15,7 +15,7 @@ class OutputListener:
 
 if __name__ == '__main__':
 	model = target.Controller(name="controller")
-	refs = {"ui": model.in_ui, "field_ui": model.atomic1.field_ui, "button_ui": model.atomic2.button_ui, "ball_ui": model.atomic3.ball_ui}
+	refs = {"ui": model.in_ui, "field_ui": model.atomics[1].field_ui, "button_ui": model.atomics[2].button_ui, "ball_ui": model.atomics[3].ball_ui}
 
 	tkroot = tk.Tk()
 	tkroot.withdraw()
