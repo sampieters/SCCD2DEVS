@@ -726,6 +726,7 @@ class ClassBase(AtomicDEVS):
     def __init__(self, name):
         AtomicDEVS.__init__(self, name)
         
+        self.glob_outputs = {}
         self.outputs = {}
         self.state = ClassState(name)
         #self.elapsed = 0

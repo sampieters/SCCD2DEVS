@@ -115,32 +115,47 @@ class DEVSGenerator(Visitor):
                                                                                            GLC.ActualParameters([
                                                                                                GLC.String(
                                                                                                    "ObjectManager")]))])))
+        
+        self.writer.addAssignment(GLC.SelfProperty("atomics"), "[]")
         for (i, class_name) in enumerate(class_diagram.class_names):
-            self.writer.addAssignment(GLC.SelfProperty(f"atomic{i}"),
-                                      (GLC.FunctionCall(GLC.SelfProperty("addSubModel"), [GLC.FunctionCall(class_name,
+            self.writer.add(GLC.FunctionCall("self.atomics.append", GLC.ActualParameters([(GLC.FunctionCall(GLC.SelfProperty("addSubModel"), [GLC.FunctionCall(class_name,
                                                                                                            GLC.ActualParameters(
                                                                                                                [
                                                                                                                    GLC.String(
-                                                                                                                       class_name)]))])))
+                                                                                                                       class_name)]))]))])))
+        #for (i, class_name) in enumerate(class_diagram.class_names):
+        #    self.writer.addAssignment(GLC.SelfProperty(f"atomic{i}"),
+        #                              (GLC.FunctionCall(GLC.SelfProperty("addSubModel"), [GLC.FunctionCall(class_name,
+        #                                                                                                   GLC.ActualParameters(
+        #                                                                                                       [
+        #                                                                                                           GLC.String(
+        #                                                                                                               class_name)]))])))
 
         # Add links between the models
         for (i, the_class) in enumerate(class_diagram.classes):
+            # Add links between the classes and the object manager
             self.writer.add((GLC.FunctionCall(GLC.SelfProperty("connectPorts"),
-                                              [GLC.SelfProperty(f"atomic{i}.obj_manager_out"),
+                                              [GLC.SelfProperty(f"atomics[{i}].obj_manager_out"),
                                                GLC.SelfProperty(f"objectmanager.input")])))
             self.writer.add((GLC.FunctionCall(GLC.SelfProperty("connectPorts"),
                                               [GLC.SelfProperty(f"objectmanager.output[\"{the_class.name}\"]"),
-                                               GLC.SelfProperty(f"atomic{i}.obj_manager_in")])))
+                                               GLC.SelfProperty(f"atomics[{i}].obj_manager_in")])))
 
+            # Add links between the classes that have associations
             for association in the_class.associations:
                 temp = class_diagram.class_names.index(association.to_class)
                 self.writer.add(GLC.FunctionCall(GLC.SelfProperty("connectPorts"),
-                                                 [GLC.SelfProperty(f"atomic{i}.outputs[\"{association.name}\"]"),
-                                                  GLC.SelfProperty(f"atomic{temp}.input")]))
+                                                 [GLC.SelfProperty(f"atomics[{i}].outputs[\"{association.name}\"]"),
+                                                  GLC.SelfProperty(f"atomics[{temp}].input")]))
 
+        # Add links between the global in-/outputs and the classes
         for (i, the_class) in enumerate(class_diagram.classes):
             for o in class_diagram.outports:
-                self.writer.add(GLC.FunctionCall(GLC.SelfProperty("connectPorts"), [GLC.SelfProperty(f"atomic{i}.output"), GLC.SelfProperty(f"out_{o}")]))
+                self.writer.add(GLC.FunctionCall(GLC.SelfProperty("connectPorts"), [GLC.SelfProperty(f"atomics[{i}].glob_outputs[\"{o}\"]"), GLC.SelfProperty(f"out_{o}")]))
+
+            for inp in class_diagram.inports:
+                self.writer.add(GLC.FunctionCall(GLC.SelfProperty("connectPorts"), [GLC.SelfProperty(f"in_{inp}"), GLC.SelfProperty(f"atomics[{i}].input")]))
+        
 
         # TODO: What to do with "actual_parameters"?
         # actual_parameters = [p.getIdent() for p in class_diagram.default_class.constructors[0].parameters]
@@ -373,9 +388,12 @@ class DEVSGenerator(Visitor):
         self.writer.addActualParameter("name")
         self.writer.endSuperClassConstructorCall()
 
+        # TODO: ceck here also
         self.writer.addAssignment(GLC.SelfProperty("input"), GLC.FunctionCall(GLC.SelfProperty("addInPort"), [GLC.String("input")]))
 
-        self.writer.addAssignment(GLC.SelfProperty("output"), GLC.FunctionCall(GLC.SelfProperty("addOutPort"), [GLC.String("ui")]))
+        # TODO: output shuold have the same name as the real port
+        for global_outport in constructor.parent_class.class_diagram.outports:
+            self.writer.addAssignment(GLC.SelfProperty(f"glob_outputs[\"{global_outport}\"]"), GLC.FunctionCall(GLC.SelfProperty("addOutPort"), [GLC.String(global_outport)]))
 
 
 

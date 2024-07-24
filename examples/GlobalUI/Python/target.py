@@ -61,10 +61,10 @@ class MainApp(RuntimeClassBase):
         self.states["/state1"].addTransition(_state1_0)
     
     def _state1_enter(self):
-        self.big_step.outputEvent(Event("generate_input", self.getOutPortName("ui"), []))
+        self.big_step.outputEvent(Event("generate_input", self.getOutPortName("Output"), []))
     
     def _state1_0_exec(self, parameters):
-        self.big_step.outputEvent(Event("received", self.getOutPortName("ui"), []))
+        self.big_step.outputEvent(Event("received", self.getOutPortName("Output"), []))
     
     def initializeStatechart(self):
         # enter default state
@@ -88,6 +88,6 @@ class Controller(ThreadsControllerBase):
         if keep_running == None: keep_running = True
         if behind_schedule_callback == None: behind_schedule_callback = None
         ThreadsControllerBase.__init__(self, ObjectManager(self), keep_running, behind_schedule_callback)
-        self.addInputPort("ui")
-        self.addOutputPort("ui")
+        self.addInputPort("Input")
+        self.addOutputPort("Output")
         self.object_manager.createInstance("MainApp", [])

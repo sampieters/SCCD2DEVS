@@ -14,6 +14,7 @@ def get_port(text):
 class DEVSSimulator(Simulator):
 	def __init__(self, model, inputs={}):
 		super().__init__(model)
+		self.setClassicDEVS()
 
 		# TODO: Add the input ports here so it works without manually adding them
 		inputs ={}
@@ -24,9 +25,11 @@ class DEVSSimulator(Simulator):
 
 		# Add private ports (can't send to it unless it knows the id)
 		for aclass in model.atomics:
-			pass
-
-
+			for in_port in aclass.IPorts:
+				if in_port.name == "obj_manager_in" or in_port.name == "input":
+					pass
+				else:
+					inputs[in_port.name] = in_port
 
 		self.setRealTimePorts(inputs)	
 	
@@ -35,7 +38,4 @@ class DEVSSimulator(Simulator):
 		event_string = f"Event(\"{event.name}\",\"{event.port}\",{event.parameters})"
 		event_string = event_string.replace(" ", "")
 		interrupt_string = f"{port_name} {event_string}"
-
-		#event_string = f"Event(\"{event.name}\",\"{"ui"}\",{event.parameters})"
-		#interrupt_string = f"ui {event_string}"
 		self.realtime_interrupt(interrupt_string)

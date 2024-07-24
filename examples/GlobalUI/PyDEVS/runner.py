@@ -7,18 +7,16 @@ class OutputListener:
 		self.controller = controller
 		
 	def add(self, events):
+		events = events[0]
 		for event in events:
 			if event.name == "generate_input":
-			    self.controller.addInput(Event("test", "ui"))
+			    self.controller.addInput(Event("test", "Input"))
 
 if __name__ == '__main__':
 	model = target.Controller(name="controller")
-	refs = {
-		"ui": model.in_ui,  
-	}
-
-	sim = DEVSSimulator(model, refs)
+	sim = DEVSSimulator(model)
 	sim.setVerbose(None)
 	listener = OutputListener(sim)
-	sim.setListenPorts(model.out_ui, listener.add)
+
+	sim.setListenPorts(model.out_Output, listener.add)
 	sim.simulate()
