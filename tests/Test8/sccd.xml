@@ -3,8 +3,8 @@
     <description>
         Test 8: Check if an instance is created and started successfully with constructor parameters (other than the main app)
     </description>
-    <inport name="ui"/>
-    <outport name="ui"/>
+    <inport name="Inport" />
+    <outport name="Outport"/>
     <class name="MainApp" default="true">
         <relationships>
             <association name="linkA" class="A" />
@@ -25,7 +25,7 @@
                 </onentry>
                 <transition event='instance_created' target='../state2'>
                     <parameter name="association_name" type="string"/>
-                    <raise port="ui" event="instance_created_succesfully">
+                    <raise port="Outport" event="instance_created_succesfully">
                         <parameter expr="str('%.2f' % (self.getSimulatedTime() / 1000.0))" />
                         <parameter expr="association_name" />
                     </raise>
@@ -37,7 +37,7 @@
             <state id="state2">
                 <transition event='instance_started' target='.'>
                     <parameter name="association_name" type="string"/>
-                    <raise port="ui" event="instance_started_succesfully">
+                    <raise port="Outport" event="instance_started_succesfully">
                         <parameter expr="str('%.2f' % (self.getSimulatedTime() / 1000.0))" />
                         <parameter expr="association_name" />
                     </raise>
@@ -64,10 +64,10 @@
         <scxml initial="state1">
             <state id="state1">
                 <onentry>
-                    <raise port="ui" event="statechart_started_succesfully">
+                    <raise port="Outport" event="statechart_started_succesfully">
                         <parameter expr="str('%.2f' % (self.getSimulatedTime() / 1000.0))" />
                     </raise>
-                    <raise port="ui" event="constructor_initialized_succesfully">
+                    <raise port="Outport" event="constructor_initialized_succesfully">
                         <parameter expr="str('%.2f' % (self.getSimulatedTime() / 1000.0))" />
                         <parameter expr="self.integer" />
                         <parameter expr="self.floating_point" />

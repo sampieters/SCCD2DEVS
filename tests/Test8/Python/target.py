@@ -71,12 +71,12 @@ class MainApp(RuntimeClassBase):
     
     def _state1_0_exec(self, parameters):
         association_name = parameters[0]
-        self.big_step.outputEvent(Event("instance_created_succesfully", self.getOutPortName("ui"), [str('%.2f' % (self.getSimulatedTime() / 1000.0)), association_name]))
+        self.big_step.outputEvent(Event("instance_created_succesfully", self.getOutPortName("Outport"), [str('%.2f' % (self.getSimulatedTime() / 1000.0)), association_name]))
         self.big_step.outputEventOM(Event("start_instance", None, [self, association_name]))
     
     def _state2_0_exec(self, parameters):
         association_name = parameters[0]
-        self.big_step.outputEvent(Event("instance_started_succesfully", self.getOutPortName("ui"), [str('%.2f' % (self.getSimulatedTime() / 1000.0)), association_name]))
+        self.big_step.outputEvent(Event("instance_started_succesfully", self.getOutPortName("Outport"), [str('%.2f' % (self.getSimulatedTime() / 1000.0)), association_name]))
     
     def initializeStatechart(self):
         # enter default state
@@ -127,8 +127,8 @@ class A(RuntimeClassBase):
         self.states[""].default_state = self.states["/state1"]
     
     def _state1_enter(self):
-        self.big_step.outputEvent(Event("statechart_started_succesfully", self.getOutPortName("ui"), [str('%.2f' % (self.getSimulatedTime() / 1000.0))]))
-        self.big_step.outputEvent(Event("constructor_initialized_succesfully", self.getOutPortName("ui"), [str('%.2f' % (self.getSimulatedTime() / 1000.0)), self.integer, self.floating_point, self.astring, self.alist, self.adict]))
+        self.big_step.outputEvent(Event("statechart_started_succesfully", self.getOutPortName("Outport"), [str('%.2f' % (self.getSimulatedTime() / 1000.0))]))
+        self.big_step.outputEvent(Event("constructor_initialized_succesfully", self.getOutPortName("Outport"), [str('%.2f' % (self.getSimulatedTime() / 1000.0)), self.integer, self.floating_point, self.astring, self.alist, self.adict]))
     
     def initializeStatechart(self):
         # enter default state
@@ -156,6 +156,6 @@ class Controller(ThreadsControllerBase):
         if keep_running == None: keep_running = True
         if behind_schedule_callback == None: behind_schedule_callback = None
         ThreadsControllerBase.__init__(self, ObjectManager(self), keep_running, behind_schedule_callback)
-        self.addInputPort("ui")
-        self.addOutputPort("ui")
+        self.addInputPort("Inport")
+        self.addOutputPort("Outport")
         self.object_manager.createInstance("MainApp", [])

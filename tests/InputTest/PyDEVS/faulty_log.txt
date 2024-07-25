@@ -1,2 +1,5 @@
-0.00 (event name: waiting_on_input; port: ui)
-1.00 (event name: test; port: ui; parameters: [])
+0.00 (event name: waiting_on_input; port: Output)
+1.00 Exit State: State(1) (name: /state1)
+1.00 Transition(State(1), State(2))
+1.00 Enter State: State(2) (name: /state2)
+1.00 (event name: received; port: Output)

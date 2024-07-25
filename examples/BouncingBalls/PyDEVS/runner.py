@@ -8,7 +8,6 @@ class OutputListener:
 		self.ui = ui
 
 	def add(self, events):
-		events = events[0]
 		for event in events:
 			if event.port == "ui":
 				method = getattr(self.ui, event.name)
@@ -21,7 +20,7 @@ if __name__ == '__main__':
 	tkroot.withdraw()
 	sim = DEVSSimulator(model)
 
-	#sim.setVerbose()
+	sim.setVerbose("./examples/BouncingBalls/PyDEVS/log.txt")
 	sim.setRealTimePlatformTk(tkroot)
 
 	ui = UI(tkroot, sim)

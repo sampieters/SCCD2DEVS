@@ -101,13 +101,13 @@ class MainAppInstance(RuntimeClassBase):
         self.default_targets = self.states["/state1"].getEffectiveTargetStates()
         RuntimeClassBase.initializeStatechart(self)
 
-class MainApp(ObjectManagerBase):
+class MainApp(ClassBase):
     def __init__(self, name):
-        ObjectManagerBase.__init__(self, name)
+        ClassBase.__init__(self, name)
         self.input = self.addInPort("input")
-        self.output = self.addOutPort("ui")
-        self.instances[self.next_instance] = MainAppInstance(self)
-        self.next_instance = self.next_instance + 1
+        self.glob_outputs["ui"] = self.addOutPort("ui")
+        self.state.instances[self.state.next_instance] = MainAppInstance(self)
+        self.state.next_instance = self.state.next_instance + 1
     
     def constructObject(self, parameters):
         new_instance = MainAppInstance(self)
@@ -117,10 +117,10 @@ class ObjectManagerState:
     def __init__(self):
         self.to_send = [("MainApp", "MainApp", Event("start_instance", None, ["MainApp[0]"], 0))]
 
-class ObjectManager(TheObjectManager):
+class ObjectManager(ObjectManagerBase):
     def __init__(self, name):
-        TheObjectManager.__init__(self, name)
-        self.State = ObjectManagerState()
+        ObjectManagerBase.__init__(self, name)
+        self.state = ObjectManagerState()
         self.input = self.addInPort("input")
         self.output["MainApp"] = self.addOutPort()
 
@@ -132,7 +132,9 @@ class Controller(CoupledDEVS):
         self.out_ui = self.addOutPort("ui")
         Ports.addOutputPort("ui")
         self.objectmanager = self.addSubModel(ObjectManager("ObjectManager"))
-        self.atomic0 = self.addSubModel(MainApp("MainApp"))
-        self.connectPorts(self.atomic0.obj_manager_out, self.objectmanager.input)
-        self.connectPorts(self.objectmanager.output["MainApp"], self.atomic0.obj_manager_in)
-        self.connectPorts(self.atomic0.output, self.out_ui)
+        self.atomics = []
+        self.atomics.append(self.addSubModel(MainApp("MainApp")))
+        self.connectPorts(self.atomics[0].obj_manager_out, self.objectmanager.input)
+        self.connectPorts(self.objectmanager.output["MainApp"], self.atomics[0].obj_manager_in)
+        self.connectPorts(self.atomics[0].glob_outputs["ui"], self.out_ui)
+        self.connectPorts(self.in_ui, self.atomics[0].input)

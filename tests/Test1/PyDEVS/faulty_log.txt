@@ -1,0 +1,3 @@
+1.00 Exit State: State(1) (name: /state1)
+1.00 Transition(State(1), State(2))
+1.00 Enter State: State(2) (name: /end)

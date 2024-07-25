@@ -1,2 +1,0 @@
-0.00 (event name: instance_created_succesfully; port: ui; parameters: ['0.00', 'linkA[0]'])
-0.00 (event name: instance_deleted_succesfully; port: ui; parameters: ['0.00', [0]])

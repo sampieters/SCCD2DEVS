@@ -5,6 +5,12 @@ import importlib.util
 from sccd.runtime.DEVS_loop import DEVSSimulator
 import TraceChecker
 
+# ANSI color escape codes
+RED = '\033[91m'    # Red color
+GREEN = '\033[92m'  # Green color
+YELLOW = '\033[93m' # Yellow color
+ENDC = '\033[0m'    # Reset color to default
+
 def sort_directories(test_directory):
     with os.scandir(tests_directory) as entries:
         sorted_entries = sorted(entries, key=lambda entry: entry.name)
@@ -20,21 +26,17 @@ def natural_sort_key(s):
     return [int(text) if text.isdigit() else text.lower() for text in re.split(r'(\d+)', s)]
 
 if __name__ == '__main__':
-    # ANSI color escape codes
-    RED = '\033[91m'    # Red color
-    GREEN = '\033[92m'  # Green color
-    YELLOW = '\033[93m' # Yellow color
-    ENDC = '\033[0m'    # Reset color to default
-
     tests_directory = "./tests"
 
-    sorted_dirs = sort_directories(tests_directory)
+    #options = ["GLOBAL_IO", "INTERNAL_IO","STATECHART"]
+    options = ["GLOBAL_IO"]
 
     checkers = {
-        #"Python": TraceChecker.PythonSCCDTraceChecker(),
+        "Python": TraceChecker.PythonSCCDTraceChecker(),
         "Pydevs": TraceChecker.PydevsSCCDTraceChecker()
     }
 
+    sorted_dirs = sort_directories(tests_directory)
     results = {checker_name: [] for checker_name in checkers}
 
     for directory_name in sorted_dirs:
@@ -44,7 +46,7 @@ if __name__ == '__main__':
             for checker_name, checker in checkers.items():
                 checker.compile(full_directory)
                 checker.run(full_directory)
-                result = checker.check(full_directory)
+                result = checker.check(full_directory, options)
                 results[checker_name].append(result)
                 if result == 0:
                     print(f"{checker_name}: ", RED + "Failed" + ENDC)

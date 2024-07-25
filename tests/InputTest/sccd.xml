@@ -3,16 +3,16 @@
     <description>
         Test X: Test if global inport works
     </description>
-    <inport name="ui"/>
-    <outport name="ui"/>
+    <inport name="Input"/>
+    <outport name="Output"/>
     <class name="MainApp" default="true">
         <scxml initial="state1">
             <state id="state1">
                 <onentry>
-                    <raise port="ui" event="waiting_on_input" />
+                    <raise port="Output" event="waiting_on_input" />
                 </onentry>
                 <transition event='test' target='../state2'>
-                    <raise port="ui" event="received" />
+                    <raise port="Output" event="received" />
                 </transition>
             </state>
             <state id="state2" />

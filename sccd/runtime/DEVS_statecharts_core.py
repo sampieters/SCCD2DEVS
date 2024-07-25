@@ -43,7 +43,7 @@ class Transition:
                     return True
 
     # @profile
-    def fire(self):
+    def fire(self, statechart):
         # exit states...
         exit_set = self.__exitSet()
         for s in exit_set:
@@ -54,6 +54,13 @@ class Transition:
                     f = lambda s0: not s0.descendants and s0 in s.descendants
                 self.obj.history_values[h.state_id] = list(filter(f, self.obj.configuration))
         for s in exit_set:
+            #########################################
+            # TODO, here trace for exit state
+            statechart.text += "\n"
+            statechart.text += "\t\t\tEXIT STATE in model <%s>\n" % statechart.name
+            statechart.text += f"\t\t\tState: {str(s)} (name: {s.name})\n"
+            #########################################
+
             self.obj.eventless_states -= s.has_eventless_transitions
             # execute exit action(s)
             if s.exit:
@@ -64,6 +71,12 @@ class Transition:
         self.obj.combo_step.changed_bitmap |= 2 ** self.lca.state_id
         self.obj.combo_step.changed_bitmap |= self.lca.descendant_bitmap
 
+        #########################################
+         # TODO, here trace for fired transition
+        statechart.text += "\n"
+        statechart.text += "\t\t\tTRANSITION FIRED in model <%s>\n" % statechart.name
+        statechart.text += "\t\t\t%s\n" % str(self)
+        #########################################
         # execute transition action(s)
         if self.action:
             self.action(self.enabled_event.parameters if self.enabled_event else [])
@@ -72,6 +85,13 @@ class Transition:
         targets = self.__getEffectiveTargetStates()
         enter_set = self.__enterSet(targets)
         for s in enter_set:
+            #########################################
+            # TODO, here trace for enter state
+            statechart.text += "\n"
+            statechart.text += "\t\t\tENTER STATE in model <%s>\n" % statechart.name
+            statechart.text += f"\t\t\tState: {str(s)} (name: {s.name})\n"
+            #########################################
+
             self.obj.eventless_states += s.has_eventless_transitions
             self.obj.configuration_bitmap |= 2 ** s.state_id
             # execute enter action(s)
@@ -368,9 +388,9 @@ class RuntimeClassBase(object):
             if self.semantics.concurrency == StatechartSemantics.Single:
                 candidate = conflicting[0]
                 if self.semantics.priority == StatechartSemantics.SourceParent:
-                    candidate[-1].fire()
+                    candidate[-1].fire(self.controller.state)
                 else:
-                    candidate[0].fire()
+                    candidate[0].fire(self.controller.state)
             elif self.semantics.concurrency == StatechartSemantics.Many:
                 pass  # TODO: implement
             self.small_step.has_stepped = True
@@ -437,6 +457,11 @@ class ClassState():
         self.inports = {}
 
         self.lock = threading.Condition()
+
+        self.text = ""
+
+    def __str__(self) -> str:
+        return self.text
 
     def getEarliestEventTime(self):
         with self.lock:
@@ -740,6 +765,7 @@ class ClassBase(AtomicDEVS):
         # Update simulated time
         self.state.simulated_time += self.elapsed
         self.state.next_time = 0
+        self.state.text = ""
 
         # Collect all inputs
         all_inputs = [input for input_list in inputs.values() for input in input_list]
@@ -824,6 +850,7 @@ class ClassBase(AtomicDEVS):
                 self.state.addInput(ev)
         return self.state
     
+    '''
     def intTransition(self):
         # Update simulated time and clear previous messages 
         self.state.simulated_time += self.state.next_time
@@ -836,7 +863,28 @@ class ClassBase(AtomicDEVS):
         self.state.handleInput()
         self.state.stepAll()
         return self.state
+    '''
+    
+    def intTransition(self):
+        self.state.to_send = self.state.to_send[1:]
+        self.state.text = ""
 
+        if len(self.state.to_send) == 0:
+            # Update simulated time and clear previous messages 
+            self.state.simulated_time += self.state.next_time
+            
+            # Calculate the next event time, clamp to ensure non-negative result
+            self.state.next_time = min(self.state.getEarliestEventTime(), self.state.simulated_time + self.state.input_queue.getEarliestTime())
+            self.state.next_time -= self.state.simulated_time
+            self.state.next_time = max(self.state.next_time, 0.0)
+            # Handle incoming inputs and do a step in all statecharts
+            self.state.handleInput()
+            self.state.stepAll()
+        else:
+            self.state.next_time = 0
+        return self.state
+
+    '''
     def outputFnc(self):
         to_dict = {}
         for sending in self.state.to_send:
@@ -845,6 +893,22 @@ class ClassBase(AtomicDEVS):
             else:
                 the_port = next((port for port in self.OPorts if port.name == sending.port), None)
                 to_dict.setdefault(the_port, []).append(sending)
+        return to_dict
+    '''
+
+    def outputFnc(self):
+        to_dict = {}
+        #for sending in self.state.to_send:
+        if not len(self.state.to_send) == 0:
+            sending = self.state.to_send[0]
+
+            if isinstance(sending, tuple) and sending[2].port == None:
+                #to_dict.setdefault(self.obj_manager_out, []).append(sending)
+                to_dict[self.obj_manager_out] = sending
+            else:
+                the_port = next((port for port in self.OPorts if port.name == sending.port), None)
+                #to_dict.setdefault(the_port, []).append(sending)
+                to_dict[the_port] = sending
         return to_dict
     
     def timeAdvance(self):
@@ -855,9 +919,16 @@ class ObjectManagerBase(AtomicDEVS):
         AtomicDEVS.__init__(self, name)
         self.output = {}
     
+    '''
     def extTransition(self, inputs):
         all_inputs = inputs[self.input]
         self.state.to_send.extend(all_inputs)
+        return self.state
+    '''
+
+    def extTransition(self, inputs):
+        all_inputs = inputs[self.input]
+        self.state.to_send.append(all_inputs)
         return self.state
     
     def intTransition(self):

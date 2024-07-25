@@ -4,8 +4,6 @@ from pypdevs.simulator import Simulator
 from sccd.runtime.DEVS_statecharts_core import Event
 from pypdevs.infinity import INFINITY
 
-import tests.Test3.PyDEVS.target as target
-
 def parse_event(line):
     # Regular expression to match the desired parts of the line
     pattern = re.compile(r'\(event name: (.*?); port: (.*?); parameters: (.*?)\)$')
@@ -66,26 +64,12 @@ class TesterUnit(AtomicDEVS):
         to_output = {}
         for event in self.to_send:
             for port in self.OPorts:
-                if event.port == port.name:
+                if f"Test_{event.port}" == port.name:
+                    string_event = f"Event(\"{event.name}\",\"{event.port}\",{event.parameters})"
                     #to_output[port] = event
-                    if port in to_output:
-                        to_output[port].append(event)
-                    else:
-                        to_output[port] = [event]
+                    to_output[port] = [string_event]
         return to_output
 
     def timeAdvance(self):
         return self.next_event_time
     
-
-class Tester(CoupledDEVS):
-    def __init__(self, model, inputfile=None):
-        CoupledDEVS.__init__(self, "Tester")
-
-        self.model = self.addSubModel(model)
-        self.tester = self.addSubModel(TesterUnit("Tester", inputfile))
-
-        # Connect to global ports
-        for model_input_ports in self.model.IPorts:
-            an_output = self.tester.addOutPort(name=model_input_ports.name)
-            self.connectPorts(an_output, model_input_ports)

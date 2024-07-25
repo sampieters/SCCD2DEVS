@@ -25,16 +25,8 @@ class SCCDTraceChecker:
     def run(self, directory):
         raise NotImplementedError("Run method must be implemented by the subclass")
 
-    def check(self, directory):
-        expected_log = os.path.join(directory, "expected_trace.txt")
-        if os.path.exists(expected_log):
-            lines_array = []
-            with open(expected_log, 'r') as file:
-                lines_array = file.readlines()
-            return lines_array
-        else:
-            print(f"The file {expected_log} does not exist.")
-            return None
+    def check(self, directory, options):
+        raise NotImplementedError("Chekc method must be implemented by the subclass")
 
 
 class PythonSCCDTraceChecker(SCCDTraceChecker):
@@ -111,7 +103,7 @@ class PythonSCCDTraceChecker(SCCDTraceChecker):
         
         return output_events
 
-    def check(self, directory):
+    def check(self, directory, options):
         log = os.path.join(directory, "Python", "log.txt")
 
         expected_log = os.path.join(directory, "expected_trace.txt")
@@ -192,10 +184,23 @@ class PydevsSCCDTraceChecker(SCCDTraceChecker):
         if not os.path.exists(input_file):
             input_file = None
 
+        # Initialize the to be tested model
         test_model = target.Controller("Controller")
-        tester = Tester.Tester(test_model, input_file)
 
-        sim = DEVSSimulator(tester)
+        # Add a new atomicDEVS to it which will be the Tester and link it to the model to sent events
+        tester = test_model.addSubModel(Tester.TesterUnit("Tester", input_file))
+
+        # Connect the outports of the tester to the global inports of the model
+        # TODO: Now directly connected to the atomicDEVS because out/in relation can not be of coupled (SEE DEVS.PY)
+        for in_port in test_model.IPorts:
+            test_output = tester.addOutPort(f"Test_{in_port.name}")
+            for atomic in test_model.atomics:
+                test_model.connectPorts(test_output, atomic.input)
+
+
+        #tester = Tester.Tester(test_model, input_file)
+
+        sim = DEVSSimulator(test_model)
         sim.setRealTime(False)
         
         # Create the full path for the log file
@@ -207,31 +212,111 @@ class PydevsSCCDTraceChecker(SCCDTraceChecker):
         #sim.setClassicDEVS()
         sim.simulate()
 
-    def extract_output_events(self, log_file_path):
+    def extract_globalio(self, line, context):
+        event_pattern = re.compile(r'^\s*\(event name:.*\)$')
+        event_match = event_pattern.match(line)
+        if event_match and context["time"] is not None:
+            event = line.strip()
+            # Remove everything before '(' in each string
+            event = event[event.index('('):]
+            return f"{context["time"]:.2f} {event}"
+        return None
+        
+    def extract_internalio(self, line, context):
+        return None
+
+    def extract_statechart(self, line, context):
+        if line != "\n" and "\t\tNew State:" not in line:
+            if "TRANSITION FIRED" in line:
+                context["extra_info"] = ""
+            elif "EXIT STATE" in line:
+                context["extra_info"] = "Exit "
+            elif "ENTER STATE" in line:
+                context["extra_info"] = "Enter "
+            else:
+                line = line.replace('\n', '')
+                line = line.replace('\t', '')  # Remove all tab characters
+                return f"{context["time"]:.2f} {context["extra_info"]}{line}"
+        return None
+
+    def check_state(self, line, context):
+        if "EXTERNAL TRANSITION" in line:
+            # Use regular expressions to find everything between <>
+            pattern = r"<(.*?)>"
+            # Search for the pattern in the string
+            match = re.search(pattern, line)
+            context = {
+                "time": context["time"],
+                "transition_type": "external",
+                "model": match.group(1),
+                "context": None,
+                "extra_info": None
+            }
+        elif "INTERNAL TRANSITION" in line:
+            # Use regular expressions to find everything between <>
+            pattern = r"<(.*?)>"
+            # Search for the pattern in the string
+            match = re.search(pattern, line)
+            context = {
+                "time": context["time"],
+                "transition_type": "internal",
+                "model": match.group(1),
+                "context": None,
+                "extra_info": None
+            }   
+        elif "New State:" in line:
+            context["context"] = "state"
+        elif "Output Port Configuration:" in line:
+            context["context"] = "input"
+        elif "Output Port Configuration:" in line:
+            context["context"] = "output"
+        elif "Next scheduled internal transition at time" in line:
+            context["context"] = "next"
+        return context
+    
+    def extract_info(self, log_file_path, options):
         output_events = []
         current_time = None
+
+        context = {
+            "time": None,
+            "transition_type": None,
+            "model": None,
+            "context": None,
+            "extra_info": None
+        }
         
         with open(log_file_path, 'r') as file:
             lines = file.readlines()
             
             time_pattern = re.compile(r"__  Current Time: +([\d\.]+) +__________________________________________")
-            event_pattern = re.compile(r'^\s*\(event name:.*\)$')
-            
+
             for line in lines:
                 time_match = time_pattern.match(line)
                 if time_match:
-                    current_time = float(time_match.group(1))
+                    context["time"] = float(time_match.group(1))
+
+                context = self.check_state(line, context)
                 
-                event_match = event_pattern.match(line)
-                if event_match and current_time is not None:
-                    event = line.strip()
-                    # Remove everything before '(' in each string
-                    event = event[event.index('('):]
-                    output_events.append(f"{current_time:.2f} {event}")
+                if "GLOBAL_IO" in options:
+                    io_event = self.extract_globalio(line, context)
+                    if io_event is not None:
+                        output_events.append(io_event)
+                
+                if "INTERNAL_IO" in options:
+                    internal_event = self.extract_internalio(line, context)
+                    if internal_event is not None:
+                        output_events.append(internal_event)
+                
+                if "STATECHART" in options:
+                    if context['context'] == "state":
+                        statechart_event = self.extract_statechart(line, context)
+                        if statechart_event is not None:
+                            output_events.append(statechart_event)
         
         return output_events
 
-    def check(self, directory):
+    def check(self, directory, options):
         log = os.path.join(directory, "PyDEVS", "log.txt")
         expected_log = os.path.join(directory, "expected_trace.txt")
 
@@ -239,8 +324,8 @@ class PydevsSCCDTraceChecker(SCCDTraceChecker):
         if os.path.exists(expected_log):
             with open(expected_log, 'r') as file:
                 expected_events = [line.strip() for line in file.readlines()]
-
-        actual_events = self.extract_output_events(log)
+        
+        actual_events = self.extract_info(log, options)
 
         return_code = 1
         if len(expected_events) != len(actual_events):

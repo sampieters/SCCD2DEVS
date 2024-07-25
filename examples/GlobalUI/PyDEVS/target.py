@@ -96,10 +96,6 @@ class ObjectManager(ObjectManagerBase):
         self.input = self.addInPort("input")
         self.output["MainApp"] = self.addOutPort()
 
-def translate_inputevent_to_outputevent(inputEvent):
-    return inputEvent
-    #return OutputEvent(inputEvent)
-
 class Controller(CoupledDEVS):
     def __init__(self, name):
         CoupledDEVS.__init__(self, name)
@@ -113,4 +109,4 @@ class Controller(CoupledDEVS):
         self.connectPorts(self.atomics[0].obj_manager_out, self.objectmanager.input)
         self.connectPorts(self.objectmanager.output["MainApp"], self.atomics[0].obj_manager_in)
         self.connectPorts(self.atomics[0].glob_outputs["Output"], self.out_Output)
-        self.connectPorts(self.in_Input, self.atomics[0].input, translate_inputevent_to_outputevent)
+        self.connectPorts(self.in_Input, self.atomics[0].input)

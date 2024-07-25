@@ -74,26 +74,26 @@ class MainAppInstance(RuntimeClassBase):
     
     def _state1_0_exec(self, parameters):
         association_name = parameters[0]
-        self.big_step.outputEvent(Event("instance_created_succesfully", self.getOutPortName("ui"), [str('%.2f' % (self.getSimulatedTime() / 1000.0)), association_name]))
+        self.big_step.outputEvent(Event("instance_created_succesfully", self.getOutPortName("Outport"), [str('%.2f' % (self.getSimulatedTime() / 1000.0)), association_name]))
         self.big_step.outputEventOM(Event("start_instance", None, [self, association_name]))
     
     def _state2_0_exec(self, parameters):
         association_name = parameters[0]
-        self.big_step.outputEvent(Event("instance_started_succesfully", self.getOutPortName("ui"), [str('%.2f' % (self.getSimulatedTime() / 1000.0)), association_name]))
+        self.big_step.outputEvent(Event("instance_started_succesfully", self.getOutPortName("Outport"), [str('%.2f' % (self.getSimulatedTime() / 1000.0)), association_name]))
     
     def initializeStatechart(self):
         # enter default state
         self.default_targets = self.states["/state1"].getEffectiveTargetStates()
         RuntimeClassBase.initializeStatechart(self)
 
-class MainApp(ObjectManagerBase):
+class MainApp(ClassBase):
     def __init__(self, name):
-        ObjectManagerBase.__init__(self, name)
+        ClassBase.__init__(self, name)
         self.input = self.addInPort("input")
-        self.output = self.addOutPort("ui")
+        self.glob_outputs["Outport"] = self.addOutPort("Outport")
         self.outputs["linkA"] = self.addOutPort("linkA")
-        self.instances[self.next_instance] = MainAppInstance(self)
-        self.next_instance = self.next_instance + 1
+        self.state.instances[self.state.next_instance] = MainAppInstance(self)
+        self.state.next_instance = self.state.next_instance + 1
     
     def constructObject(self, parameters):
         new_instance = MainAppInstance(self)
@@ -145,19 +145,19 @@ class AInstance(RuntimeClassBase):
         self.states[""].default_state = self.states["/state1"]
     
     def _state1_enter(self):
-        self.big_step.outputEvent(Event("statechart_started_succesfully", self.getOutPortName("ui"), [str('%.2f' % (self.getSimulatedTime() / 1000.0))]))
-        self.big_step.outputEvent(Event("constructor_initialized_succesfully", self.getOutPortName("ui"), [str('%.2f' % (self.getSimulatedTime() / 1000.0)), self.integer, self.floating_point, self.astring, self.alist, self.adict]))
+        self.big_step.outputEvent(Event("statechart_started_succesfully", self.getOutPortName("Outport"), [str('%.2f' % (self.getSimulatedTime() / 1000.0))]))
+        self.big_step.outputEvent(Event("constructor_initialized_succesfully", self.getOutPortName("Outport"), [str('%.2f' % (self.getSimulatedTime() / 1000.0)), self.integer, self.floating_point, self.astring, self.alist, self.adict]))
     
     def initializeStatechart(self):
         # enter default state
         self.default_targets = self.states["/state1"].getEffectiveTargetStates()
         RuntimeClassBase.initializeStatechart(self)
 
-class A(ObjectManagerBase):
+class A(ClassBase):
     def __init__(self, name):
-        ObjectManagerBase.__init__(self, name)
+        ClassBase.__init__(self, name)
         self.input = self.addInPort("input")
-        self.output = self.addOutPort("ui")
+        self.glob_outputs["Outport"] = self.addOutPort("Outport")
     
     def constructObject(self, parameters):
         new_instance = AInstance(self, parameters[2], parameters[3], parameters[4], parameters[5], parameters[6])
@@ -167,10 +167,10 @@ class ObjectManagerState:
     def __init__(self):
         self.to_send = [("MainApp", "MainApp", Event("start_instance", None, ["MainApp[0]"], 0))]
 
-class ObjectManager(TheObjectManager):
+class ObjectManager(ObjectManagerBase):
     def __init__(self, name):
-        TheObjectManager.__init__(self, name)
-        self.State = ObjectManagerState()
+        ObjectManagerBase.__init__(self, name)
+        self.state = ObjectManagerState()
         self.input = self.addInPort("input")
         self.output["MainApp"] = self.addOutPort()
         self.output["A"] = self.addOutPort()
@@ -178,17 +178,20 @@ class ObjectManager(TheObjectManager):
 class Controller(CoupledDEVS):
     def __init__(self, name):
         CoupledDEVS.__init__(self, name)
-        self.in_ui = self.addInPort("ui")
-        Ports.addInputPort("ui")
-        self.out_ui = self.addOutPort("ui")
-        Ports.addOutputPort("ui")
+        self.in_Inport = self.addInPort("Inport")
+        Ports.addInputPort("Inport")
+        self.out_Outport = self.addOutPort("Outport")
+        Ports.addOutputPort("Outport")
         self.objectmanager = self.addSubModel(ObjectManager("ObjectManager"))
-        self.atomic0 = self.addSubModel(MainApp("MainApp"))
-        self.atomic1 = self.addSubModel(A("A"))
-        self.connectPorts(self.atomic0.obj_manager_out, self.objectmanager.input)
-        self.connectPorts(self.objectmanager.output["MainApp"], self.atomic0.obj_manager_in)
-        self.connectPorts(self.atomic0.outputs["linkA"], self.atomic1.input)
-        self.connectPorts(self.atomic1.obj_manager_out, self.objectmanager.input)
-        self.connectPorts(self.objectmanager.output["A"], self.atomic1.obj_manager_in)
-        self.connectPorts(self.atomic0.output, self.out_ui)
-        self.connectPorts(self.atomic1.output, self.out_ui)
+        self.atomics = []
+        self.atomics.append(self.addSubModel(MainApp("MainApp")))
+        self.atomics.append(self.addSubModel(A("A")))
+        self.connectPorts(self.atomics[0].obj_manager_out, self.objectmanager.input)
+        self.connectPorts(self.objectmanager.output["MainApp"], self.atomics[0].obj_manager_in)
+        self.connectPorts(self.atomics[0].outputs["linkA"], self.atomics[1].input)
+        self.connectPorts(self.atomics[1].obj_manager_out, self.objectmanager.input)
+        self.connectPorts(self.objectmanager.output["A"], self.atomics[1].obj_manager_in)
+        self.connectPorts(self.atomics[0].glob_outputs["Outport"], self.out_Outport)
+        self.connectPorts(self.in_Inport, self.atomics[0].input)
+        self.connectPorts(self.atomics[1].glob_outputs["Outport"], self.out_Outport)
+        self.connectPorts(self.in_Inport, self.atomics[1].input)
