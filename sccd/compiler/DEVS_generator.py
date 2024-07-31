@@ -54,14 +54,61 @@ class DEVSGenerator(Visitor):
         ################################
         # Object Manager State
         ################################
-        self.writer.beginClass("ObjectManagerState")
+        #self.writer.beginClass("ObjectManagerState")
+        #self.writer.beginConstructor()
+        #self.writer.beginMethodBody()
+
+        #self.writer.addAssignment(GLC.SelfProperty("to_send"), f"[(\"{class_diagram.default_class.name}\", \"{class_diagram.default_class.name}\", Event(\"start_instance\", None, [\"{class_diagram.default_class.name}[0]\"], 0))]")
+
+        #self.writer.endMethodBody()
+        #self.writer.endConstructor()
+        #self.writer.endClass()
+
+        self.writer.beginClass(f"Dummy", ["ObjectManagerState"])
         self.writer.beginConstructor()
         self.writer.beginMethodBody()
+        self.writer.beginSuperClassConstructorCall("ObjectManagerState")
+        self.writer.endSuperClassConstructorCall()
 
-        self.writer.addAssignment(GLC.SelfProperty("to_send"), f"[(\"{class_diagram.default_class.name}\", \"{class_diagram.default_class.name}\", Event(\"start_instance\", None, [\"{class_diagram.default_class.name}[0]\"], 0))]")
+        #self.writer.addAssignment(GLC.SelfProperty("to_send"), f"[(\"{class_diagram.default_class.name}\", \"{class_diagram.default_class.name}\", Event(\"start_instance\", None, [\"{class_diagram.default_class.name}[0]\"], 0))]")
 
         self.writer.endMethodBody()
         self.writer.endConstructor()
+
+
+        self.writer.beginMethod("instantiate")
+        self.writer.addFormalParameter("class_name")
+        self.writer.addFormalParameter("construct_params")
+        self.writer.beginMethodBody()
+
+        self.writer.addAssignment("instance", "{}")
+        self.writer.addAssignment("instance[\"name\"]", "class_name")
+        for index,c in enumerate(class_diagram.classes):
+            self.writer.beginElseIf(GLC.EqualsExpression("class_name", GLC.String(c.name)))
+            if c.isAbstract():
+                # cannot instantiate abstract class
+                self.writer.add(GLC.ThrowExceptionStatement(GLC.String("Cannot instantiate abstract class \"" + c.name + "\" with unimplemented methods \"" + "\", \"".join(c.abstract_method_names) + "\".")))
+            else:
+                self.writer.addAssignment(
+                    "instance[\"associations\"]", GLC.MapExpression())
+                for a in c.associations:
+                    a.accept(self)
+            self.writer.endElseIf()
+        self.writer.beginElse()
+        self.writer.add(
+            GLC.ThrowExceptionStatement(
+                GLC.AdditionExpression(
+                    GLC.String("Cannot instantiate class "),
+                    "class_name"
+                )
+            )
+        )
+        self.writer.endElse()
+        self.writer.add(GLC.ReturnStatement("instance"))
+        self.writer.endMethodBody()
+        self.writer.endMethod()
+
+
         self.writer.endClass()
 
         ################################
@@ -75,13 +122,16 @@ class DEVSGenerator(Visitor):
         self.writer.addActualParameter("name")
         self.writer.endSuperClassConstructorCall()
 
-        self.writer.addAssignment(GLC.SelfProperty("state"), GLC.FunctionCall("ObjectManagerState"))
+        self.writer.addAssignment(GLC.SelfProperty("state"), GLC.FunctionCall("Dummy"))
         self.writer.addAssignment(GLC.SelfProperty("input"),
                                   GLC.FunctionCall(GLC.SelfProperty("addInPort"), [GLC.String("input")]))
 
         for class_name in class_diagram.class_names:
             self.writer.addAssignment(GLC.SelfProperty(f"output[\"{class_name}\"]"),
                                       GLC.FunctionCall(GLC.SelfProperty("addOutPort")))
+
+        self.writer.add(GLC.FunctionCall("self.state.createInstance", [GLC.String(class_diagram.default_class.name), "[]"]))
+        self.writer.add(GLC.FunctionCall("self.state.to_send.append", [f"((\"{class_diagram.default_class.name}\", 0), (\"{class_diagram.default_class.name}\", 0), Event(\"start_instance\", None, [\"{class_diagram.default_class.name}[0]\"]))"]))
 
         self.writer.endMethodBody()
         self.writer.endConstructor()
@@ -194,6 +244,7 @@ class DEVSGenerator(Visitor):
         self.writer.beginClass(f"{class_node.name}Instance", super_classes)
         self.writer.beginConstructor()
         self.writer.addFormalParameter("atomdevs")
+        self.writer.addFormalParameter("id")
 
         for p in class_node.constructors[0].getParams():
             self.writer.addFormalParameter(p.getIdent(), p.getDefault())
@@ -202,6 +253,7 @@ class DEVSGenerator(Visitor):
 
         self.writer.beginSuperClassConstructorCall("RuntimeClassBase")
         self.writer.addActualParameter("atomdevs")
+        self.writer.addActualParameter("id")
         self.writer.endSuperClassConstructorCall()
 
         self.writer.addAssignment(GLC.SelfProperty("associations"), "{}")
@@ -275,7 +327,7 @@ class DEVSGenerator(Visitor):
             #self.writer.addAssignment(GLC.SelfProperty(f"inports[\"{inp}\"]"), f"(\'{inp}\', atomdevs.next_instance)")
             self.writer.addAssignment("port_name", GLC.FunctionCall("Ports.addInputPort", [GLC.String(inp), "self"]))
             self.writer.add(GLC.FunctionCall("atomdevs.addInPort", ["port_name"]))
-            self.writer.addAssignment("atomdevs.state.port_mappings[port_name]", "atomdevs.state.next_instance")
+            self.writer.addAssignment("atomdevs.state.port_mappings[port_name]", "id")
             self.writer.addAssignment(f"self.inports[\"{inp}\"]", "port_name")
 
 
@@ -357,10 +409,11 @@ class DEVSGenerator(Visitor):
 
         self.writer.beginMethod("constructObject")
 
-        parameters = [GLC.SelfExpression()]
+        parameters = [GLC.SelfExpression(), "id"]
         for i, _ in enumerate(constructor.parameters):
-            parameters.append(f"parameters[{i+2}]")
+            parameters.append(f"parameters[{i+1}]")
 
+        self.writer.addFormalParameter("id")
         self.writer.addFormalParameter("parameters")
         self.writer.beginMethodBody()
         self.writer.addAssignment("new_instance", GLC.FunctionCall(f"{class_node.name}Instance", parameters))
@@ -411,7 +464,9 @@ class DEVSGenerator(Visitor):
                 GLC.FunctionCall(GLC.Property("controller", "addOutputPort"), [GLC.String(p), GLC.SelfExpression()]))
 
         if constructor.parent_class.name == constructor.parent_class.class_diagram.default_class.name:
-            self.writer.addAssignment("self.state.instances[self.state.next_instance]", f"{constructor.parent_class.name}Instance(self)")
+            self.writer.addAssignment("new_instance", "self.constructObject(0, [])")
+            self.writer.addAssignment("self.state.instances[new_instance.instance_id]", "new_instance")
+            #self.writer.addAssignment("self.state.instances[self.state.next_instance]", f"{constructor.parent_class.name}Instance(self)")
             self.writer.addAssignment("self.state.next_instance", "self.state.next_instance + 1")
 
         self.writer.endMethodBody()
@@ -458,7 +513,7 @@ class DEVSGenerator(Visitor):
     def visit_Association(self, association):
         self.writer.addAssignment(
             GLC.MapIndexedExpression(
-                GLC.Property("instance", "associations"),
+                "instance[\"associations\"]",
                 GLC.String(association.name)),
             GLC.NewExpression("Association",
                               [GLC.String(association.to_class), str(association.min), str(association.max)]))

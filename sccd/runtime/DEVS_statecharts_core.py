@@ -5,6 +5,8 @@ from pypdevs.infinity import INFINITY
 from pypdevs.DEVS import *
 
 from sccd.runtime.statecharts_core import StatechartSemantics, State, HistoryState, ShallowHistoryState, DeepHistoryState, ParallelState, Transition, BigStepState, ComboStepState, SmallStepState, RuntimeException, AssociationException, Association
+from sccd.runtime.statecharts_core import Event
+
 
 from heapq import heappush, heappop, heapify
 import threading
@@ -157,46 +159,18 @@ class Transition:
                         break
 
     def __repr__(self):
-        return "Transition(%s, %s)" % (self.source, self.targets[0])
-
-
-class Event(object):
-    def __init__(self, event_name, port="", parameters=[], instance=None):
-        self.name = event_name
-        self.parameters = parameters
-        self.port = port
-        self.instance = instance
-
-    # for comparisons in heaps
-    def __lt__(self, other):
-        s = str(self.name) + str(self.parameters) + str(self.port)
-        return len(s)
-
-    def getName(self):
-        return self.name
-
-    def getPort(self):
-        return self.port
-
-    def getParameters(self):
-        return self.parameters
-
-    def __repr__(self):
-        representation = "(event name: " + str(self.name) + "; port: " + str(self.port)
-        if self.parameters:
-            representation += "; parameters: " + str(self.parameters)
-        representation += ")"
-        return representation
+        return "Transition(%s -> %s)" % (self.source.name, self.targets[0].name)
 
 
 class RuntimeClassBase(object):
-    def __init__(self, controller):
+    def __init__(self, controller, id):
         self.events = EventQueue()
 
         self.active = False
 
         # Instead of controller, do the class for which the instanced 
         self.controller = controller
+        self.instance_id = id
 
         self.__set_stable(True)
         self.inports = {}
@@ -283,7 +257,6 @@ class RuntimeClassBase(object):
             self.controller.state.outputEvent(e)
         for e in self.big_step.output_events_om:
             self.controller.state.addEvent(e)
-
     def __set_stable(self, is_stable):
         self.is_stable = is_stable
         # self.earliest_event_time keeps track of the earliest time this instance will execute a transition
@@ -562,145 +535,51 @@ class ClassState():
             raise ParameterException ("The start instance event needs 2 parameters.")  
         else:
             source = parameters[0]
-            source_index = None
-            try:
-                source_traversal_list = self.processAssociationReference(source.association_name)
-                source_index = source_traversal_list[0][1]
-            except:
-                source_index = 0 
-                
-            traversal_list = self.processAssociationReference(parameters[1])
-
-            for i in self.getInstances(source, traversal_list):
-                ev = Event("start_instance", None, [i['path']], source_index)
-                self.to_send.append((self.name, i['to_class'], ev))
+            parameters[0] = source.instance_id
+            ev = Event("start_instance", None, parameters)
+            self.to_send.append(((self.name, source.instance_id), None, ev))
 
         
     def handleBroadCastEvent(self, parameters):
         if len(parameters) != 2:
-            raise ParameterException ("The broadcast event needs 2 parameters (source of event and event name).")
+            raise ParameterException("The broadcast event needs 2 parameters (source of event and event name).")
         self.broadcast(parameters[0], parameters[1])
 
     def handleCreateEvent(self, parameters):
         if len(parameters) < 2:
-            raise ParameterException ("The create event needs at least 2 parameters.")
+            raise ParameterException("The create event needs at least 2 parameters.")
 
         source = parameters[0]
-        source_index = None
-        try:
-            source_index = self.processAssociationReference(source.association_name)
-            source_index = source_index[0][1]
-        except:
-            # TODO: I think the else is only for mainapp becuase it would not have an assocation name
-            source_index = 0
-
-        association_name = parameters[1]
-
-        traversal_list = self.processAssociationReference(association_name)
-        instances = self.getInstances(source, traversal_list)
-        
-        association = source.associations[association_name]
-        if association.allowedToAdd():
-            ''' allow subclasses to be instantiated '''
-            class_name = association.to_class if len(parameters) == 2 else parameters[2]
-            self.to_send.append((self.name, class_name, Event('create_instance', None, parameters[1:], source_index)))
-
-        #else:
-        #    source.addEvent(Event("instance_creation_error", None, [association_name]))
-        #    return []
+        parameters[0] = source.instance_id
+        self.to_send.append(((self.name, source.instance_id), None, Event('create_instance', None, parameters)))
 
     def handleCreateAndStartEvent(self, parameters):
-        params = self.handleCreateEvent(parameters)
-        if params:
-            self.handleStartInstanceEvent(params)
+        pass
 
     def handleDeleteInstanceEvent(self, parameters):
-        if len(parameters) < 2:
-            raise ParameterException ("The delete event needs at least 2 parameters.")
-        else:
-            source = parameters[0]
-            association_name = parameters[1]
-            
-            traversal_list = self.processAssociationReference(association_name)
-            
-            instances = self.getInstances(source, traversal_list)
-            association = source.associations[traversal_list[0][0]]
-            index = None
-            try:
-                index = self.processAssociationReference(source.association_name)
-                index = index[0][1]
-                params = list(association.instances.values())
-            except:
-                # TODO: This is only for the default, don't know if it will work always --> beter check source with instances 
-                index = self.processAssociationReference(association_name)
-                params = [index[0][1]]
-                index = 0
-            self.to_send.append((self.name, association.to_class, Event("delete_instance", None, [parameters[1], params], index)))
+        source = parameters[0]
+        parameters[0] = source.instance_id
+        self.to_send.append(((self.name, source.instance_id), None, Event('delete_instance', None, parameters)))
                 
     def handleAssociateEvent(self, parameters):
-        if len(parameters) != 3:
-            raise ParameterException ("The associate_instance event needs 3 parameters.")
-        else:
-            source = parameters[0]
-            to_copy_list = self.getInstances(source, self.processAssociationReference(parameters[1]))
-            if len(to_copy_list) != 1:
-                raise AssociationReferenceException ("Invalid source association reference.")
-            wrapped_to_copy_instance = to_copy_list[0]["instance"]
-            dest_list = self.processAssociationReference(parameters[2])
-            if len(dest_list) == 0:
-                raise AssociationReferenceException ("Invalid destination association reference.")
-            last = dest_list.pop()
-            if last[1] != -1:
-                raise AssociationReferenceException ("Last association name in association reference should not be accompanied by an index.")
-                
-            added_links = []
-            for i in self.getInstances(source, dest_list):
-                association = i["instance"].associations[last[0]]
-                if association.allowedToAdd():
-                    index = association.addInstance(wrapped_to_copy_instance)
-                    added_links.append(i["path"] + ("" if i["path"] == "" else "/") + last[0] + "[" + str(index) + "]")
-                
-            source.addEvent(Event("instance_associated", parameters = [added_links]))
+        source = parameters[0]
+        parameters[0] = source.instance_id
+        self.to_send.append(((self.name, source.instance_id), None, Event('associate_instance', None, parameters)))
                 
     def handleDisassociateEvent(self, parameters):
-        if len(parameters) < 2:
-            raise ParameterException ("The disassociate_instance event needs at least 2 parameters.")
-        else:
-            source = parameters[0]
-            association_name = parameters[1]
-            if not isinstance(association_name, list):
-                association_name = [association_name]
-            deleted_links = []
-            
-            for a_n in association_name:
-                traversal_list = self.processAssociationReference(a_n)
-                instances = self.getInstances(source, traversal_list)
-                
-                for i in instances:
-                    try:
-                        index = i['ref'].associations[i['assoc_name']].removeInstance(i["instance"])
-                        deleted_links.append(a_n +  "[" + str(index) + "]")
-                    except AssociationException as exception:
-                        raise RuntimeException("Error disassociating '" + a_n + "': " + str(exception))
-                
-            source.addEvent(Event("instance_disassociated", parameters = [deleted_links]))
+        source = parameters[0]
+        parameters[0] = source.instance_id
+        self.to_send.append(((self.name, source.instance_id), None, Event('disassociate_instance', None, parameters)))
         
     def handleNarrowCastEvent(self, parameters):
         if len(parameters) != 3:
             raise ParameterException ("The narrow_cast event needs 3 parameters.")
-        source = parameters[0]
         
-        if not isinstance(parameters[1], list):
-            targets = [parameters[1]]
-        else:
-            targets = parameters[1]
+        source = parameters[0]
+        parameters[0] = source.instance_id
+        cast_event = Event("narrow_cast", None, parameters)
+        self.to_send.append(((self.name, source.instance_id), None, cast_event))
 
-        for target in targets:
-            traversal_list = self.processAssociationReference(target)
-            cast_event = parameters[2]
-            for i in self.getInstances(source, traversal_list):
-                ev = Event(cast_event.name, None, cast_event.parameters, i["instance"])
-                self.to_send.append((self.name, i['to_class'], ev))
         
     def getInstances(self, source, traversal_list):
         currents = [{
@@ -754,11 +633,10 @@ class ClassBase(AtomicDEVS):
         self.glob_outputs = {}
         self.outputs = {}
         self.state = ClassState(name)
-        #self.elapsed = 0
         self.obj_manager_in = self.addInPort("obj_manager_in")
         self.obj_manager_out = self.addOutPort("obj_manager_out")
 
-    def constructObject(self, parameters):
+    def constructObject(self, id, parameters):
         raise "Something went wrong "
 
     def extTransition(self, inputs):
@@ -772,98 +650,69 @@ class ClassBase(AtomicDEVS):
         for input in all_inputs:
             if isinstance(input, str):
                 tem = eval(input)
-
-                # TODO: This works, the instance does not create a ball in bouncing balls but this is probably normal (port != input_port)
-
-                #tem.instance = self.state.port_mappings[tem.port]
                 tem.instance = self.state.port_mappings.setdefault(tem.port, None)
 
                 if tem.instance != None:
                     tem.port = get_private_port(tem.port)
                 self.state.addInput(tem)
             elif input[2].name == "create_instance":
-                new_instance = self.constructObject(input[2].parameters)
-                self.state.instances[self.state.next_instance] = new_instance
-                p = new_instance.associations.get("parent")
-                if p:
-                    p.addInstance(input[2].instance)
-                ev = Event("instance_created", None, [f"{input[2].parameters[0]}[{self.state.next_instance}]"], input[2].instance)
+                new_instance = self.constructObject(input[1][1], input[2].parameters[2:])
+                self.state.instances[new_instance.instance_id] = new_instance
+                #p = new_instance.associations.get("parent")
+                #if p:
+                #    p.addInstance(input[2].instance)
+                ev = Event("instance_created", None, [input[2].parameters[1]], input[2].instance)
                 self.state.to_send.append((input[1], input[0], ev))
                 self.state.next_instance += 1
             elif input[2].name == "start_instance":
-                test = self.state.processAssociationReference(input[2].parameters[0])
-                index = test[0][1]
-                instance = self.state.instances[index]
+                instance = self.state.instances[input[1][1]]
                 instance.start()
-                ev = Event("instance_started", None, [input[2].parameters[0]], input[2].instance)
+                ev = Event("instance_started", None, [input[2].parameters[0]])
                 self.state.to_send.append((input[1], input[0], ev))
-            elif input[2].name == "delete_instance":
-                for index in input[2].parameters[1]:
-                    i = self.state.instances[index]
-                    for assoc_name in i.associations:
-                        if not (assoc_name == "parent"):
-                            traversal_list = self.state.processAssociationReference(assoc_name)
-                            instances = self.state.getInstances(i, traversal_list)
-                            if len(instances) > 0:
-                                raise RuntimeException("Error removing instance from association %s, still %i children left connected with association %s" % (association_name, len(instances), assoc_name))
-                    i.user_defined_destructor()
-                    i.stop()
-                self.state.instances = {key: value for key, value in self.state.instances.items() if key not in input[2].parameters[1]}
-                ev = Event("instance_deleted", None, [input[2].parameters[0], input[2].parameters[1]], input[2].instance)
-                self.state.to_send.append((input[1], input[0], ev))
-                
-            elif input[2].name == "instance_created":
-                instance = self.state.instances[input[2].instance]
-                
-                test = self.state.processAssociationReference(input[2].parameters[0])
-                association_name = test[0][0]
-                association_index = test[0][1]
+            elif input[2].name == "delete_instance":    
+                instance = self.state.instances[input[1][1]]  
 
-                association = instance.associations[association_name]
-                if association.allowedToAdd():
-                    ''' allow subclasses to be instantiated '''
-                    class_name = association.to_class # TODO: normally the following is behind this: if len(parameters) == 2 else parameters[2]
-                    try:
-                        new_index = association.addInstance(association_index)
-                    except AssociationException as exception:
-                        raise RuntimeException("Error adding instance to association '" + association_name + "': " + str(exception))
+                # TODO: deleting the narrow cast port should be somewhere else
+                #del i["instance"].controller.input_ports[i["instance"].narrow_cast_port]
+
+
+                        
+                # TODO: this should also be different
+                del self.state.instances[instance.instance_id]
+                self.state.eventless.discard(instance.instance_id)
+
+                instance.user_defined_destructor()
+                instance.stop()
+
+                # TODO: The instance_deleted will be returned for each instance which should not happen
+                ev = Event("instance_deleted", None, [input[2].parameters[1]])
+                self.state.to_send.append((input[1], input[0], ev))
+                        
+            elif input[2].name == "associate_instance":
+                ev = Event("instance_associated", None, input[2].parameters)
+                self.state.to_send.append((input[1], input[0], ev))
+            elif input[2].name == "disassociate_instance":
+                ev = Event("instance_disassociated", None, input[2].parameters)
+                self.state.to_send.append((input[1], input[0], ev))
+            elif input[2].name == "instance_created":
+                instance = self.state.instances[input[1][1]]
                 instance.addEvent(input[2])
             elif input[2].name == "instance_started":
-                instance = self.state.instances[input[2].instance]
+                instance = self.state.instances[input[1][1]]
                 instance.addEvent(input[2])
             elif input[2].name == "instance_deleted":
-                source = self.state.instances[input[2].instance]
-                association_name = input[2].parameters[0]
-
-                traversal_list = self.state.processAssociationReference(association_name)
-                instances = self.state.getInstances(source, traversal_list)
-                association = source.associations[traversal_list[0][0]]
-
-                for index, instance in enumerate(instances):
-                    try:
-                        association.removeInstance(instance["instance"])
-                    except AssociationException as exception:
-                        raise RuntimeException("Error removing instance from association '" + association_name + "': " + str(exception))
-                source.addEvent(Event("instance_deleted", parameters = [input[2].parameters[0]]))
+                instance = self.state.instances[input[1][1]]
+                instance.addEvent(input[2])
+            elif input[2].name == "instance_associated":
+                instance = self.state.instances[input[1][1]]
+                instance.addEvent(input[2])
+            elif input[2].name == "instance_disassociated":
+                instance = self.state.instances[input[1][1]]
+                instance.addEvent(input[2])
             else:
                 ev = input[2]
                 self.state.addInput(ev)
         return self.state
-    
-    '''
-    def intTransition(self):
-        # Update simulated time and clear previous messages 
-        self.state.simulated_time += self.state.next_time
-        self.state.to_send = []
-        # Calculate the next event time, clamp to ensure non-negative result
-        self.state.next_time = min(self.state.getEarliestEventTime(), self.state.simulated_time + self.state.input_queue.getEarliestTime())
-        self.state.next_time -= self.state.simulated_time
-        self.state.next_time = max(self.state.next_time, 0.0)
-        # Handle incoming inputs and do a step in all statecharts
-        self.state.handleInput()
-        self.state.stepAll()
-        return self.state
-    '''
     
     def intTransition(self):
         self.state.to_send = self.state.to_send[1:]
@@ -884,18 +733,6 @@ class ClassBase(AtomicDEVS):
             self.state.next_time = 0
         return self.state
 
-    '''
-    def outputFnc(self):
-        to_dict = {}
-        for sending in self.state.to_send:
-            if isinstance(sending, tuple) and sending[2].port == None:
-                to_dict.setdefault(self.obj_manager_out, []).append(sending)
-            else:
-                the_port = next((port for port in self.OPorts if port.name == sending.port), None)
-                to_dict.setdefault(the_port, []).append(sending)
-        return to_dict
-    '''
-
     def outputFnc(self):
         to_dict = {}
         #for sending in self.state.to_send:
@@ -914,21 +751,296 @@ class ClassBase(AtomicDEVS):
     def timeAdvance(self):
         return self.state.next_time
 
+class ObjectManagerState():
+    def __init__(self):
+        self.to_send = []
+        self.instances = []
+
+        self.regex_pattern = re.compile("^([a-zA-Z_]\w*)(?:\[(\d+)\])?$")
+        self.handlers = {
+                    "narrow_cast": self.handleNarrowCastEvent,
+                    "create_instance": self.handleCreateEvent,
+                    "associate_instance": self.handleAssociateEvent,
+                    "start_instance": self.handleStartEvent,
+                    "delete_instance": self.handleDeleteEvent,
+                    "disassociate_instance": self.handleDisassociateEvent,
+                    }
+        
+        '''
+        self.handlers = {,
+                    "broad_cast": self.handleBroadCastEvent,
+                    "create_instance": self.handleCreateEvent,
+                    "associate_instance": self.handleAssociateEvent,
+                    "disassociate_instance": self.handleDisassociateEvent,
+                    "start_instance": self.handleStartInstanceEvent,
+                    "delete_instance": self.handleDeleteInstanceEvent,
+                    "create_and_start_instance": self.handleCreateAndStartEvent}
+        '''
+
+    def handleEvent(self, e):
+        self.handlers[e[2].getName()](e)
+    
+    def processAssociationReference(self, input_string):
+        if len(input_string) == 0:
+            raise AssociationReferenceException("Empty association reference.")
+        path_string =  input_string.split("/")
+        result = []
+        for piece in path_string:
+            match = self.regex_pattern.match(piece)
+            if match:
+                name = match.group(1)
+                index = match.group(2)
+                if index is None:
+                    index = -1
+                result.append((name,int(index)))
+            else:
+                raise AssociationReferenceException("Invalid entry in association reference. Input string: " + input_string)
+        return result
+
+    def getInstances(self, source, traversal_list):
+        currents = [{
+            "instance": source,
+            "ref": None,
+            "assoc_name": None,
+            "assoc_index": None,
+            "path": ""
+        }]
+        # currents = [source]
+        for (name, index) in traversal_list:
+            nexts = []
+            for current in currents:
+                #association = current["instance"].associations[name]
+
+                instance = current["instance"][1]
+
+                association = self.instances[instance]["associations"][name]
+                if (index >= 0 ):
+                    try:
+                        nexts.append({
+                            "class": association.to_class,
+                            "instance": association.instances[index],
+                            "ref": current["instance"],
+                            "assoc_name": name,
+                            "assoc_index": index,
+                            "path": current["path"] + ("" if current["path"] == "" else "/") + name + "[" + str(index) + "]"
+                        })
+                    except KeyError:
+                        # Entry was removed, so ignore this request
+                        pass
+                elif (index == -1):
+                    for i in association.instances:
+                        nexts.append({
+                            "class": association.to_class,
+                            "instance": association.instances[i],
+                            "ref": current["instance"],
+                            "assoc_name": name,
+                            "assoc_index": index,
+                            "path": current["path"] + ("" if current["path"] == "" else "/") + name + "[" + str(index) + "]"
+                        })
+                    #nexts.extend( association.instances.values() )
+                else:
+                    raise AssociationReferenceException("Incorrect index in association reference.")
+            currents = nexts
+        return currents
+
+    def handleNarrowCastEvent(self, parameters):
+        source = parameters[0]
+        
+        parameters = parameters[2].parameters
+        if not isinstance(parameters[1], list):
+            targets = [parameters[1]]
+        else:
+            targets = parameters[1]
+
+        for target in targets:
+            traversal_list = self.processAssociationReference(target)
+            cast_event = parameters[2]
+            for i in self.getInstances(source, traversal_list):
+                to_send_event = Event(cast_event.name, None, cast_event.parameters)
+                self.to_send.append((source, (i["class"], i["instance"]), to_send_event))
+
+                #to_send_event = Event(cast_event.name, i["instance"].narrow_cast_port, cast_event.parameters)
+                #i["instance"].controller.addInput(to_send_event, force_internal=True)
+
+
+
+    def handleCreateEvent(self, parameters):
+        source = parameters[0]
+
+        association_name = parameters[2].parameters[1]
+        
+        traversal_list = self.processAssociationReference(association_name)
+        instances = self.getInstances(source, traversal_list)
+        
+        association = self.instances[source[1]]["associations"][association_name]
+
+        if association.allowedToAdd():
+            ''' allow subclasses to be instantiated '''
+            class_name = association.to_class if len(parameters[2].parameters) == 2 else parameters[2].parameters[2]
+            new_instance = self.createInstance(class_name, parameters[2].parameters[3:])
+
+            # TODO: work on index instead of the instance
+            new_instance_index = len(self.instances) - 1
+
+            if not new_instance:
+                raise ParameterException("Creating instance: no such class: " + class_name)
+            try:
+                index = association.addInstance(new_instance_index)
+            except AssociationException as exception:
+                raise RuntimeException("Error adding instance to association '" + association_name + "': " + str(exception))
+            p = new_instance["associations"].get("parent")
+            if p:
+                p.addInstance(source)
+            
+            parameters[2].parameters[1] = f"{association_name}[{index}]"
+            ev = Event('create_instance', None, parameters[2].parameters)
+            self.to_send.append((parameters[0], (class_name, new_instance_index), ev))
+            return [source, association_name+"["+str(index)+"]"]
+        else:
+            #source.addEvent(Event("instance_creation_error", None, [association_name]))
+            return []
+    
+    def handleStartEvent(self, parameters):
+        source = parameters[0]
+        traversal_list = self.processAssociationReference(parameters[2].parameters[1])
+
+        # TODO: it is possible that we need to get the right index here because not needed now
+        to_class = None
+        for i in self.getInstances(source, traversal_list):
+            to_class = (i["class"], i["instance"])
+        self.to_send.append((source, to_class, Event('start_instance', None, parameters[2].parameters[1:])))
+        
+    def createInstance(self, to_class, construct_params = []):
+        instance = self.instantiate(to_class, construct_params)
+        #self.state.instances.add(instance)
+        self.instances.append(instance)
+        return instance
+    
+    def handleAssociateEvent(self, parameters):
+        if len(parameters[2].parameters) != 3:
+            raise ParameterException("The associate_instance event needs 3 parameters.")
+        else:
+            source = parameters[0]
+            to_copy_list = self.getInstances(source, self.processAssociationReference(parameters[2].parameters[1]))
+            if len(to_copy_list) != 1:
+                raise AssociationReferenceException("Invalid source association reference.")
+            wrapped_to_copy_instance = to_copy_list[0]["instance"]
+            dest_list = self.processAssociationReference(parameters[2].parameters[2])
+            if len(dest_list) == 0:
+                raise AssociationReferenceException ("Invalid destination association reference.")
+            last = dest_list.pop()
+            if last[1] != -1:
+                raise AssociationReferenceException ("Last association name in association reference should not be accompanied by an index.")
+                
+            added_links = []
+            to_class = None
+            for i in self.getInstances(source, dest_list):
+                to_class = (i["class"], i["instance"])
+                association = self.instances[i["instance"]]["associations"][last[0]]
+                #association = i["instance"].associations[last[0]]
+                if association.allowedToAdd():
+                    index = association.addInstance(wrapped_to_copy_instance)
+                    added_links.append(i["path"] + ("" if i["path"] == "" else "/") + last[0] + "[" + str(index) + "]")
+
+            self.to_send.append((source, to_class, Event('associate_instance', None, [added_links])))  
+            #source.addEvent(Event("instance_associated", parameters = [added_links]))
+
+    def handleDisassociateEvent(self, parameters):
+        if len(parameters[2].parameters) < 2:
+            raise ParameterException ("The disassociate_instance event needs at least 2 parameters.")
+        else:
+            source = parameters[0]
+            association_name = parameters[2].parameters[1]
+            if not isinstance(association_name, list):
+                association_name = [association_name]
+            deleted_links = []
+            
+            to_class = None
+            for a_n in association_name:
+                traversal_list = self.processAssociationReference(a_n)
+                instances = self.getInstances(source, traversal_list)
+                
+                for i in instances:
+                    try:
+                        to_class = (i["class"], i["instance"])
+                        instance = self.instances[i['ref'][1]]
+                        association = instance['associations'][i['assoc_name']]
+
+                        index = association.removeInstance(i["instance"])
+                        #index = i['ref'].associations[i['assoc_name']].removeInstance(i["instance"])
+                        deleted_links.append(a_n +  "[" + str(index) + "]")
+                    except AssociationException as exception:
+                        raise RuntimeException("Error disassociating '" + a_n + "': " + str(exception))
+                
+            self.to_send.append((None, source, Event('instance_disassociated', None, [deleted_links])))  
+            #self.to_send.append((source, to_class, Event('disassociate_instance', None, [deleted_links])))  
+            #source.addEvent(Event("instance_disassociated", parameters = [deleted_links]))
+
+    def handleDeleteEvent(self, parameters):
+        if len(parameters) < 2:
+            raise ParameterException ("The delete event needs at least 2 parameters.")
+        else:
+            source = parameters[0]
+            association_name = parameters[2].parameters[1]
+            
+            traversal_list = self.processAssociationReference(association_name)
+            instances = self.getInstances(source, traversal_list)
+
+            #association = self.instances[source[1]]["associations"][association_name]
+            association = self.instances[source[1]]["associations"][traversal_list[0][0]]
+            
+            to_class = None
+            for i in instances:
+                to_class = (i["class"], i["instance"])
+                try:
+                    for assoc_name in self.instances[i["instance"]]["associations"]:
+                        if assoc_name != 'parent':
+                            traversal_list = self.processAssociationReference(assoc_name)
+                            instances = self.getInstances(to_class, traversal_list)
+                            if len(instances) > 0:
+                                raise RuntimeException("Error removing instance from association %s, still %i children left connected with association %s" % (association_name, len(instances), assoc_name))
+                    # TODO: deleting the narrow cast port should be somewhere else
+                    #del i["instance"].controller.input_ports[i["instance"].narrow_cast_port]
+                    association.removeInstance(i["instance"])
+                    
+                    # TODO: this should also be different
+                    #self.instances.discard(i["instance"])
+                    #self.eventless.discard(i["instance"])
+                except AssociationException as exception:
+                    raise RuntimeException("Error removing instance from association '" + association_name + "': " + str(exception))
+                
+                # TODO: Needs to happend in the class
+                #i["instance"].user_defined_destructor()
+                #i["instance"].stop()
+                
+                self.to_send.append((source, to_class, Event('delete_instance', None, parameters[2].parameters)))
+            #source.addEvent(Event("delete_instance", parameters = [parameters[1]]))
+
 class ObjectManagerBase(AtomicDEVS):
     def __init__(self, name):
         AtomicDEVS.__init__(self, name)
         self.output = {}
-    
-    '''
-    def extTransition(self, inputs):
-        all_inputs = inputs[self.input]
-        self.state.to_send.extend(all_inputs)
-        return self.state
-    '''
 
     def extTransition(self, inputs):
         all_inputs = inputs[self.input]
-        self.state.to_send.append(all_inputs)
+        #self.state.to_send.append(all_inputs)
+
+        # TODO: check if all inputs arrive
+
+        if all_inputs[2].name == "instance_created":
+            self.state.to_send.append(all_inputs)
+        elif all_inputs[2].name == "instance_started":
+            self.state.to_send.append(all_inputs)
+        elif all_inputs[2].name == "instance_associated":
+            self.state.to_send.append(all_inputs)
+        elif all_inputs[2].name == "instance_disassociated":
+            self.state.to_send.append(all_inputs)
+        elif all_inputs[2].name == "instance_deleted":
+            self.state.to_send.append(all_inputs)
+        else:
+            self.state.handleEvent(all_inputs)
+
+        
         return self.state
     
     def intTransition(self):
@@ -938,7 +1050,7 @@ class ObjectManagerBase(AtomicDEVS):
     def outputFnc(self):
         out_dict = {}
         for source, target, message in self.state.to_send:
-            out_dict.setdefault(self.output.get(target), []).append((source, target, message))
+            out_dict.setdefault(self.output.get(target[0]), []).append((source, target, message))
         return out_dict
     
     def timeAdvance(self):

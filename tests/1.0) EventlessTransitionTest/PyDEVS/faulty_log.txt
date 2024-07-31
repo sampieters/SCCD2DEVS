@@ -1,0 +1,3 @@
+0.00 .MainApp: exit /state1
+0.00 .MainApp: transition (/state1 -> /state3)
+0.00 .MainApp: enter /state3

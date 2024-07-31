@@ -1,0 +1,15 @@
+<?xml version="1.1" ?>
+<diagram author="Sam Pieters" name="EventlessTransitionTest">
+    <description>
+        Test 1: Check if a statechart directly transitions without an event being raised. 
+    </description>
+    <class name="MainApp" default="true">
+        <scxml initial="state1">
+            <state id="state1"> 
+                <transition target="../state3"/>
+            </state>
+            <state id="state2" />
+            <state id="state3" />
+        </scxml>
+    </class>
+</diagram>

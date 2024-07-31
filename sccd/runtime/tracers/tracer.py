@@ -99,6 +99,12 @@ class Tracers(object):
             return
         for tracer in self.tracers:
             tracer.traceEnterState(StateChartName, StateName)
+        
+    def tracesTransition(self, StateChartName, Transition):
+        if StateChartName is None:
+            return
+        for tracer in self.tracers:
+            tracer.traceTransition(StateChartName, Transition)
 
     def tracesOutput(self, event):
         """
@@ -115,35 +121,3 @@ class Tracers(object):
         for tracer in self.tracers:
             tracer.traceInput(listener, event)
 
-    def tracesInternal(self, aDEVS):
-        """
-        Perform all tracing actions for an internal transition
-        
-        :param aDEVS: the model that transitioned
-        """
-        if aDEVS.full_name is None:
-            return
-        for tracer in self.tracers:
-            tracer.traceInternal(aDEVS)
-
-    def tracesExternal(self, aDEVS):
-        """
-        Perform all tracing actions for an external transition
-        
-        :param aDEVS: the model that transitioned
-        """
-        if aDEVS.full_name is None:
-            return
-        for tracer in self.tracers:
-            tracer.traceExternal(aDEVS)
-
-    def tracesConfluent(self, aDEVS):
-        """
-        Perform all tracing actions for a confluent transition
-        
-        :param aDEVS: the model that transitioned
-        """
-        if aDEVS.full_name is None:
-            return
-        for tracer in self.tracers:
-            tracer.traceConfluent(aDEVS)

@@ -1,0 +1,74 @@
+<?xml version="1.0" ?>
+<diagram author="Simon Van Mierlo" name="Timer (Threaded Version)">
+    <description>
+    </description>
+    <top>
+        import time
+    </top>    
+    <inport name="input" />
+
+    <class name="MainApp" default="true">
+        <constructor>
+            <body>
+                self.starting_time = time.time()
+            </body>
+        </constructor>
+        <method name="print_simulated_time">
+            <body>
+                print('SIMTIME = %.2f' % (self.getSimulatedTime() / 1000.0))
+            </body>
+        </method>
+        <method name="print_wct_time">
+            <body>
+                print('ACTTIME = %.2f' % (time.time() - self.starting_time))
+            </body>
+        </method>
+        <scxml initial="running">
+            <parallel id="running">
+                <state id="print_simulated_time">
+                    <state id="print_simulated_time">
+                        <transition target="." after="0.05">
+                            <script>
+                                self.print_simulated_time()
+                            </script>
+                        </transition>
+                    </state>
+                    <transition target="." event="interrupt" port="input">
+                        <script>
+                            print('going nowhere')
+                        </script>
+                    </transition>
+                </state>
+                <state id="print_wct_time">
+                    <state id="print_wct_time">
+                        <transition target="." after="0.05">
+                            <script>
+                                self.print_wct_time()
+                            </script>
+                        </transition>
+                    </state>
+                </state>
+                <transition target="../interrupted" event="interrupt" port="input">
+                    <script>
+                        self.print_simulated_time()
+                        self.print_wct_time()
+                    </script>
+                </transition>
+            </parallel>
+            <state id="interrupted">
+                <transition target="." event="interrupt" port="input">
+                    <script>
+                        self.print_simulated_time()
+                        self.print_wct_time()
+                    </script>
+                </transition>
+                <transition target="../running" event="continue" port="input">
+                    <script>
+                        self.print_simulated_time()
+                        self.print_wct_time()
+                    </script>
+                </transition>
+            </state>
+        </scxml>
+    </class>
+</diagram>

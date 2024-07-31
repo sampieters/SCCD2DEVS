@@ -1,0 +1,108 @@
+<?xml version="1.1" ?>
+<diagram author="Sam Pieters" name="Delete from Non Parent">
+    <description>
+        Test 3.9: Try to delete an instance from a class that is not the creator of that instance
+        Note: This is not going to work probably as the instance first need to be associated
+    </description>
+    <inport name="ui"/>
+    <outport name="ui"/>
+    <class name="MainApp" default="true">
+        <relationships>
+            <association name="linkA" class="A" />
+            <association name="linkB" class="B" />
+        </relationships>
+        <constructor>
+            <body>
+                self.assoc_name = None
+            </body>
+        </constructor>
+        <scxml initial="state1">
+            <state id="state1">
+                <onentry>
+                    <raise scope="cd" event="create_instance">
+                        <parameter expr='"linkA"' />
+                        <parameter expr='"A"' />
+                    </raise>
+                </onentry>
+                <transition event='instance_created' target='../state2'>
+                    <parameter name="association_name" type="string"/>
+                    <script>
+                        self.assoc_name = association_name
+                    </script>
+                    <raise port="ui" event="instance_created_succesfully">
+                        <parameter expr="association_name" />
+                    </raise>
+                    <raise scope="cd" event="start_instance">
+                        <parameter expr='association_name' />
+                    </raise>
+                </transition>
+            </state>
+            <state id="state2">
+                <transition event='instance_started' target='../state3'>
+                    <parameter name="association_name" type="string"/>
+                    <raise port="ui" event="instance_started_succesfully">
+                        <parameter expr="association_name" />
+                    </raise>
+                    <raise scope="cd" event="create_instance">
+                        <parameter expr='"linkB"' />
+                        <parameter expr='"B"' />
+                    </raise>
+                </transition>
+            </state>
+            <state id="state3">
+                <transition event='instance_created' target='../state4'>
+                    <parameter name="association_name" type="string"/>
+                    <raise port="ui" event="instance_created_succesfully">
+                        <parameter expr="association_name" />
+                    </raise>
+                    <raise scope="cd" event="start_instance">
+                        <parameter expr='association_name' />
+                    </raise>
+                </transition>
+            </state>
+            <state id="state4">
+                <transition event='instance_started' target='../state5'>
+                    <parameter name="association_name" type="string"/>
+                    <raise port="ui" event="instance_started_succesfully">
+                        <parameter expr="association_name" />
+                    </raise>
+                </transition>
+            </state>
+            <state id="state5">
+                <onentry>
+                    <raise scope="narrow" event="remove" target="self.assoc_name" />
+                </onentry>
+            </state>
+        </scxml>
+    </class>
+
+    <class name="A">
+        <relationships>
+            <association name="linkB" class="B" />
+        </relationships>
+        <scxml initial="state1">
+            <state id="state1">
+                <onentry>
+                    <raise port="ui" event="statechart_started_succesfully" />
+                </onentry>
+                <transition event="remove" target="../state2">
+                    <raise scope="cd" event="delete_instance">
+                        <parameter expr="'linkB[0]'" />
+                    </raise>
+                </transition>
+            </state>
+            <state id="state2">
+            </state>
+        </scxml>
+    </class>
+
+    <class name="B">
+        <scxml initial="state1">
+            <state id="state1">
+                <onentry>
+                    <raise port="ui" event="statechart_started_succesfully" />
+                </onentry>
+            </state>
+        </scxml>
+    </class>
+</diagram>

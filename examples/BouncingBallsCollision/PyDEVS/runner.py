@@ -15,11 +15,11 @@ class OutputListener:
 
 if __name__ == '__main__':
 	model = target.Controller(name="controller")
-	refs = {"ui": model.in_ui, "field_ui": model.atomic1.field_ui, "button_ui": model.atomic2.button_ui, "ball_ui": model.atomic3.ball_ui}
+	#refs = {"ui": model.in_ui, "field_ui": model.atomic1.field_ui, "button_ui": model.atomic2.button_ui, "ball_ui": model.atomic3.ball_ui}
 
 	tkroot = tk.Tk()
 	tkroot.withdraw()
-	sim = DEVSSimulator(model, refs)
+	sim = DEVSSimulator(model)
 
 	#sim.setVerbose()
 	sim.setRealTimePlatformTk(tkroot)

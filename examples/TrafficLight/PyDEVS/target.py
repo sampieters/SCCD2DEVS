@@ -16,8 +16,8 @@ CANVAS_HEIGHT = 350
 # package "TrafficLight"
 
 class MainAppInstance(RuntimeClassBase):
-    def __init__(self, atomdevs):
-        RuntimeClassBase.__init__(self, atomdevs)
+    def __init__(self, atomdevs, id):
+        RuntimeClassBase.__init__(self, atomdevs, id)
         self.associations = {}
         
         self.semantics.big_step_maximality = StatechartSemantics.TakeMany
@@ -43,7 +43,7 @@ class MainAppInstance(RuntimeClassBase):
         atomdevs.addInPort(port_name)
         port_name = Ports.addInputPort("field_ui", self)
         atomdevs.addInPort(port_name)
-        atomdevs.port_mappings[port_name] = atomdevs.next_instance
+        atomdevs.state.port_mappings[port_name] = id
         self.inports["field_ui"] = port_name
     
     def user_defined_constructor(self):
@@ -377,29 +377,41 @@ class MainAppInstance(RuntimeClassBase):
         self.default_targets = self.states["/creating_window"].getEffectiveTargetStates()
         RuntimeClassBase.initializeStatechart(self)
 
-class MainApp(ObjectManagerBase):
+class MainApp(ClassBase):
     def __init__(self, name):
-        ObjectManagerBase.__init__(self, name)
+        ClassBase.__init__(self, name)
         self.input = self.addInPort("input")
-        self.output = self.addOutPort("ui")
+        self.glob_outputs["ui"] = self.addOutPort("ui")
         self.field_ui = self.addInPort("field_ui")
-        self.instances[self.next_instance] = MainAppInstance(self)
-        self.next_instance = self.next_instance + 1
+        new_instance = self.constructObject(0, [])
+        self.state.instances[new_instance.instance_id] = new_instance
+        self.state.next_instance = self.state.next_instance + 1
     
-    def constructObject(self, parameters):
-        new_instance = MainAppInstance(self)
+    def constructObject(self, id, parameters):
+        new_instance = MainAppInstance(self, id)
         return new_instance
 
-class ObjectManagerState:
+class Dummy(ObjectManagerState):
     def __init__(self):
-        self.to_send = [("MainApp", "MainApp", Event("start_instance", None, ["MainApp[0]"], 0))]
+        ObjectManagerState.__init__(self)
+    
+    def instantiate(self, class_name, construct_params):
+        instance = {}
+        instance["name"] = class_name
+        if class_name == "MainApp":
+            instance["associations"] = {}
+        else:
+            raise Exception("Cannot instantiate class " + class_name)
+        return instance
 
-class ObjectManager(TheObjectManager):
+class ObjectManager(ObjectManagerBase):
     def __init__(self, name):
-        TheObjectManager.__init__(self, name)
-        self.State = ObjectManagerState()
+        ObjectManagerBase.__init__(self, name)
+        self.state = Dummy()
         self.input = self.addInPort("input")
         self.output["MainApp"] = self.addOutPort()
+        self.state.createInstance("MainApp", [])
+        self.state.to_send.append((("MainApp", 0), ("MainApp", 0), Event("start_instance", None, ["MainApp[0]"])))
 
 class Controller(CoupledDEVS):
     def __init__(self, name):
@@ -409,7 +421,9 @@ class Controller(CoupledDEVS):
         self.out_ui = self.addOutPort("ui")
         Ports.addOutputPort("ui")
         self.objectmanager = self.addSubModel(ObjectManager("ObjectManager"))
-        self.atomic0 = self.addSubModel(MainApp("MainApp"))
-        self.connectPorts(self.atomic0.obj_manager_out, self.objectmanager.input)
-        self.connectPorts(self.objectmanager.output["MainApp"], self.atomic0.obj_manager_in)
-        self.connectPorts(self.atomic0.output, self.out_ui)
+        self.atomics = []
+        self.atomics.append(self.addSubModel(MainApp("MainApp")))
+        self.connectPorts(self.atomics[0].obj_manager_out, self.objectmanager.input)
+        self.connectPorts(self.objectmanager.output["MainApp"], self.atomics[0].obj_manager_in)
+        self.connectPorts(self.atomics[0].glob_outputs["ui"], self.out_ui)
+        self.connectPorts(self.in_ui, self.atomics[0].input)

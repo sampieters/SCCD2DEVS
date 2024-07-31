@@ -1,0 +1,19 @@
+<?xml version="1.1" ?>
+<diagram author="Sam Pieters" name="AfterTransitionTest">
+    <description>
+        Test 3: Test if the composite state works as expected
+    </description>
+    <class name="MainApp" default="true">
+        <scxml initial="state1">
+            <state id="state1" initial="state11"> 
+                <state id="state10" />
+                    <transition target="." />
+                <state id="state11">
+                    <transition target="../state12" />
+                </state>
+                <state id="state12">
+                </state>
+            </state>
+        </scxml>
+    </class>
+</diagram>

@@ -16,8 +16,8 @@ CANVAS_DIMS = (800, 550)
 # package "Bouncing_Balls_DEVS_Version"
 
 class MainAppInstance(RuntimeClassBase):
-    def __init__(self, atomdevs):
-        RuntimeClassBase.__init__(self, atomdevs)
+    def __init__(self, atomdevs, id):
+        RuntimeClassBase.__init__(self, atomdevs, id)
         self.associations = {}
         self.associations["fields"] = Association("Field", 0, -1)
         
@@ -199,18 +199,19 @@ class MainApp(ClassBase):
     def __init__(self, name):
         ClassBase.__init__(self, name)
         self.input = self.addInPort("input")
-        self.output = self.addOutPort("ui")
+        self.glob_outputs["ui"] = self.addOutPort("ui")
         self.outputs["fields"] = self.addOutPort("fields")
-        self.state.instances[self.state.next_instance] = MainAppInstance(self)
+        new_instance = self.constructObject(0, [])
+        self.state.instances[new_instance.instance_id] = new_instance
         self.state.next_instance = self.state.next_instance + 1
     
-    def constructObject(self, parameters):
-        new_instance = MainAppInstance(self)
+    def constructObject(self, id, parameters):
+        new_instance = MainAppInstance(self, id)
         return new_instance
 
 class FieldInstance(RuntimeClassBase):
-    def __init__(self, atomdevs):
-        RuntimeClassBase.__init__(self, atomdevs)
+    def __init__(self, atomdevs, id):
+        RuntimeClassBase.__init__(self, atomdevs, id)
         self.associations = {}
         self.associations["balls"] = Association("Ball", 0, -1)
         self.associations["buttons"] = Association("Button", 0, -1)
@@ -235,7 +236,7 @@ class FieldInstance(RuntimeClassBase):
         atomdevs.addInPort(port_name)
         port_name = Ports.addInputPort("field_ui", self)
         atomdevs.addInPort(port_name)
-        atomdevs.state.port_mappings[port_name] = atomdevs.state.next_instance
+        atomdevs.state.port_mappings[port_name] = id
         self.inports["field_ui"] = port_name
     
     def user_defined_constructor(self):
@@ -472,19 +473,19 @@ class Field(ClassBase):
     def __init__(self, name):
         ClassBase.__init__(self, name)
         self.input = self.addInPort("input")
-        self.output = self.addOutPort("ui")
+        self.glob_outputs["ui"] = self.addOutPort("ui")
         self.outputs["balls"] = self.addOutPort("balls")
         self.outputs["buttons"] = self.addOutPort("buttons")
         self.outputs["parent"] = self.addOutPort("parent")
         self.field_ui = self.addInPort("field_ui")
     
-    def constructObject(self, parameters):
-        new_instance = FieldInstance(self)
+    def constructObject(self, id, parameters):
+        new_instance = FieldInstance(self, id)
         return new_instance
 
 class ButtonInstance(RuntimeClassBase):
-    def __init__(self, atomdevs, window_id, event_name, button_text):
-        RuntimeClassBase.__init__(self, atomdevs)
+    def __init__(self, atomdevs, id, window_id, event_name, button_text):
+        RuntimeClassBase.__init__(self, atomdevs, id)
         self.associations = {}
         self.associations["parent"] = Association("Field", 1, 1)
         
@@ -508,7 +509,7 @@ class ButtonInstance(RuntimeClassBase):
         atomdevs.addInPort(port_name)
         port_name = Ports.addInputPort("button_ui", self)
         atomdevs.addInPort(port_name)
-        atomdevs.state.port_mappings[port_name] = atomdevs.state.next_instance
+        atomdevs.state.port_mappings[port_name] = id
         self.inports["button_ui"] = port_name
     
     def user_defined_constructor(self, window_id, event_name, button_text):
@@ -580,17 +581,17 @@ class Button(ClassBase):
     def __init__(self, name):
         ClassBase.__init__(self, name)
         self.input = self.addInPort("input")
-        self.output = self.addOutPort("ui")
+        self.glob_outputs["ui"] = self.addOutPort("ui")
         self.outputs["parent"] = self.addOutPort("parent")
         self.button_ui = self.addInPort("button_ui")
     
-    def constructObject(self, parameters):
-        new_instance = ButtonInstance(self, parameters[2], parameters[3], parameters[4])
+    def constructObject(self, id, parameters):
+        new_instance = ButtonInstance(self, id, parameters[1], parameters[2], parameters[3])
         return new_instance
 
 class BallInstance(RuntimeClassBase):
-    def __init__(self, atomdevs, canvas_id, x, y):
-        RuntimeClassBase.__init__(self, atomdevs)
+    def __init__(self, atomdevs, id, canvas_id, x, y):
+        RuntimeClassBase.__init__(self, atomdevs, id)
         self.associations = {}
         self.associations["parent"] = Association("Field", 1, 1)
         
@@ -613,7 +614,7 @@ class BallInstance(RuntimeClassBase):
         atomdevs.addInPort(port_name)
         port_name = Ports.addInputPort("ball_ui", self)
         atomdevs.addInPort(port_name)
-        atomdevs.state.port_mappings[port_name] = atomdevs.state.next_instance
+        atomdevs.state.port_mappings[port_name] = id
         self.inports["ball_ui"] = port_name
     
     def user_defined_constructor(self, canvas_id, x, y):
@@ -805,27 +806,50 @@ class Ball(ClassBase):
     def __init__(self, name):
         ClassBase.__init__(self, name)
         self.input = self.addInPort("input")
-        self.output = self.addOutPort("ui")
+        self.glob_outputs["ui"] = self.addOutPort("ui")
         self.outputs["parent"] = self.addOutPort("parent")
         self.ball_ui = self.addInPort("ball_ui")
     
-    def constructObject(self, parameters):
-        new_instance = BallInstance(self, parameters[2], parameters[3], parameters[4])
+    def constructObject(self, id, parameters):
+        new_instance = BallInstance(self, id, parameters[1], parameters[2], parameters[3])
         return new_instance
 
-class ObjectManagerState:
+class Dummy(ObjectManagerState):
     def __init__(self):
-        self.to_send = [("MainApp", "MainApp", Event("start_instance", None, ["MainApp[0]"], 0))]
+        ObjectManagerState.__init__(self)
+    
+    def instantiate(self, class_name, construct_params):
+        instance = {}
+        instance["name"] = class_name
+        if class_name == "MainApp":
+            instance["associations"] = {}
+            instance["associations"]["fields"] = Association("Field", 0, -1)
+        elif class_name == "Field":
+            instance["associations"] = {}
+            instance["associations"]["balls"] = Association("Ball", 0, -1)
+            instance["associations"]["buttons"] = Association("Button", 0, -1)
+            instance["associations"]["parent"] = Association("MainApp", 1, 1)
+        elif class_name == "Button":
+            instance["associations"] = {}
+            instance["associations"]["parent"] = Association("Field", 1, 1)
+        elif class_name == "Ball":
+            instance["associations"] = {}
+            instance["associations"]["parent"] = Association("Field", 1, 1)
+        else:
+            raise Exception("Cannot instantiate class " + class_name)
+        return instance
 
 class ObjectManager(ObjectManagerBase):
     def __init__(self, name):
         ObjectManagerBase.__init__(self, name)
-        self.state = ObjectManagerState()
+        self.state = Dummy()
         self.input = self.addInPort("input")
         self.output["MainApp"] = self.addOutPort()
         self.output["Field"] = self.addOutPort()
         self.output["Button"] = self.addOutPort()
         self.output["Ball"] = self.addOutPort()
+        self.state.createInstance("MainApp", [])
+        self.state.to_send.append((("MainApp", 0), ("MainApp", 0), Event("start_instance", None, ["MainApp[0]"])))
 
 class Controller(CoupledDEVS):
     def __init__(self, name):
@@ -854,7 +878,11 @@ class Controller(CoupledDEVS):
         self.connectPorts(self.atomics[3].obj_manager_out, self.objectmanager.input)
         self.connectPorts(self.objectmanager.output["Ball"], self.atomics[3].obj_manager_in)
         self.connectPorts(self.atomics[3].outputs["parent"], self.atomics[1].input)
-        self.connectPorts(self.atomics[0].output, self.out_ui)
-        self.connectPorts(self.atomics[1].output, self.out_ui)
-        self.connectPorts(self.atomics[2].output, self.out_ui)
-        self.connectPorts(self.atomics[3].output, self.out_ui)
+        self.connectPorts(self.atomics[0].glob_outputs["ui"], self.out_ui)
+        self.connectPorts(self.in_ui, self.atomics[0].input)
+        self.connectPorts(self.atomics[1].glob_outputs["ui"], self.out_ui)
+        self.connectPorts(self.in_ui, self.atomics[1].input)
+        self.connectPorts(self.atomics[2].glob_outputs["ui"], self.out_ui)
+        self.connectPorts(self.in_ui, self.atomics[2].input)
+        self.connectPorts(self.atomics[3].glob_outputs["ui"], self.out_ui)
+        self.connectPorts(self.in_ui, self.atomics[3].input)

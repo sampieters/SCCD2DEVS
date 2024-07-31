@@ -1,0 +1,25 @@
+<?xml version="1.1" ?>
+<diagram author="Sam Pieters" name="AfterTransitionTest">
+    <description>
+        Test 3: Check if a script works by updating parameters.
+    </description>
+    <class name="MainApp" default="true">
+        <constructor>
+            <body>
+                self.value = 0
+            </body>
+        </constructor>
+        <scxml initial="state1">
+            <state id="state1"> 
+                <transition target="." cond="self.value &lt; 5" />
+                <transition target="../state2" cond="self.value == 5"/>
+                <onexit>
+                    <script>
+                        self.value += 1
+                    </script>
+                </onexit>
+            </state>
+            <state id="state2" />
+        </scxml>
+    </class>
+</diagram>

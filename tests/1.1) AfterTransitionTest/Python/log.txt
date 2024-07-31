@@ -1,0 +1,13 @@
+__  Current Time:   0.000000 __________________________________________ 
+
+__  Current Time:   1.000000 __________________________________________ 
+
+EXIT STATE in model <MainApp>
+		State: /state1
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/state1 -> /state3)
+
+ENTER STATE in model <MainApp>
+		State: /state3
+

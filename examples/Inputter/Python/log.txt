@@ -1,5 +1,0 @@
-__  Current Time:   0.000000 __________________________________________ 
-
-OUTPUT EVENT to port <ui>
-	\Event: (event name: generate_input; port: ui)
-

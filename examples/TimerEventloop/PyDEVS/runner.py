@@ -17,14 +17,12 @@ class OutputListener:
 
 if __name__ == '__main__':
 	model = target.Controller(name="controller")
-	refs = {"ui": model.in_ui, "field_ui": model.atomic0.field_ui}
 
 	tkroot = tk.Tk()
 	tkroot.withdraw()
-	sim = DEVSSimulator(model, refs)
+	sim = DEVSSimulator(model)
 	sim.setRealTime(True)
 	#sim.setRealTimeInputFile("./examples/BouncingBalls/input_trace.txt")
-	sim.setRealTimePorts(refs)
 	sim.setVerbose("./examples/BouncingBalls/PyDEVS/trace.txt")
 	
 	sim.setRealTimePlatformTk(tkroot)
@@ -32,6 +30,6 @@ if __name__ == '__main__':
 	ui = UI(tkroot, sim)
 	listener = OutputListener(ui)
 	sim.setListenPorts(model.out_ui, listener.add)
-	model.atomic0.addMyOwnOutputListener(OutputListener(ui))
+	#model.atomics[0].addMyOwnOutputListener(OutputListener(ui))
 	sim.simulate()
 	tkroot.mainloop()

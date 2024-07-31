@@ -1,0 +1,15 @@
+__  Current Time:   0.000000 __________________________________________ 
+
+INPUT EVENT from port <Inport>
+	\Type: Inport
+	\Event: (event name: input_event; port: Inport; parameters: [])
+
+EXIT STATE in model <MainApp>
+		State: /state1
+
+ENTER STATE in model <MainApp>
+		State: /state2
+
+OUTPUT EVENT to port <Outport>
+	\Event: (event name: output_event; port: Outport)
+

@@ -971,8 +971,11 @@ class Transition:
                     f = lambda s0: not s0.descendants and s0 in s.descendants
                 self.obj.history_values[h.state_id] = list(filter(f, self.obj.configuration))
         for s in exit_set:
+            #########################################
+            # TODO, here trace for exit state
             print_debug('EXIT: %s::%s' % (self.obj.__class__.__name__, s.name))
             self.obj.controller.tracers.tracesExitState(self.obj.__class__.__name__, s.name)
+            #########################################
 
             self.obj.eventless_states -= s.has_eventless_transitions
             # execute exit action(s)
@@ -984,6 +987,10 @@ class Transition:
         self.obj.combo_step.changed_bitmap |= 2**self.lca.state_id
         self.obj.combo_step.changed_bitmap |= self.lca.descendant_bitmap
         
+        #########################################
+        # TODO, here trace for fired transition
+        self.obj.controller.tracers.tracesTransition(self.obj.__class__.__name__, str(self))
+        #########################################
         # execute transition action(s)
         if self.action:
             self.action(self.enabled_event.parameters if self.enabled_event else [])
@@ -1057,7 +1064,7 @@ class Transition:
                         break
                     
     def __repr__(self):
-        return "Transition(%s, %s)" % (self.source, self.targets[0])
+        return "Transition(%s -> %s)" % (self.source.name, self.targets[0].name)
 
 class RuntimeClassBase(object):
     __metaclass__  = abc.ABCMeta

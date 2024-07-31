@@ -68,6 +68,16 @@ class TracerVerbose(BaseTracer):
         self.text += "ENTER STATE in model <%s>\n" % StateChart
         self.text += "\t\tState: %s\n" % str(State)
         #print(text)
+
+    def traceTransition(self, StateChart, Transition):
+        """
+		Tracing done for the internal transition function
+
+		:param aDEVS: the model that transitioned
+		"""
+        self.text += "\n"
+        self.text += "TRANSITION FIRED in model <%s>\n" % StateChart
+        self.text += "\t\t%s\n" % str(Transition)
     
     def traceOutput(self, event):
         self.text += "\n"
@@ -75,20 +85,13 @@ class TracerVerbose(BaseTracer):
         self.text += "\t\Event: %s\n" % str(event)
         #print(text)
 
+
     def traceInput(self, listener, event):
         self.text += "\n"
         self.text += "INPUT EVENT from port <%s>\n" % event.port
         self.text += "\t\Type: %s\n" % listener.virtual_name
         self.text += "\t\Event: %s\n" % str(event)
         #print(text)
-
-    def traceTransition(self, aStateChart):
-        """
-		Tracing done for the internal transition function
-
-		:param aDEVS: the model that transitioned
-		"""
-        pass
 
     def traceExternal(self, aClass):
         """

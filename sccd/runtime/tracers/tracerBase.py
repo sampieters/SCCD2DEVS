@@ -43,17 +43,9 @@ class BaseTracer:
 	def traceInput(self, listener, event):
 		pass 
 	
-	def traceTransition(self, aStateChart):
+	def traceTransition(self, Transition):
 		"""
 		Tracing done for the internal transition function
-
-		:param aDEVS: the model that transitioned
-		"""
-		pass
-
-	def traceExternal(self, aDEVS):
-		"""
-		Tracing done for the external transition function
 
 		:param aDEVS: the model that transitioned
 		"""
