@@ -1,8 +1,6 @@
 import os
 import re
-import subprocess
-import importlib.util
-from sccd.runtime.DEVS_loop import DEVSSimulator
+import json
 import TraceChecker
 
 # ANSI color escape codes
@@ -29,7 +27,11 @@ if __name__ == '__main__':
     tests_directory = "./tests"
 
     #options = ["GLOBAL_IO", "INTERNAL_IO","STATECHART"]
-    options = ["STATECHART"]
+    #options = ["STATECHART"]
+
+    config_data = {
+        "trace": "external"
+    }
 
     checkers = {
         "Python": TraceChecker.PythonSCCDTraceChecker(),
@@ -44,9 +46,20 @@ if __name__ == '__main__':
         if os.path.isdir(full_directory):
             print(f"Processing {directory_name}...")
             for checker_name, checker in checkers.items():
+                # Path to your JSON file
+                config_file = os.path.join(full_directory, 'config.json')
+                # Open and read the JSON file
+                if os.path.exists(config_file):
+                    with open(config_file, 'r') as file:
+                        config_data = json.load(file)
+                else:
+                    config_data = {
+                        "trace": "external"
+                    }
+
                 checker.compile(full_directory)
                 checker.run(full_directory)
-                result = checker.check(full_directory, options)
+                result = checker.check(full_directory, config_data)
                 results[checker_name].append(result)
                 if result == 0:
                     print(f"{checker_name}: ", RED + "Failed" + ENDC)

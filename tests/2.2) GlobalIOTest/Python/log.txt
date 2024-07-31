@@ -7,6 +7,9 @@ INPUT EVENT from port <Inport>
 EXIT STATE in model <MainApp>
 		State: /state1
 
+TRANSITION FIRED in model <MainApp>
+		Transition(/state1 -> /state2)
+
 ENTER STATE in model <MainApp>
 		State: /state2
 

@@ -5,11 +5,17 @@ __  Current Time:   1.000000 __________________________________________
 EXIT STATE in model <MainApp>
 		State: /state1
 
+TRANSITION FIRED in model <MainApp>
+		Transition(/state1 -> /state2)
+
 ENTER STATE in model <MainApp>
 		State: /state2
 
 EXIT STATE in model <MainApp>
 		State: /state2
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/state2 -> /state1)
 
 ENTER STATE in model <MainApp>
 		State: /state1
@@ -22,11 +28,17 @@ __  Current Time:   2.000000 __________________________________________
 EXIT STATE in model <MainApp>
 		State: /state1
 
+TRANSITION FIRED in model <MainApp>
+		Transition(/state1 -> /state2)
+
 ENTER STATE in model <MainApp>
 		State: /state2
 
 EXIT STATE in model <MainApp>
 		State: /state2
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/state2 -> /state1)
 
 ENTER STATE in model <MainApp>
 		State: /state1
@@ -39,11 +51,17 @@ __  Current Time:   3.000000 __________________________________________
 EXIT STATE in model <MainApp>
 		State: /state1
 
+TRANSITION FIRED in model <MainApp>
+		Transition(/state1 -> /state2)
+
 ENTER STATE in model <MainApp>
 		State: /state2
 
 EXIT STATE in model <MainApp>
 		State: /state2
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/state2 -> /state1)
 
 ENTER STATE in model <MainApp>
 		State: /state1
@@ -56,11 +74,17 @@ __  Current Time:   4.000000 __________________________________________
 EXIT STATE in model <MainApp>
 		State: /state1
 
+TRANSITION FIRED in model <MainApp>
+		Transition(/state1 -> /state2)
+
 ENTER STATE in model <MainApp>
 		State: /state2
 
 EXIT STATE in model <MainApp>
 		State: /state2
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/state2 -> /state1)
 
 ENTER STATE in model <MainApp>
 		State: /state1
@@ -73,11 +97,17 @@ __  Current Time:   5.000000 __________________________________________
 EXIT STATE in model <MainApp>
 		State: /state1
 
+TRANSITION FIRED in model <MainApp>
+		Transition(/state1 -> /state2)
+
 ENTER STATE in model <MainApp>
 		State: /state2
 
 EXIT STATE in model <MainApp>
 		State: /state2
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/state2 -> /end)
 
 ENTER STATE in model <MainApp>
 		State: /end

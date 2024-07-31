@@ -3,11 +3,17 @@ __  Current Time:   0.000000 __________________________________________
 EXIT STATE in model <MainApp>
 		State: /state1
 
+TRANSITION FIRED in model <MainApp>
+		Transition(/state1 -> /state2)
+
 ENTER STATE in model <MainApp>
 		State: /state2
 
 EXIT STATE in model <MainApp>
 		State: /state2
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/state2 -> /state1)
 
 ENTER STATE in model <MainApp>
 		State: /state1
@@ -26,11 +32,17 @@ OUTPUT EVENT to port <ui>
 EXIT STATE in model <MainApp>
 		State: /state1
 
+TRANSITION FIRED in model <MainApp>
+		Transition(/state1 -> /state2)
+
 ENTER STATE in model <MainApp>
 		State: /state2
 
 EXIT STATE in model <MainApp>
 		State: /state2
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/state2 -> /state1)
 
 ENTER STATE in model <MainApp>
 		State: /state1
@@ -49,11 +61,17 @@ OUTPUT EVENT to port <ui>
 EXIT STATE in model <MainApp>
 		State: /state1
 
+TRANSITION FIRED in model <MainApp>
+		Transition(/state1 -> /state2)
+
 ENTER STATE in model <MainApp>
 		State: /state2
 
 EXIT STATE in model <MainApp>
 		State: /state2
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/state2 -> /state1)
 
 ENTER STATE in model <MainApp>
 		State: /state1
@@ -72,11 +90,17 @@ OUTPUT EVENT to port <ui>
 EXIT STATE in model <MainApp>
 		State: /state1
 
+TRANSITION FIRED in model <MainApp>
+		Transition(/state1 -> /state2)
+
 ENTER STATE in model <MainApp>
 		State: /state2
 
 EXIT STATE in model <MainApp>
 		State: /state2
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/state2 -> /state1)
 
 ENTER STATE in model <MainApp>
 		State: /state1
@@ -95,11 +119,17 @@ OUTPUT EVENT to port <ui>
 EXIT STATE in model <MainApp>
 		State: /state1
 
+TRANSITION FIRED in model <MainApp>
+		Transition(/state1 -> /state2)
+
 ENTER STATE in model <MainApp>
 		State: /state2
 
 EXIT STATE in model <MainApp>
 		State: /state2
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/state2 -> /state1)
 
 ENTER STATE in model <MainApp>
 		State: /state1
@@ -118,11 +148,17 @@ OUTPUT EVENT to port <ui>
 EXIT STATE in model <MainApp>
 		State: /state1
 
+TRANSITION FIRED in model <MainApp>
+		Transition(/state1 -> /state2)
+
 ENTER STATE in model <MainApp>
 		State: /state2
 
 EXIT STATE in model <MainApp>
 		State: /state2
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/state2 -> /state1)
 
 ENTER STATE in model <MainApp>
 		State: /state1
@@ -141,11 +177,17 @@ OUTPUT EVENT to port <ui>
 EXIT STATE in model <MainApp>
 		State: /state1
 
+TRANSITION FIRED in model <MainApp>
+		Transition(/state1 -> /state2)
+
 ENTER STATE in model <MainApp>
 		State: /state2
 
 EXIT STATE in model <MainApp>
 		State: /state2
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/state2 -> /state1)
 
 ENTER STATE in model <MainApp>
 		State: /state1
@@ -164,11 +206,17 @@ OUTPUT EVENT to port <ui>
 EXIT STATE in model <MainApp>
 		State: /state1
 
+TRANSITION FIRED in model <MainApp>
+		Transition(/state1 -> /state2)
+
 ENTER STATE in model <MainApp>
 		State: /state2
 
 EXIT STATE in model <MainApp>
 		State: /state2
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/state2 -> /state1)
 
 ENTER STATE in model <MainApp>
 		State: /state1
@@ -187,11 +235,17 @@ OUTPUT EVENT to port <ui>
 EXIT STATE in model <MainApp>
 		State: /state1
 
+TRANSITION FIRED in model <MainApp>
+		Transition(/state1 -> /state2)
+
 ENTER STATE in model <MainApp>
 		State: /state2
 
 EXIT STATE in model <MainApp>
 		State: /state2
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/state2 -> /state1)
 
 ENTER STATE in model <MainApp>
 		State: /state1
@@ -210,11 +264,17 @@ OUTPUT EVENT to port <ui>
 EXIT STATE in model <MainApp>
 		State: /state1
 
+TRANSITION FIRED in model <MainApp>
+		Transition(/state1 -> /state2)
+
 ENTER STATE in model <MainApp>
 		State: /state2
 
 EXIT STATE in model <MainApp>
 		State: /state2
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/state2 -> /state3)
 
 ENTER STATE in model <MainApp>
 		State: /state3

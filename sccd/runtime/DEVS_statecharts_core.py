@@ -478,12 +478,11 @@ class ClassState():
             i.start()
 
     def handleInput(self):
+        """
         while not self.input_queue.isEmpty():
             event_time = self.input_queue.getEarliestTime()
             event = self.input_queue.pop()
             
-            #if event.instance is None:
-            #    event.instance = self.processAssociationReference(event.parameters[0])[0][1]
             if event.instance is None:
                 target_instance = None
             else:
@@ -492,6 +491,27 @@ class ClassState():
                 self.broadcast(None, event, event_time - self.simulated_time)
             else:
                 target_instance.addEvent(event, event_time - self.simulated_time)
+        """
+        
+        while not self.input_queue.isEmpty():
+            event_time = self.input_queue.getEarliestTime()
+            e = self.input_queue.pop()
+
+            target_instance = None
+            if e.getPort():
+                target_instance = self.port_mappings[e.getPort()]
+                target_instance = self.instances[target_instance] 
+                e.port = get_private_port(e.port)
+                #target_instance = self.instances[e.getPort()]
+            
+            #target_instance = self.instances[self.port_mappings[e.getPort()]]
+            #target_instance = self.instances[e.getPort()]
+            if target_instance == None:
+                self.broadcast(None,e, event_time - self.simulated_time)
+            else:
+                #e.port = None
+                target_instance.addEvent(e, event_time - self.simulated_time)
+        
 
     def addInput(self, input_event_list, time_offset = 0):
         if not isinstance(input_event_list, list):
@@ -572,9 +592,6 @@ class ClassState():
         self.to_send.append(((self.name, source.instance_id), None, Event('disassociate_instance', None, parameters)))
         
     def handleNarrowCastEvent(self, parameters):
-        if len(parameters) != 3:
-            raise ParameterException ("The narrow_cast event needs 3 parameters.")
-        
         source = parameters[0]
         parameters[0] = source.instance_id
         cast_event = Event("narrow_cast", None, parameters)
@@ -650,10 +667,13 @@ class ClassBase(AtomicDEVS):
         for input in all_inputs:
             if isinstance(input, str):
                 tem = eval(input)
-                tem.instance = self.state.port_mappings.setdefault(tem.port, None)
+                instance = self.state.port_mappings.setdefault(tem.port, None)
 
-                if tem.instance != None:
-                    tem.port = get_private_port(tem.port)
+
+
+                #if instance != None:
+                #    tem.port = get_private_port(tem.port)
+                    #tem.port = self.state.port_mappings[tem.getPort()]
                 self.state.addInput(tem)
             elif input[2].name == "create_instance":
                 new_instance = self.constructObject(input[1][1], input[2].parameters[2:])
@@ -661,7 +681,7 @@ class ClassBase(AtomicDEVS):
                 #p = new_instance.associations.get("parent")
                 #if p:
                 #    p.addInstance(input[2].instance)
-                ev = Event("instance_created", None, [input[2].parameters[1]], input[2].instance)
+                ev = Event("instance_created", None, [input[2].parameters[1]])
                 self.state.to_send.append((input[1], input[0], ev))
                 self.state.next_instance += 1
             elif input[2].name == "start_instance":
@@ -711,6 +731,19 @@ class ClassBase(AtomicDEVS):
                 instance.addEvent(input[2])
             else:
                 ev = input[2]
+
+                new_port = None
+                for key, value in self.state.port_mappings.items():
+                    if value == ev.port[1]:
+                        new_port = key
+                        break
+                
+                if new_port is None:
+                    new_port = 0
+                ev.port = new_port
+
+
+                
                 self.state.addInput(ev)
         return self.state
     
@@ -818,7 +851,7 @@ class ObjectManagerState():
                     try:
                         nexts.append({
                             "class": association.to_class,
-                            "instance": association.instances[index],
+                            "instance": (association.to_class, association.instances[index]),
                             "ref": current["instance"],
                             "assoc_name": name,
                             "assoc_index": index,
@@ -831,7 +864,7 @@ class ObjectManagerState():
                     for i in association.instances:
                         nexts.append({
                             "class": association.to_class,
-                            "instance": association.instances[i],
+                            "instance": (association.to_class, association.instances[i]),
                             "ref": current["instance"],
                             "assoc_name": name,
                             "assoc_index": index,
@@ -844,20 +877,23 @@ class ObjectManagerState():
         return currents
 
     def handleNarrowCastEvent(self, parameters):
-        source = parameters[0]
-        
-        parameters = parameters[2].parameters
-        if not isinstance(parameters[1], list):
-            targets = [parameters[1]]
+        if len(parameters[2].parameters) != 3:
+            raise ParameterException ("The narrow_cast event needs 3 parameters.")
         else:
-            targets = parameters[1]
+            source = parameters[0]
+            
+            parameters = parameters[2].parameters
+            if not isinstance(parameters[1], list):
+                targets = [parameters[1]]
+            else:
+                targets = parameters[1]
 
-        for target in targets:
-            traversal_list = self.processAssociationReference(target)
-            cast_event = parameters[2]
-            for i in self.getInstances(source, traversal_list):
-                to_send_event = Event(cast_event.name, None, cast_event.parameters)
-                self.to_send.append((source, (i["class"], i["instance"]), to_send_event))
+            for target in targets:
+                traversal_list = self.processAssociationReference(target)
+                cast_event = parameters[2]
+                for i in self.getInstances(source, traversal_list):
+                    to_send_event = Event(cast_event.name, i["instance"], cast_event.parameters)
+                    self.to_send.append((source,  i["instance"], to_send_event))
 
                 #to_send_event = Event(cast_event.name, i["instance"].narrow_cast_port, cast_event.parameters)
                 #i["instance"].controller.addInput(to_send_event, force_internal=True)
@@ -907,7 +943,7 @@ class ObjectManagerState():
         # TODO: it is possible that we need to get the right index here because not needed now
         to_class = None
         for i in self.getInstances(source, traversal_list):
-            to_class = (i["class"], i["instance"])
+            to_class = i["instance"]
         self.to_send.append((source, to_class, Event('start_instance', None, parameters[2].parameters[1:])))
         
     def createInstance(self, to_class, construct_params = []):
@@ -991,9 +1027,9 @@ class ObjectManagerState():
             
             to_class = None
             for i in instances:
-                to_class = (i["class"], i["instance"])
+                to_class = i["instance"]
                 try:
-                    for assoc_name in self.instances[i["instance"]]["associations"]:
+                    for assoc_name in self.instances[i["instance"][1]]["associations"]:
                         if assoc_name != 'parent':
                             traversal_list = self.processAssociationReference(assoc_name)
                             instances = self.getInstances(to_class, traversal_list)
@@ -1001,7 +1037,7 @@ class ObjectManagerState():
                                 raise RuntimeException("Error removing instance from association %s, still %i children left connected with association %s" % (association_name, len(instances), assoc_name))
                     # TODO: deleting the narrow cast port should be somewhere else
                     #del i["instance"].controller.input_ports[i["instance"].narrow_cast_port]
-                    association.removeInstance(i["instance"])
+                    association.removeInstance(i["instance"][1])
                     
                     # TODO: this should also be different
                     #self.instances.discard(i["instance"])

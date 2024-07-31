@@ -53,8 +53,12 @@ class MainApp(RuntimeClassBase):
         # state /state1/state12
         self.states["/state1/state12"] = State(4, "/state1/state12", self)
         
+        # state /state2
+        self.states["/state2"] = State(5, "/state2", self)
+        
         # add children
         self.states[""].addChild(self.states["/state1"])
+        self.states[""].addChild(self.states["/state2"])
         self.states["/state1"].addChild(self.states["/state1/state10"])
         self.states["/state1"].addChild(self.states["/state1/state11"])
         self.states["/state1"].addChild(self.states["/state1/state12"])
@@ -62,15 +66,20 @@ class MainApp(RuntimeClassBase):
         self.states[""].default_state = self.states["/state1"]
         self.states["/state1"].default_state = self.states["/state1/state11"]
         
+        # transition /state1/state10
+        _state1_state10_0 = Transition(self, self.states["/state1/state10"], [self.states["/state1/state10"]])
+        _state1_state10_0.setTrigger(None)
+        self.states["/state1/state10"].addTransition(_state1_state10_0)
+        
         # transition /state1/state11
         _state1_state11_0 = Transition(self, self.states["/state1/state11"], [self.states["/state1/state12"]])
         _state1_state11_0.setTrigger(None)
         self.states["/state1/state11"].addTransition(_state1_state11_0)
         
-        # transition /state1
-        _state1_0 = Transition(self, self.states["/state1"], [self.states["/state1"]])
-        _state1_0.setTrigger(None)
-        self.states["/state1"].addTransition(_state1_0)
+        # transition /state1/state12
+        _state1_state12_0 = Transition(self, self.states["/state1/state12"], [self.states["/state2"]])
+        _state1_state12_0.setTrigger(None)
+        self.states["/state1/state12"].addTransition(_state1_state12_0)
     
     def initializeStatechart(self):
         # enter default state

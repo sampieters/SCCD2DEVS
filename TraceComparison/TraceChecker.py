@@ -117,7 +117,7 @@ class PythonSCCDTraceChecker(SCCDTraceChecker):
         event_pattern = re.compile(r'^\s*\\Event: \(event name:.*\)$')
         event_match = event_pattern.match(line)
         if event_match and context["time"] is not None:
-            if context["event_type"] == "global output":
+            if context["context"] == "global output":
                 event = line.strip()
                 # Remove everything before '(' in each string
                 event = event[event.index('('):]
@@ -222,17 +222,17 @@ class PythonSCCDTraceChecker(SCCDTraceChecker):
 
                 context = self.check_state(line, context)
                 
-                if "GLOBAL_IO" in options:
+                if "external" in options["trace"]:
                     io_event = self.extract_globalio(line, context)
                     if io_event is not None:
                         output_events.append(io_event)
                 
-                if "INTERNAL_IO" in options:
+                if "internal" in options["trace"]:
                     internal_event = self.extract_internalio(line, context)
                     if internal_event is not None:
                         output_events.append(internal_event)
                 
-                if "STATECHART" in options:
+                if "statechart" in options["trace"]:
                     if context['context'] == "state":
                         statechart_event = self.extract_statechart(line, context)
                         if statechart_event is not None:
@@ -426,17 +426,17 @@ class PydevsSCCDTraceChecker(SCCDTraceChecker):
 
                 context = self.check_state(line, context)
                 
-                if "GLOBAL_IO" in options:
+                if "external" in options["trace"]:
                     io_event = self.extract_globalio(line, context)
                     if io_event is not None:
                         output_events.append(io_event)
                 
-                if "INTERNAL_IO" in options:
+                if "internal" in options["trace"]:
                     internal_event = self.extract_internalio(line, context)
                     if internal_event is not None:
                         output_events.append(internal_event)
                 
-                if "STATECHART" in options:
+                if "statechart" in options["trace"]:
                     if context['context'] == "state":
                         statechart_event = self.extract_statechart(line, context)
                         if statechart_event is not None:
