@@ -1,0 +1,66 @@
+<?xml version="1.1" ?>
+<diagram author="Sam Pieters" name="Create and Delete an Instance (other than the MainApp)">
+    <description>
+        Test 12: Check if an instance can be deleted after the creation, the instance is not started yet.
+    </description>
+    <inport name="ui"/>
+    <outport name="ui"/>
+    <class name="MainApp" default="true">
+        <relationships>
+            <association name="linkA" class="A" />
+        </relationships>
+        <scxml initial="state1">
+            <state id="state1">
+                <onentry>
+                    <raise scope="cd" event="create_instance">
+                        <parameter expr='"linkA"' />
+                        <parameter expr='"A"' />
+                    </raise>
+                </onentry>
+                <transition event='instance_created' target='../state2'>
+                    <parameter name="association_name" type="string"/>
+                    <raise port="ui" event="instance_created_succesfully">
+                        <parameter expr="association_name" />
+                    </raise>
+                </transition>
+            </state>
+            <state id ="state2">
+                <onentry>
+                    <raise scope="cd" event="create_instance">
+                        <parameter expr='"linkA"' />
+                        <parameter expr='"A"' />
+                    </raise>
+                </onentry>
+                <transition event='instance_created' target='../state3'>
+                    <parameter name="association_name" type="string"/>
+                    <raise port="ui" event="instance_created_succesfully">
+                        <parameter expr="association_name" />
+                    </raise>
+                    <raise scope="cd" event="delete_instance">
+                        <parameter expr="'linkA'" />
+                    </raise>
+                </transition>
+            </state>
+            <state id="state3">
+                <transition event='instance_deleted' target='.'>
+                    <parameter name="deleted_links" type="string"/>
+                    <raise port="ui" event="instance_deleted_succesfully">
+                        <parameter expr="deleted_links" />
+                    </raise>
+                </transition>
+            </state>
+        </scxml>
+    </class>
+
+    <class name="A">
+        <scxml initial="state1">
+            <state id="state1">
+                <onentry>
+                    <raise port="ui" event="not_possible">
+                        <parameter expr="str('%.2f' % (self.getSimulatedTime() / 1000.0))" />
+                    </raise>
+                </onentry>
+            </state>
+        </scxml>
+    </class>
+</diagram>

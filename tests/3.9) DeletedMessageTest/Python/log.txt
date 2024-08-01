@@ -1,0 +1,40 @@
+__  Current Time:   0.000000 __________________________________________ 
+
+EXIT STATE in model <MainApp>
+		State: /state1
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/state1 -> /state2)
+
+ENTER STATE in model <MainApp>
+		State: /state2
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: instance_created_succesfully; port: ui; parameters: ['linkA[0]'])
+
+
+EXIT STATE in model <MainApp>
+		State: /state2
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/state2 -> /state3)
+
+ENTER STATE in model <MainApp>
+		State: /state3
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: instance_created_succesfully; port: ui; parameters: ['linkA[1]'])
+
+
+EXIT STATE in model <MainApp>
+		State: /state3
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/state3 -> /state3)
+
+ENTER STATE in model <MainApp>
+		State: /state3
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: instance_deleted_succesfully; port: ui; parameters: ['linkA'])
+
