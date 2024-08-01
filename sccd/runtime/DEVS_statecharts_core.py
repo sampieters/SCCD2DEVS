@@ -766,7 +766,7 @@ class ObjectManagerState():
                     raise RuntimeException("Error adding instance to association '" + association_name + "': " + str(exception))
                 p = new_instance["associations"].get("parent")
                 if p:
-                    p.addInstance(source)
+                    p.addInstance(source[1])
                 
                 parameters[2].parameters[1] = f"{association_name}[{index}]"
                 ev = Event('create_instance', None, parameters[2].parameters)
