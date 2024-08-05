@@ -185,24 +185,15 @@ class MainApp(RuntimeClassBase):
         # transition /running
         _running_0 = Transition(self, self.states["/running"], [self.states["/running"]])
         _running_0.setAction(self._running_0_exec)
-        _running_0.setTrigger(Event("create_ball", None))
+        _running_0.setTrigger(Event("update_bounds", None))
         self.states["/running"].addTransition(_running_0)
         _running_1 = Transition(self, self.states["/running"], [self.states["/running"]])
         _running_1.setAction(self._running_1_exec)
-        _running_1.setTrigger(Event("instance_created", None))
+        _running_1.setTrigger(Event("button_pressed", None))
         self.states["/running"].addTransition(_running_1)
         _running_2 = Transition(self, self.states["/running"], [self.states["/running"]])
-        _running_2.setAction(self._running_2_exec)
-        _running_2.setTrigger(Event("update_bounds", None))
+        _running_2.setTrigger(Event("open_elevator", None))
         self.states["/running"].addTransition(_running_2)
-        _running_3 = Transition(self, self.states["/running"], [self.states["/running"]])
-        _running_3.setAction(self._running_3_exec)
-        _running_3.setTrigger(Event("button_pressed", None))
-        self.states["/running"].addTransition(_running_3)
-        _running_4 = Transition(self, self.states["/running"], [self.states["/running"]])
-        _running_4.setAction(self._running_4_exec)
-        _running_4.setTrigger(Event("open_elevator", None))
-        self.states["/running"].addTransition(_running_4)
     
     def _creating_window_enter(self):
         self.big_step.outputEvent(Event("create_window", self.getOutPortName("ui"), [CANVAS_DIMS[0], CANVAS_DIMS[1], "Bouncing Balls Elevator", self.inports['field_ui']]))
@@ -257,30 +248,17 @@ class MainApp(RuntimeClassBase):
         association_name = parameters[0]
         self.big_step.outputEventOM(Event("start_instance", None, [self, association_name]))
         self.big_step.outputEventOM(Event("narrow_cast", None, [self, association_name, Event("set_association_name", None, [association_name, self.canvas_id, self.window_id])]))
+        self.big_step.outputEventOM(Event("associate_instance", None, [self, 'floor', association_name]))
     
     def _running_0_exec(self, parameters):
-        floor_num = parameters[0]
-        x = parameters[1]
-        y = parameters[2]
-        self.big_step.outputEventOM(Event("create_instance", None, [self, "ball", "Ball", self.canvas_id, floor_num, x, y, self.elevator_pos, self.elevator_dim]))
-    
-    def _running_1_exec(self, parameters):
-        association_name = parameters[0]
-        self.big_step.outputEventOM(Event("start_instance", None, [self, association_name]))
-        self.big_step.outputEventOM(Event("narrow_cast", None, [self, association_name, Event("set_association_name", None, [association_name])]))
-    
-    def _running_2_exec(self, parameters):
         pos = parameters[0]
         dim = parameters[1]
         vel = parameters[2]
         self.big_step.outputEventOM(Event("broad_cast", None, [self, Event("update_elevator_bounds", None, [pos, dim, vel])]))
     
-    def _running_3_exec(self, parameters):
+    def _running_1_exec(self, parameters):
         floor_number = parameters[0]
         self.big_step.outputEventOM(Event("narrow_cast", None, [self, 'elevator', Event("move_elevator", None, [floor_number])]))
-    
-    def _running_4_exec(self, parameters):
-        self.big_step.outputEventOM(Event("narrow_cast", None, [self, 'ball', Event("open_elevator", None, [])]))
     
     def initializeStatechart(self):
         # enter default state
@@ -348,10 +326,14 @@ class Floor(RuntimeClassBase):
         self.states["/running/create_random_ball"].setEnter(self._running_create_random_ball_enter)
         self.states["/running/create_random_ball"].setExit(self._running_create_random_ball_exit)
         
+        # state /running/wait
+        self.states["/running/wait"] = State(4, "/running/wait", self)
+        
         # add children
         self.states[""].addChild(self.states["/creating_floor"])
         self.states[""].addChild(self.states["/running"])
         self.states["/running"].addChild(self.states["/running/create_random_ball"])
+        self.states["/running"].addChild(self.states["/running/wait"])
         self.states[""].fixTree()
         self.states[""].default_state = self.states["/creating_floor"]
         self.states["/running"].default_state = self.states["/running/create_random_ball"]
@@ -362,10 +344,16 @@ class Floor(RuntimeClassBase):
         self.states["/creating_floor"].addTransition(_creating_floor_0)
         
         # transition /running/create_random_ball
-        _running_create_random_ball_0 = Transition(self, self.states["/running/create_random_ball"], [self.states["/running/create_random_ball"]])
+        _running_create_random_ball_0 = Transition(self, self.states["/running/create_random_ball"], [self.states["/running/wait"]])
         _running_create_random_ball_0.setAction(self._running_create_random_ball_0_exec)
         _running_create_random_ball_0.setTrigger(Event("_0after"))
         self.states["/running/create_random_ball"].addTransition(_running_create_random_ball_0)
+        
+        # transition /running/wait
+        _running_wait_0 = Transition(self, self.states["/running/wait"], [self.states["/running/create_random_ball"]])
+        _running_wait_0.setAction(self._running_wait_0_exec)
+        _running_wait_0.setTrigger(Event("instance_created", None))
+        self.states["/running/wait"].addTransition(_running_wait_0)
     
     def _creating_floor_enter(self):
         self.big_step.outputEvent(Event("create_rectangle", self.getOutPortName("ui"), [self.canvas_id, self.pos['x'], self.pos['y'], self.dim['x'], self.dim['y'], {'fill':'white', 'outline': 'black'}, self.inports['floor_ui']]))
@@ -377,7 +365,12 @@ class Floor(RuntimeClassBase):
         self.removeTimer(0)
     
     def _running_create_random_ball_0_exec(self, parameters):
-        self.big_step.outputEventOM(Event("narrow_cast", None, [self, 'parent', Event("create_ball", None, [self.floor_num, 10, self.pos['y']])]))
+        self.big_step.outputEventOM(Event("create_instance", None, [self, "balls", "Ball", self.canvas_id, self.floor_num, 10, self.pos['y']]))
+    
+    def _running_wait_0_exec(self, parameters):
+        association_name = parameters[0]
+        self.big_step.outputEventOM(Event("start_instance", None, [self, association_name]))
+        self.big_step.outputEventOM(Event("narrow_cast", None, [self, association_name, Event("set_association_name", None, [association_name])]))
     
     def initializeStatechart(self):
         # enter default state
@@ -642,7 +635,7 @@ class Elevator(RuntimeClassBase):
         RuntimeClassBase.initializeStatechart(self)
 
 class Ball(RuntimeClassBase):
-    def __init__(self, controller, canvas_id, floor_num, x, y, elevator_pos, elevator_dim):
+    def __init__(self, controller, canvas_id, floor_num, x, y):
         RuntimeClassBase.__init__(self, controller)
         
         self.inports["ball_ui"] = controller.addInputPort("ball_ui", self)
@@ -661,9 +654,9 @@ class Ball(RuntimeClassBase):
         self.pos = None
         
         # call user defined constructor
-        Ball.user_defined_constructor(self, canvas_id, floor_num, x, y, elevator_pos, elevator_dim)
+        Ball.user_defined_constructor(self, canvas_id, floor_num, x, y)
     
-    def user_defined_constructor(self, canvas_id, floor_num, x, y, elevator_pos, elevator_dim):
+    def user_defined_constructor(self, canvas_id, floor_num, x, y):
         self.canvas_id = canvas_id;
         
         
@@ -671,8 +664,6 @@ class Ball(RuntimeClassBase):
         
         self.elevator_floor = 0;
         self.elevator_open = True;
-        self.rect_pos = elevator_pos;
-        self.rect_dim = elevator_dim;
         
         self.r = 5.0;
         self.vel = {'x': random.uniform(-5.0, 5.0), 'y': random.uniform(-5.0, 5.0)};
@@ -777,6 +768,8 @@ class Ball(RuntimeClassBase):
     
     def _main_behaviour_bouncing_0_exec(self, parameters):
         if self.floor_num == -1:
+            pass
+            """
             if self.pos['x'] - self.r < self.rect_pos['x'] - (self.rect_dim['x'] / 2):
                 if self.elevator_open:
                     self.floor_num = self.elevator_floor
@@ -794,6 +787,7 @@ class Ball(RuntimeClassBase):
             elif self.pos['y'] + self.r > self.rect_pos['y'] + (self.rect_dim['y'] / 2):
                 self.pos['y'] = self.rect_pos['y'] + (self.rect_dim['y'] / 2) - self.r
                 self.vel['y'] = -self.vel['y'] + self.rect_vel
+            """
         else:
             floor_height = ((CANVAS_DIMS[1] - 150) - ((FLOORS - 1) * FLOOR_SPACE)) / FLOORS
             floor_dim = {'x': FLOOR_LENGTH, 'y': floor_height};
@@ -855,11 +849,11 @@ class ObjectManager(ObjectManagerBase):
             instance.associations["floor"] = Association("Floor", 2, -1)
             instance.associations["button"] = Association("ElevatorButton", 0, -1)
             instance.associations["elevator"] = Association("Elevator", 1, 1)
-            instance.associations["ball"] = Association("Ball", 0, -1)
         elif class_name == "Floor":
             instance = Floor(self.controller, construct_params[0], construct_params[1])
             instance.associations = {}
             instance.associations["parent"] = Association("MainApp", 1, 1)
+            instance.associations["balls"] = Association("Ball", 0, -1)
         elif class_name == "ElevatorButton":
             instance = ElevatorButton(self.controller, construct_params[0], construct_params[1], construct_params[2])
             instance.associations = {}
@@ -867,10 +861,10 @@ class ObjectManager(ObjectManagerBase):
         elif class_name == "Elevator":
             instance = Elevator(self.controller, construct_params[0])
             instance.associations = {}
-            instance.associations["floors"] = Association("Floor", 1, 1)
+            instance.associations["floors"] = Association("Floor", 0, -1)
             instance.associations["parent"] = Association("MainApp", 1, 1)
         elif class_name == "Ball":
-            instance = Ball(self.controller, construct_params[0], construct_params[1], construct_params[2], construct_params[3], construct_params[4], construct_params[5])
+            instance = Ball(self.controller, construct_params[0], construct_params[1], construct_params[2], construct_params[3])
             instance.associations = {}
             instance.associations["parent"] = Association("MainApp", 1, 1)
         else:

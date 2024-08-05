@@ -19,6 +19,7 @@ if __name__ == '__main__':
 	ui = UI(tkroot, controller)
 	controller.addMyOwnOutputListener(OutputListener(ui))
 
+	#controller.setVerbose("./examples/BouncingBalls/Python/trace.txt")
 
 	controller.start()
 	tkroot.mainloop()

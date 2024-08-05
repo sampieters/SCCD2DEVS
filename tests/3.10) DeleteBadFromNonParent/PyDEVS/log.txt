@@ -18,7 +18,7 @@ __  Current Time:   0.000000 __________________________________________
 
 
 	INITIAL CONDITIONS in model <Controller.ObjectManager>
-		Initial State: <target.Dummy object at 0x1076baf00>
+		Initial State: <target.Dummy object at 0x1049c2b70>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -35,13 +35,14 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_in>:
 				[(('MainApp', 0), ('MainApp', 0), (event name: start_instance; port: None; parameters: ['MainApp[0]']))]
 			port <input>:
-			port <private_49_<narrow_cast>>:
+			port <ui>:
+			port <private_0_<narrow_cast>>:
 		New State: 
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <target.Dummy object at 0x1076baf00>
+		New State: <target.Dummy object at 0x1049c2b70>
 		Output Port Configuration:
 			port <port1>:
 				[(('MainApp', 0), ('MainApp', 0), (event name: start_instance; port: None; parameters: ['MainApp[0]']))]
@@ -57,7 +58,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('MainApp', 0), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['MainApp[0]']))
-		New State: <target.Dummy object at 0x1076baf00>
+		New State: <target.Dummy object at 0x1049c2b70>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -79,7 +80,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('MainApp', 0), None, (event name: create_instance; port: None; parameters: [0, 'linkA[0]', 'A']))
-		New State: <target.Dummy object at 0x1076baf00>
+		New State: <target.Dummy object at 0x1049c2b70>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -100,9 +101,10 @@ __  Current Time:   0.000000 __________________________________________
 	EXTERNAL TRANSITION in model <Controller.A>
 		Input Port Configuration:
 			port <obj_manager_in>:
-				[(('MainApp', 0), ('A', 1), (event name: create_instance; port: None; parameters: [0, 'linkA[0]', 'A']))]
+				[(('MainApp', 0), ('A', 1), (event name: create_instance; port: None; parameters: [0, 1, 'linkA[0]', 'A']))]
 			port <input>:
-			port <private_50_<narrow_cast>>:
+			port <ui>:
+			port <private_1_<narrow_cast>>:
 		New State: 
 		Next scheduled internal transition at time 0.000000
 
@@ -112,18 +114,19 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_in>:
 				[(('MainApp', 0), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['MainApp[0]']))]
 			port <input>:
-			port <private_49_<narrow_cast>>:
+			port <ui>:
+			port <private_0_<narrow_cast>>:
 		New State: 
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <target.Dummy object at 0x1076baf00>
+		New State: <target.Dummy object at 0x1049c2b70>
 		Output Port Configuration:
 			port <port1>:
 				[(('MainApp', 0), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['MainApp[0]']))]
 			port <port2>:
-				[(('MainApp', 0), ('A', 1), (event name: create_instance; port: None; parameters: [0, 'linkA[0]', 'A']))]
+				[(('MainApp', 0), ('A', 1), (event name: create_instance; port: None; parameters: [0, 1, 'linkA[0]', 'A']))]
 			port <port3>:
 		Next scheduled internal transition at time inf
 
@@ -135,7 +138,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('A', 1), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[0]']))
-		New State: <target.Dummy object at 0x1076baf00>
+		New State: <target.Dummy object at 0x1049c2b70>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -183,13 +186,14 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_in>:
 				[(('A', 1), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[0]']))]
 			port <input>:
-			port <private_49_<narrow_cast>>:
+			port <ui>:
+			port <private_0_<narrow_cast>>:
 		New State: 
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <target.Dummy object at 0x1076baf00>
+		New State: <target.Dummy object at 0x1049c2b70>
 		Output Port Configuration:
 			port <port1>:
 				[(('A', 1), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[0]']))]
@@ -241,7 +245,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('MainApp', 0), None, (event name: start_instance; port: None; parameters: [0, 'linkA[0]']))
-		New State: <target.Dummy object at 0x1076baf00>
+		New State: <target.Dummy object at 0x1049c2b70>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -264,13 +268,14 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_in>:
 				[(('MainApp', 0), ('A', 1), (event name: start_instance; port: None; parameters: ['linkA[0]']))]
 			port <input>:
-			port <private_50_<narrow_cast>>:
+			port <ui>:
+			port <private_1_<narrow_cast>>:
 		New State: 
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <target.Dummy object at 0x1076baf00>
+		New State: <target.Dummy object at 0x1049c2b70>
 		Output Port Configuration:
 			port <port1>:
 			port <port2>:
@@ -299,7 +304,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('A', 1), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[0]']))
-		New State: <target.Dummy object at 0x1076baf00>
+		New State: <target.Dummy object at 0x1049c2b70>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -333,13 +338,14 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_in>:
 				[(('A', 1), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[0]']))]
 			port <input>:
-			port <private_49_<narrow_cast>>:
+			port <ui>:
+			port <private_0_<narrow_cast>>:
 		New State: 
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <target.Dummy object at 0x1076baf00>
+		New State: <target.Dummy object at 0x1049c2b70>
 		Output Port Configuration:
 			port <port1>:
 				[(('A', 1), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[0]']))]
@@ -391,7 +397,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('MainApp', 0), None, (event name: create_instance; port: None; parameters: [0, 'linkB[0]', 'B']))
-		New State: <target.Dummy object at 0x1076baf00>
+		New State: <target.Dummy object at 0x1049c2b70>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -412,20 +418,21 @@ __  Current Time:   0.000000 __________________________________________
 	EXTERNAL TRANSITION in model <Controller.B>
 		Input Port Configuration:
 			port <obj_manager_in>:
-				[(('MainApp', 0), ('B', 2), (event name: create_instance; port: None; parameters: [0, 'linkB[0]', 'B']))]
+				[(('MainApp', 0), ('B', 2), (event name: create_instance; port: None; parameters: [0, 2, 'linkB[0]', 'B']))]
 			port <input>:
-			port <private_51_<narrow_cast>>:
+			port <ui>:
+			port <private_2_<narrow_cast>>:
 		New State: 
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <target.Dummy object at 0x1076baf00>
+		New State: <target.Dummy object at 0x1049c2b70>
 		Output Port Configuration:
 			port <port1>:
 			port <port2>:
 			port <port3>:
-				[(('MainApp', 0), ('B', 2), (event name: create_instance; port: None; parameters: [0, 'linkB[0]', 'B']))]
+				[(('MainApp', 0), ('B', 2), (event name: create_instance; port: None; parameters: [0, 2, 'linkB[0]', 'B']))]
 		Next scheduled internal transition at time inf
 
 
@@ -436,7 +443,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('B', 2), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkB[0]']))
-		New State: <target.Dummy object at 0x1076baf00>
+		New State: <target.Dummy object at 0x1049c2b70>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -457,13 +464,14 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_in>:
 				[(('B', 2), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkB[0]']))]
 			port <input>:
-			port <private_49_<narrow_cast>>:
+			port <ui>:
+			port <private_0_<narrow_cast>>:
 		New State: 
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <target.Dummy object at 0x1076baf00>
+		New State: <target.Dummy object at 0x1049c2b70>
 		Output Port Configuration:
 			port <port1>:
 				[(('B', 2), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkB[0]']))]
@@ -515,7 +523,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('MainApp', 0), None, (event name: start_instance; port: None; parameters: [0, 'linkB[0]']))
-		New State: <target.Dummy object at 0x1076baf00>
+		New State: <target.Dummy object at 0x1049c2b70>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -538,13 +546,14 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_in>:
 				[(('MainApp', 0), ('B', 2), (event name: start_instance; port: None; parameters: ['linkB[0]']))]
 			port <input>:
-			port <private_51_<narrow_cast>>:
+			port <ui>:
+			port <private_2_<narrow_cast>>:
 		New State: 
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <target.Dummy object at 0x1076baf00>
+		New State: <target.Dummy object at 0x1049c2b70>
 		Output Port Configuration:
 			port <port1>:
 			port <port2>:
@@ -572,7 +581,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('B', 2), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkB[0]']))
-		New State: <target.Dummy object at 0x1076baf00>
+		New State: <target.Dummy object at 0x1049c2b70>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -604,13 +613,14 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_in>:
 				[(('B', 2), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkB[0]']))]
 			port <input>:
-			port <private_49_<narrow_cast>>:
+			port <ui>:
+			port <private_0_<narrow_cast>>:
 		New State: 
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <target.Dummy object at 0x1076baf00>
+		New State: <target.Dummy object at 0x1049c2b70>
 		Output Port Configuration:
 			port <port1>:
 				[(('B', 2), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkB[0]']))]
@@ -662,7 +672,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('MainApp', 0), None, (event name: narrow_cast; port: None; parameters: [0, 'linkA[0]', (event name: remove; port: None)]))
-		New State: <target.Dummy object at 0x1076baf00>
+		New State: <target.Dummy object at 0x1049c2b70>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -683,19 +693,20 @@ __  Current Time:   0.000000 __________________________________________
 	EXTERNAL TRANSITION in model <Controller.A>
 		Input Port Configuration:
 			port <obj_manager_in>:
-				[(('MainApp', 0), ('A', 1), (event name: remove; port: 0))]
+				[(('MainApp', 0), ('A', 1), (event name: remove; port: private_1_<narrow_cast>))]
 			port <input>:
-			port <private_50_<narrow_cast>>:
+			port <ui>:
+			port <private_1_<narrow_cast>>:
 		New State: 
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <target.Dummy object at 0x1076baf00>
+		New State: <target.Dummy object at 0x1049c2b70>
 		Output Port Configuration:
 			port <port1>:
 			port <port2>:
-				[(('MainApp', 0), ('A', 1), (event name: remove; port: ('A', 1)))]
+				[(('MainApp', 0), ('A', 1), (event name: remove; port: private_1_<narrow_cast>))]
 			port <port3>:
 		Next scheduled internal transition at time inf
 
@@ -740,7 +751,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('A', 1), None, (event name: delete_instance; port: None; parameters: [[], 'linkB[0]']))
-		New State: <target.Dummy object at 0x1076baf00>
+		New State: <target.Dummy object at 0x1049c2b70>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -762,13 +773,14 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_in>:
 				[(('A', 1), ('B', 0), (event name: delete_instance; port: None; parameters: [[], 'linkB[0]']))]
 			port <input>:
-			port <private_51_<narrow_cast>>:
+			port <ui>:
+			port <private_2_<narrow_cast>>:
 		New State: 
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <target.Dummy object at 0x1076baf00>
+		New State: <target.Dummy object at 0x1049c2b70>
 		Output Port Configuration:
 			port <port1>:
 			port <port2>:
@@ -784,7 +796,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('B', 0), ('A', 1), (event name: instance_deleted; port: None; parameters: ['linkB[0]']))
-		New State: <target.Dummy object at 0x1076baf00>
+		New State: <target.Dummy object at 0x1049c2b70>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -805,13 +817,14 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_in>:
 				[(('B', 0), ('A', 1), (event name: instance_deleted; port: None; parameters: ['linkB[0]']))]
 			port <input>:
-			port <private_50_<narrow_cast>>:
+			port <ui>:
+			port <private_1_<narrow_cast>>:
 		New State: 
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <target.Dummy object at 0x1076baf00>
+		New State: <target.Dummy object at 0x1049c2b70>
 		Output Port Configuration:
 			port <port1>:
 			port <port2>:

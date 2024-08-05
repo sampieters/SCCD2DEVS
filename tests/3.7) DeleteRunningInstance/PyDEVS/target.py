@@ -12,7 +12,7 @@ from sccd.runtime.DEVS_statecharts_core import *
 # package "Create and Delete A Running Instance (other than the MainApp)"
 
 class MainAppInstance(RuntimeClassBase):
-    def __init__(self, atomdevs, id):
+    def __init__(self, atomdevs, id, start_port_id):
         RuntimeClassBase.__init__(self, atomdevs, id)
         self.associations = {}
         self.associations["linkA"] = Association("A", 0, -1)
@@ -28,8 +28,12 @@ class MainAppInstance(RuntimeClassBase):
         
         # call user defined constructor
         MainAppInstance.user_defined_constructor(self)
-        port_name = Ports.addInputPort("<narrow_cast>", self)
+        port_name = addInputPort("ui", start_port_id, True)
         atomdevs.addInPort(port_name)
+        atomdevs.state.port_mappings[port_name] = id
+        port_name = addInputPort("<narrow_cast>", start_port_id)
+        atomdevs.addInPort(port_name)
+        atomdevs.state.port_mappings[port_name] = id
     
     def user_defined_constructor(self):
         pass
@@ -118,16 +122,16 @@ class MainApp(ClassBase):
         self.input = self.addInPort("input")
         self.glob_outputs["ui"] = self.addOutPort("ui")
         self.outputs["linkA"] = self.addOutPort("linkA")
-        new_instance = self.constructObject(0, [])
+        new_instance = self.constructObject(0, 0, [])
         self.state.instances[new_instance.instance_id] = new_instance
         self.state.next_instance = self.state.next_instance + 1
     
-    def constructObject(self, id, parameters):
-        new_instance = MainAppInstance(self, id)
+    def constructObject(self, id, start_port_id, parameters):
+        new_instance = MainAppInstance(self, id, start_port_id)
         return new_instance
 
 class AInstance(RuntimeClassBase):
-    def __init__(self, atomdevs, id):
+    def __init__(self, atomdevs, id, start_port_id):
         RuntimeClassBase.__init__(self, atomdevs, id)
         self.associations = {}
         
@@ -142,8 +146,12 @@ class AInstance(RuntimeClassBase):
         
         # call user defined constructor
         AInstance.user_defined_constructor(self)
-        port_name = Ports.addInputPort("<narrow_cast>", self)
+        port_name = addInputPort("ui", start_port_id, True)
         atomdevs.addInPort(port_name)
+        atomdevs.state.port_mappings[port_name] = id
+        port_name = addInputPort("<narrow_cast>", start_port_id)
+        atomdevs.addInPort(port_name)
+        atomdevs.state.port_mappings[port_name] = id
     
     def user_defined_constructor(self):
         pass
@@ -190,8 +198,8 @@ class A(ClassBase):
         self.input = self.addInPort("input")
         self.glob_outputs["ui"] = self.addOutPort("ui")
     
-    def constructObject(self, id, parameters):
-        new_instance = AInstance(self, id)
+    def constructObject(self, id, start_port_id, parameters):
+        new_instance = AInstance(self, id, start_port_id)
         return new_instance
 
 class Dummy(ObjectManagerState):
@@ -202,9 +210,11 @@ class Dummy(ObjectManagerState):
         instance = {}
         instance["name"] = class_name
         if class_name == "MainApp":
+            self.narrow_cast_id = self.narrow_cast_id + 0
             instance["associations"] = {}
             instance["associations"]["linkA"] = Association("A", 0, -1)
         elif class_name == "A":
+            self.narrow_cast_id = self.narrow_cast_id + 0
             instance["associations"] = {}
         else:
             raise Exception("Cannot instantiate class " + class_name)
@@ -224,9 +234,7 @@ class Controller(CoupledDEVS):
     def __init__(self, name):
         CoupledDEVS.__init__(self, name)
         self.in_ui = self.addInPort("ui")
-        Ports.addInputPort("ui")
         self.out_ui = self.addOutPort("ui")
-        Ports.addOutputPort("ui")
         self.objectmanager = self.addSubModel(ObjectManager("ObjectManager"))
         self.atomics = []
         self.atomics.append(self.addSubModel(MainApp("MainApp")))

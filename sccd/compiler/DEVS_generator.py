@@ -89,6 +89,7 @@ class DEVSGenerator(Visitor):
                 # cannot instantiate abstract class
                 self.writer.add(GLC.ThrowExceptionStatement(GLC.String("Cannot instantiate abstract class \"" + c.name + "\" with unimplemented methods \"" + "\", \"".join(c.abstract_method_names) + "\".")))
             else:
+                self.writer.addAssignment("self.narrow_cast_id", f"self.narrow_cast_id + {len(c.inports)}")
                 self.writer.addAssignment(
                     "instance[\"associations\"]", GLC.MapExpression())
                 for a in c.associations:
@@ -153,10 +154,8 @@ class DEVSGenerator(Visitor):
 
         for i in class_diagram.inports:
             self.writer.addAssignment(GLC.SelfProperty("in_" + i), GLC.FunctionCall(GLC.SelfProperty("addInPort"), [GLC.String(i)]))
-            self.writer.add(GLC.FunctionCall("Ports.addInputPort", [GLC.String(i)]))
         for o in class_diagram.outports:
             self.writer.addAssignment(GLC.SelfProperty("out_" + o), GLC.FunctionCall(GLC.SelfProperty("addOutPort"), [GLC.String(o)]))
-            self.writer.add(GLC.FunctionCall("Ports.addOutputPort", [GLC.String(o)]))
 
         # Add AtomicDEVS models
         self.writer.addAssignment(GLC.SelfProperty("objectmanager"), (GLC.FunctionCall(GLC.SelfProperty("addSubModel"),
@@ -245,6 +244,7 @@ class DEVSGenerator(Visitor):
         self.writer.beginConstructor()
         self.writer.addFormalParameter("atomdevs")
         self.writer.addFormalParameter("id")
+        self.writer.addFormalParameter("start_port_id")
 
         for p in class_node.constructors[0].getParams():
             self.writer.addFormalParameter(p.getIdent(), p.getDefault())
@@ -318,14 +318,20 @@ class DEVSGenerator(Visitor):
             self.writer.addActualParameter(p.getIdent())
         self.writer.endSuperClassMethodCall()
 
-        # TODO
-        #if constructor.parent_class.name != constructor.parent_class.class_diagram.default_class.name:
-        self.writer.addAssignment("port_name", GLC.FunctionCall("Ports.addInputPort", [GLC.String("<narrow_cast>"), "self"]))
+        for inp in class_node.class_diagram.inports:
+            self.writer.addAssignment("port_name", GLC.FunctionCall("addInputPort", [GLC.String(inp), "start_port_id", "True"]))
+            self.writer.add(GLC.FunctionCall("atomdevs.addInPort", ["port_name"]))
+            self.writer.addAssignment("atomdevs.state.port_mappings[port_name]", "id")
+
+
+
+        self.writer.addAssignment("port_name", GLC.FunctionCall("addInputPort", [GLC.String("<narrow_cast>"), "start_port_id"]))
         self.writer.add(GLC.FunctionCall("atomdevs.addInPort", ["port_name"]))
+        self.writer.addAssignment("atomdevs.state.port_mappings[port_name]", "id")
 
         for inp in class_node.inports:
             #self.writer.addAssignment(GLC.SelfProperty(f"inports[\"{inp}\"]"), f"(\'{inp}\', atomdevs.next_instance)")
-            self.writer.addAssignment("port_name", GLC.FunctionCall("Ports.addInputPort", [GLC.String(inp), "self"]))
+            self.writer.addAssignment("port_name", GLC.FunctionCall("addInputPort", [GLC.String(inp), "start_port_id"]))
             self.writer.add(GLC.FunctionCall("atomdevs.addInPort", ["port_name"]))
             self.writer.addAssignment("atomdevs.state.port_mappings[port_name]", "id")
             self.writer.addAssignment(f"self.inports[\"{inp}\"]", "port_name")
@@ -409,11 +415,12 @@ class DEVSGenerator(Visitor):
 
         self.writer.beginMethod("constructObject")
 
-        parameters = [GLC.SelfExpression(), "id"]
+        parameters = [GLC.SelfExpression(), "id", "start_port_id"]
         for i, _ in enumerate(constructor.parameters):
             parameters.append(f"parameters[{i+1}]")
 
         self.writer.addFormalParameter("id")
+        self.writer.addFormalParameter("start_port_id")
         self.writer.addFormalParameter("parameters")
         self.writer.beginMethodBody()
         self.writer.addAssignment("new_instance", GLC.FunctionCall(f"{class_node.name}Instance", parameters))
@@ -464,7 +471,7 @@ class DEVSGenerator(Visitor):
                 GLC.FunctionCall(GLC.Property("controller", "addOutputPort"), [GLC.String(p), GLC.SelfExpression()]))
 
         if constructor.parent_class.name == constructor.parent_class.class_diagram.default_class.name:
-            self.writer.addAssignment("new_instance", "self.constructObject(0, [])")
+            self.writer.addAssignment("new_instance", "self.constructObject(0, 0, [])")
             self.writer.addAssignment("self.state.instances[new_instance.instance_id]", "new_instance")
             #self.writer.addAssignment("self.state.instances[self.state.next_instance]", f"{constructor.parent_class.name}Instance(self)")
             self.writer.addAssignment("self.state.next_instance", "self.state.next_instance + 1")

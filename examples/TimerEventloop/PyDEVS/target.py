@@ -15,7 +15,7 @@ CANVAS_DIMS = (350, 300)
 # package "Timer (Eventloop Version)"
 
 class MainAppInstance(RuntimeClassBase):
-    def __init__(self, atomdevs, id):
+    def __init__(self, atomdevs, id, start_port_id):
         RuntimeClassBase.__init__(self, atomdevs, id)
         self.associations = {}
         
@@ -38,9 +38,13 @@ class MainAppInstance(RuntimeClassBase):
         
         # call user defined constructor
         MainAppInstance.user_defined_constructor(self)
-        port_name = Ports.addInputPort("<narrow_cast>", self)
+        port_name = addInputPort("ui", start_port_id, True)
         atomdevs.addInPort(port_name)
-        port_name = Ports.addInputPort("field_ui", self)
+        atomdevs.state.port_mappings[port_name] = id
+        port_name = addInputPort("<narrow_cast>", start_port_id)
+        atomdevs.addInPort(port_name)
+        atomdevs.state.port_mappings[port_name] = id
+        port_name = addInputPort("field_ui", start_port_id)
         atomdevs.addInPort(port_name)
         atomdevs.state.port_mappings[port_name] = id
         self.inports["field_ui"] = port_name
@@ -217,12 +221,12 @@ class MainApp(ClassBase):
         self.input = self.addInPort("input")
         self.glob_outputs["ui"] = self.addOutPort("ui")
         self.field_ui = self.addInPort("field_ui")
-        new_instance = self.constructObject(0, [])
+        new_instance = self.constructObject(0, 0, [])
         self.state.instances[new_instance.instance_id] = new_instance
         self.state.next_instance = self.state.next_instance + 1
     
-    def constructObject(self, id, parameters):
-        new_instance = MainAppInstance(self, id)
+    def constructObject(self, id, start_port_id, parameters):
+        new_instance = MainAppInstance(self, id, start_port_id)
         return new_instance
 
 class Dummy(ObjectManagerState):
@@ -233,6 +237,7 @@ class Dummy(ObjectManagerState):
         instance = {}
         instance["name"] = class_name
         if class_name == "MainApp":
+            self.narrow_cast_id = self.narrow_cast_id + 1
             instance["associations"] = {}
         else:
             raise Exception("Cannot instantiate class " + class_name)
@@ -251,9 +256,7 @@ class Controller(CoupledDEVS):
     def __init__(self, name):
         CoupledDEVS.__init__(self, name)
         self.in_ui = self.addInPort("ui")
-        Ports.addInputPort("ui")
         self.out_ui = self.addOutPort("ui")
-        Ports.addOutputPort("ui")
         self.objectmanager = self.addSubModel(ObjectManager("ObjectManager"))
         self.atomics = []
         self.atomics.append(self.addSubModel(MainApp("MainApp")))

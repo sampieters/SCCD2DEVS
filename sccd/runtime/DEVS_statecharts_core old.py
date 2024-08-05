@@ -490,9 +490,8 @@ class ClassState():
             if e.getName() == "":
                 raise InputException("Input event can't have an empty name.")
             
-            if e.getPort() not in self.port_mappings:
             #if e.getPort() not in self.IPorts:
-                raise InputException("Input port mismatch, no such port: " + e.getPort() + ".")
+            #    raise InputException("Input port mismatch, no such port: " + e.getPort() + ".")
                 
             self.input_queue.add((0 if self.simulated_time is None else 0) + time_offset, e)
 
@@ -529,14 +528,14 @@ class ClassBase(AtomicDEVS):
         # Collect all inputs
         all_inputs = [input for input_list in inputs.values() for input in input_list]
         for input in all_inputs:
-            # TODO, this should be translated somewhere else
             if isinstance(input, str):
-                input = (None, None, eval(input))
-            if input[2].name == "create_instance":
-                new_instance = self.constructObject(input[1][1], input[2].parameters[1], input[2].parameters[3:])
-                # new_instance = self.constructObject(input[1][1], input[2].parameters[2:])
+                tem = eval(input)
+                instance = self.state.port_mappings.setdefault(tem.port, None)
+                self.state.addInput(tem)
+            elif input[2].name == "create_instance":
+                new_instance = self.constructObject(input[1][1], input[2].parameters[2:])
                 self.state.instances[new_instance.instance_id] = new_instance
-                ev = Event("instance_created", None, [input[2].parameters[2]])
+                ev = Event("instance_created", None, [input[2].parameters[1]])
                 self.state.to_send.append((input[1], input[0], ev))
                 self.state.next_instance += 1
             elif input[2].name == "broad_cast":
@@ -585,6 +584,16 @@ class ClassBase(AtomicDEVS):
                 instance.addEvent(input[2])
             else:
                 ev = input[2]
+
+                new_port = None
+                for key, value in self.state.port_mappings.items():
+                    if value == ev.port[1]:
+                        new_port = key
+                        break
+                
+                if new_port is None:
+                    new_port = 0
+                ev.port = new_port
                 self.state.addInput(ev)
         return self.state
     
@@ -624,9 +633,6 @@ class ObjectManagerState():
     def __init__(self):
         self.to_send = []
         self.instances = []
-
-        self.narrow_cast_id = 0
-        self.narrow_cast_ports = {}
 
         self.regex_pattern = re.compile("^([a-zA-Z_]\w*)(?:\[(\d+)\])?$")
         self.handlers = {
@@ -718,8 +724,7 @@ class ObjectManagerState():
                 traversal_list = self.processAssociationReference(target)
                 cast_event = parameters[2]
                 for i in self.getInstances(source, traversal_list):
-                    to_send_event = Event(cast_event.name, self.narrow_cast_ports[i["instance"][1]], cast_event.parameters)
-                    # to_send_event = Event(cast_event.name, i["instance"], cast_event.parameters)
+                    to_send_event = Event(cast_event.name, i["instance"], cast_event.parameters)
                     self.to_send.append((source,  i["instance"], to_send_event))
 
     def handleBroadCastEvent(self, parameters):
@@ -747,9 +752,6 @@ class ObjectManagerState():
             association = self.instances[source[1]]["associations"][association_name]
 
             if association.allowedToAdd():
-                # TODO: Needed here to know the id for the first port
-                starting_port_id = self.narrow_cast_id
-
                 ''' allow subclasses to be instantiated '''
                 class_name = association.to_class if len(parameters[2].parameters) == 2 else parameters[2].parameters[2]
                 new_instance = self.createInstance(class_name, parameters[2].parameters[3:])
@@ -767,18 +769,8 @@ class ObjectManagerState():
                 if p:
                     p.addInstance(source[1])
                 
-
                 parameters[2].parameters[1] = f"{association_name}[{index}]"
-
-                old_params = [parameters[2].parameters[0]]
-                old_params.append(starting_port_id)
-                old_params.extend(parameters[2].parameters[1:])
-
-
-                
-
-                ev = Event('create_instance', None, old_params)
-                #ev = Event('create_instance', None, parameters[2].parameters)
+                ev = Event('create_instance', None, parameters[2].parameters)
                 self.to_send.append((parameters[0], (class_name, new_instance_index), ev))
                 return [source, association_name+"["+str(index)+"]"]
             else:
@@ -797,22 +789,9 @@ class ObjectManagerState():
             for i in self.getInstances(source, traversal_list):
                 to_class = i["instance"]
             self.to_send.append((source, to_class, Event('start_instance', None, parameters[2].parameters[1:])))
-    
-    def addtestInputPort(self, virtual_name, instance = None):
-        if instance == None:
-            port_name = virtual_name
-        else:
-            port_name = "private_" + str(self.narrow_cast_id) + "_" + virtual_name
-            self.narrow_cast_id += 1
-        #self.input_ports[port_name] = InputPortEntry(virtual_name, instance)
-        return port_name
         
     def createInstance(self, to_class, construct_params = []):
-        test = self.addtestInputPort("<narrow_cast>", 0)
         instance = self.instantiate(to_class, construct_params)
-        
-        self.narrow_cast_ports[len(self.instances)] = test
-
         self.instances.append(instance)
         return instance
     
@@ -896,11 +875,7 @@ class ObjectManagerState():
                             traversal_list = self.processAssociationReference(assoc_name)
                             instances = self.getInstances(to_class, traversal_list)
                             if len(instances) > 0:
-                                pass
-                                #raise RuntimeException("Error removing instance from association %s, still %i children left connected with association %s" % (association_name, len(instances), assoc_name))
-                    
-                    del self.narrow_cast_ports[i["instance"][1]]
-
+                                raise RuntimeException("Error removing instance from association %s, still %i children left connected with association %s" % (association_name, len(instances), assoc_name))
                     association.removeInstance(i["instance"][1])
                 except AssociationException as exception:
                     raise RuntimeException("Error removing instance from association '" + association_name + "': " + str(exception))
@@ -936,20 +911,30 @@ class ObjectManagerBase(AtomicDEVS):
     
     def timeAdvance(self):
         return 0 if self.state.to_send else INFINITY
+    
+# TODO: port class as wrapper to define the in and out ports the same as in SCCD
+class Ports:
+    private_port_counter = 0
 
-"""  
-def addInputPort(virtual_name, private_port_id):
-        port_name = "private_" + str(private_port_id) + "_" + virtual_name
+    inports = {}
+    outports = {}
+
+    @classmethod
+    def addOutputPort(self, virtual_name, instance=None):
+        if instance == None:
+            port_name = virtual_name
+        else:
+            port_name = "private_" + str(self.private_port_counter) + "_" + virtual_name
+            self.outports[port_name] = instance
+            self.private_port_counter += 1
         return port_name
-"""
 
-def addInputPort(virtual_name, private_port_id, is_global = False):
-    if is_global:
-        port_name = virtual_name
-    else:
-        port_name = "private_" + str(private_port_id) + "_" + virtual_name
-    return port_name
-
-def addOutputPort(virtual_name, private_port_id):
-    port_name = "private_" + str(private_port_id) + "_" + virtual_name
-    return port_name
+    @classmethod
+    def addInputPort(self, virtual_name, instance=None):
+        if instance == None:
+            port_name = virtual_name
+        else:
+            port_name = "private_" + str(self.private_port_counter) + "_" + virtual_name
+            self.inports[port_name] = instance
+            self.private_port_counter += 1
+        return port_name

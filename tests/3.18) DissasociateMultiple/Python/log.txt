@@ -42,6 +42,15 @@ OUTPUT EVENT to port <ui>
 OUTPUT EVENT to port <ui>
 	\Event: (event name: statechart_started_succesfully; port: ui; parameters: ['0.00'])
 
+EXIT STATE in model <A>
+		State: /state1
+
+TRANSITION FIRED in model <A>
+		Transition(/state1 -> /state2)
+
+ENTER STATE in model <A>
+		State: /state2
+
 EXIT STATE in model <MainApp>
 		State: /state3
 
@@ -53,15 +62,6 @@ ENTER STATE in model <MainApp>
 
 OUTPUT EVENT to port <ui>
 	\Event: (event name: instance_started_succesfully; port: ui; parameters: ['0.00', 'linkA[1]'])
-
-EXIT STATE in model <A>
-		State: /state1
-
-TRANSITION FIRED in model <A>
-		Transition(/state1 -> /state2)
-
-ENTER STATE in model <A>
-		State: /state2
 
 
 EXIT STATE in model <MainApp>
