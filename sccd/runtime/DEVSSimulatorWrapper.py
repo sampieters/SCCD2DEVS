@@ -16,9 +16,7 @@ class DEVSSimulator(Simulator):
 		super().__init__(model)
 		self.setClassicDEVS()
 
-		# TODO: Add the input ports here so it works without manually adding them
-		inputs ={}
-
+		inputs = {}
 		# Add global inports
 		for global_in in model.IPorts:
 			inputs[global_in.name] = global_in

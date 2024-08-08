@@ -1,5 +1,9 @@
 __  Current Time:   0.000000 __________________________________________ 
 
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: input_event; port: Inport; parameters: [])
+
 INPUT EVENT from port <Inport>
 	\Type: Inport
 	\Event: (event name: input_event; port: Inport; parameters: [])

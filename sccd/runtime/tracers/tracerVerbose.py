@@ -1,5 +1,6 @@
 from sccd.runtime.tracers.tracerBase import BaseTracer
 import sys
+import copy
 
 class TracerVerbose(BaseTracer):
     """
@@ -78,6 +79,18 @@ class TracerVerbose(BaseTracer):
         self.text += "\n"
         self.text += "TRANSITION FIRED in model <%s>\n" % StateChart
         self.text += "\t\t%s\n" % str(Transition)
+
+    def traceInternalInput(self, event):
+        self.text += "\n"
+        self.text += "INPUT EVENT from <ObjectManager>\n"
+        self.text += "\t\Type: cd\n"
+        self.text += "\t\Event: %s\n" % str(event)
+
+    def traceInternalOutput(self, event):
+        self.text += "\n"
+        self.text += "OUTPUT EVENT to <ObjectManager>\n"
+
+        self.text += "\t\Event: %s\n" % str(event)
     
     def traceOutput(self, event):
         self.text += "\n"

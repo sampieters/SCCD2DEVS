@@ -146,6 +146,7 @@ class ObjectManagerBase(object):
         
     def addEvent(self, event, time_offset = 0):
         self.events.add(self.controller.simulated_time + time_offset, event)
+        self.controller.tracers.tracesInternalOutput(event)
         
     # broadcast an event to all instances
     def broadcast(self, source, new_event, time_offset = 0):
@@ -1168,7 +1169,8 @@ class RuntimeClassBase(object):
         if not isinstance(event_list, list):
             event_list = [event_list]
         for e in event_list:
-            self.events.add(event_time, e)
+            self.controller.tracers.tracesInternalInput(e)
+            self.events.add(event_time, e)           
 
     def processBigStepOutput(self):
         for e in self.big_step.output_events_port:

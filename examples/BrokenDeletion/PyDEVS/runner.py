@@ -1,5 +1,5 @@
 import target as target
-from sccd.runtime.DEVS_loop import DEVSSimulator
+from sccd.runtime.DEVSSimulatorWrapper import DEVSSimulator
 from sccd.runtime.statecharts_core import Event
 
 class OutputListener:

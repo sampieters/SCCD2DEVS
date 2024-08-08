@@ -46,36 +46,15 @@ class DEVSGenerator(Visitor):
 
         self.writer.beginPackage(class_diagram.name)
 
-        # visit children
+        ################################
+        # Visit children (Classes)
+        ################################
         for c in class_diagram.classes:
             c.accept(self)
 
-
         ################################
-        # Object Manager State
+        # Object Manager State (instantiate function)
         ################################
-        #self.writer.beginClass("ObjectManagerState")
-        #self.writer.beginConstructor()
-        #self.writer.beginMethodBody()
-
-        #self.writer.addAssignment(GLC.SelfProperty("to_send"), f"[(\"{class_diagram.default_class.name}\", \"{class_diagram.default_class.name}\", Event(\"start_instance\", None, [\"{class_diagram.default_class.name}[0]\"], 0))]")
-
-        #self.writer.endMethodBody()
-        #self.writer.endConstructor()
-        #self.writer.endClass()
-
-        self.writer.beginClass(f"Dummy", ["ObjectManagerState"])
-        self.writer.beginConstructor()
-        self.writer.beginMethodBody()
-        self.writer.beginSuperClassConstructorCall("ObjectManagerState")
-        self.writer.endSuperClassConstructorCall()
-
-        #self.writer.addAssignment(GLC.SelfProperty("to_send"), f"[(\"{class_diagram.default_class.name}\", \"{class_diagram.default_class.name}\", Event(\"start_instance\", None, [\"{class_diagram.default_class.name}[0]\"], 0))]")
-
-        self.writer.endMethodBody()
-        self.writer.endConstructor()
-
-
         self.writer.beginMethod("instantiate")
         self.writer.addFormalParameter("class_name")
         self.writer.addFormalParameter("construct_params")
@@ -109,8 +88,7 @@ class DEVSGenerator(Visitor):
         self.writer.endMethodBody()
         self.writer.endMethod()
 
-
-        self.writer.endClass()
+        self.writer.addStaticAttribute("ObjectManagerState.instantiate", "instantiate")
 
         ################################
         # Object Manager
@@ -123,7 +101,8 @@ class DEVSGenerator(Visitor):
         self.writer.addActualParameter("name")
         self.writer.endSuperClassConstructorCall()
 
-        self.writer.addAssignment(GLC.SelfProperty("state"), GLC.FunctionCall("Dummy"))
+        self.writer.addAssignment(GLC.SelfProperty("state"), GLC.FunctionCall("ObjectManagerState"))
+
         self.writer.addAssignment(GLC.SelfProperty("input"),
                                   GLC.FunctionCall(GLC.SelfProperty("addInPort"), [GLC.String("input")]))
 
@@ -172,13 +151,6 @@ class DEVSGenerator(Visitor):
                                                                                                                [
                                                                                                                    GLC.String(
                                                                                                                        class_name)]))]))])))
-        #for (i, class_name) in enumerate(class_diagram.class_names):
-        #    self.writer.addAssignment(GLC.SelfProperty(f"atomic{i}"),
-        #                              (GLC.FunctionCall(GLC.SelfProperty("addSubModel"), [GLC.FunctionCall(class_name,
-        #                                                                                                   GLC.ActualParameters(
-        #                                                                                                       [
-        #                                                                                                           GLC.String(
-        #                                                                                                               class_name)]))])))
 
         # Add links between the models
         for (i, the_class) in enumerate(class_diagram.classes):
@@ -204,11 +176,7 @@ class DEVSGenerator(Visitor):
 
             for inp in class_diagram.inports:
                 self.writer.add(GLC.FunctionCall(GLC.SelfProperty("connectPorts"), [GLC.SelfProperty(f"in_{inp}"), GLC.SelfProperty(f"atomics[{i}].input")]))
-        
 
-        # TODO: What to do with "actual_parameters"?
-        # actual_parameters = [p.getIdent() for p in class_diagram.default_class.constructors[0].parameters]
-        # self.writer.add(GLC.FunctionCall(GLC.Property(GLC.SelfProperty("object_manager"), "createInstance"), [GLC.String(class_diagram.default_class.name), GLC.ArrayExpression(actual_parameters)]))
         self.writer.endMethodBody()
         self.writer.endConstructor()
         self.writer.endClass()
@@ -231,15 +199,11 @@ class DEVSGenerator(Visitor):
                 super_classes.append("RuntimeClassBase")
         if class_node.super_classes:
             for super_class in class_node.super_classes:
-                # Check if this is always the case (that the superclass is an instance)
                 super_classes.append(super_class + "Instance")
 
         ################################
         # State Instance (statechart)
         ################################
-
-        # TODO: RuntimeClassBase only if there are no superclasses, if there are then append the superclasses
-
         self.writer.beginClass(f"{class_node.name}Instance", super_classes)
         self.writer.beginConstructor()
         self.writer.addFormalParameter("atomdevs")
@@ -256,13 +220,6 @@ class DEVSGenerator(Visitor):
         self.writer.addActualParameter("id")
         self.writer.endSuperClassConstructorCall()
 
-        self.writer.addAssignment(GLC.SelfProperty("associations"), "{}")
-        for association in class_node.associations:
-            self.writer.addAssignment(
-                GLC.SelfProperty(f"associations[\"{association.name}\"]"),
-                GLC.FunctionCall("Association",
-                                 [GLC.String(association.to_class), f"{association.min}", f"{association.max}"]))
-            
         # TODO: Switch instance to write in constructor instead of the atomic devs because corresponds better
         constructor = class_node.constructors[0]
         if class_node.statechart:
@@ -320,19 +277,15 @@ class DEVSGenerator(Visitor):
 
         for inp in class_node.class_diagram.inports:
             self.writer.addAssignment("port_name", GLC.FunctionCall("addInputPort", [GLC.String(inp), "start_port_id", "True"]))
-            self.writer.add(GLC.FunctionCall("atomdevs.addInPort", ["port_name"]))
             self.writer.addAssignment("atomdevs.state.port_mappings[port_name]", "id")
 
 
 
         self.writer.addAssignment("port_name", GLC.FunctionCall("addInputPort", [GLC.String("<narrow_cast>"), "start_port_id"]))
-        self.writer.add(GLC.FunctionCall("atomdevs.addInPort", ["port_name"]))
         self.writer.addAssignment("atomdevs.state.port_mappings[port_name]", "id")
 
-        for inp in class_node.inports:
-            #self.writer.addAssignment(GLC.SelfProperty(f"inports[\"{inp}\"]"), f"(\'{inp}\', atomdevs.next_instance)")
-            self.writer.addAssignment("port_name", GLC.FunctionCall("addInputPort", [GLC.String(inp), "start_port_id"]))
-            self.writer.add(GLC.FunctionCall("atomdevs.addInPort", ["port_name"]))
+        for index, inp in enumerate(class_node.inports):
+            self.writer.addAssignment("port_name", GLC.FunctionCall("addInputPort", [GLC.String(inp), f"start_port_id + {index + 1}"]))
             self.writer.addAssignment("atomdevs.state.port_mappings[port_name]", "id")
             self.writer.addAssignment(f"self.inports[\"{inp}\"]", "port_name")
 
@@ -341,7 +294,7 @@ class DEVSGenerator(Visitor):
         self.writer.endConstructor()
 
         # visit constructor
-                # user defined constructor
+        # user defined constructor
         self.writer.beginMethod("user_defined_constructor")
         for p in constructor.getParams():
             p.accept(self)
@@ -353,7 +306,6 @@ class DEVSGenerator(Visitor):
             if super_class in constructor.parent_class.super_class_objs:
                 self.writer.beginSuperClassMethodCall(super_class + "Instance", "user_defined_constructor")
             else:
-                # TODO: How to get in this? 
                 self.writer.beginSuperClassConstructorCall(super_class)
             # write actual parameters
             if super_class in constructor.super_class_parameters:
@@ -409,7 +361,7 @@ class DEVSGenerator(Visitor):
         self.writer.endClass()
 
         ################################
-        # State Object (keeps list of all instances of that object + controller operations)
+        # Class (Type) 
         ################################
         self.writer.beginClass(class_node.name, ["ClassBase"])
 
@@ -448,10 +400,8 @@ class DEVSGenerator(Visitor):
         self.writer.addActualParameter("name")
         self.writer.endSuperClassConstructorCall()
 
-        # TODO: ceck here also
         self.writer.addAssignment(GLC.SelfProperty("input"), GLC.FunctionCall(GLC.SelfProperty("addInPort"), [GLC.String("input")]))
 
-        # TODO: output shuold have the same name as the real port
         for global_outport in constructor.parent_class.class_diagram.outports:
             self.writer.addAssignment(GLC.SelfProperty(f"glob_outputs[\"{global_outport}\"]"), GLC.FunctionCall(GLC.SelfProperty("addOutPort"), [GLC.String(global_outport)]))
 
@@ -473,8 +423,6 @@ class DEVSGenerator(Visitor):
         if constructor.parent_class.name == constructor.parent_class.class_diagram.default_class.name:
             self.writer.addAssignment("new_instance", "self.constructObject(0, 0, [])")
             self.writer.addAssignment("self.state.instances[new_instance.instance_id]", "new_instance")
-            #self.writer.addAssignment("self.state.instances[self.state.next_instance]", f"{constructor.parent_class.name}Instance(self)")
-            self.writer.addAssignment("self.state.next_instance", "self.state.next_instance + 1")
 
         self.writer.endMethodBody()
         self.writer.endConstructor()
@@ -499,9 +447,6 @@ class DEVSGenerator(Visitor):
                     self.writer.beginSuperClassDestructorCall(super_class)
                     self.writer.endSuperClassDestructorCall()
                     pass
-
-                # self.writer.beginSuperClassMethodCall(super_class, "user_defined_destructor")
-                # self.writer.endSuperClassMethodCall()
         self.writer.endMethodBody()
         self.writer.endMethod()
 

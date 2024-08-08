@@ -1127,21 +1127,21 @@ class BaseSimulator(Solver):
                 tn = time_diff / self.realtime_scale
 
                 # TODO: SAM right now i think 
-                for p in event_port.outline:
-                    z = event_port.z_functions[p]
+                #for p in event_port.outline:
+                #    z = event_port.z_functions[p]
 
+                ##    ev = event_value if z is None else z(event_value)
+                 #   msg = {p: [ev]}
+                 #   p.host_DEVS.my_input = msg
+                 #   self.transitioning[p.host_DEVS] = 2
+                 #   self.model.time_next = (tn, 1)
+
+                for p, z in event_port.routing_outline:
                     ev = event_value if z is None else z(event_value)
                     msg = {p: [ev]}
                     p.host_DEVS.my_input = msg
                     self.transitioning[p.host_DEVS] = 2
                     self.model.time_next = (tn, 1)
-
-                #for p, z in event_port.routing_outline:
-                #    ev = event_value if z is None else z(event_value)
-                #    msg = {p: [ev]}
-                #    p.host_DEVS.my_input = msg
-                #    self.transitioning[p.host_DEVS] = 2
-                #    self.model.time_next = (tn, 1)
 
 
             # Transition

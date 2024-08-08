@@ -13,7 +13,7 @@ from sccd.compiler.sccd_constructs import FormalParameter
 from sccd.compiler.stateful_writer import StatefulWriter
 import sccd.compiler.generic_language_constructs as GLC
 
-Platforms = Enum("Threads","GameLoop","EventLoop", "PypDEVS") 
+Platforms = Enum("Threads","GameLoop","EventLoop", "classicDEVS") 
 
 class GenericGenerator(Visitor):
     

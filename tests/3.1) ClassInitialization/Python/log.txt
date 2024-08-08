@@ -1,5 +1,12 @@
 __  Current Time:   0.000000 __________________________________________ 
 
+OUTPUT EVENT to <ObjectManager>
+	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x1021df260>, 'linkA', 'A'])
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: instance_created; port: None; parameters: ['linkA[0]'])
+
 EXIT STATE in model <MainApp>
 		State: /state1
 
@@ -12,9 +19,16 @@ ENTER STATE in model <MainApp>
 OUTPUT EVENT to port <ui>
 	\Event: (event name: instance_created_succesfully; port: ui; parameters: ['0.00', 'linkA[0]'])
 
+OUTPUT EVENT to <ObjectManager>
+	\Event: (event name: start_instance; port: None; parameters: [<target.MainApp object at 0x1021df260>, 'linkA[0]'])
+
 
 OUTPUT EVENT to port <ui>
 	\Event: (event name: statechart_started_succesfully; port: ui; parameters: ['0.00'])
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: instance_started; port: ; parameters: ['linkA[0]'])
 
 EXIT STATE in model <MainApp>
 		State: /state2

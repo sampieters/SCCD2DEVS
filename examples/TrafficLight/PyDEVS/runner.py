@@ -1,7 +1,7 @@
 import tkinter as tk
 import examples.TrafficLight.PyDEVS.target as target
 from sccd.runtime.libs.ui_v2 import UI
-from sccd.runtime.DEVS_loop import DEVSSimulator
+from sccd.runtime.DEVSSimulatorWrapper import DEVSSimulator
 
 
 class OutputListener:

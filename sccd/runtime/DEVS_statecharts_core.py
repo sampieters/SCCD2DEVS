@@ -1,5 +1,3 @@
-# TODO: The associations are sometimes getting pushed differently, fix this
-
 import sys
 import re
 from sccd.runtime.event_queue import EventQueue
@@ -59,7 +57,7 @@ class Transition:
                 self.obj.history_values[h.state_id] = list(filter(f, self.obj.configuration))
         for s in exit_set:
             #########################################
-            # TODO, here trace for exit state
+            # Trace for exit state
             statechart.text += "\n"
             statechart.text += "\t\t\tEXIT STATE in model <%s>\n" % statechart.name
             statechart.text += f"\t\t\tState: {str(s)} (name: {s.name})\n"
@@ -76,7 +74,7 @@ class Transition:
         self.obj.combo_step.changed_bitmap |= self.lca.descendant_bitmap
 
         #########################################
-         # TODO, here trace for fired transition
+         # Trace for fired transition
         statechart.text += "\n"
         statechart.text += "\t\t\tTRANSITION FIRED in model <%s>\n" % statechart.name
         statechart.text += "\t\t\t%s\n" % str(self)
@@ -90,7 +88,7 @@ class Transition:
         enter_set = self.__enterSet(targets)
         for s in enter_set:
             #########################################
-            # TODO, here trace for enter state
+            # Trace for enter state
             statechart.text += "\n"
             statechart.text += "\t\t\tENTER STATE in model <%s>\n" % statechart.name
             statechart.text += f"\t\t\tState: {str(s)} (name: {s.name})\n"
@@ -414,13 +412,14 @@ class ClassState():
 
         self.events = EventQueue()
         self.instances = {}
-        self.next_instance = 0
         self.instance_times = []
         self.eventless = set()
 
         #self.lock = threading.Condition()
 
         self.text = ""
+        
+        self.to_add = ["instance_created", "instance_started", "instance_associated", "instance_disassociated", "instance_deleted"]
 
     def __str__(self) -> str:
         return self.text
@@ -445,7 +444,7 @@ class ClassState():
         self.to_step = set()
         if len(self.instance_times) > (4 * len(self.instances)):
             new_instance_times = []
-            for it in self.instances:
+            for it in self.instances.values():
                 if it.earliest_event_time != INFINITY:
                     new_instance_times.append((it.earliest_event_time, it))
             self.instance_times = new_instance_times
@@ -491,18 +490,15 @@ class ClassState():
                 raise InputException("Input event can't have an empty name.")
             
             if e.getPort() not in self.port_mappings:
-            #if e.getPort() not in self.IPorts:
                 raise InputException("Input port mismatch, no such port: " + e.getPort() + ".")
                 
             self.input_queue.add((0 if self.simulated_time is None else 0) + time_offset, e)
-
 
     def handleEvent(self, e):
         parameters = e.parameters
         source = parameters[0]
         parameters[0] = source.instance_id
         self.to_send.append(((self.name, source.instance_id), None, e))
-
 
     def outputEvent(self, event):
         self.to_send.append(event)
@@ -517,8 +513,55 @@ class ClassBase(AtomicDEVS):
         self.obj_manager_in = self.addInPort("obj_manager_in")
         self.obj_manager_out = self.addOutPort("obj_manager_out")
 
+        self.handlers = {
+            "create_instance": self.handleCreateEvent,
+            "broad_cast": self.handleBroadCastEvent,
+            "narrow_cast": self.handleNarrowCastEvent,
+            "associate_instance": self.handleAssociateEvent,
+            "start_instance": self.handleStartEvent,
+            "delete_instance": self.handleDeleteEvent,
+            "disassociate_instance": self.handleDisassociateEvent,
+            }
+
     def constructObject(self, id, parameters):
-        raise "Something went wrong "
+        raise "Something went wrong"
+    
+    def handleBroadCastEvent(self, input):
+        # Handle when in the instance atomicDEVS
+        if input[0][0] == self.name:
+            source = self.state.instances[input[0][1]]
+            self.state.broadcast(source, input[2].parameters[1])
+        self.state.broadcast(None, input[2].parameters[1])
+    def handleNarrowCastEvent(self, input):
+        pass
+    def handleCreateEvent(self, input):
+        new_instance = self.constructObject(input[1][1], input[2].parameters[1], input[2].parameters[3:])
+        self.state.instances[new_instance.instance_id] = new_instance
+        ev = Event("instance_created", None, [input[2].parameters[2]])
+        self.state.to_send.append((input[1], input[0], ev))
+    def handleAssociateEvent(self, input):
+        ev = Event("instance_associated", None, input[2].parameters)
+        self.state.to_send.append((input[1], input[0], ev))
+    def handleStartEvent(self, input):
+        instance = self.state.instances[input[1][1]]
+        instance.start()
+        ev = Event("instance_started", None, [input[2].parameters[0]])
+        self.state.to_send.append((input[1], input[0], ev))
+    def handleDeleteEvent(self, input):
+        instance_ids =  input[2].parameters[0]
+        for id in instance_ids:
+            instance = self.state.instances[id]  
+            self.state.port_mappings = {k: v for k, v in self.state.port_mappings.items() if v != id}
+            del self.state.instances[instance.instance_id]
+            self.state.eventless.discard(instance.instance_id)
+            instance.user_defined_destructor()
+            instance.stop()
+            del instance
+        ev = Event("instance_deleted", None, [input[2].parameters[1]])
+        self.state.to_send.append((input[1], input[0], ev))
+    def handleDisassociateEvent(self, input):
+        ev = Event("instance_disassociated", None, input[2].parameters)
+        self.state.to_send.append((input[1], input[0], ev))
 
     def extTransition(self, inputs):
         # Update simulated time
@@ -527,60 +570,14 @@ class ClassBase(AtomicDEVS):
         self.state.text = ""
 
         # Collect all inputs
-        all_inputs = [input for input_list in inputs.values() for input in input_list]
+        # all_inputs = [input for input_list in inputs.values() for input in input_list]
+        all_inputs = [item for input_list in inputs.values() for item in (input_list if isinstance(input_list, (tuple, list)) else [input_list])]
         for input in all_inputs:
-            # TODO, this should be translated somewhere else
             if isinstance(input, str):
                 input = (None, None, eval(input))
-            if input[2].name == "create_instance":
-                new_instance = self.constructObject(input[1][1], input[2].parameters[1], input[2].parameters[3:])
-                # new_instance = self.constructObject(input[1][1], input[2].parameters[2:])
-                self.state.instances[new_instance.instance_id] = new_instance
-                ev = Event("instance_created", None, [input[2].parameters[2]])
-                self.state.to_send.append((input[1], input[0], ev))
-                self.state.next_instance += 1
-            elif input[2].name == "broad_cast":
-                # Handle when in the instance atomicDEVS
-                if input[0][0] == self.name:
-                    source = self.state.instances[input[0][1]]
-                    self.state.broadcast(source, input[2].parameters[1])
-                self.state.broadcast(None, input[2].parameters[1])
-            elif input[2].name == "start_instance":
-                instance = self.state.instances[input[1][1]]
-                instance.start()
-                ev = Event("instance_started", None, [input[2].parameters[0]])
-                self.state.to_send.append((input[1], input[0], ev))
-            elif input[2].name == "delete_instance":   
-                instance_ids =  input[2].parameters[0]
-                for id in instance_ids:
-                    instance = self.state.instances[id]  
-                    self.state.port_mappings = {k: v for k, v in self.state.port_mappings.items() if v != id}
-                    del self.state.instances[instance.instance_id]
-                    self.state.eventless.discard(instance.instance_id)
-                    instance.user_defined_destructor()
-                    instance.stop()
-                    del instance
-                ev = Event("instance_deleted", None, [input[2].parameters[1]])
-                self.state.to_send.append((input[1], input[0], ev))
-            elif input[2].name == "associate_instance":
-                ev = Event("instance_associated", None, input[2].parameters)
-                self.state.to_send.append((input[1], input[0], ev))
-            elif input[2].name == "disassociate_instance":
-                ev = Event("instance_disassociated", None, input[2].parameters)
-                self.state.to_send.append((input[1], input[0], ev))
-            elif input[2].name == "instance_created":
-                instance = self.state.instances[input[1][1]]
-                instance.addEvent(input[2])
-            elif input[2].name == "instance_started":
-                instance = self.state.instances[input[1][1]]
-                instance.addEvent(input[2])
-            elif input[2].name == "instance_deleted":
-                instance = self.state.instances[input[1][1]]
-                instance.addEvent(input[2])
-            elif input[2].name == "instance_associated":
-                instance = self.state.instances[input[1][1]]
-                instance.addEvent(input[2])
-            elif input[2].name == "instance_disassociated":
+            if input[2].getName() in self.handlers:
+                self.handlers[input[2].getName()](input)
+            elif input[2].name in self.state.to_add:
                 instance = self.state.instances[input[1][1]]
                 instance.addEvent(input[2])
             else:
@@ -804,7 +801,6 @@ class ObjectManagerState():
         else:
             port_name = "private_" + str(self.narrow_cast_id) + "_" + virtual_name
             self.narrow_cast_id += 1
-        #self.input_ports[port_name] = InputPortEntry(virtual_name, instance)
         return port_name
         
     def createInstance(self, to_class, construct_params = []):
@@ -865,7 +861,6 @@ class ObjectManagerState():
                         association = instance['associations'][i['assoc_name']]
 
                         index = association.removeInstance(i["instance"][1])
-                        #index = i['ref'].associations[i['assoc_name']].removeInstance(i["instance"])
                         deleted_links.append(a_n +  "[" + str(index) + "]")
                     except AssociationException as exception:
                         raise RuntimeException("Error disassociating '" + a_n + "': " + str(exception))
@@ -884,7 +879,6 @@ class ObjectManagerState():
 
             association = self.instances[source[1]]["associations"][traversal_list[0][0]]
             
-            # TODO: THis to class only for when there are no instance
             to_class = (association.to_class, 0)
             to_remove = []
             for i in instances:
@@ -896,8 +890,8 @@ class ObjectManagerState():
                             traversal_list = self.processAssociationReference(assoc_name)
                             instances = self.getInstances(to_class, traversal_list)
                             if len(instances) > 0:
-                                pass
-                                #raise RuntimeException("Error removing instance from association %s, still %i children left connected with association %s" % (association_name, len(instances), assoc_name))
+                                #pass
+                                raise RuntimeException("Error removing instance from association %s, still %i children left connected with association %s" % (association_name, len(instances), assoc_name))
                     
                     del self.narrow_cast_ports[i["instance"][1]]
 
@@ -906,7 +900,6 @@ class ObjectManagerState():
                     raise RuntimeException("Error removing instance from association '" + association_name + "': " + str(exception))
             parameters[2].parameters[0] = to_remove
             self.to_send.append((source, to_class, Event('delete_instance', None, parameters[2].parameters)))
-            #source.addEvent(Event("delete_instance", parameters = [parameters[1]]))
 
 class ObjectManagerBase(AtomicDEVS):
     def __init__(self, name):
@@ -921,7 +914,6 @@ class ObjectManagerBase(AtomicDEVS):
             self.state.to_send.append(all_inputs)
         else:
             self.state.handleEvent(all_inputs)
-        
         return self.state
     
     def intTransition(self):
@@ -936,12 +928,6 @@ class ObjectManagerBase(AtomicDEVS):
     
     def timeAdvance(self):
         return 0 if self.state.to_send else INFINITY
-
-"""  
-def addInputPort(virtual_name, private_port_id):
-        port_name = "private_" + str(private_port_id) + "_" + virtual_name
-        return port_name
-"""
 
 def addInputPort(virtual_name, private_port_id, is_global = False):
     if is_global:

@@ -2,7 +2,7 @@ import os
 import subprocess
 import importlib.util
 import re
-from sccd.runtime.DEVS_loop import DEVSSimulator
+from sccd.runtime.DEVSSimulatorWrapper import DEVSSimulator
 import Tester
 from sccd.runtime.DEVS_statecharts_core import Event
 
@@ -126,6 +126,14 @@ class PythonSCCDTraceChecker(SCCDTraceChecker):
         return None
         
     def extract_internalio(self, line, context):
+        event_pattern = re.compile(r'^\s*\\Event: \(event name:.*\)$')
+        event_match = event_pattern.match(line)
+        if event_match and context["context"] is not None:
+            if context["context"] == "internal input" or context["context"] == "internal output":
+                event = line.strip()
+                # Remove everything before '(' in each string
+                event = event[event.index('('):]
+                return f"{context["time"]:.2f} {event}"
         return None
 
     def extract_statechart(self, line, context):
@@ -149,12 +157,21 @@ class PythonSCCDTraceChecker(SCCDTraceChecker):
         return None
 
     def check_state(self, line, context):
-        if "INPUT EVENT" in line:
+        if "INPUT EVENT from <ObjectManager>" in line:
+            context = {
+                "time": context["time"],
+                "context": "internal input",
+            }
+        elif "OUTPUT EVENT to <ObjectManager>" in line:
+            context = {
+                "time": context["time"],
+                "context": "internal output",
+            }
+        elif "INPUT EVENT" in line:
             context = {
                 "time": context["time"],
                 "context": "global input",
             }
-
         elif "OUTPUT EVENT" in line:
             context = {
                 "time": context["time"],
@@ -291,7 +308,7 @@ class PydevsSCCDTraceChecker(SCCDTraceChecker):
             "python", 
             os.path.join("sccd", "compiler", "sccdc.py"), 
             "-o", output_file, 
-            "-p", "pypDEVS", 
+            "-p", "classicdevs", 
             sccd_file
         ]
 
@@ -345,6 +362,18 @@ class PydevsSCCDTraceChecker(SCCDTraceChecker):
         return None
         
     def extract_internalio(self, line, context):
+        if context["extra_info"] == "obj_manager_in" or context["extra_info"] == "obj_manager_out":
+            event_pattern = re.compile(r'\(event name:.*\)$')
+            event_pattern = r'\(event name.*?\)'
+            event_match = re.search(event_pattern, line)
+
+            if event_match and context["time"] is not None:
+                event = event_match.group(0)
+                #event = line.strip()
+                # Remove everything before '(' in each string
+                #event = event[event.index('('):]
+                return f"{context["time"]:.2f} {event}"
+        
         return None
 
     def extract_statechart(self, line, context):
@@ -394,12 +423,17 @@ class PydevsSCCDTraceChecker(SCCDTraceChecker):
             }   
         elif "New State:" in line:
             context["context"] = "state"
-        elif "Output Port Configuration:" in line:
+        elif "Input Port Configuration:" in line:
             context["context"] = "input"
         elif "Output Port Configuration:" in line:
             context["context"] = "output"
         elif "Next scheduled internal transition at time" in line:
             context["context"] = "next"
+        elif context["context"] == "input" and "obj_manager_in" in line:
+            context["extra_info"] = "obj_manager_in"
+        elif context["context"] == "output" and "obj_manager_out" in line:
+            context["extra_info"] = "obj_manager_out"
+            
         return context
     
     def extract_info(self, log_file_path, options):

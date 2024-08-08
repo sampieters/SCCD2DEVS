@@ -60,7 +60,7 @@ def sccdToDEVS(sccd, platform):
 	generator = DEVSGenerator(platform)
 	sccd.accept(generator)
 	generic = generator.get()
-	Logger.showInfo("Classes <" + ", ".join(sccd.class_names) + "> have been converted to DEVS language constructs.")
+	Logger.showInfo("Classes <" + ", ".join(sccd.class_names) + "> have been converted to generic DEVS constructs.")
 	return generic
 
 def genericToTarget(generic, target_language, output_file):
@@ -69,8 +69,6 @@ def genericToTarget(generic, target_language, output_file):
 		if target_language == "javascript":
 			writer = JavascriptWriter(f)
 		elif target_language == "python":
-			writer = PythonWriter(f)
-		elif target_language == "pypDEVS":
 			writer = PythonWriter(f)
 		else:
 			raise Exception("Language not supported")
@@ -124,11 +122,14 @@ def main():
 			platform = Platforms.GameLoop
 		elif args['platform'] == "eventloop" :
 			platform = Platforms.EventLoop
-		elif args['platform'] == "pypdevs":
-			platform = Platforms.PypDEVS
+		elif args['platform'] == "classicdevs":
+			if target_language == "" or target_language == "python":
+				platform = Platforms.classicDEVS
+			else:
+				Logger.showError("DEVS currently only supports python.")
 		else :
 			Logger.showError("Invalid platform.")
-			return		  
+			return	
 	else :
 		platform = Platforms.EventLoop
 		

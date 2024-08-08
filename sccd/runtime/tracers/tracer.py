@@ -106,12 +106,15 @@ class Tracers(object):
         for tracer in self.tracers:
             tracer.traceTransition(StateChartName, Transition)
 
+    def tracesInternalOutput(self, event):
+        for tracer in self.tracers:
+            tracer.traceInternalOutput(event)
+    
+    def tracesInternalInput(self, event):
+        for tracer in self.tracers:
+            tracer.traceInternalInput(event)
+
     def tracesOutput(self, event):
-        """
-        Perform all tracing actions for an external transition
-        
-        :param aDEVS: the model that transitioned
-        """
         for tracer in self.tracers:
             tracer.traceOutput(event)
 

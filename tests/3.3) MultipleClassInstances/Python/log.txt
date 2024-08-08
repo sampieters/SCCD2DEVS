@@ -1,5 +1,12 @@
 __  Current Time:   0.000000 __________________________________________ 
 
+OUTPUT EVENT to <ObjectManager>
+	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x1020615e0>, 'linkA', 'A', 10])
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: instance_created; port: None; parameters: ['linkA[0]'])
+
 EXIT STATE in model <MainApp>
 		State: /state1
 
@@ -21,12 +28,26 @@ ENTER STATE in model <MainApp>
 OUTPUT EVENT to port <ui>
 	\Event: (event name: instance_created_succesfully; port: ui; parameters: ['0.00', 'linkA[0]'])
 
+OUTPUT EVENT to <ObjectManager>
+	\Event: (event name: start_instance; port: None; parameters: [<target.MainApp object at 0x1020615e0>, 'linkA[0]'])
+
+OUTPUT EVENT to <ObjectManager>
+	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x1020615e0>, 'linkA', 'A', 9])
+
 
 OUTPUT EVENT to port <ui>
 	\Event: (event name: statechart_started_succesfully; port: ui; parameters: ['0.00', 10])
 
 OUTPUT EVENT to port <ui>
 	\Event: (event name: constructor_initialized_succesfully; port: ui; parameters: ['0.00', 10])
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: instance_started; port: ; parameters: ['linkA[0]'])
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: instance_created; port: None; parameters: ['linkA[1]'])
 
 
 EXIT STATE in model <MainApp>
@@ -50,12 +71,26 @@ ENTER STATE in model <MainApp>
 OUTPUT EVENT to port <ui>
 	\Event: (event name: instance_created_succesfully; port: ui; parameters: ['0.00', 'linkA[1]'])
 
+OUTPUT EVENT to <ObjectManager>
+	\Event: (event name: start_instance; port: None; parameters: [<target.MainApp object at 0x1020615e0>, 'linkA[1]'])
+
+OUTPUT EVENT to <ObjectManager>
+	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x1020615e0>, 'linkA', 'A', 8])
+
 
 OUTPUT EVENT to port <ui>
 	\Event: (event name: statechart_started_succesfully; port: ui; parameters: ['0.00', 9])
 
 OUTPUT EVENT to port <ui>
 	\Event: (event name: constructor_initialized_succesfully; port: ui; parameters: ['0.00', 9])
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: instance_started; port: ; parameters: ['linkA[1]'])
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: instance_created; port: None; parameters: ['linkA[2]'])
 
 
 EXIT STATE in model <MainApp>
@@ -79,12 +114,26 @@ ENTER STATE in model <MainApp>
 OUTPUT EVENT to port <ui>
 	\Event: (event name: instance_created_succesfully; port: ui; parameters: ['0.00', 'linkA[2]'])
 
+OUTPUT EVENT to <ObjectManager>
+	\Event: (event name: start_instance; port: None; parameters: [<target.MainApp object at 0x1020615e0>, 'linkA[2]'])
+
+OUTPUT EVENT to <ObjectManager>
+	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x1020615e0>, 'linkA', 'A', 7])
+
 
 OUTPUT EVENT to port <ui>
 	\Event: (event name: statechart_started_succesfully; port: ui; parameters: ['0.00', 8])
 
 OUTPUT EVENT to port <ui>
 	\Event: (event name: constructor_initialized_succesfully; port: ui; parameters: ['0.00', 8])
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: instance_started; port: ; parameters: ['linkA[2]'])
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: instance_created; port: None; parameters: ['linkA[3]'])
 
 
 EXIT STATE in model <MainApp>
@@ -108,12 +157,26 @@ ENTER STATE in model <MainApp>
 OUTPUT EVENT to port <ui>
 	\Event: (event name: instance_created_succesfully; port: ui; parameters: ['0.00', 'linkA[3]'])
 
+OUTPUT EVENT to <ObjectManager>
+	\Event: (event name: start_instance; port: None; parameters: [<target.MainApp object at 0x1020615e0>, 'linkA[3]'])
+
+OUTPUT EVENT to <ObjectManager>
+	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x1020615e0>, 'linkA', 'A', 6])
+
 
 OUTPUT EVENT to port <ui>
 	\Event: (event name: statechart_started_succesfully; port: ui; parameters: ['0.00', 7])
 
 OUTPUT EVENT to port <ui>
 	\Event: (event name: constructor_initialized_succesfully; port: ui; parameters: ['0.00', 7])
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: instance_started; port: ; parameters: ['linkA[3]'])
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: instance_created; port: None; parameters: ['linkA[4]'])
 
 
 EXIT STATE in model <MainApp>
@@ -137,12 +200,26 @@ ENTER STATE in model <MainApp>
 OUTPUT EVENT to port <ui>
 	\Event: (event name: instance_created_succesfully; port: ui; parameters: ['0.00', 'linkA[4]'])
 
+OUTPUT EVENT to <ObjectManager>
+	\Event: (event name: start_instance; port: None; parameters: [<target.MainApp object at 0x1020615e0>, 'linkA[4]'])
+
+OUTPUT EVENT to <ObjectManager>
+	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x1020615e0>, 'linkA', 'A', 5])
+
 
 OUTPUT EVENT to port <ui>
 	\Event: (event name: statechart_started_succesfully; port: ui; parameters: ['0.00', 6])
 
 OUTPUT EVENT to port <ui>
 	\Event: (event name: constructor_initialized_succesfully; port: ui; parameters: ['0.00', 6])
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: instance_started; port: ; parameters: ['linkA[4]'])
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: instance_created; port: None; parameters: ['linkA[5]'])
 
 
 EXIT STATE in model <MainApp>
@@ -166,12 +243,26 @@ ENTER STATE in model <MainApp>
 OUTPUT EVENT to port <ui>
 	\Event: (event name: instance_created_succesfully; port: ui; parameters: ['0.00', 'linkA[5]'])
 
+OUTPUT EVENT to <ObjectManager>
+	\Event: (event name: start_instance; port: None; parameters: [<target.MainApp object at 0x1020615e0>, 'linkA[5]'])
+
+OUTPUT EVENT to <ObjectManager>
+	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x1020615e0>, 'linkA', 'A', 4])
+
 
 OUTPUT EVENT to port <ui>
 	\Event: (event name: statechart_started_succesfully; port: ui; parameters: ['0.00', 5])
 
 OUTPUT EVENT to port <ui>
 	\Event: (event name: constructor_initialized_succesfully; port: ui; parameters: ['0.00', 5])
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: instance_started; port: ; parameters: ['linkA[5]'])
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: instance_created; port: None; parameters: ['linkA[6]'])
 
 
 EXIT STATE in model <MainApp>
@@ -195,12 +286,26 @@ ENTER STATE in model <MainApp>
 OUTPUT EVENT to port <ui>
 	\Event: (event name: instance_created_succesfully; port: ui; parameters: ['0.00', 'linkA[6]'])
 
+OUTPUT EVENT to <ObjectManager>
+	\Event: (event name: start_instance; port: None; parameters: [<target.MainApp object at 0x1020615e0>, 'linkA[6]'])
+
+OUTPUT EVENT to <ObjectManager>
+	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x1020615e0>, 'linkA', 'A', 3])
+
 
 OUTPUT EVENT to port <ui>
 	\Event: (event name: statechart_started_succesfully; port: ui; parameters: ['0.00', 4])
 
 OUTPUT EVENT to port <ui>
 	\Event: (event name: constructor_initialized_succesfully; port: ui; parameters: ['0.00', 4])
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: instance_started; port: ; parameters: ['linkA[6]'])
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: instance_created; port: None; parameters: ['linkA[7]'])
 
 
 EXIT STATE in model <MainApp>
@@ -224,12 +329,26 @@ ENTER STATE in model <MainApp>
 OUTPUT EVENT to port <ui>
 	\Event: (event name: instance_created_succesfully; port: ui; parameters: ['0.00', 'linkA[7]'])
 
+OUTPUT EVENT to <ObjectManager>
+	\Event: (event name: start_instance; port: None; parameters: [<target.MainApp object at 0x1020615e0>, 'linkA[7]'])
+
+OUTPUT EVENT to <ObjectManager>
+	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x1020615e0>, 'linkA', 'A', 2])
+
 
 OUTPUT EVENT to port <ui>
 	\Event: (event name: statechart_started_succesfully; port: ui; parameters: ['0.00', 3])
 
 OUTPUT EVENT to port <ui>
 	\Event: (event name: constructor_initialized_succesfully; port: ui; parameters: ['0.00', 3])
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: instance_started; port: ; parameters: ['linkA[7]'])
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: instance_created; port: None; parameters: ['linkA[8]'])
 
 
 EXIT STATE in model <MainApp>
@@ -253,12 +372,26 @@ ENTER STATE in model <MainApp>
 OUTPUT EVENT to port <ui>
 	\Event: (event name: instance_created_succesfully; port: ui; parameters: ['0.00', 'linkA[8]'])
 
+OUTPUT EVENT to <ObjectManager>
+	\Event: (event name: start_instance; port: None; parameters: [<target.MainApp object at 0x1020615e0>, 'linkA[8]'])
+
+OUTPUT EVENT to <ObjectManager>
+	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x1020615e0>, 'linkA', 'A', 1])
+
 
 OUTPUT EVENT to port <ui>
 	\Event: (event name: statechart_started_succesfully; port: ui; parameters: ['0.00', 2])
 
 OUTPUT EVENT to port <ui>
 	\Event: (event name: constructor_initialized_succesfully; port: ui; parameters: ['0.00', 2])
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: instance_started; port: ; parameters: ['linkA[8]'])
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: instance_created; port: None; parameters: ['linkA[9]'])
 
 
 EXIT STATE in model <MainApp>
@@ -282,10 +415,17 @@ ENTER STATE in model <MainApp>
 OUTPUT EVENT to port <ui>
 	\Event: (event name: instance_created_succesfully; port: ui; parameters: ['0.00', 'linkA[9]'])
 
+OUTPUT EVENT to <ObjectManager>
+	\Event: (event name: start_instance; port: None; parameters: [<target.MainApp object at 0x1020615e0>, 'linkA[9]'])
+
 
 OUTPUT EVENT to port <ui>
 	\Event: (event name: statechart_started_succesfully; port: ui; parameters: ['0.00', 1])
 
 OUTPUT EVENT to port <ui>
 	\Event: (event name: constructor_initialized_succesfully; port: ui; parameters: ['0.00', 1])
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: instance_started; port: ; parameters: ['linkA[9]'])
 

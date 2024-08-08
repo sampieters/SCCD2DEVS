@@ -18,8 +18,6 @@ CANVAS_DIMS = (800, 550)
 class MainAppInstance(RuntimeClassBase):
     def __init__(self, atomdevs, id, start_port_id):
         RuntimeClassBase.__init__(self, atomdevs, id)
-        self.associations = {}
-        self.associations["fields"] = Association("Field", 0, -1)
         
         self.semantics.big_step_maximality = StatechartSemantics.TakeMany
         self.semantics.internal_event_lifeline = StatechartSemantics.Queue
@@ -33,10 +31,8 @@ class MainAppInstance(RuntimeClassBase):
         # call user defined constructor
         MainAppInstance.user_defined_constructor(self)
         port_name = addInputPort("ui", start_port_id, True)
-        atomdevs.addInPort(port_name)
         atomdevs.state.port_mappings[port_name] = id
         port_name = addInputPort("<narrow_cast>", start_port_id)
-        atomdevs.addInPort(port_name)
         atomdevs.state.port_mappings[port_name] = id
     
     def user_defined_constructor(self):
@@ -207,7 +203,6 @@ class MainApp(ClassBase):
         self.outputs["fields"] = self.addOutPort("fields")
         new_instance = self.constructObject(0, 0, [])
         self.state.instances[new_instance.instance_id] = new_instance
-        self.state.next_instance = self.state.next_instance + 1
     
     def constructObject(self, id, start_port_id, parameters):
         new_instance = MainAppInstance(self, id, start_port_id)
@@ -216,10 +211,6 @@ class MainApp(ClassBase):
 class FieldInstance(RuntimeClassBase):
     def __init__(self, atomdevs, id, start_port_id):
         RuntimeClassBase.__init__(self, atomdevs, id)
-        self.associations = {}
-        self.associations["balls"] = Association("Ball", 0, -1)
-        self.associations["buttons"] = Association("Button", 0, -1)
-        self.associations["parent"] = Association("MainApp", 1, 1)
         
         self.semantics.big_step_maximality = StatechartSemantics.TakeMany
         self.semantics.internal_event_lifeline = StatechartSemantics.Queue
@@ -237,13 +228,10 @@ class FieldInstance(RuntimeClassBase):
         # call user defined constructor
         FieldInstance.user_defined_constructor(self)
         port_name = addInputPort("ui", start_port_id, True)
-        atomdevs.addInPort(port_name)
         atomdevs.state.port_mappings[port_name] = id
         port_name = addInputPort("<narrow_cast>", start_port_id)
-        atomdevs.addInPort(port_name)
         atomdevs.state.port_mappings[port_name] = id
-        port_name = addInputPort("field_ui", start_port_id)
-        atomdevs.addInPort(port_name)
+        port_name = addInputPort("field_ui", start_port_id + 1)
         atomdevs.state.port_mappings[port_name] = id
         self.inports["field_ui"] = port_name
     
@@ -494,8 +482,6 @@ class Field(ClassBase):
 class ButtonInstance(RuntimeClassBase):
     def __init__(self, atomdevs, id, start_port_id, window_id, event_name, button_text):
         RuntimeClassBase.__init__(self, atomdevs, id)
-        self.associations = {}
-        self.associations["parent"] = Association("Field", 1, 1)
         
         self.semantics.big_step_maximality = StatechartSemantics.TakeMany
         self.semantics.internal_event_lifeline = StatechartSemantics.Queue
@@ -514,13 +500,10 @@ class ButtonInstance(RuntimeClassBase):
         # call user defined constructor
         ButtonInstance.user_defined_constructor(self, window_id, event_name, button_text)
         port_name = addInputPort("ui", start_port_id, True)
-        atomdevs.addInPort(port_name)
         atomdevs.state.port_mappings[port_name] = id
         port_name = addInputPort("<narrow_cast>", start_port_id)
-        atomdevs.addInPort(port_name)
         atomdevs.state.port_mappings[port_name] = id
-        port_name = addInputPort("button_ui", start_port_id)
-        atomdevs.addInPort(port_name)
+        port_name = addInputPort("button_ui", start_port_id + 1)
         atomdevs.state.port_mappings[port_name] = id
         self.inports["button_ui"] = port_name
     
@@ -604,8 +587,6 @@ class Button(ClassBase):
 class BallInstance(RuntimeClassBase):
     def __init__(self, atomdevs, id, start_port_id, canvas_id, x, y):
         RuntimeClassBase.__init__(self, atomdevs, id)
-        self.associations = {}
-        self.associations["parent"] = Association("Field", 1, 1)
         
         self.semantics.big_step_maximality = StatechartSemantics.TakeMany
         self.semantics.internal_event_lifeline = StatechartSemantics.Queue
@@ -623,13 +604,10 @@ class BallInstance(RuntimeClassBase):
         # call user defined constructor
         BallInstance.user_defined_constructor(self, canvas_id, x, y)
         port_name = addInputPort("ui", start_port_id, True)
-        atomdevs.addInPort(port_name)
         atomdevs.state.port_mappings[port_name] = id
         port_name = addInputPort("<narrow_cast>", start_port_id)
-        atomdevs.addInPort(port_name)
         atomdevs.state.port_mappings[port_name] = id
-        port_name = addInputPort("ball_ui", start_port_id)
-        atomdevs.addInPort(port_name)
+        port_name = addInputPort("ball_ui", start_port_id + 1)
         atomdevs.state.port_mappings[port_name] = id
         self.inports["ball_ui"] = port_name
     
@@ -830,39 +808,36 @@ class Ball(ClassBase):
         new_instance = BallInstance(self, id, start_port_id, parameters[1], parameters[2], parameters[3])
         return new_instance
 
-class Dummy(ObjectManagerState):
-    def __init__(self):
-        ObjectManagerState.__init__(self)
-    
-    def instantiate(self, class_name, construct_params):
-        instance = {}
-        instance["name"] = class_name
-        if class_name == "MainApp":
-            self.narrow_cast_id = self.narrow_cast_id + 0
-            instance["associations"] = {}
-            instance["associations"]["fields"] = Association("Field", 0, -1)
-        elif class_name == "Field":
-            self.narrow_cast_id = self.narrow_cast_id + 1
-            instance["associations"] = {}
-            instance["associations"]["balls"] = Association("Ball", 0, -1)
-            instance["associations"]["buttons"] = Association("Button", 0, -1)
-            instance["associations"]["parent"] = Association("MainApp", 1, 1)
-        elif class_name == "Button":
-            self.narrow_cast_id = self.narrow_cast_id + 1
-            instance["associations"] = {}
-            instance["associations"]["parent"] = Association("Field", 1, 1)
-        elif class_name == "Ball":
-            self.narrow_cast_id = self.narrow_cast_id + 1
-            instance["associations"] = {}
-            instance["associations"]["parent"] = Association("Field", 1, 1)
-        else:
-            raise Exception("Cannot instantiate class " + class_name)
-        return instance
+def instantiate(self, class_name, construct_params):
+    instance = {}
+    instance["name"] = class_name
+    if class_name == "MainApp":
+        self.narrow_cast_id = self.narrow_cast_id + 0
+        instance["associations"] = {}
+        instance["associations"]["fields"] = Association("Field", 0, -1)
+    elif class_name == "Field":
+        self.narrow_cast_id = self.narrow_cast_id + 1
+        instance["associations"] = {}
+        instance["associations"]["balls"] = Association("Ball", 0, -1)
+        instance["associations"]["buttons"] = Association("Button", 0, -1)
+        instance["associations"]["parent"] = Association("MainApp", 1, 1)
+    elif class_name == "Button":
+        self.narrow_cast_id = self.narrow_cast_id + 1
+        instance["associations"] = {}
+        instance["associations"]["parent"] = Association("Field", 1, 1)
+    elif class_name == "Ball":
+        self.narrow_cast_id = self.narrow_cast_id + 1
+        instance["associations"] = {}
+        instance["associations"]["parent"] = Association("Field", 1, 1)
+    else:
+        raise Exception("Cannot instantiate class " + class_name)
+    return instance
+ObjectManagerState.instantiate = instantiate
 
 class ObjectManager(ObjectManagerBase):
     def __init__(self, name):
         ObjectManagerBase.__init__(self, name)
-        self.state = Dummy()
+        self.state = ObjectManagerState()
         self.input = self.addInPort("input")
         self.output["MainApp"] = self.addOutPort()
         self.output["Field"] = self.addOutPort()
