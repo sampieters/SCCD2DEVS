@@ -6,3 +6,6 @@ if __name__ == '__main__':
 	sim = Simulator(model)
 	sim.setRealTime(True)
 	sim.simulate()
+
+	while 1:
+		pass

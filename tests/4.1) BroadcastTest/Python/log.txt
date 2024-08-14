@@ -1,7 +1,7 @@
 __  Current Time:   0.000000 __________________________________________ 
 
 OUTPUT EVENT to <ObjectManager>
-	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x1020d2fc0>, 'linkA', 'A'])
+	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x104a9e630>, 'linkA', 'A'])
 
 INPUT EVENT from <ObjectManager>
 	\Type: cd
@@ -20,10 +20,10 @@ OUTPUT EVENT to port <ui>
 	\Event: (event name: instance_created_succesfully; port: ui; parameters: ['linkA[0]'])
 
 OUTPUT EVENT to <ObjectManager>
-	\Event: (event name: start_instance; port: None; parameters: [<target.MainApp object at 0x1020d2fc0>, 'linkA[0]'])
+	\Event: (event name: start_instance; port: None; parameters: [<target.MainApp object at 0x104a9e630>, 'linkA[0]'])
 
 OUTPUT EVENT to <ObjectManager>
-	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x1020d2fc0>, 'linkA', 'A'])
+	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x104a9e630>, 'linkA', 'A'])
 
 
 INPUT EVENT from <ObjectManager>
@@ -48,10 +48,10 @@ OUTPUT EVENT to port <ui>
 	\Event: (event name: instance_created_succesfully; port: ui; parameters: ['linkA[1]'])
 
 OUTPUT EVENT to <ObjectManager>
-	\Event: (event name: start_instance; port: None; parameters: [<target.MainApp object at 0x1020d2fc0>, 'linkA[1]'])
+	\Event: (event name: start_instance; port: None; parameters: [<target.MainApp object at 0x104a9e630>, 'linkA[1]'])
 
 OUTPUT EVENT to <ObjectManager>
-	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x1020d2fc0>, 'linkA', 'A'])
+	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x104a9e630>, 'linkA', 'A'])
 
 
 INPUT EVENT from <ObjectManager>
@@ -76,10 +76,10 @@ OUTPUT EVENT to port <ui>
 	\Event: (event name: instance_created_succesfully; port: ui; parameters: ['linkA[2]'])
 
 OUTPUT EVENT to <ObjectManager>
-	\Event: (event name: start_instance; port: None; parameters: [<target.MainApp object at 0x1020d2fc0>, 'linkA[2]'])
+	\Event: (event name: start_instance; port: None; parameters: [<target.MainApp object at 0x104a9e630>, 'linkA[2]'])
 
 OUTPUT EVENT to <ObjectManager>
-	\Event: (event name: broad_cast; port: None; parameters: [<target.MainApp object at 0x1020d2fc0>, (event name: test_broad; port: None)])
+	\Event: (event name: broad_cast; port: None; parameters: [<target.MainApp object at 0x104a9e630>, (event name: test_broad; port: None)])
 
 
 INPUT EVENT from <ObjectManager>

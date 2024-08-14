@@ -8,7 +8,7 @@ __  Current Time:   0.000000 __________________________________________
 
 
 	INITIAL CONDITIONS in model <Controller.ObjectManager>
-		Initial State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x101f7cc20>
+		Initial State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x104a6f7a0>
 		Next scheduled internal transition at time inf
 
 

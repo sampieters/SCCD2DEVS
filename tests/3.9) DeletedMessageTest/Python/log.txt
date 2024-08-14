@@ -1,7 +1,7 @@
 __  Current Time:   0.000000 __________________________________________ 
 
 OUTPUT EVENT to <ObjectManager>
-	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x101f63a40>, 'linkA', 'A'])
+	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x104d16b40>, 'linkA', 'A'])
 
 INPUT EVENT from <ObjectManager>
 	\Type: cd
@@ -20,7 +20,7 @@ OUTPUT EVENT to port <ui>
 	\Event: (event name: instance_created_succesfully; port: ui; parameters: ['linkA[0]'])
 
 OUTPUT EVENT to <ObjectManager>
-	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x101f63a40>, 'linkA', 'A'])
+	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x104d16b40>, 'linkA', 'A'])
 
 
 INPUT EVENT from <ObjectManager>
@@ -40,7 +40,7 @@ OUTPUT EVENT to port <ui>
 	\Event: (event name: instance_created_succesfully; port: ui; parameters: ['linkA[1]'])
 
 OUTPUT EVENT to <ObjectManager>
-	\Event: (event name: delete_instance; port: None; parameters: [<target.MainApp object at 0x101f63a40>, 'linkA'])
+	\Event: (event name: delete_instance; port: None; parameters: [<target.MainApp object at 0x104d16b40>, 'linkA'])
 
 
 INPUT EVENT from <ObjectManager>

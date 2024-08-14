@@ -1,26 +1,23 @@
 import target as target
-from sccd.runtime.DEVS_statecharts_core import Event
-import threading
+from sccd.runtime.DEVSSimulatorWrapper import DEVSSimulator
 
+class OutputListener:
+	def add(self, events):
+		for event in events:
+			sim_time = event.getParameters()[0] / 1000.0  # Convert from milliseconds to seconds
+			act_time = event.getParameters()[1]
+			print("SIMTIME: %.2fs" % (sim_time))
+			print("ACTTIME: %.2fs" % (act_time))
 
 if __name__ == '__main__':
-    controller = target.Controller("Controller") 
-    
-    def raw_inputter():
-        while 1:
-            controller.addInput(Event(input(), "input", []))
-    input_thread = threading.Thread(target=raw_inputter)
-    input_thread.daemon = True
-    input_thread.start()
-    
-    output_listener = controller.addOutputListener(["output"])
-    def outputter():
-        while 1:
-            event = output_listener.fetch(-1)
-            print("SIMTIME: %.2fs" % (event.getParameters()[0] / 1000.0))
-            print("ACTTIME: %.2fs" % (event.getParameters()[1]))
-    output_thread = threading.Thread(target=outputter)
-    output_thread.daemon = True
-    output_thread.start()
-    
-    controller.start()
+	model = target.Controller(name="controller")
+
+	sim = DEVSSimulator(model)
+	sim.setRealTime()
+
+	listener = OutputListener()
+	sim.setListenPorts(model.out_output, listener.add)
+	sim.simulate()
+
+	while 1:
+		pass

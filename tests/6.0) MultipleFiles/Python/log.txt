@@ -1,7 +1,7 @@
 __  Current Time:   0.000000 __________________________________________ 
 
 OUTPUT EVENT to <ObjectManager>
-	\Event: (event name: create_instance; port: None; parameters: [<target.A object at 0x10220eb40>, 'BLink', 'B'])
+	\Event: (event name: create_instance; port: None; parameters: [<target.A object at 0x104e5dbb0>, 'BLink', 'B'])
 
 INPUT EVENT from <ObjectManager>
 	\Type: cd
@@ -17,7 +17,7 @@ ENTER STATE in model <A>
 		State: /initializing
 
 OUTPUT EVENT to <ObjectManager>
-	\Event: (event name: start_instance; port: None; parameters: [<target.A object at 0x10220eb40>, 'BLink[0]'])
+	\Event: (event name: start_instance; port: None; parameters: [<target.A object at 0x104e5dbb0>, 'BLink[0]'])
 
 
 INPUT EVENT from <ObjectManager>

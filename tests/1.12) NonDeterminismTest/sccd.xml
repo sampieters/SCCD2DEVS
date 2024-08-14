@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<diagram author="Raphael Mannadiar" name="">
+    <class name="MainApp" default="true">
+        <scxml initial="Y">
+            <state id="Y" initial="A"> 
+                <state id="A">
+                    <transition target="../B" />
+                    <transition target="../C" />
+                </state>
+                <state id="B" />
+                <state id="C" />
+                <transition target="../D" />
+            </state>
+            <state id="D" />
+        </scxml>
+    </class>
+</diagram>

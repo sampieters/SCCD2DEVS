@@ -1,7 +1,7 @@
 __  Current Time:   0.000000 __________________________________________ 
 
 OUTPUT EVENT to <ObjectManager>
-	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x101f63890>, 'linkA', 'A'])
+	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x104d155b0>, 'linkA', 'A'])
 
 INPUT EVENT from <ObjectManager>
 	\Type: cd
@@ -20,7 +20,7 @@ OUTPUT EVENT to port <ui>
 	\Event: (event name: instance_created_succesfully; port: ui; parameters: ['linkA[0]'])
 
 OUTPUT EVENT to <ObjectManager>
-	\Event: (event name: start_instance; port: None; parameters: [<target.MainApp object at 0x101f63890>, 'linkA[0]'])
+	\Event: (event name: start_instance; port: None; parameters: [<target.MainApp object at 0x104d155b0>, 'linkA[0]'])
 
 
 OUTPUT EVENT to port <ui>
@@ -43,7 +43,7 @@ OUTPUT EVENT to port <ui>
 	\Event: (event name: instance_started_succesfully; port: ui; parameters: ['linkA[0]'])
 
 OUTPUT EVENT to <ObjectManager>
-	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x101f63890>, 'linkB', 'B'])
+	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x104d155b0>, 'linkB', 'B'])
 
 
 INPUT EVENT from <ObjectManager>
@@ -63,7 +63,7 @@ OUTPUT EVENT to port <ui>
 	\Event: (event name: instance_created_succesfully; port: ui; parameters: ['linkB[0]'])
 
 OUTPUT EVENT to <ObjectManager>
-	\Event: (event name: start_instance; port: None; parameters: [<target.MainApp object at 0x101f63890>, 'linkB[0]'])
+	\Event: (event name: start_instance; port: None; parameters: [<target.MainApp object at 0x104d155b0>, 'linkB[0]'])
 
 
 OUTPUT EVENT to port <ui>
@@ -86,7 +86,7 @@ OUTPUT EVENT to port <ui>
 	\Event: (event name: instance_started_succesfully; port: ui; parameters: ['linkB[0]'])
 
 OUTPUT EVENT to <ObjectManager>
-	\Event: (event name: narrow_cast; port: None; parameters: [<target.MainApp object at 0x101f63890>, 'linkA[0]', (event name: remove; port: None)])
+	\Event: (event name: narrow_cast; port: None; parameters: [<target.MainApp object at 0x104d155b0>, 'linkA[0]', (event name: remove; port: None)])
 
 
 
@@ -108,7 +108,7 @@ ENTER STATE in model <A>
 		State: /state2
 
 OUTPUT EVENT to <ObjectManager>
-	\Event: (event name: delete_instance; port: None; parameters: [<target.A object at 0x1021e3380>, 'linkB[0]'])
+	\Event: (event name: delete_instance; port: None; parameters: [<target.A object at 0x104d16c60>, 'linkB[0]'])
 
 
 INPUT EVENT from <ObjectManager>

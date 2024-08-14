@@ -19,8 +19,6 @@ CANVAS_DIMS = (800, 550)
 class MainAppInstance(RuntimeClassBase):
     def __init__(self, atomdevs, id, start_port_id):
         RuntimeClassBase.__init__(self, atomdevs, id)
-        self.associations = {}
-        self.associations["fields"] = Association("Field", 0, -1)
         
         self.semantics.big_step_maximality = StatechartSemantics.TakeMany
         self.semantics.internal_event_lifeline = StatechartSemantics.Queue
@@ -203,10 +201,10 @@ class MainApp(ClassBase):
         ClassBase.__init__(self, name)
         self.input = self.addInPort("input")
         self.glob_outputs["ui"] = self.addOutPort("ui")
-        self.outputs["fields"] = self.addOutPort("fields")
         new_instance = self.constructObject(0, 0, [])
         self.state.instances[new_instance.instance_id] = new_instance
-        self.state.next_instance = self.state.next_instance + 1
+        new_instance.start()
+        self.state.next_time = 0
     
     def constructObject(self, id, start_port_id, parameters):
         new_instance = MainAppInstance(self, id, start_port_id)
@@ -215,11 +213,6 @@ class MainApp(ClassBase):
 class FieldInstance(RuntimeClassBase):
     def __init__(self, atomdevs, id, start_port_id):
         RuntimeClassBase.__init__(self, atomdevs, id)
-        self.associations = {}
-        self.associations["balls"] = Association("Ball", 0, -1)
-        self.associations["buttons"] = Association("Button", 0, -1)
-        self.associations["collisions"] = Association("CollisionPhysics", 0, -1)
-        self.associations["parent"] = Association("MainApp", 1, 1)
         
         self.semantics.big_step_maximality = StatechartSemantics.TakeMany
         self.semantics.internal_event_lifeline = StatechartSemantics.Queue
@@ -240,7 +233,7 @@ class FieldInstance(RuntimeClassBase):
         atomdevs.state.port_mappings[port_name] = id
         port_name = addInputPort("<narrow_cast>", start_port_id)
         atomdevs.state.port_mappings[port_name] = id
-        port_name = addInputPort("field_ui", start_port_id)
+        port_name = addInputPort("field_ui", start_port_id + 1)
         atomdevs.state.port_mappings[port_name] = id
         self.inports["field_ui"] = port_name
     
@@ -566,10 +559,6 @@ class Field(ClassBase):
         ClassBase.__init__(self, name)
         self.input = self.addInPort("input")
         self.glob_outputs["ui"] = self.addOutPort("ui")
-        self.outputs["balls"] = self.addOutPort("balls")
-        self.outputs["buttons"] = self.addOutPort("buttons")
-        self.outputs["collisions"] = self.addOutPort("collisions")
-        self.outputs["parent"] = self.addOutPort("parent")
         self.field_ui = self.addInPort("field_ui")
     
     def constructObject(self, id, start_port_id, parameters):
@@ -579,8 +568,6 @@ class Field(ClassBase):
 class ButtonInstance(RuntimeClassBase):
     def __init__(self, atomdevs, id, start_port_id, window_id, event_name, button_text):
         RuntimeClassBase.__init__(self, atomdevs, id)
-        self.associations = {}
-        self.associations["parent"] = Association("Field", 1, 1)
         
         self.semantics.big_step_maximality = StatechartSemantics.TakeMany
         self.semantics.internal_event_lifeline = StatechartSemantics.Queue
@@ -602,7 +589,7 @@ class ButtonInstance(RuntimeClassBase):
         atomdevs.state.port_mappings[port_name] = id
         port_name = addInputPort("<narrow_cast>", start_port_id)
         atomdevs.state.port_mappings[port_name] = id
-        port_name = addInputPort("button_ui", start_port_id)
+        port_name = addInputPort("button_ui", start_port_id + 1)
         atomdevs.state.port_mappings[port_name] = id
         self.inports["button_ui"] = port_name
     
@@ -676,7 +663,6 @@ class Button(ClassBase):
         ClassBase.__init__(self, name)
         self.input = self.addInPort("input")
         self.glob_outputs["ui"] = self.addOutPort("ui")
-        self.outputs["parent"] = self.addOutPort("parent")
         self.button_ui = self.addInPort("button_ui")
     
     def constructObject(self, id, start_port_id, parameters):
@@ -686,8 +672,6 @@ class Button(ClassBase):
 class BallInstance(RuntimeClassBase):
     def __init__(self, atomdevs, id, start_port_id, canvas_id, x, y):
         RuntimeClassBase.__init__(self, atomdevs, id)
-        self.associations = {}
-        self.associations["parent"] = Association("Field", 1, 1)
         
         self.semantics.big_step_maximality = StatechartSemantics.TakeMany
         self.semantics.internal_event_lifeline = StatechartSemantics.Queue
@@ -708,7 +692,7 @@ class BallInstance(RuntimeClassBase):
         atomdevs.state.port_mappings[port_name] = id
         port_name = addInputPort("<narrow_cast>", start_port_id)
         atomdevs.state.port_mappings[port_name] = id
-        port_name = addInputPort("ball_ui", start_port_id)
+        port_name = addInputPort("ball_ui", start_port_id + 1)
         atomdevs.state.port_mappings[port_name] = id
         self.inports["ball_ui"] = port_name
     
@@ -912,7 +896,6 @@ class Ball(ClassBase):
         ClassBase.__init__(self, name)
         self.input = self.addInPort("input")
         self.glob_outputs["ui"] = self.addOutPort("ui")
-        self.outputs["parent"] = self.addOutPort("parent")
         self.ball_ui = self.addInPort("ball_ui")
     
     def constructObject(self, id, start_port_id, parameters):
@@ -922,8 +905,6 @@ class Ball(ClassBase):
 class CollisionPhysicsInstance(RuntimeClassBase):
     def __init__(self, atomdevs, id, start_port_id, ball1_id, ball2_id, ball1_info, ball2_info):
         RuntimeClassBase.__init__(self, atomdevs, id)
-        self.associations = {}
-        self.associations["parent"] = Association("Field", 1, 1)
         
         self.semantics.big_step_maximality = StatechartSemantics.TakeMany
         self.semantics.internal_event_lifeline = StatechartSemantics.Queue
@@ -943,7 +924,7 @@ class CollisionPhysicsInstance(RuntimeClassBase):
         atomdevs.state.port_mappings[port_name] = id
         port_name = addInputPort("<narrow_cast>", start_port_id)
         atomdevs.state.port_mappings[port_name] = id
-        port_name = addInputPort("physics_ui", start_port_id)
+        port_name = addInputPort("physics_ui", start_port_id + 1)
         atomdevs.state.port_mappings[port_name] = id
         self.inports["physics_ui"] = port_name
     
@@ -1055,51 +1036,47 @@ class CollisionPhysics(ClassBase):
         ClassBase.__init__(self, name)
         self.input = self.addInPort("input")
         self.glob_outputs["ui"] = self.addOutPort("ui")
-        self.outputs["parent"] = self.addOutPort("parent")
         self.physics_ui = self.addInPort("physics_ui")
     
     def constructObject(self, id, start_port_id, parameters):
         new_instance = CollisionPhysicsInstance(self, id, start_port_id, parameters[1], parameters[2], parameters[3], parameters[4])
         return new_instance
 
-class Dummy(ObjectManagerState):
-    def __init__(self):
-        ObjectManagerState.__init__(self)
-    
-    def instantiate(self, class_name, construct_params):
-        instance = {}
-        instance["name"] = class_name
-        if class_name == "MainApp":
-            self.narrow_cast_id = self.narrow_cast_id + 0
-            instance["associations"] = {}
-            instance["associations"]["fields"] = Association("Field", 0, -1)
-        elif class_name == "Field":
-            self.narrow_cast_id = self.narrow_cast_id + 1
-            instance["associations"] = {}
-            instance["associations"]["balls"] = Association("Ball", 0, -1)
-            instance["associations"]["buttons"] = Association("Button", 0, -1)
-            instance["associations"]["collisions"] = Association("CollisionPhysics", 0, -1)
-            instance["associations"]["parent"] = Association("MainApp", 1, 1)
-        elif class_name == "Button":
-            self.narrow_cast_id = self.narrow_cast_id + 1
-            instance["associations"] = {}
-            instance["associations"]["parent"] = Association("Field", 1, 1)
-        elif class_name == "Ball":
-            self.narrow_cast_id = self.narrow_cast_id + 1
-            instance["associations"] = {}
-            instance["associations"]["parent"] = Association("Field", 1, 1)
-        elif class_name == "CollisionPhysics":
-            self.narrow_cast_id = self.narrow_cast_id + 1
-            instance["associations"] = {}
-            instance["associations"]["parent"] = Association("Field", 1, 1)
-        else:
-            raise Exception("Cannot instantiate class " + class_name)
-        return instance
+def instantiate(self, class_name, construct_params):
+    instance = {}
+    instance["name"] = class_name
+    if class_name == "MainApp":
+        self.narrow_cast_id = self.narrow_cast_id + 0
+        instance["associations"] = {}
+        instance["associations"]["fields"] = Association("Field", 0, -1)
+    elif class_name == "Field":
+        self.narrow_cast_id = self.narrow_cast_id + 1
+        instance["associations"] = {}
+        instance["associations"]["balls"] = Association("Ball", 0, -1)
+        instance["associations"]["buttons"] = Association("Button", 0, -1)
+        instance["associations"]["collisions"] = Association("CollisionPhysics", 0, -1)
+        instance["associations"]["parent"] = Association("MainApp", 1, 1)
+    elif class_name == "Button":
+        self.narrow_cast_id = self.narrow_cast_id + 1
+        instance["associations"] = {}
+        instance["associations"]["parent"] = Association("Field", 1, 1)
+    elif class_name == "Ball":
+        self.narrow_cast_id = self.narrow_cast_id + 1
+        instance["associations"] = {}
+        instance["associations"]["parent"] = Association("Field", 1, 1)
+    elif class_name == "CollisionPhysics":
+        self.narrow_cast_id = self.narrow_cast_id + 1
+        instance["associations"] = {}
+        instance["associations"]["parent"] = Association("Field", 1, 1)
+    else:
+        raise Exception("Cannot instantiate class " + class_name)
+    return instance
+ObjectManagerState.instantiate = instantiate
 
 class ObjectManager(ObjectManagerBase):
     def __init__(self, name):
         ObjectManagerBase.__init__(self, name)
-        self.state = Dummy()
+        self.state = ObjectManagerState()
         self.input = self.addInPort("input")
         self.output["MainApp"] = self.addOutPort()
         self.output["Field"] = self.addOutPort()
@@ -1107,7 +1084,6 @@ class ObjectManager(ObjectManagerBase):
         self.output["Ball"] = self.addOutPort()
         self.output["CollisionPhysics"] = self.addOutPort()
         self.state.createInstance("MainApp", [])
-        self.state.to_send.append((("MainApp", 0), ("MainApp", 0), Event("start_instance", None, ["MainApp[0]"])))
 
 class Controller(CoupledDEVS):
     def __init__(self, name):
@@ -1123,22 +1099,14 @@ class Controller(CoupledDEVS):
         self.atomics.append(self.addSubModel(CollisionPhysics("CollisionPhysics")))
         self.connectPorts(self.atomics[0].obj_manager_out, self.objectmanager.input)
         self.connectPorts(self.objectmanager.output["MainApp"], self.atomics[0].obj_manager_in)
-        self.connectPorts(self.atomics[0].outputs["fields"], self.atomics[1].input)
         self.connectPorts(self.atomics[1].obj_manager_out, self.objectmanager.input)
         self.connectPorts(self.objectmanager.output["Field"], self.atomics[1].obj_manager_in)
-        self.connectPorts(self.atomics[1].outputs["balls"], self.atomics[3].input)
-        self.connectPorts(self.atomics[1].outputs["buttons"], self.atomics[2].input)
-        self.connectPorts(self.atomics[1].outputs["collisions"], self.atomics[4].input)
-        self.connectPorts(self.atomics[1].outputs["parent"], self.atomics[0].input)
         self.connectPorts(self.atomics[2].obj_manager_out, self.objectmanager.input)
         self.connectPorts(self.objectmanager.output["Button"], self.atomics[2].obj_manager_in)
-        self.connectPorts(self.atomics[2].outputs["parent"], self.atomics[1].input)
         self.connectPorts(self.atomics[3].obj_manager_out, self.objectmanager.input)
         self.connectPorts(self.objectmanager.output["Ball"], self.atomics[3].obj_manager_in)
-        self.connectPorts(self.atomics[3].outputs["parent"], self.atomics[1].input)
         self.connectPorts(self.atomics[4].obj_manager_out, self.objectmanager.input)
         self.connectPorts(self.objectmanager.output["CollisionPhysics"], self.atomics[4].obj_manager_in)
-        self.connectPorts(self.atomics[4].outputs["parent"], self.atomics[1].input)
         self.connectPorts(self.atomics[0].glob_outputs["ui"], self.out_ui)
         self.connectPorts(self.in_ui, self.atomics[0].input)
         self.connectPorts(self.atomics[1].glob_outputs["ui"], self.out_ui)

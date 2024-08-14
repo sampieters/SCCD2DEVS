@@ -1,7 +1,7 @@
 __  Current Time:   0.000000 __________________________________________ 
 
 OUTPUT EVENT to <ObjectManager>
-	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x1021744a0>, 'linkA', 'A'])
+	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x104d16ab0>, 'linkA', 'A'])
 
 INPUT EVENT from <ObjectManager>
 	\Type: cd
@@ -20,7 +20,7 @@ OUTPUT EVENT to port <ui>
 	\Event: (event name: instance_created_succesfully; port: ui; parameters: ['0.00', 'linkA[0]'])
 
 OUTPUT EVENT to <ObjectManager>
-	\Event: (event name: start_instance; port: None; parameters: [<target.MainApp object at 0x1021744a0>, 'linkA[0]'])
+	\Event: (event name: start_instance; port: None; parameters: [<target.MainApp object at 0x104d16ab0>, 'linkA[0]'])
 
 
 OUTPUT EVENT to port <ui>
@@ -52,10 +52,10 @@ OUTPUT EVENT to port <ui>
 	\Event: (event name: instance_started_succesfully; port: ui; parameters: ['0.00', 'linkA[0]'])
 
 OUTPUT EVENT to <ObjectManager>
-	\Event: (event name: narrow_cast; port: None; parameters: [<target.MainApp object at 0x1021744a0>, 'linkA[0]', (event name: link_check; port: None; parameters: ['linkA[0]'])])
+	\Event: (event name: narrow_cast; port: None; parameters: [<target.MainApp object at 0x104d16ab0>, 'linkA[0]', (event name: link_check; port: None; parameters: ['linkA[0]'])])
 
 OUTPUT EVENT to <ObjectManager>
-	\Event: (event name: disassociate_instance; port: None; parameters: [<target.MainApp object at 0x1021744a0>, 'linkA'])
+	\Event: (event name: disassociate_instance; port: None; parameters: [<target.MainApp object at 0x104d16ab0>, 'linkA'])
 
 
 INPUT EVENT from <ObjectManager>
@@ -75,7 +75,7 @@ OUTPUT EVENT to port <ui>
 	\Event: (event name: instance_disassociated_succesfully; port: ui; parameters: ['0.00', ['linkA[0]']])
 
 OUTPUT EVENT to <ObjectManager>
-	\Event: (event name: narrow_cast; port: None; parameters: [<target.MainApp object at 0x1021744a0>, 'linkA[0]', (event name: sanity_check; port: None)])
+	\Event: (event name: narrow_cast; port: None; parameters: [<target.MainApp object at 0x104d16ab0>, 'linkA[0]', (event name: sanity_check; port: None)])
 
 
 INPUT EVENT from <ObjectManager>

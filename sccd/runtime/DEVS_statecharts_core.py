@@ -201,6 +201,9 @@ class RuntimeClassBase(object):
         return self.inports[port_name] if port_name in self.inports else port_name
 
     def start(self):
+        '''
+        Start a statechart
+        '''
         self.configuration = []
 
         self.active = True
@@ -220,6 +223,9 @@ class RuntimeClassBase(object):
         self.processBigStepOutput()
 
     def stop(self):
+        '''
+        Stop a statechart
+        '''
         self.active = False
         self.__set_stable(True)
 
@@ -228,6 +234,10 @@ class RuntimeClassBase(object):
         self.configuration_bitmap = sum([2 ** s.state_id for s in states])
 
     def getSimulatedTime(self):
+        '''
+        Returns the simulated time of the statechart.
+        '''
+        # As the original SCCD returns the simulated time in milliseconds, so does the DEVS representation
         return self.controller.state.simulated_time * 1000
 
     def addTimer(self, index, timeout):
@@ -415,7 +425,7 @@ class ClassState():
         self.instance_times = []
         self.eventless = set()
 
-        #self.lock = threading.Condition()
+        self.lock = threading.Condition()
 
         self.text = ""
         
@@ -425,15 +435,15 @@ class ClassState():
         return self.text
 
     def getEarliestEventTime(self):
-        #with self.lock:
-        while self.instance_times and self.instance_times[0][0] < self.instance_times[0][1].earliest_event_time:
-            heappop(self.instance_times)
+        with self.lock:
+            while self.instance_times and self.instance_times[0][0] < self.instance_times[0][1].earliest_event_time:
+                heappop(self.instance_times)
         return min(INFINITY if not self.instance_times else self.instance_times[0][0], self.events.getEarliestTime())
         
     def addEvent(self, event, time_offset = 0):
         self.events.add(self.simulated_time + time_offset, event)
         
-    # broadcast an event to all instances
+    # broadcast an event to all instances, except its own
     def broadcast(self, source, new_event, time_offset = 0):
         for i in self.instances:
             if self.instances[i] != source:
@@ -526,7 +536,8 @@ class ClassBase(AtomicDEVS):
         raise "Something went wrong"
     
     def handleBroadCastEvent(self, input):
-        # Handle when in the instance atomicDEVS
+        # If the broadcast event is of the same class type as the source of the event, 
+        # forward the instance to the boradcast function so it will be handled properly
         if input[0][0] == self.name:
             source = self.state.instances[input[0][1]]
             self.state.broadcast(source, input[2].parameters[1])
@@ -582,9 +593,11 @@ class ClassBase(AtomicDEVS):
         return self.state
     
     def intTransition(self):
+        # Remove the first event, this event was handled in the previous iteration
         self.state.to_send = self.state.to_send[1:]
         self.state.text = ""
 
+        # First, handle all the events that need to be sent
         if len(self.state.to_send) == 0:
             # Update simulated time and clear previous messages 
             self.state.simulated_time += self.state.next_time
@@ -604,8 +617,10 @@ class ClassBase(AtomicDEVS):
         if not len(self.state.to_send) == 0:
             sending = self.state.to_send[0]
             if isinstance(sending, tuple) and sending[2].port == None:
+                # Handle internal events, will always be sent to the object manager
                 to_dict[self.obj_manager_out] = sending
             else:
+                # Get the port to sent to the outside of the simulation
                 the_port = next((port for port in self.OPorts if port.name == sending.port), None)
                 to_dict[the_port] = sending
         return to_dict
@@ -719,27 +734,24 @@ class ObjectManagerState():
             raise ParameterException("The broadcast event needs 2 parameters (source of event and event name).")
         
         ev = Event('broad_cast', None, parameters[2].parameters)
-        # Extract unique names
+        # Extract all unique classes in the instances dictionary
         unique_classes = {entry["name"] for entry in self.instances}
         for aclass in unique_classes:
             # The index of target does not matter as it gets broadcasted to every instance
-            self.to_send.append((parameters[0], (aclass, 0), ev))
+            # TODO: firstly set to 0, for clarity i am going to set this to None, should work but needs testing
+            self.to_send.append((parameters[0], (aclass, None), ev))
 
     def handleCreateEvent(self, parameters):
         if len(parameters[2].parameters) < 2:
             raise ParameterException("The create event needs at least 2 parameters.")
         else:
             source = parameters[0]
-
             association_name = parameters[2].parameters[1]
-            
-            traversal_list = self.processAssociationReference(association_name)
-            instances = self.getInstances(source, traversal_list)
             
             association = self.instances[source[1]]["associations"][association_name]
 
             if association.allowedToAdd():
-                # TODO: Needed here to know the id for the first port
+                # The narrow_cast id is the first id of a port as the narrow cast port always gets initialized first
                 starting_port_id = self.narrow_cast_id
 
                 ''' allow subclasses to be instantiated '''
@@ -759,7 +771,6 @@ class ObjectManagerState():
                 if p:
                     p.addInstance(source[1])
                 
-
                 parameters[2].parameters[1] = f"{association_name}[{index}]"
 
                 old_params = [parameters[2].parameters[0]]
@@ -770,7 +781,6 @@ class ObjectManagerState():
                 self.to_send.append((parameters[0], (class_name, new_instance_index), ev))
                 return [source, association_name+"["+str(index)+"]"]
             else:
-                #source.addEvent(Event("instance_creation_error", None, [association_name]))
                 ev = Event('instance_creation_error', None, [association_name])
                 self.to_send.append((parameters[0], (class_name, new_instance_index), ev))
                 return []
@@ -782,7 +792,6 @@ class ObjectManagerState():
             source = parameters[0]
             traversal_list = self.processAssociationReference(parameters[2].parameters[1])
 
-            # TODO: it is possible that we need to get the right index here because not needed now
             to_class = None
             for i in self.getInstances(source, traversal_list):
                 to_class = i["instance"]
@@ -842,14 +851,12 @@ class ObjectManagerState():
                 association_name = [association_name]
             deleted_links = []
             
-            to_class = None
             for a_n in association_name:
                 traversal_list = self.processAssociationReference(a_n)
                 instances = self.getInstances(source, traversal_list)
                 
                 for i in instances:
                     try:
-                        to_class = i["instance"]
                         instance = self.instances[i['ref'][1]]
                         association = instance['associations'][i['assoc_name']]
 
@@ -910,21 +917,21 @@ class ObjectManagerBase(AtomicDEVS):
         return self.state
     
     def intTransition(self):
-        self.state.to_send.pop(0)
-        #self.state.to_send.clear()
+        #self.state.to_send.pop(0)
+        self.state.to_send.clear()
         return self.state
     
     def outputFnc(self):
-        out_dict = {}
-        if not len(self.state.to_send) == 0:
-            source, target, message = self.state.to_send[0]
-            out_dict[self.output.get(target[0])] = [(source, target, message)]
-        return out_dict
-
         #out_dict = {}
-        #for source, target, message in self.state.to_send:
-        #    out_dict.setdefault(self.output.get(target[0]), []).append((source, target, message))
+        #if not len(self.state.to_send) == 0:
+        #    source, target, message = self.state.to_send[0]
+        #    out_dict[self.output.get(target[0])] = [(source, target, message)]
         #return out_dict
+
+        out_dict = {}
+        for source, target, message in self.state.to_send:
+            out_dict.setdefault(self.output.get(target[0]), []).append((source, target, message))
+        return out_dict
     
     def timeAdvance(self):
         return 0 if self.state.to_send else INFINITY

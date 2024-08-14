@@ -1,7 +1,7 @@
 __  Current Time:   0.000000 __________________________________________ 
 
 OUTPUT EVENT to <ObjectManager>
-	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x102177590>, 'linkA', 'A'])
+	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x104eb95b0>, 'linkA', 'A'])
 
 INPUT EVENT from <ObjectManager>
 	\Type: cd
@@ -20,10 +20,10 @@ OUTPUT EVENT to port <ui>
 	\Event: (event name: instance_created_succesfully; port: ui; parameters: ['0.00', 'linkA[0]'])
 
 OUTPUT EVENT to <ObjectManager>
-	\Event: (event name: start_instance; port: None; parameters: [<target.MainApp object at 0x102177590>, 'linkA[0]'])
+	\Event: (event name: start_instance; port: None; parameters: [<target.MainApp object at 0x104eb95b0>, 'linkA[0]'])
 
 OUTPUT EVENT to <ObjectManager>
-	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x102177590>, 'linkA', 'A'])
+	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x104eb95b0>, 'linkA', 'A'])
 
 
 OUTPUT EVENT to port <ui>
@@ -60,7 +60,7 @@ OUTPUT EVENT to port <ui>
 	\Event: (event name: instance_created_succesfully; port: ui; parameters: ['0.00', 'linkA[1]'])
 
 OUTPUT EVENT to <ObjectManager>
-	\Event: (event name: start_instance; port: None; parameters: [<target.MainApp object at 0x102177590>, 'linkA[1]'])
+	\Event: (event name: start_instance; port: None; parameters: [<target.MainApp object at 0x104eb95b0>, 'linkA[1]'])
 
 
 OUTPUT EVENT to port <ui>
@@ -69,6 +69,15 @@ OUTPUT EVENT to port <ui>
 INPUT EVENT from <ObjectManager>
 	\Type: cd
 	\Event: (event name: instance_started; port: None; parameters: ['linkA[1]'])
+
+EXIT STATE in model <A>
+		State: /state1
+
+TRANSITION FIRED in model <A>
+		Transition(/state1 -> /state2)
+
+ENTER STATE in model <A>
+		State: /state2
 
 EXIT STATE in model <MainApp>
 		State: /state3
@@ -83,19 +92,10 @@ OUTPUT EVENT to port <ui>
 	\Event: (event name: instance_started_succesfully; port: ui; parameters: ['0.00', 'linkA[1]'])
 
 OUTPUT EVENT to <ObjectManager>
-	\Event: (event name: narrow_cast; port: None; parameters: [<target.MainApp object at 0x102177590>, 'linkA[1]', (event name: link_check; port: None; parameters: ['linkA[1]'])])
+	\Event: (event name: narrow_cast; port: None; parameters: [<target.MainApp object at 0x104eb95b0>, 'linkA[1]', (event name: link_check; port: None; parameters: ['linkA[1]'])])
 
 OUTPUT EVENT to <ObjectManager>
-	\Event: (event name: disassociate_instance; port: None; parameters: [<target.MainApp object at 0x102177590>, 'linkA'])
-
-EXIT STATE in model <A>
-		State: /state1
-
-TRANSITION FIRED in model <A>
-		Transition(/state1 -> /state2)
-
-ENTER STATE in model <A>
-		State: /state2
+	\Event: (event name: disassociate_instance; port: None; parameters: [<target.MainApp object at 0x104eb95b0>, 'linkA'])
 
 
 INPUT EVENT from <ObjectManager>
@@ -115,7 +115,7 @@ OUTPUT EVENT to port <ui>
 	\Event: (event name: instance_disassociated_succesfully; port: ui; parameters: ['0.00', ['linkA[0]', 'linkA[1]']])
 
 OUTPUT EVENT to <ObjectManager>
-	\Event: (event name: narrow_cast; port: None; parameters: [<target.MainApp object at 0x102177590>, 'linkA[1]', (event name: sanity_check; port: None)])
+	\Event: (event name: narrow_cast; port: None; parameters: [<target.MainApp object at 0x104eb95b0>, 'linkA[1]', (event name: sanity_check; port: None)])
 
 
 INPUT EVENT from <ObjectManager>

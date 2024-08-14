@@ -13,7 +13,7 @@ __  Current Time:   0.000000 __________________________________________
 
 
 	INITIAL CONDITIONS in model <Controller.ObjectManager>
-		Initial State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x10220e630>
+		Initial State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x10652c3e0>
 		Next scheduled internal transition at time inf
 
 
@@ -40,7 +40,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('A', 0), None, (event name: create_instance; port: None; parameters: [0, 'BLink[0]', 'B']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x10220e630>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x10652c3e0>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -66,7 +66,7 @@ __  Current Time:   0.000000 __________________________________________
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x10220e630>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x10652c3e0>
 		Output Port Configuration:
 			port <port1>:
 			port <port2>:
@@ -81,7 +81,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('B', 1), ('A', 0), (event name: instance_created; port: None; parameters: ['BLink[0]']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x10220e630>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x10652c3e0>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -107,7 +107,7 @@ __  Current Time:   0.000000 __________________________________________
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x10220e630>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x10652c3e0>
 		Output Port Configuration:
 			port <port1>:
 				[(('B', 1), ('A', 0), (event name: instance_created; port: None; parameters: ['BLink[0]']))]
@@ -153,7 +153,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('A', 0), None, (event name: start_instance; port: None; parameters: [0, 'BLink[0]']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x10220e630>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x10652c3e0>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -179,7 +179,7 @@ __  Current Time:   0.000000 __________________________________________
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x10220e630>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x10652c3e0>
 		Output Port Configuration:
 			port <port1>:
 			port <port2>:
@@ -194,7 +194,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('B', 1), ('A', 0), (event name: instance_started; port: None; parameters: ['BLink[0]']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x10220e630>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x10652c3e0>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -231,7 +231,7 @@ __  Current Time:   0.000000 __________________________________________
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x10220e630>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x10652c3e0>
 		Output Port Configuration:
 			port <port1>:
 				[(('B', 1), ('A', 0), (event name: instance_started; port: None; parameters: ['BLink[0]']))]
