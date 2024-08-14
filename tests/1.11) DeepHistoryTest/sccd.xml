@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<diagram author="Raphael Mannadiar" name="">
+    <inport name="ui" />
+    <class name="MainApp" default="true">
+        <scxml initial="on">
+            <state id="on" initial="normal">
+                <state id="normal" initial="red">
+                    <state id="red">
+                        <transition after='2' target='../green'/>
+                    </state>
+                    <state id="green">
+                        <transition after='1' target='../yellow'/>
+                    </state>
+                    <state id="yellow" initial="yellow1">
+                        <state id="yellow1">
+                            <transition after='0.1' target='../yellow2'/>
+                        </state>
+                        <state id="yellow2">
+                            <transition after='0.5' target='../yellow3'/>
+                        </state>
+                        <state id="yellow3">
+                            <transition after='0.1' target='../../../../off'/>
+                        </state>
+                    </state>
+                    <transition after='3.5' target='../interrupted'/>
+                    <history id="history" type="deep"/>
+                </state>
+                <state id="interrupted">
+                    <transition after='1' target='../normal/history'/>
+                </state>
+            </state>
+            <state id="off" />
+        </scxml>
+    </class>
+</diagram>

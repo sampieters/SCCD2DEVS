@@ -1,0 +1,29 @@
+2.00 MainApp: exit /on/normal/red
+2.00 MainApp: transition (/on/normal/red -> /on/normal/green)
+2.00 MainApp: enter /on/normal/green
+3.00 MainApp: exit /on/normal/green
+3.00 MainApp: transition (/on/normal/green -> /on/normal/yellow)
+3.00 MainApp: enter /on/normal/yellow
+3.00 MainApp: enter /on/normal/yellow/yellow1
+3.10 MainApp: exit /on/normal/yellow/yellow1
+3.10 MainApp: transition (/on/normal/yellow/yellow1 -> /on/normal/yellow/yellow2)
+3.10 MainApp: enter /on/normal/yellow/yellow2
+3.50 MainApp: exit /on/normal/yellow/yellow2
+3.50 MainApp: exit /on/normal/yellow
+3.50 MainApp: exit /on/normal
+3.50 MainApp: transition (/on/normal -> /on/interrupted)
+3.50 MainApp: enter /on/interrupted
+4.50 MainApp: exit /on/interrupted
+4.50 MainApp: transition (/on/interrupted -> /on/normal/history)
+4.50 MainApp: enter /on/normal
+4.50 MainApp: enter /on/normal/yellow
+4.50 MainApp: enter /on/normal/yellow/yellow2
+5.00 MainApp: exit /on/normal/yellow/yellow2
+5.00 MainApp: transition (/on/normal/yellow/yellow2 -> /on/normal/yellow/yellow3)
+5.00 MainApp: enter /on/normal/yellow/yellow3
+5.10 MainApp: exit /on/normal/yellow/yellow3
+5.10 MainApp: exit /on/normal/yellow
+5.10 MainApp: exit /on/normal
+5.10 MainApp: exit /on
+5.10 MainApp: transition (/on/normal/yellow/yellow3 -> /off)
+5.10 MainApp: enter /off

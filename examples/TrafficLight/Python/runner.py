@@ -19,7 +19,7 @@ if __name__ == '__main__':
 	ui = UI(tkroot, controller)
 	controller.addMyOwnOutputListener(OutputListener(ui))
 
-	controller.setVerbose(None)
+	controller.setVerbose("./output.txt")
 	
 	controller.start()
 	tkroot.mainloop()

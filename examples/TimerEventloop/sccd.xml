@@ -23,7 +23,7 @@
                     <raise port="ui" event="create_window">
                         <parameter expr="CANVAS_DIMS[0]"/>
                         <parameter expr="CANVAS_DIMS[1]"/>
-                        <parameter expr='"Fixed Timer"'/>
+                        <parameter expr='"Timer"'/>
                         <parameter expr="self.inports['field_ui']"/>
                     </raise>
                 </onentry>

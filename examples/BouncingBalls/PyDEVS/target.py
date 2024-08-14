@@ -200,9 +200,10 @@ class MainApp(ClassBase):
         ClassBase.__init__(self, name)
         self.input = self.addInPort("input")
         self.glob_outputs["ui"] = self.addOutPort("ui")
-        self.outputs["fields"] = self.addOutPort("fields")
         new_instance = self.constructObject(0, 0, [])
         self.state.instances[new_instance.instance_id] = new_instance
+        new_instance.start()
+        self.state.next_time = 0
     
     def constructObject(self, id, start_port_id, parameters):
         new_instance = MainAppInstance(self, id, start_port_id)
@@ -470,9 +471,6 @@ class Field(ClassBase):
         ClassBase.__init__(self, name)
         self.input = self.addInPort("input")
         self.glob_outputs["ui"] = self.addOutPort("ui")
-        self.outputs["balls"] = self.addOutPort("balls")
-        self.outputs["buttons"] = self.addOutPort("buttons")
-        self.outputs["parent"] = self.addOutPort("parent")
         self.field_ui = self.addInPort("field_ui")
     
     def constructObject(self, id, start_port_id, parameters):
@@ -577,7 +575,6 @@ class Button(ClassBase):
         ClassBase.__init__(self, name)
         self.input = self.addInPort("input")
         self.glob_outputs["ui"] = self.addOutPort("ui")
-        self.outputs["parent"] = self.addOutPort("parent")
         self.button_ui = self.addInPort("button_ui")
     
     def constructObject(self, id, start_port_id, parameters):
@@ -801,7 +798,6 @@ class Ball(ClassBase):
         ClassBase.__init__(self, name)
         self.input = self.addInPort("input")
         self.glob_outputs["ui"] = self.addOutPort("ui")
-        self.outputs["parent"] = self.addOutPort("parent")
         self.ball_ui = self.addInPort("ball_ui")
     
     def constructObject(self, id, start_port_id, parameters):
@@ -844,7 +840,6 @@ class ObjectManager(ObjectManagerBase):
         self.output["Button"] = self.addOutPort()
         self.output["Ball"] = self.addOutPort()
         self.state.createInstance("MainApp", [])
-        self.state.to_send.append((("MainApp", 0), ("MainApp", 0), Event("start_instance", None, ["MainApp[0]"])))
 
 class Controller(CoupledDEVS):
     def __init__(self, name):
@@ -859,18 +854,12 @@ class Controller(CoupledDEVS):
         self.atomics.append(self.addSubModel(Ball("Ball")))
         self.connectPorts(self.atomics[0].obj_manager_out, self.objectmanager.input)
         self.connectPorts(self.objectmanager.output["MainApp"], self.atomics[0].obj_manager_in)
-        self.connectPorts(self.atomics[0].outputs["fields"], self.atomics[1].input)
         self.connectPorts(self.atomics[1].obj_manager_out, self.objectmanager.input)
         self.connectPorts(self.objectmanager.output["Field"], self.atomics[1].obj_manager_in)
-        self.connectPorts(self.atomics[1].outputs["balls"], self.atomics[3].input)
-        self.connectPorts(self.atomics[1].outputs["buttons"], self.atomics[2].input)
-        self.connectPorts(self.atomics[1].outputs["parent"], self.atomics[0].input)
         self.connectPorts(self.atomics[2].obj_manager_out, self.objectmanager.input)
         self.connectPorts(self.objectmanager.output["Button"], self.atomics[2].obj_manager_in)
-        self.connectPorts(self.atomics[2].outputs["parent"], self.atomics[1].input)
         self.connectPorts(self.atomics[3].obj_manager_out, self.objectmanager.input)
         self.connectPorts(self.objectmanager.output["Ball"], self.atomics[3].obj_manager_in)
-        self.connectPorts(self.atomics[3].outputs["parent"], self.atomics[1].input)
         self.connectPorts(self.atomics[0].glob_outputs["ui"], self.out_ui)
         self.connectPorts(self.in_ui, self.atomics[0].input)
         self.connectPorts(self.atomics[1].glob_outputs["ui"], self.out_ui)

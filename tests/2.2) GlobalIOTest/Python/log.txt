@@ -2,11 +2,11 @@ __  Current Time:   0.000000 __________________________________________
 
 INPUT EVENT from <ObjectManager>
 	\Type: cd
-	\Event: (event name: input_event; port: Inport; parameters: [])
+	\Event: (event name: input_event; port: Inport)
 
 INPUT EVENT from port <Inport>
 	\Type: Inport
-	\Event: (event name: input_event; port: Inport; parameters: [])
+	\Event: (event name: input_event; port: Inport)
 
 EXIT STATE in model <MainApp>
 		State: /state1

@@ -1,0 +1,23 @@
+<class name="A">
+    <relationships>
+        <association name="BLink" class="B" min="1" max="1"/>
+    </relationships>
+    <scxml initial="init">
+        <state id="init">
+            <onentry>
+                <raise scope="cd" event="create_instance">
+                    <parameter expr="'BLink'"/>
+                    <parameter expr="'B'"/>
+                </raise>
+            </onentry>
+            <transition event="instance_created" target="../initializing">
+                <parameter name="instancename"/>
+                <raise scope="cd" event="start_instance">
+                    <parameter expr="instancename"/>
+                </raise>
+            </transition>
+        </state>
+        <state id="initializing">
+        </state>
+    </scxml>
+</class>

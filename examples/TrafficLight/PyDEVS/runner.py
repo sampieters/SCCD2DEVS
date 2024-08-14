@@ -21,7 +21,7 @@ if __name__ == '__main__':
 	tkroot.withdraw()
 	sim = DEVSSimulator(model)
 
-	sim.setVerbose()
+	sim.setVerbose("./output.txt")
 	sim.setRealTimePlatformTk(tkroot)
 
 	ui = UI(tkroot, sim)

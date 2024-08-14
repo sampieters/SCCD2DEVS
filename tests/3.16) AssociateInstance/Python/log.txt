@@ -1,0 +1,151 @@
+__  Current Time:   0.000000 __________________________________________ 
+
+OUTPUT EVENT to <ObjectManager>
+	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x102177770>, 'linkA', 'A'])
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: instance_created; port: None; parameters: ['linkA[0]'])
+
+EXIT STATE in model <MainApp>
+		State: /state1
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/state1 -> /state2)
+
+ENTER STATE in model <MainApp>
+		State: /state2
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: instance_created_succesfully; port: ui; parameters: ['linkA[0]'])
+
+OUTPUT EVENT to <ObjectManager>
+	\Event: (event name: start_instance; port: None; parameters: [<target.MainApp object at 0x102177770>, 'linkA[0]'])
+
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: statechart_started_succesfully; port: ui)
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: instance_started; port: None; parameters: ['linkA[0]'])
+
+EXIT STATE in model <MainApp>
+		State: /state2
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/state2 -> /state3)
+
+ENTER STATE in model <MainApp>
+		State: /state3
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: instance_started_succesfully; port: ui; parameters: ['linkA[0]'])
+
+OUTPUT EVENT to <ObjectManager>
+	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x102177770>, 'linkB', 'B'])
+
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: instance_created; port: None; parameters: ['linkB[0]'])
+
+EXIT STATE in model <MainApp>
+		State: /state3
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/state3 -> /state4)
+
+ENTER STATE in model <MainApp>
+		State: /state4
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: instance_created_succesfully; port: ui; parameters: ['linkB[0]'])
+
+OUTPUT EVENT to <ObjectManager>
+	\Event: (event name: start_instance; port: None; parameters: [<target.MainApp object at 0x102177770>, 'linkB[0]'])
+
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: statechart_started_succesfully; port: ui)
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: instance_started; port: None; parameters: ['linkB[0]'])
+
+EXIT STATE in model <MainApp>
+		State: /state4
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/state4 -> /state5)
+
+ENTER STATE in model <MainApp>
+		State: /state5
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: instance_started_succesfully; port: ui; parameters: ['linkB[0]'])
+
+OUTPUT EVENT to <ObjectManager>
+	\Event: (event name: associate_instance; port: None; parameters: [<target.MainApp object at 0x102177770>, 'linkB[0]', 'linkA/linkB'])
+
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: instance_associated; port: None; parameters: [['linkA[-1]/linkB[0]']])
+
+EXIT STATE in model <MainApp>
+		State: /state5
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/state5 -> /state6)
+
+ENTER STATE in model <MainApp>
+		State: /state6
+
+OUTPUT EVENT to <ObjectManager>
+	\Event: (event name: narrow_cast; port: None; parameters: [<target.MainApp object at 0x102177770>, 'linkA[0]', (event name: test_link; port: None)])
+
+
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: test_link; port: private_1_<narrow_cast>)
+
+INPUT EVENT from port <private_1_<narrow_cast>>
+	\Type: <narrow_cast>
+	\Event: (event name: test_link; port: private_1_<narrow_cast>)
+
+EXIT STATE in model <A>
+		State: /state1
+
+TRANSITION FIRED in model <A>
+		Transition(/state1 -> /state2)
+
+ENTER STATE in model <A>
+		State: /state2
+
+OUTPUT EVENT to <ObjectManager>
+	\Event: (event name: narrow_cast; port: None; parameters: [<target.A object at 0x10208e150>, 'linkB[0]', (event name: test_new_link; port: None)])
+
+
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: test_new_link; port: private_2_<narrow_cast>)
+
+INPUT EVENT from port <private_2_<narrow_cast>>
+	\Type: <narrow_cast>
+	\Event: (event name: test_new_link; port: private_2_<narrow_cast>)
+
+EXIT STATE in model <B>
+		State: /state1
+
+TRANSITION FIRED in model <B>
+		Transition(/state1 -> /state2)
+
+ENTER STATE in model <B>
+		State: /state2
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: associated_succesfully; port: ui)
+

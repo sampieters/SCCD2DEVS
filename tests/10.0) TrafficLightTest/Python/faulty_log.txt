@@ -1,0 +1,43 @@
+0.00 MainApp: exit /creating_window
+0.00 MainApp: transition (/creating_window -> /creating_canvas)
+0.00 MainApp: enter /creating_canvas
+0.00 MainApp: exit /creating_canvas
+0.00 MainApp: transition (/creating_canvas -> /creating_trafficlight)
+0.00 MainApp: enter /creating_trafficlight
+0.00 MainApp: enter /creating_trafficlight/creating_greenlight
+0.00 MainApp: exit /creating_trafficlight/creating_greenlight
+0.00 MainApp: transition (/creating_trafficlight/creating_greenlight -> /creating_trafficlight/creating_yellowlight)
+0.00 MainApp: enter /creating_trafficlight/creating_yellowlight
+0.00 MainApp: exit /creating_trafficlight/creating_yellowlight
+0.00 MainApp: transition (/creating_trafficlight/creating_yellowlight -> /creating_trafficlight/creating_redlight)
+0.00 MainApp: enter /creating_trafficlight/creating_redlight
+0.00 MainApp: exit /creating_trafficlight/creating_redlight
+0.00 MainApp: exit /creating_trafficlight
+0.00 MainApp: transition (/creating_trafficlight/creating_redlight -> /creating_interrupt_button)
+0.00 MainApp: enter /creating_interrupt_button
+0.00 MainApp: exit /creating_interrupt_button
+0.00 MainApp: transition (/creating_interrupt_button -> /creating_quit_button)
+0.00 MainApp: enter /creating_quit_button
+0.00 MainApp: exit /creating_quit_button
+0.00 MainApp: transition (/creating_quit_button -> /on)
+0.00 MainApp: enter /on
+0.00 MainApp: enter /on/normal
+0.00 MainApp: enter /on/normal/red
+1.00 MainApp: exit /on/normal/red
+1.00 MainApp: exit /on/normal
+1.00 MainApp: transition (/on/normal -> /on/interrupted)
+1.00 MainApp: enter /on/interrupted
+1.00 MainApp: enter /on/interrupted/yellow
+1.50 MainApp: exit /on/interrupted/yellow
+1.50 MainApp: transition (/on/interrupted/yellow -> /on/interrupted/black)
+1.50 MainApp: enter /on/interrupted/black
+1.99 MainApp: exit /on/interrupted/black
+1.99 MainApp: exit /on/interrupted
+1.99 MainApp: transition (/on/interrupted -> /on/normal)
+1.99 MainApp: enter /on/normal
+1.99 MainApp: enter /on/normal/red
+3.00 MainApp: exit /on/normal/red
+3.00 MainApp: exit /on/normal
+3.00 MainApp: exit /on
+3.00 MainApp: transition (/on -> /off)
+3.00 MainApp: enter /off

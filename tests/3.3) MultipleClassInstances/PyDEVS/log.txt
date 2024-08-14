@@ -9,12 +9,12 @@ __  Current Time:   0.000000 __________________________________________
 
 	INITIAL CONDITIONS in model <Controller.MainApp>
 		Initial State: 
-		Next scheduled internal transition at time inf
+		Next scheduled internal transition at time 0.000000
 
 
 	INITIAL CONDITIONS in model <Controller.ObjectManager>
-		Initial State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
-		Next scheduled internal transition at time 0.000000
+		Initial State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
+		Next scheduled internal transition at time inf
 
 
 	INITIAL CONDITIONS in model <Controller.Tester>
@@ -25,42 +25,11 @@ __  Current Time:   0.000000 __________________________________________
 __  Current Time:   0.000000 __________________________________________ 
 
 
-	EXTERNAL TRANSITION in model <Controller.MainApp>
-		Input Port Configuration:
-			port <obj_manager_in>:
-				[(('MainApp', 0), ('MainApp', 0), (event name: start_instance; port: None; parameters: ['MainApp[0]']))]
-			port <input>:
-		New State: 
-		Next scheduled internal transition at time 0.000000
-
-
-	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
-		Output Port Configuration:
-			port <port1>:
-				[(('MainApp', 0), ('MainApp', 0), (event name: start_instance; port: None; parameters: ['MainApp[0]']))]
-			port <port2>:
-		Next scheduled internal transition at time inf
-
-
-__  Current Time:   0.000000 __________________________________________ 
-
-
-	EXTERNAL TRANSITION in model <Controller.ObjectManager>
-		Input Port Configuration:
-			port <input>:
-				(('MainApp', 0), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['MainApp[0]']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
-		Next scheduled internal transition at time 0.000000
-
-
 	INTERNAL TRANSITION in model <Controller.MainApp>
 		New State: 
 		Output Port Configuration:
 			port <obj_manager_out>:
-				(('MainApp', 0), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['MainApp[0]']))
 			port <ui>:
-			port <linkA>:
 		Next scheduled internal transition at time 0.000000
 
 
@@ -71,7 +40,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('MainApp', 0), None, (event name: create_instance; port: None; parameters: [0, 'linkA[0]', 'A', 10]))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -81,7 +50,6 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 				(('MainApp', 0), None, (event name: create_instance; port: None; parameters: [0, 'linkA', 'A', 10]))
 			port <ui>:
-			port <linkA>:
 		Next scheduled internal transition at time inf
 
 
@@ -97,20 +65,10 @@ __  Current Time:   0.000000 __________________________________________
 		Next scheduled internal transition at time 0.000000
 
 
-	EXTERNAL TRANSITION in model <Controller.MainApp>
-		Input Port Configuration:
-			port <obj_manager_in>:
-				[(('MainApp', 0), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['MainApp[0]']))]
-			port <input>:
-		New State: 
-		Next scheduled internal transition at time 0.000000
-
-
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Output Port Configuration:
 			port <port1>:
-				[(('MainApp', 0), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['MainApp[0]']))]
 			port <port2>:
 				[(('MainApp', 0), ('A', 1), (event name: create_instance; port: None; parameters: [0, 1, 'linkA[0]', 'A', 10]))]
 		Next scheduled internal transition at time inf
@@ -123,7 +81,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('A', 1), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[0]']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -133,30 +91,6 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 				(('A', 1), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[0]']))
 			port <ui>:
-		Next scheduled internal transition at time inf
-
-
-__  Current Time:   0.000000 __________________________________________ 
-
-
-	INTERNAL TRANSITION in model <Controller.MainApp>
-		New State: 
-		Output Port Configuration:
-			port <obj_manager_out>:
-			port <ui>:
-			port <linkA>:
-		Next scheduled internal transition at time 0.000000
-
-
-__  Current Time:   0.000000 __________________________________________ 
-
-
-	INTERNAL TRANSITION in model <Controller.MainApp>
-		New State: 
-		Output Port Configuration:
-			port <obj_manager_out>:
-			port <ui>:
-			port <linkA>:
 		Next scheduled internal transition at time inf
 
 
@@ -173,7 +107,7 @@ __  Current Time:   0.000000 __________________________________________
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Output Port Configuration:
 			port <port1>:
 				[(('A', 1), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[0]']))]
@@ -207,7 +141,6 @@ __  Current Time:   0.000000 __________________________________________
 		Output Port Configuration:
 			port <obj_manager_out>:
 			port <ui>:
-			port <linkA>:
 		Next scheduled internal transition at time 0.000000
 
 
@@ -220,7 +153,6 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 			port <ui>:
 				(event name: instance_created_succesfully; port: ui; parameters: ['0.00', 'linkA[0]'])
-			port <linkA>:
 		Next scheduled internal transition at time 0.000000
 
 
@@ -231,7 +163,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('MainApp', 0), None, (event name: start_instance; port: None; parameters: [0, 'linkA[0]']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -241,7 +173,6 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 				(('MainApp', 0), None, (event name: start_instance; port: None; parameters: [0, 'linkA[0]']))
 			port <ui>:
-			port <linkA>:
 		Next scheduled internal transition at time 0.000000
 
 
@@ -252,7 +183,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('MainApp', 0), None, (event name: create_instance; port: None; parameters: [0, 'linkA[1]', 'A', 9]))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -262,7 +193,6 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 				(('MainApp', 0), None, (event name: create_instance; port: None; parameters: [0, 'linkA', 'A', 9]))
 			port <ui>:
-			port <linkA>:
 		Next scheduled internal transition at time inf
 
 
@@ -272,19 +202,19 @@ __  Current Time:   0.000000 __________________________________________
 	EXTERNAL TRANSITION in model <Controller.A>
 		Input Port Configuration:
 			port <obj_manager_in>:
-				[(('MainApp', 0), ('A', 1), (event name: start_instance; port: None; parameters: ['linkA[0]'])), (('MainApp', 0), ('A', 2), (event name: create_instance; port: None; parameters: [0, 2, 'linkA[1]', 'A', 9]))]
+				[(('MainApp', 0), ('A', 1), (event name: start_instance; port: None; parameters: ['linkA[0]']))]
 			port <input>:
 		New State: 
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Output Port Configuration:
 			port <port1>:
 			port <port2>:
-				[(('MainApp', 0), ('A', 1), (event name: start_instance; port: None; parameters: ['linkA[0]'])), (('MainApp', 0), ('A', 2), (event name: create_instance; port: None; parameters: [0, 2, 'linkA[1]', 'A', 9]))]
-		Next scheduled internal transition at time inf
+				[(('MainApp', 0), ('A', 1), (event name: start_instance; port: None; parameters: ['linkA[0]']))]
+		Next scheduled internal transition at time 0.000000
 
 
 __  Current Time:   0.000000 __________________________________________ 
@@ -318,7 +248,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('A', 1), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[0]']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -334,11 +264,43 @@ __  Current Time:   0.000000 __________________________________________
 __  Current Time:   0.000000 __________________________________________ 
 
 
+	INTERNAL TRANSITION in model <Controller.A>
+		New State: 
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <Controller.A>
+		Input Port Configuration:
+			port <obj_manager_in>:
+				[(('MainApp', 0), ('A', 2), (event name: create_instance; port: None; parameters: [0, 2, 'linkA[1]', 'A', 9]))]
+			port <input>:
+		New State: 
+		Next scheduled internal transition at time 0.000000
+
+
+	INTERNAL TRANSITION in model <Controller.ObjectManager>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
+		Output Port Configuration:
+			port <port1>:
+			port <port2>:
+				[(('MainApp', 0), ('A', 2), (event name: create_instance; port: None; parameters: [0, 2, 'linkA[1]', 'A', 9]))]
+		Next scheduled internal transition at time 0.000000
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
 	EXTERNAL TRANSITION in model <Controller.ObjectManager>
 		Input Port Configuration:
 			port <input>:
 				(('A', 2), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[1]']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -348,13 +310,45 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 				(('A', 2), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[1]']))
 			port <ui>:
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <Controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+				[(('A', 1), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[0]']))]
+			port <input>:
+		New State: 
+		Next scheduled internal transition at time 0.000000
+
+
+	INTERNAL TRANSITION in model <Controller.ObjectManager>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
+		Output Port Configuration:
+			port <port1>:
+				[(('A', 1), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[0]']))]
+			port <port2>:
 		Next scheduled internal transition at time 0.000000
 
 
 __  Current Time:   0.000000 __________________________________________ 
 
 
-	INTERNAL TRANSITION in model <Controller.A>
+	INTERNAL TRANSITION in model <Controller.MainApp>
+		New State: 
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.000000
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <Controller.MainApp>
 		New State: 
 		Output Port Configuration:
 			port <obj_manager_out>:
@@ -368,31 +362,19 @@ __  Current Time:   0.000000 __________________________________________
 	EXTERNAL TRANSITION in model <Controller.MainApp>
 		Input Port Configuration:
 			port <obj_manager_in>:
-				[(('A', 1), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[0]'])), (('A', 2), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[1]']))]
+				[(('A', 2), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[1]']))]
 			port <input>:
 		New State: 
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Output Port Configuration:
 			port <port1>:
-				[(('A', 1), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[0]'])), (('A', 2), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[1]']))]
+				[(('A', 2), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[1]']))]
 			port <port2>:
 		Next scheduled internal transition at time inf
-
-
-__  Current Time:   0.000000 __________________________________________ 
-
-
-	INTERNAL TRANSITION in model <Controller.MainApp>
-		New State: 
-		Output Port Configuration:
-			port <obj_manager_out>:
-			port <ui>:
-			port <linkA>:
-		Next scheduled internal transition at time 0.000000
 
 
 __  Current Time:   0.000000 __________________________________________ 
@@ -421,7 +403,6 @@ __  Current Time:   0.000000 __________________________________________
 		Output Port Configuration:
 			port <obj_manager_out>:
 			port <ui>:
-			port <linkA>:
 		Next scheduled internal transition at time 0.000000
 
 
@@ -434,7 +415,6 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 			port <ui>:
 				(event name: instance_created_succesfully; port: ui; parameters: ['0.00', 'linkA[1]'])
-			port <linkA>:
 		Next scheduled internal transition at time 0.000000
 
 
@@ -445,7 +425,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('MainApp', 0), None, (event name: start_instance; port: None; parameters: [0, 'linkA[1]']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -455,7 +435,6 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 				(('MainApp', 0), None, (event name: start_instance; port: None; parameters: [0, 'linkA[1]']))
 			port <ui>:
-			port <linkA>:
 		Next scheduled internal transition at time 0.000000
 
 
@@ -466,7 +445,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('MainApp', 0), None, (event name: create_instance; port: None; parameters: [0, 'linkA[2]', 'A', 8]))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -476,7 +455,6 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 				(('MainApp', 0), None, (event name: create_instance; port: None; parameters: [0, 'linkA', 'A', 8]))
 			port <ui>:
-			port <linkA>:
 		Next scheduled internal transition at time inf
 
 
@@ -486,19 +464,19 @@ __  Current Time:   0.000000 __________________________________________
 	EXTERNAL TRANSITION in model <Controller.A>
 		Input Port Configuration:
 			port <obj_manager_in>:
-				[(('MainApp', 0), ('A', 2), (event name: start_instance; port: None; parameters: ['linkA[1]'])), (('MainApp', 0), ('A', 3), (event name: create_instance; port: None; parameters: [0, 3, 'linkA[2]', 'A', 8]))]
+				[(('MainApp', 0), ('A', 2), (event name: start_instance; port: None; parameters: ['linkA[1]']))]
 			port <input>:
 		New State: 
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Output Port Configuration:
 			port <port1>:
 			port <port2>:
-				[(('MainApp', 0), ('A', 2), (event name: start_instance; port: None; parameters: ['linkA[1]'])), (('MainApp', 0), ('A', 3), (event name: create_instance; port: None; parameters: [0, 3, 'linkA[2]', 'A', 8]))]
-		Next scheduled internal transition at time inf
+				[(('MainApp', 0), ('A', 2), (event name: start_instance; port: None; parameters: ['linkA[1]']))]
+		Next scheduled internal transition at time 0.000000
 
 
 __  Current Time:   0.000000 __________________________________________ 
@@ -532,7 +510,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('A', 2), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[1]']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -548,11 +526,43 @@ __  Current Time:   0.000000 __________________________________________
 __  Current Time:   0.000000 __________________________________________ 
 
 
+	INTERNAL TRANSITION in model <Controller.A>
+		New State: 
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <Controller.A>
+		Input Port Configuration:
+			port <obj_manager_in>:
+				[(('MainApp', 0), ('A', 3), (event name: create_instance; port: None; parameters: [0, 3, 'linkA[2]', 'A', 8]))]
+			port <input>:
+		New State: 
+		Next scheduled internal transition at time 0.000000
+
+
+	INTERNAL TRANSITION in model <Controller.ObjectManager>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
+		Output Port Configuration:
+			port <port1>:
+			port <port2>:
+				[(('MainApp', 0), ('A', 3), (event name: create_instance; port: None; parameters: [0, 3, 'linkA[2]', 'A', 8]))]
+		Next scheduled internal transition at time 0.000000
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
 	EXTERNAL TRANSITION in model <Controller.ObjectManager>
 		Input Port Configuration:
 			port <input>:
 				(('A', 3), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[2]']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -562,13 +572,45 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 				(('A', 3), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[2]']))
 			port <ui>:
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <Controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+				[(('A', 2), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[1]']))]
+			port <input>:
+		New State: 
+		Next scheduled internal transition at time 0.000000
+
+
+	INTERNAL TRANSITION in model <Controller.ObjectManager>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
+		Output Port Configuration:
+			port <port1>:
+				[(('A', 2), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[1]']))]
+			port <port2>:
 		Next scheduled internal transition at time 0.000000
 
 
 __  Current Time:   0.000000 __________________________________________ 
 
 
-	INTERNAL TRANSITION in model <Controller.A>
+	INTERNAL TRANSITION in model <Controller.MainApp>
+		New State: 
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.000000
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <Controller.MainApp>
 		New State: 
 		Output Port Configuration:
 			port <obj_manager_out>:
@@ -582,31 +624,19 @@ __  Current Time:   0.000000 __________________________________________
 	EXTERNAL TRANSITION in model <Controller.MainApp>
 		Input Port Configuration:
 			port <obj_manager_in>:
-				[(('A', 2), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[1]'])), (('A', 3), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[2]']))]
+				[(('A', 3), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[2]']))]
 			port <input>:
 		New State: 
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Output Port Configuration:
 			port <port1>:
-				[(('A', 2), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[1]'])), (('A', 3), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[2]']))]
+				[(('A', 3), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[2]']))]
 			port <port2>:
 		Next scheduled internal transition at time inf
-
-
-__  Current Time:   0.000000 __________________________________________ 
-
-
-	INTERNAL TRANSITION in model <Controller.MainApp>
-		New State: 
-		Output Port Configuration:
-			port <obj_manager_out>:
-			port <ui>:
-			port <linkA>:
-		Next scheduled internal transition at time 0.000000
 
 
 __  Current Time:   0.000000 __________________________________________ 
@@ -635,7 +665,6 @@ __  Current Time:   0.000000 __________________________________________
 		Output Port Configuration:
 			port <obj_manager_out>:
 			port <ui>:
-			port <linkA>:
 		Next scheduled internal transition at time 0.000000
 
 
@@ -648,7 +677,6 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 			port <ui>:
 				(event name: instance_created_succesfully; port: ui; parameters: ['0.00', 'linkA[2]'])
-			port <linkA>:
 		Next scheduled internal transition at time 0.000000
 
 
@@ -659,7 +687,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('MainApp', 0), None, (event name: start_instance; port: None; parameters: [0, 'linkA[2]']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -669,7 +697,6 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 				(('MainApp', 0), None, (event name: start_instance; port: None; parameters: [0, 'linkA[2]']))
 			port <ui>:
-			port <linkA>:
 		Next scheduled internal transition at time 0.000000
 
 
@@ -680,7 +707,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('MainApp', 0), None, (event name: create_instance; port: None; parameters: [0, 'linkA[3]', 'A', 7]))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -690,7 +717,6 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 				(('MainApp', 0), None, (event name: create_instance; port: None; parameters: [0, 'linkA', 'A', 7]))
 			port <ui>:
-			port <linkA>:
 		Next scheduled internal transition at time inf
 
 
@@ -700,19 +726,19 @@ __  Current Time:   0.000000 __________________________________________
 	EXTERNAL TRANSITION in model <Controller.A>
 		Input Port Configuration:
 			port <obj_manager_in>:
-				[(('MainApp', 0), ('A', 3), (event name: start_instance; port: None; parameters: ['linkA[2]'])), (('MainApp', 0), ('A', 4), (event name: create_instance; port: None; parameters: [0, 4, 'linkA[3]', 'A', 7]))]
+				[(('MainApp', 0), ('A', 3), (event name: start_instance; port: None; parameters: ['linkA[2]']))]
 			port <input>:
 		New State: 
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Output Port Configuration:
 			port <port1>:
 			port <port2>:
-				[(('MainApp', 0), ('A', 3), (event name: start_instance; port: None; parameters: ['linkA[2]'])), (('MainApp', 0), ('A', 4), (event name: create_instance; port: None; parameters: [0, 4, 'linkA[3]', 'A', 7]))]
-		Next scheduled internal transition at time inf
+				[(('MainApp', 0), ('A', 3), (event name: start_instance; port: None; parameters: ['linkA[2]']))]
+		Next scheduled internal transition at time 0.000000
 
 
 __  Current Time:   0.000000 __________________________________________ 
@@ -746,7 +772,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('A', 3), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[2]']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -762,11 +788,43 @@ __  Current Time:   0.000000 __________________________________________
 __  Current Time:   0.000000 __________________________________________ 
 
 
+	INTERNAL TRANSITION in model <Controller.A>
+		New State: 
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <Controller.A>
+		Input Port Configuration:
+			port <obj_manager_in>:
+				[(('MainApp', 0), ('A', 4), (event name: create_instance; port: None; parameters: [0, 4, 'linkA[3]', 'A', 7]))]
+			port <input>:
+		New State: 
+		Next scheduled internal transition at time 0.000000
+
+
+	INTERNAL TRANSITION in model <Controller.ObjectManager>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
+		Output Port Configuration:
+			port <port1>:
+			port <port2>:
+				[(('MainApp', 0), ('A', 4), (event name: create_instance; port: None; parameters: [0, 4, 'linkA[3]', 'A', 7]))]
+		Next scheduled internal transition at time 0.000000
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
 	EXTERNAL TRANSITION in model <Controller.ObjectManager>
 		Input Port Configuration:
 			port <input>:
 				(('A', 4), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[3]']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -776,13 +834,45 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 				(('A', 4), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[3]']))
 			port <ui>:
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <Controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+				[(('A', 3), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[2]']))]
+			port <input>:
+		New State: 
+		Next scheduled internal transition at time 0.000000
+
+
+	INTERNAL TRANSITION in model <Controller.ObjectManager>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
+		Output Port Configuration:
+			port <port1>:
+				[(('A', 3), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[2]']))]
+			port <port2>:
 		Next scheduled internal transition at time 0.000000
 
 
 __  Current Time:   0.000000 __________________________________________ 
 
 
-	INTERNAL TRANSITION in model <Controller.A>
+	INTERNAL TRANSITION in model <Controller.MainApp>
+		New State: 
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.000000
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <Controller.MainApp>
 		New State: 
 		Output Port Configuration:
 			port <obj_manager_out>:
@@ -796,31 +886,19 @@ __  Current Time:   0.000000 __________________________________________
 	EXTERNAL TRANSITION in model <Controller.MainApp>
 		Input Port Configuration:
 			port <obj_manager_in>:
-				[(('A', 3), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[2]'])), (('A', 4), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[3]']))]
+				[(('A', 4), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[3]']))]
 			port <input>:
 		New State: 
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Output Port Configuration:
 			port <port1>:
-				[(('A', 3), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[2]'])), (('A', 4), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[3]']))]
+				[(('A', 4), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[3]']))]
 			port <port2>:
 		Next scheduled internal transition at time inf
-
-
-__  Current Time:   0.000000 __________________________________________ 
-
-
-	INTERNAL TRANSITION in model <Controller.MainApp>
-		New State: 
-		Output Port Configuration:
-			port <obj_manager_out>:
-			port <ui>:
-			port <linkA>:
-		Next scheduled internal transition at time 0.000000
 
 
 __  Current Time:   0.000000 __________________________________________ 
@@ -849,7 +927,6 @@ __  Current Time:   0.000000 __________________________________________
 		Output Port Configuration:
 			port <obj_manager_out>:
 			port <ui>:
-			port <linkA>:
 		Next scheduled internal transition at time 0.000000
 
 
@@ -862,7 +939,6 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 			port <ui>:
 				(event name: instance_created_succesfully; port: ui; parameters: ['0.00', 'linkA[3]'])
-			port <linkA>:
 		Next scheduled internal transition at time 0.000000
 
 
@@ -873,7 +949,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('MainApp', 0), None, (event name: start_instance; port: None; parameters: [0, 'linkA[3]']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -883,7 +959,6 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 				(('MainApp', 0), None, (event name: start_instance; port: None; parameters: [0, 'linkA[3]']))
 			port <ui>:
-			port <linkA>:
 		Next scheduled internal transition at time 0.000000
 
 
@@ -894,7 +969,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('MainApp', 0), None, (event name: create_instance; port: None; parameters: [0, 'linkA[4]', 'A', 6]))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -904,7 +979,6 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 				(('MainApp', 0), None, (event name: create_instance; port: None; parameters: [0, 'linkA', 'A', 6]))
 			port <ui>:
-			port <linkA>:
 		Next scheduled internal transition at time inf
 
 
@@ -914,19 +988,19 @@ __  Current Time:   0.000000 __________________________________________
 	EXTERNAL TRANSITION in model <Controller.A>
 		Input Port Configuration:
 			port <obj_manager_in>:
-				[(('MainApp', 0), ('A', 4), (event name: start_instance; port: None; parameters: ['linkA[3]'])), (('MainApp', 0), ('A', 5), (event name: create_instance; port: None; parameters: [0, 5, 'linkA[4]', 'A', 6]))]
+				[(('MainApp', 0), ('A', 4), (event name: start_instance; port: None; parameters: ['linkA[3]']))]
 			port <input>:
 		New State: 
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Output Port Configuration:
 			port <port1>:
 			port <port2>:
-				[(('MainApp', 0), ('A', 4), (event name: start_instance; port: None; parameters: ['linkA[3]'])), (('MainApp', 0), ('A', 5), (event name: create_instance; port: None; parameters: [0, 5, 'linkA[4]', 'A', 6]))]
-		Next scheduled internal transition at time inf
+				[(('MainApp', 0), ('A', 4), (event name: start_instance; port: None; parameters: ['linkA[3]']))]
+		Next scheduled internal transition at time 0.000000
 
 
 __  Current Time:   0.000000 __________________________________________ 
@@ -960,7 +1034,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('A', 4), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[3]']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -976,11 +1050,43 @@ __  Current Time:   0.000000 __________________________________________
 __  Current Time:   0.000000 __________________________________________ 
 
 
+	INTERNAL TRANSITION in model <Controller.A>
+		New State: 
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <Controller.A>
+		Input Port Configuration:
+			port <obj_manager_in>:
+				[(('MainApp', 0), ('A', 5), (event name: create_instance; port: None; parameters: [0, 5, 'linkA[4]', 'A', 6]))]
+			port <input>:
+		New State: 
+		Next scheduled internal transition at time 0.000000
+
+
+	INTERNAL TRANSITION in model <Controller.ObjectManager>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
+		Output Port Configuration:
+			port <port1>:
+			port <port2>:
+				[(('MainApp', 0), ('A', 5), (event name: create_instance; port: None; parameters: [0, 5, 'linkA[4]', 'A', 6]))]
+		Next scheduled internal transition at time 0.000000
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
 	EXTERNAL TRANSITION in model <Controller.ObjectManager>
 		Input Port Configuration:
 			port <input>:
 				(('A', 5), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[4]']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -990,13 +1096,45 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 				(('A', 5), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[4]']))
 			port <ui>:
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <Controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+				[(('A', 4), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[3]']))]
+			port <input>:
+		New State: 
+		Next scheduled internal transition at time 0.000000
+
+
+	INTERNAL TRANSITION in model <Controller.ObjectManager>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
+		Output Port Configuration:
+			port <port1>:
+				[(('A', 4), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[3]']))]
+			port <port2>:
 		Next scheduled internal transition at time 0.000000
 
 
 __  Current Time:   0.000000 __________________________________________ 
 
 
-	INTERNAL TRANSITION in model <Controller.A>
+	INTERNAL TRANSITION in model <Controller.MainApp>
+		New State: 
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.000000
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <Controller.MainApp>
 		New State: 
 		Output Port Configuration:
 			port <obj_manager_out>:
@@ -1010,31 +1148,19 @@ __  Current Time:   0.000000 __________________________________________
 	EXTERNAL TRANSITION in model <Controller.MainApp>
 		Input Port Configuration:
 			port <obj_manager_in>:
-				[(('A', 4), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[3]'])), (('A', 5), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[4]']))]
+				[(('A', 5), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[4]']))]
 			port <input>:
 		New State: 
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Output Port Configuration:
 			port <port1>:
-				[(('A', 4), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[3]'])), (('A', 5), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[4]']))]
+				[(('A', 5), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[4]']))]
 			port <port2>:
 		Next scheduled internal transition at time inf
-
-
-__  Current Time:   0.000000 __________________________________________ 
-
-
-	INTERNAL TRANSITION in model <Controller.MainApp>
-		New State: 
-		Output Port Configuration:
-			port <obj_manager_out>:
-			port <ui>:
-			port <linkA>:
-		Next scheduled internal transition at time 0.000000
 
 
 __  Current Time:   0.000000 __________________________________________ 
@@ -1063,7 +1189,6 @@ __  Current Time:   0.000000 __________________________________________
 		Output Port Configuration:
 			port <obj_manager_out>:
 			port <ui>:
-			port <linkA>:
 		Next scheduled internal transition at time 0.000000
 
 
@@ -1076,7 +1201,6 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 			port <ui>:
 				(event name: instance_created_succesfully; port: ui; parameters: ['0.00', 'linkA[4]'])
-			port <linkA>:
 		Next scheduled internal transition at time 0.000000
 
 
@@ -1087,7 +1211,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('MainApp', 0), None, (event name: start_instance; port: None; parameters: [0, 'linkA[4]']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -1097,7 +1221,6 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 				(('MainApp', 0), None, (event name: start_instance; port: None; parameters: [0, 'linkA[4]']))
 			port <ui>:
-			port <linkA>:
 		Next scheduled internal transition at time 0.000000
 
 
@@ -1108,7 +1231,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('MainApp', 0), None, (event name: create_instance; port: None; parameters: [0, 'linkA[5]', 'A', 5]))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -1118,7 +1241,6 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 				(('MainApp', 0), None, (event name: create_instance; port: None; parameters: [0, 'linkA', 'A', 5]))
 			port <ui>:
-			port <linkA>:
 		Next scheduled internal transition at time inf
 
 
@@ -1128,19 +1250,19 @@ __  Current Time:   0.000000 __________________________________________
 	EXTERNAL TRANSITION in model <Controller.A>
 		Input Port Configuration:
 			port <obj_manager_in>:
-				[(('MainApp', 0), ('A', 5), (event name: start_instance; port: None; parameters: ['linkA[4]'])), (('MainApp', 0), ('A', 6), (event name: create_instance; port: None; parameters: [0, 6, 'linkA[5]', 'A', 5]))]
+				[(('MainApp', 0), ('A', 5), (event name: start_instance; port: None; parameters: ['linkA[4]']))]
 			port <input>:
 		New State: 
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Output Port Configuration:
 			port <port1>:
 			port <port2>:
-				[(('MainApp', 0), ('A', 5), (event name: start_instance; port: None; parameters: ['linkA[4]'])), (('MainApp', 0), ('A', 6), (event name: create_instance; port: None; parameters: [0, 6, 'linkA[5]', 'A', 5]))]
-		Next scheduled internal transition at time inf
+				[(('MainApp', 0), ('A', 5), (event name: start_instance; port: None; parameters: ['linkA[4]']))]
+		Next scheduled internal transition at time 0.000000
 
 
 __  Current Time:   0.000000 __________________________________________ 
@@ -1174,7 +1296,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('A', 5), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[4]']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -1190,11 +1312,43 @@ __  Current Time:   0.000000 __________________________________________
 __  Current Time:   0.000000 __________________________________________ 
 
 
+	INTERNAL TRANSITION in model <Controller.A>
+		New State: 
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <Controller.A>
+		Input Port Configuration:
+			port <obj_manager_in>:
+				[(('MainApp', 0), ('A', 6), (event name: create_instance; port: None; parameters: [0, 6, 'linkA[5]', 'A', 5]))]
+			port <input>:
+		New State: 
+		Next scheduled internal transition at time 0.000000
+
+
+	INTERNAL TRANSITION in model <Controller.ObjectManager>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
+		Output Port Configuration:
+			port <port1>:
+			port <port2>:
+				[(('MainApp', 0), ('A', 6), (event name: create_instance; port: None; parameters: [0, 6, 'linkA[5]', 'A', 5]))]
+		Next scheduled internal transition at time 0.000000
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
 	EXTERNAL TRANSITION in model <Controller.ObjectManager>
 		Input Port Configuration:
 			port <input>:
 				(('A', 6), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[5]']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -1204,13 +1358,45 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 				(('A', 6), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[5]']))
 			port <ui>:
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <Controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+				[(('A', 5), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[4]']))]
+			port <input>:
+		New State: 
+		Next scheduled internal transition at time 0.000000
+
+
+	INTERNAL TRANSITION in model <Controller.ObjectManager>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
+		Output Port Configuration:
+			port <port1>:
+				[(('A', 5), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[4]']))]
+			port <port2>:
 		Next scheduled internal transition at time 0.000000
 
 
 __  Current Time:   0.000000 __________________________________________ 
 
 
-	INTERNAL TRANSITION in model <Controller.A>
+	INTERNAL TRANSITION in model <Controller.MainApp>
+		New State: 
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.000000
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <Controller.MainApp>
 		New State: 
 		Output Port Configuration:
 			port <obj_manager_out>:
@@ -1224,31 +1410,19 @@ __  Current Time:   0.000000 __________________________________________
 	EXTERNAL TRANSITION in model <Controller.MainApp>
 		Input Port Configuration:
 			port <obj_manager_in>:
-				[(('A', 5), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[4]'])), (('A', 6), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[5]']))]
+				[(('A', 6), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[5]']))]
 			port <input>:
 		New State: 
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Output Port Configuration:
 			port <port1>:
-				[(('A', 5), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[4]'])), (('A', 6), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[5]']))]
+				[(('A', 6), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[5]']))]
 			port <port2>:
 		Next scheduled internal transition at time inf
-
-
-__  Current Time:   0.000000 __________________________________________ 
-
-
-	INTERNAL TRANSITION in model <Controller.MainApp>
-		New State: 
-		Output Port Configuration:
-			port <obj_manager_out>:
-			port <ui>:
-			port <linkA>:
-		Next scheduled internal transition at time 0.000000
 
 
 __  Current Time:   0.000000 __________________________________________ 
@@ -1277,7 +1451,6 @@ __  Current Time:   0.000000 __________________________________________
 		Output Port Configuration:
 			port <obj_manager_out>:
 			port <ui>:
-			port <linkA>:
 		Next scheduled internal transition at time 0.000000
 
 
@@ -1290,7 +1463,6 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 			port <ui>:
 				(event name: instance_created_succesfully; port: ui; parameters: ['0.00', 'linkA[5]'])
-			port <linkA>:
 		Next scheduled internal transition at time 0.000000
 
 
@@ -1301,7 +1473,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('MainApp', 0), None, (event name: start_instance; port: None; parameters: [0, 'linkA[5]']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -1311,7 +1483,6 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 				(('MainApp', 0), None, (event name: start_instance; port: None; parameters: [0, 'linkA[5]']))
 			port <ui>:
-			port <linkA>:
 		Next scheduled internal transition at time 0.000000
 
 
@@ -1322,7 +1493,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('MainApp', 0), None, (event name: create_instance; port: None; parameters: [0, 'linkA[6]', 'A', 4]))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -1332,7 +1503,6 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 				(('MainApp', 0), None, (event name: create_instance; port: None; parameters: [0, 'linkA', 'A', 4]))
 			port <ui>:
-			port <linkA>:
 		Next scheduled internal transition at time inf
 
 
@@ -1342,19 +1512,19 @@ __  Current Time:   0.000000 __________________________________________
 	EXTERNAL TRANSITION in model <Controller.A>
 		Input Port Configuration:
 			port <obj_manager_in>:
-				[(('MainApp', 0), ('A', 6), (event name: start_instance; port: None; parameters: ['linkA[5]'])), (('MainApp', 0), ('A', 7), (event name: create_instance; port: None; parameters: [0, 7, 'linkA[6]', 'A', 4]))]
+				[(('MainApp', 0), ('A', 6), (event name: start_instance; port: None; parameters: ['linkA[5]']))]
 			port <input>:
 		New State: 
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Output Port Configuration:
 			port <port1>:
 			port <port2>:
-				[(('MainApp', 0), ('A', 6), (event name: start_instance; port: None; parameters: ['linkA[5]'])), (('MainApp', 0), ('A', 7), (event name: create_instance; port: None; parameters: [0, 7, 'linkA[6]', 'A', 4]))]
-		Next scheduled internal transition at time inf
+				[(('MainApp', 0), ('A', 6), (event name: start_instance; port: None; parameters: ['linkA[5]']))]
+		Next scheduled internal transition at time 0.000000
 
 
 __  Current Time:   0.000000 __________________________________________ 
@@ -1388,7 +1558,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('A', 6), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[5]']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -1404,11 +1574,43 @@ __  Current Time:   0.000000 __________________________________________
 __  Current Time:   0.000000 __________________________________________ 
 
 
+	INTERNAL TRANSITION in model <Controller.A>
+		New State: 
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <Controller.A>
+		Input Port Configuration:
+			port <obj_manager_in>:
+				[(('MainApp', 0), ('A', 7), (event name: create_instance; port: None; parameters: [0, 7, 'linkA[6]', 'A', 4]))]
+			port <input>:
+		New State: 
+		Next scheduled internal transition at time 0.000000
+
+
+	INTERNAL TRANSITION in model <Controller.ObjectManager>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
+		Output Port Configuration:
+			port <port1>:
+			port <port2>:
+				[(('MainApp', 0), ('A', 7), (event name: create_instance; port: None; parameters: [0, 7, 'linkA[6]', 'A', 4]))]
+		Next scheduled internal transition at time 0.000000
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
 	EXTERNAL TRANSITION in model <Controller.ObjectManager>
 		Input Port Configuration:
 			port <input>:
 				(('A', 7), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[6]']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -1418,13 +1620,45 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 				(('A', 7), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[6]']))
 			port <ui>:
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <Controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+				[(('A', 6), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[5]']))]
+			port <input>:
+		New State: 
+		Next scheduled internal transition at time 0.000000
+
+
+	INTERNAL TRANSITION in model <Controller.ObjectManager>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
+		Output Port Configuration:
+			port <port1>:
+				[(('A', 6), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[5]']))]
+			port <port2>:
 		Next scheduled internal transition at time 0.000000
 
 
 __  Current Time:   0.000000 __________________________________________ 
 
 
-	INTERNAL TRANSITION in model <Controller.A>
+	INTERNAL TRANSITION in model <Controller.MainApp>
+		New State: 
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.000000
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <Controller.MainApp>
 		New State: 
 		Output Port Configuration:
 			port <obj_manager_out>:
@@ -1438,31 +1672,19 @@ __  Current Time:   0.000000 __________________________________________
 	EXTERNAL TRANSITION in model <Controller.MainApp>
 		Input Port Configuration:
 			port <obj_manager_in>:
-				[(('A', 6), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[5]'])), (('A', 7), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[6]']))]
+				[(('A', 7), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[6]']))]
 			port <input>:
 		New State: 
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Output Port Configuration:
 			port <port1>:
-				[(('A', 6), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[5]'])), (('A', 7), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[6]']))]
+				[(('A', 7), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[6]']))]
 			port <port2>:
 		Next scheduled internal transition at time inf
-
-
-__  Current Time:   0.000000 __________________________________________ 
-
-
-	INTERNAL TRANSITION in model <Controller.MainApp>
-		New State: 
-		Output Port Configuration:
-			port <obj_manager_out>:
-			port <ui>:
-			port <linkA>:
-		Next scheduled internal transition at time 0.000000
 
 
 __  Current Time:   0.000000 __________________________________________ 
@@ -1491,7 +1713,6 @@ __  Current Time:   0.000000 __________________________________________
 		Output Port Configuration:
 			port <obj_manager_out>:
 			port <ui>:
-			port <linkA>:
 		Next scheduled internal transition at time 0.000000
 
 
@@ -1504,7 +1725,6 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 			port <ui>:
 				(event name: instance_created_succesfully; port: ui; parameters: ['0.00', 'linkA[6]'])
-			port <linkA>:
 		Next scheduled internal transition at time 0.000000
 
 
@@ -1515,7 +1735,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('MainApp', 0), None, (event name: start_instance; port: None; parameters: [0, 'linkA[6]']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -1525,7 +1745,6 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 				(('MainApp', 0), None, (event name: start_instance; port: None; parameters: [0, 'linkA[6]']))
 			port <ui>:
-			port <linkA>:
 		Next scheduled internal transition at time 0.000000
 
 
@@ -1536,7 +1755,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('MainApp', 0), None, (event name: create_instance; port: None; parameters: [0, 'linkA[7]', 'A', 3]))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -1546,7 +1765,6 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 				(('MainApp', 0), None, (event name: create_instance; port: None; parameters: [0, 'linkA', 'A', 3]))
 			port <ui>:
-			port <linkA>:
 		Next scheduled internal transition at time inf
 
 
@@ -1556,19 +1774,19 @@ __  Current Time:   0.000000 __________________________________________
 	EXTERNAL TRANSITION in model <Controller.A>
 		Input Port Configuration:
 			port <obj_manager_in>:
-				[(('MainApp', 0), ('A', 7), (event name: start_instance; port: None; parameters: ['linkA[6]'])), (('MainApp', 0), ('A', 8), (event name: create_instance; port: None; parameters: [0, 8, 'linkA[7]', 'A', 3]))]
+				[(('MainApp', 0), ('A', 7), (event name: start_instance; port: None; parameters: ['linkA[6]']))]
 			port <input>:
 		New State: 
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Output Port Configuration:
 			port <port1>:
 			port <port2>:
-				[(('MainApp', 0), ('A', 7), (event name: start_instance; port: None; parameters: ['linkA[6]'])), (('MainApp', 0), ('A', 8), (event name: create_instance; port: None; parameters: [0, 8, 'linkA[7]', 'A', 3]))]
-		Next scheduled internal transition at time inf
+				[(('MainApp', 0), ('A', 7), (event name: start_instance; port: None; parameters: ['linkA[6]']))]
+		Next scheduled internal transition at time 0.000000
 
 
 __  Current Time:   0.000000 __________________________________________ 
@@ -1602,7 +1820,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('A', 7), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[6]']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -1618,11 +1836,43 @@ __  Current Time:   0.000000 __________________________________________
 __  Current Time:   0.000000 __________________________________________ 
 
 
+	INTERNAL TRANSITION in model <Controller.A>
+		New State: 
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <Controller.A>
+		Input Port Configuration:
+			port <obj_manager_in>:
+				[(('MainApp', 0), ('A', 8), (event name: create_instance; port: None; parameters: [0, 8, 'linkA[7]', 'A', 3]))]
+			port <input>:
+		New State: 
+		Next scheduled internal transition at time 0.000000
+
+
+	INTERNAL TRANSITION in model <Controller.ObjectManager>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
+		Output Port Configuration:
+			port <port1>:
+			port <port2>:
+				[(('MainApp', 0), ('A', 8), (event name: create_instance; port: None; parameters: [0, 8, 'linkA[7]', 'A', 3]))]
+		Next scheduled internal transition at time 0.000000
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
 	EXTERNAL TRANSITION in model <Controller.ObjectManager>
 		Input Port Configuration:
 			port <input>:
 				(('A', 8), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[7]']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -1632,13 +1882,45 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 				(('A', 8), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[7]']))
 			port <ui>:
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <Controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+				[(('A', 7), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[6]']))]
+			port <input>:
+		New State: 
+		Next scheduled internal transition at time 0.000000
+
+
+	INTERNAL TRANSITION in model <Controller.ObjectManager>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
+		Output Port Configuration:
+			port <port1>:
+				[(('A', 7), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[6]']))]
+			port <port2>:
 		Next scheduled internal transition at time 0.000000
 
 
 __  Current Time:   0.000000 __________________________________________ 
 
 
-	INTERNAL TRANSITION in model <Controller.A>
+	INTERNAL TRANSITION in model <Controller.MainApp>
+		New State: 
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.000000
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <Controller.MainApp>
 		New State: 
 		Output Port Configuration:
 			port <obj_manager_out>:
@@ -1652,31 +1934,19 @@ __  Current Time:   0.000000 __________________________________________
 	EXTERNAL TRANSITION in model <Controller.MainApp>
 		Input Port Configuration:
 			port <obj_manager_in>:
-				[(('A', 7), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[6]'])), (('A', 8), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[7]']))]
+				[(('A', 8), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[7]']))]
 			port <input>:
 		New State: 
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Output Port Configuration:
 			port <port1>:
-				[(('A', 7), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[6]'])), (('A', 8), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[7]']))]
+				[(('A', 8), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[7]']))]
 			port <port2>:
 		Next scheduled internal transition at time inf
-
-
-__  Current Time:   0.000000 __________________________________________ 
-
-
-	INTERNAL TRANSITION in model <Controller.MainApp>
-		New State: 
-		Output Port Configuration:
-			port <obj_manager_out>:
-			port <ui>:
-			port <linkA>:
-		Next scheduled internal transition at time 0.000000
 
 
 __  Current Time:   0.000000 __________________________________________ 
@@ -1705,7 +1975,6 @@ __  Current Time:   0.000000 __________________________________________
 		Output Port Configuration:
 			port <obj_manager_out>:
 			port <ui>:
-			port <linkA>:
 		Next scheduled internal transition at time 0.000000
 
 
@@ -1718,7 +1987,6 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 			port <ui>:
 				(event name: instance_created_succesfully; port: ui; parameters: ['0.00', 'linkA[7]'])
-			port <linkA>:
 		Next scheduled internal transition at time 0.000000
 
 
@@ -1729,7 +1997,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('MainApp', 0), None, (event name: start_instance; port: None; parameters: [0, 'linkA[7]']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -1739,7 +2007,6 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 				(('MainApp', 0), None, (event name: start_instance; port: None; parameters: [0, 'linkA[7]']))
 			port <ui>:
-			port <linkA>:
 		Next scheduled internal transition at time 0.000000
 
 
@@ -1750,7 +2017,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('MainApp', 0), None, (event name: create_instance; port: None; parameters: [0, 'linkA[8]', 'A', 2]))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -1760,7 +2027,6 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 				(('MainApp', 0), None, (event name: create_instance; port: None; parameters: [0, 'linkA', 'A', 2]))
 			port <ui>:
-			port <linkA>:
 		Next scheduled internal transition at time inf
 
 
@@ -1770,19 +2036,19 @@ __  Current Time:   0.000000 __________________________________________
 	EXTERNAL TRANSITION in model <Controller.A>
 		Input Port Configuration:
 			port <obj_manager_in>:
-				[(('MainApp', 0), ('A', 8), (event name: start_instance; port: None; parameters: ['linkA[7]'])), (('MainApp', 0), ('A', 9), (event name: create_instance; port: None; parameters: [0, 9, 'linkA[8]', 'A', 2]))]
+				[(('MainApp', 0), ('A', 8), (event name: start_instance; port: None; parameters: ['linkA[7]']))]
 			port <input>:
 		New State: 
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Output Port Configuration:
 			port <port1>:
 			port <port2>:
-				[(('MainApp', 0), ('A', 8), (event name: start_instance; port: None; parameters: ['linkA[7]'])), (('MainApp', 0), ('A', 9), (event name: create_instance; port: None; parameters: [0, 9, 'linkA[8]', 'A', 2]))]
-		Next scheduled internal transition at time inf
+				[(('MainApp', 0), ('A', 8), (event name: start_instance; port: None; parameters: ['linkA[7]']))]
+		Next scheduled internal transition at time 0.000000
 
 
 __  Current Time:   0.000000 __________________________________________ 
@@ -1816,7 +2082,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('A', 8), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[7]']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -1832,11 +2098,43 @@ __  Current Time:   0.000000 __________________________________________
 __  Current Time:   0.000000 __________________________________________ 
 
 
+	INTERNAL TRANSITION in model <Controller.A>
+		New State: 
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <Controller.A>
+		Input Port Configuration:
+			port <obj_manager_in>:
+				[(('MainApp', 0), ('A', 9), (event name: create_instance; port: None; parameters: [0, 9, 'linkA[8]', 'A', 2]))]
+			port <input>:
+		New State: 
+		Next scheduled internal transition at time 0.000000
+
+
+	INTERNAL TRANSITION in model <Controller.ObjectManager>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
+		Output Port Configuration:
+			port <port1>:
+			port <port2>:
+				[(('MainApp', 0), ('A', 9), (event name: create_instance; port: None; parameters: [0, 9, 'linkA[8]', 'A', 2]))]
+		Next scheduled internal transition at time 0.000000
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
 	EXTERNAL TRANSITION in model <Controller.ObjectManager>
 		Input Port Configuration:
 			port <input>:
 				(('A', 9), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[8]']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -1846,13 +2144,45 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 				(('A', 9), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[8]']))
 			port <ui>:
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <Controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+				[(('A', 8), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[7]']))]
+			port <input>:
+		New State: 
+		Next scheduled internal transition at time 0.000000
+
+
+	INTERNAL TRANSITION in model <Controller.ObjectManager>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
+		Output Port Configuration:
+			port <port1>:
+				[(('A', 8), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[7]']))]
+			port <port2>:
 		Next scheduled internal transition at time 0.000000
 
 
 __  Current Time:   0.000000 __________________________________________ 
 
 
-	INTERNAL TRANSITION in model <Controller.A>
+	INTERNAL TRANSITION in model <Controller.MainApp>
+		New State: 
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.000000
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <Controller.MainApp>
 		New State: 
 		Output Port Configuration:
 			port <obj_manager_out>:
@@ -1866,31 +2196,19 @@ __  Current Time:   0.000000 __________________________________________
 	EXTERNAL TRANSITION in model <Controller.MainApp>
 		Input Port Configuration:
 			port <obj_manager_in>:
-				[(('A', 8), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[7]'])), (('A', 9), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[8]']))]
+				[(('A', 9), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[8]']))]
 			port <input>:
 		New State: 
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Output Port Configuration:
 			port <port1>:
-				[(('A', 8), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[7]'])), (('A', 9), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[8]']))]
+				[(('A', 9), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[8]']))]
 			port <port2>:
 		Next scheduled internal transition at time inf
-
-
-__  Current Time:   0.000000 __________________________________________ 
-
-
-	INTERNAL TRANSITION in model <Controller.MainApp>
-		New State: 
-		Output Port Configuration:
-			port <obj_manager_out>:
-			port <ui>:
-			port <linkA>:
-		Next scheduled internal transition at time 0.000000
 
 
 __  Current Time:   0.000000 __________________________________________ 
@@ -1919,7 +2237,6 @@ __  Current Time:   0.000000 __________________________________________
 		Output Port Configuration:
 			port <obj_manager_out>:
 			port <ui>:
-			port <linkA>:
 		Next scheduled internal transition at time 0.000000
 
 
@@ -1932,7 +2249,6 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 			port <ui>:
 				(event name: instance_created_succesfully; port: ui; parameters: ['0.00', 'linkA[8]'])
-			port <linkA>:
 		Next scheduled internal transition at time 0.000000
 
 
@@ -1943,7 +2259,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('MainApp', 0), None, (event name: start_instance; port: None; parameters: [0, 'linkA[8]']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -1953,7 +2269,6 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 				(('MainApp', 0), None, (event name: start_instance; port: None; parameters: [0, 'linkA[8]']))
 			port <ui>:
-			port <linkA>:
 		Next scheduled internal transition at time 0.000000
 
 
@@ -1964,7 +2279,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('MainApp', 0), None, (event name: create_instance; port: None; parameters: [0, 'linkA[9]', 'A', 1]))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -1974,7 +2289,6 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 				(('MainApp', 0), None, (event name: create_instance; port: None; parameters: [0, 'linkA', 'A', 1]))
 			port <ui>:
-			port <linkA>:
 		Next scheduled internal transition at time inf
 
 
@@ -1984,19 +2298,19 @@ __  Current Time:   0.000000 __________________________________________
 	EXTERNAL TRANSITION in model <Controller.A>
 		Input Port Configuration:
 			port <obj_manager_in>:
-				[(('MainApp', 0), ('A', 9), (event name: start_instance; port: None; parameters: ['linkA[8]'])), (('MainApp', 0), ('A', 10), (event name: create_instance; port: None; parameters: [0, 10, 'linkA[9]', 'A', 1]))]
+				[(('MainApp', 0), ('A', 9), (event name: start_instance; port: None; parameters: ['linkA[8]']))]
 			port <input>:
 		New State: 
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Output Port Configuration:
 			port <port1>:
 			port <port2>:
-				[(('MainApp', 0), ('A', 9), (event name: start_instance; port: None; parameters: ['linkA[8]'])), (('MainApp', 0), ('A', 10), (event name: create_instance; port: None; parameters: [0, 10, 'linkA[9]', 'A', 1]))]
-		Next scheduled internal transition at time inf
+				[(('MainApp', 0), ('A', 9), (event name: start_instance; port: None; parameters: ['linkA[8]']))]
+		Next scheduled internal transition at time 0.000000
 
 
 __  Current Time:   0.000000 __________________________________________ 
@@ -2030,7 +2344,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('A', 9), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[8]']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -2046,11 +2360,43 @@ __  Current Time:   0.000000 __________________________________________
 __  Current Time:   0.000000 __________________________________________ 
 
 
+	INTERNAL TRANSITION in model <Controller.A>
+		New State: 
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <Controller.A>
+		Input Port Configuration:
+			port <obj_manager_in>:
+				[(('MainApp', 0), ('A', 10), (event name: create_instance; port: None; parameters: [0, 10, 'linkA[9]', 'A', 1]))]
+			port <input>:
+		New State: 
+		Next scheduled internal transition at time 0.000000
+
+
+	INTERNAL TRANSITION in model <Controller.ObjectManager>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
+		Output Port Configuration:
+			port <port1>:
+			port <port2>:
+				[(('MainApp', 0), ('A', 10), (event name: create_instance; port: None; parameters: [0, 10, 'linkA[9]', 'A', 1]))]
+		Next scheduled internal transition at time 0.000000
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
 	EXTERNAL TRANSITION in model <Controller.ObjectManager>
 		Input Port Configuration:
 			port <input>:
 				(('A', 10), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[9]']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -2060,13 +2406,45 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 				(('A', 10), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[9]']))
 			port <ui>:
+		Next scheduled internal transition at time inf
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	EXTERNAL TRANSITION in model <Controller.MainApp>
+		Input Port Configuration:
+			port <obj_manager_in>:
+				[(('A', 9), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[8]']))]
+			port <input>:
+		New State: 
+		Next scheduled internal transition at time 0.000000
+
+
+	INTERNAL TRANSITION in model <Controller.ObjectManager>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
+		Output Port Configuration:
+			port <port1>:
+				[(('A', 9), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[8]']))]
+			port <port2>:
 		Next scheduled internal transition at time 0.000000
 
 
 __  Current Time:   0.000000 __________________________________________ 
 
 
-	INTERNAL TRANSITION in model <Controller.A>
+	INTERNAL TRANSITION in model <Controller.MainApp>
+		New State: 
+		Output Port Configuration:
+			port <obj_manager_out>:
+			port <ui>:
+		Next scheduled internal transition at time 0.000000
+
+
+__  Current Time:   0.000000 __________________________________________ 
+
+
+	INTERNAL TRANSITION in model <Controller.MainApp>
 		New State: 
 		Output Port Configuration:
 			port <obj_manager_out>:
@@ -2080,31 +2458,19 @@ __  Current Time:   0.000000 __________________________________________
 	EXTERNAL TRANSITION in model <Controller.MainApp>
 		Input Port Configuration:
 			port <obj_manager_in>:
-				[(('A', 9), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[8]'])), (('A', 10), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[9]']))]
+				[(('A', 10), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[9]']))]
 			port <input>:
 		New State: 
 		Next scheduled internal transition at time 0.000000
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Output Port Configuration:
 			port <port1>:
-				[(('A', 9), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[8]'])), (('A', 10), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[9]']))]
+				[(('A', 10), ('MainApp', 0), (event name: instance_created; port: None; parameters: ['linkA[9]']))]
 			port <port2>:
 		Next scheduled internal transition at time inf
-
-
-__  Current Time:   0.000000 __________________________________________ 
-
-
-	INTERNAL TRANSITION in model <Controller.MainApp>
-		New State: 
-		Output Port Configuration:
-			port <obj_manager_out>:
-			port <ui>:
-			port <linkA>:
-		Next scheduled internal transition at time 0.000000
 
 
 __  Current Time:   0.000000 __________________________________________ 
@@ -2133,7 +2499,6 @@ __  Current Time:   0.000000 __________________________________________
 		Output Port Configuration:
 			port <obj_manager_out>:
 			port <ui>:
-			port <linkA>:
 		Next scheduled internal transition at time 0.000000
 
 
@@ -2146,7 +2511,6 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 			port <ui>:
 				(event name: instance_created_succesfully; port: ui; parameters: ['0.00', 'linkA[9]'])
-			port <linkA>:
 		Next scheduled internal transition at time 0.000000
 
 
@@ -2157,7 +2521,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('MainApp', 0), None, (event name: start_instance; port: None; parameters: [0, 'linkA[9]']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -2167,7 +2531,6 @@ __  Current Time:   0.000000 __________________________________________
 			port <obj_manager_out>:
 				(('MainApp', 0), None, (event name: start_instance; port: None; parameters: [0, 'linkA[9]']))
 			port <ui>:
-			port <linkA>:
 		Next scheduled internal transition at time inf
 
 
@@ -2184,7 +2547,7 @@ __  Current Time:   0.000000 __________________________________________
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Output Port Configuration:
 			port <port1>:
 			port <port2>:
@@ -2223,7 +2586,7 @@ __  Current Time:   0.000000 __________________________________________
 		Input Port Configuration:
 			port <input>:
 				(('A', 10), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[9]']))
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Next scheduled internal transition at time 0.000000
 
 
@@ -2260,7 +2623,7 @@ __  Current Time:   0.000000 __________________________________________
 
 
 	INTERNAL TRANSITION in model <Controller.ObjectManager>
-		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1022496a0>
+		New State: <sccd.runtime.DEVS_statecharts_core.ObjectManagerState object at 0x1020d3a10>
 		Output Port Configuration:
 			port <port1>:
 				[(('A', 10), ('MainApp', 0), (event name: instance_started; port: None; parameters: ['linkA[9]']))]
@@ -2276,7 +2639,6 @@ __  Current Time:   0.000000 __________________________________________
 		Output Port Configuration:
 			port <obj_manager_out>:
 			port <ui>:
-			port <linkA>:
 		Next scheduled internal transition at time 0.000000
 
 
@@ -2288,7 +2650,6 @@ __  Current Time:   0.000000 __________________________________________
 		Output Port Configuration:
 			port <obj_manager_out>:
 			port <ui>:
-			port <linkA>:
 		Next scheduled internal transition at time inf
 
 

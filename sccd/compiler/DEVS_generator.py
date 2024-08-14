@@ -111,7 +111,7 @@ class DEVSGenerator(Visitor):
                                       GLC.FunctionCall(GLC.SelfProperty("addOutPort")))
 
         self.writer.add(GLC.FunctionCall("self.state.createInstance", [GLC.String(class_diagram.default_class.name), "[]"]))
-        self.writer.add(GLC.FunctionCall("self.state.to_send.append", [f"((\"{class_diagram.default_class.name}\", 0), (\"{class_diagram.default_class.name}\", 0), Event(\"start_instance\", None, [\"{class_diagram.default_class.name}[0]\"]))"]))
+        # self.writer.add(GLC.FunctionCall("self.state.to_send.append", [f"((\"{class_diagram.default_class.name}\", 0), (\"{class_diagram.default_class.name}\", 0), Event(\"start_instance\", None, [\"{class_diagram.default_class.name}[0]\"]))"]))
 
         self.writer.endMethodBody()
         self.writer.endConstructor()
@@ -163,11 +163,11 @@ class DEVSGenerator(Visitor):
                                                GLC.SelfProperty(f"atomics[{i}].obj_manager_in")])))
 
             # Add links between the classes that have associations
-            for association in the_class.associations:
-                temp = class_diagram.class_names.index(association.to_class)
-                self.writer.add(GLC.FunctionCall(GLC.SelfProperty("connectPorts"),
-                                                 [GLC.SelfProperty(f"atomics[{i}].outputs[\"{association.name}\"]"),
-                                                  GLC.SelfProperty(f"atomics[{temp}].input")]))
+            #for association in the_class.associations:
+            #    temp = class_diagram.class_names.index(association.to_class)
+            #    self.writer.add(GLC.FunctionCall(GLC.SelfProperty("connectPorts"),
+            #                                     [GLC.SelfProperty(f"atomics[{i}].outputs[\"{association.name}\"]"),
+            #                                      GLC.SelfProperty(f"atomics[{temp}].input")]))
 
         # Add links between the global in-/outputs and the classes
         for (i, the_class) in enumerate(class_diagram.classes):
@@ -407,9 +407,9 @@ class DEVSGenerator(Visitor):
 
 
 
-        for association in constructor.parent_class.associations:
-            self.writer.addAssignment(GLC.SelfProperty(f"outputs[\"{association.name}\"]"),
-                                      GLC.FunctionCall(GLC.SelfProperty("addOutPort"), [GLC.String(association.name)]))
+        #for association in constructor.parent_class.associations:
+            #self.writer.addAssignment(GLC.SelfProperty(f"outputs[\"{association.name}\"]"),
+            #                          GLC.FunctionCall(GLC.SelfProperty("addOutPort"), [GLC.String(association.name)]))
 
         for p in constructor.parent_class.inports:
             self.writer.addAssignment(GLC.SelfProperty(p),
@@ -423,6 +423,8 @@ class DEVSGenerator(Visitor):
         if constructor.parent_class.name == constructor.parent_class.class_diagram.default_class.name:
             self.writer.addAssignment("new_instance", "self.constructObject(0, 0, [])")
             self.writer.addAssignment("self.state.instances[new_instance.instance_id]", "new_instance")
+            self.writer.add(GLC.FunctionCall("new_instance.start"))
+            self.writer.addAssignment("self.state.next_time", "0")
 
         self.writer.endMethodBody()
         self.writer.endConstructor()

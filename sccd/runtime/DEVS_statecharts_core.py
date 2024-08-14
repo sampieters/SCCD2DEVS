@@ -516,7 +516,6 @@ class ClassBase(AtomicDEVS):
         self.handlers = {
             "create_instance": self.handleCreateEvent,
             "broad_cast": self.handleBroadCastEvent,
-            "narrow_cast": self.handleNarrowCastEvent,
             "associate_instance": self.handleAssociateEvent,
             "start_instance": self.handleStartEvent,
             "delete_instance": self.handleDeleteEvent,
@@ -532,8 +531,6 @@ class ClassBase(AtomicDEVS):
             source = self.state.instances[input[0][1]]
             self.state.broadcast(source, input[2].parameters[1])
         self.state.broadcast(None, input[2].parameters[1])
-    def handleNarrowCastEvent(self, input):
-        pass
     def handleCreateEvent(self, input):
         new_instance = self.constructObject(input[1][1], input[2].parameters[1], input[2].parameters[3:])
         self.state.instances[new_instance.instance_id] = new_instance
@@ -570,7 +567,6 @@ class ClassBase(AtomicDEVS):
         self.state.text = ""
 
         # Collect all inputs
-        # all_inputs = [input for input_list in inputs.values() for input in input_list]
         all_inputs = [item for input_list in inputs.values() for item in (input_list if isinstance(input_list, (tuple, list)) else [input_list])]
         for input in all_inputs:
             if isinstance(input, str):
@@ -716,7 +712,6 @@ class ObjectManagerState():
                 cast_event = parameters[2]
                 for i in self.getInstances(source, traversal_list):
                     to_send_event = Event(cast_event.name, self.narrow_cast_ports[i["instance"][1]], cast_event.parameters)
-                    # to_send_event = Event(cast_event.name, i["instance"], cast_event.parameters)
                     self.to_send.append((source,  i["instance"], to_send_event))
 
     def handleBroadCastEvent(self, parameters):
@@ -771,15 +766,13 @@ class ObjectManagerState():
                 old_params.append(starting_port_id)
                 old_params.extend(parameters[2].parameters[1:])
 
-
-                
-
                 ev = Event('create_instance', None, old_params)
-                #ev = Event('create_instance', None, parameters[2].parameters)
                 self.to_send.append((parameters[0], (class_name, new_instance_index), ev))
                 return [source, association_name+"["+str(index)+"]"]
             else:
                 #source.addEvent(Event("instance_creation_error", None, [association_name]))
+                ev = Event('instance_creation_error', None, [association_name])
+                self.to_send.append((parameters[0], (class_name, new_instance_index), ev))
                 return []
     
     def handleStartEvent(self, parameters):
@@ -917,14 +910,21 @@ class ObjectManagerBase(AtomicDEVS):
         return self.state
     
     def intTransition(self):
-        self.state.to_send.clear()
+        self.state.to_send.pop(0)
+        #self.state.to_send.clear()
         return self.state
     
     def outputFnc(self):
         out_dict = {}
-        for source, target, message in self.state.to_send:
-            out_dict.setdefault(self.output.get(target[0]), []).append((source, target, message))
+        if not len(self.state.to_send) == 0:
+            source, target, message = self.state.to_send[0]
+            out_dict[self.output.get(target[0])] = [(source, target, message)]
         return out_dict
+
+        #out_dict = {}
+        #for source, target, message in self.state.to_send:
+        #    out_dict.setdefault(self.output.get(target[0]), []).append((source, target, message))
+        #return out_dict
     
     def timeAdvance(self):
         return 0 if self.state.to_send else INFINITY

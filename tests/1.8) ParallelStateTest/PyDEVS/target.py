@@ -50,15 +50,23 @@ class MainAppInstance(RuntimeClassBase):
         
         # state /state1/state11/state11
         self.states["/state1/state11/state11"] = State(3, "/state1/state11/state11", self)
+        self.states["/state1/state11/state11"].setEnter(self._state1_state11_state11_enter)
+        self.states["/state1/state11/state11"].setExit(self._state1_state11_state11_exit)
         
         # state /state1/state12
         self.states["/state1/state12"] = State(4, "/state1/state12", self)
         
         # state /state1/state12/state12
         self.states["/state1/state12/state12"] = State(5, "/state1/state12/state12", self)
+        self.states["/state1/state12/state12"].setEnter(self._state1_state12_state12_enter)
+        self.states["/state1/state12/state12"].setExit(self._state1_state12_state12_exit)
+        
+        # state /end_parallel
+        self.states["/end_parallel"] = State(6, "/end_parallel", self)
         
         # add children
         self.states[""].addChild(self.states["/state1"])
+        self.states[""].addChild(self.states["/end_parallel"])
         self.states["/state1"].addChild(self.states["/state1/state11"])
         self.states["/state1"].addChild(self.states["/state1/state12"])
         self.states["/state1/state11"].addChild(self.states["/state1/state11/state11"])
@@ -67,6 +75,33 @@ class MainAppInstance(RuntimeClassBase):
         self.states[""].default_state = self.states["/state1"]
         self.states["/state1/state11"].default_state = self.states["/state1/state11/state11"]
         self.states["/state1/state12"].default_state = self.states["/state1/state12/state12"]
+        
+        # transition /state1/state11/state11
+        _state1_state11_state11_0 = Transition(self, self.states["/state1/state11/state11"], [self.states["/state1/state11/state11"]])
+        _state1_state11_state11_0.setTrigger(Event("_0after"))
+        self.states["/state1/state11/state11"].addTransition(_state1_state11_state11_0)
+        
+        # transition /state1/state12/state12
+        _state1_state12_state12_0 = Transition(self, self.states["/state1/state12/state12"], [self.states["/state1/state12/state12"]])
+        _state1_state12_state12_0.setTrigger(Event("_1after"))
+        self.states["/state1/state12/state12"].addTransition(_state1_state12_state12_0)
+        
+        # transition /state1
+        _state1_0 = Transition(self, self.states["/state1"], [self.states["/end_parallel"]])
+        _state1_0.setTrigger(None)
+        self.states["/state1"].addTransition(_state1_0)
+    
+    def _state1_state11_state11_enter(self):
+        self.addTimer(0, 0.05)
+    
+    def _state1_state11_state11_exit(self):
+        self.removeTimer(0)
+    
+    def _state1_state12_state12_enter(self):
+        self.addTimer(1, 0.05)
+    
+    def _state1_state12_state12_exit(self):
+        self.removeTimer(1)
     
     def initializeStatechart(self):
         # enter default state
@@ -79,7 +114,8 @@ class MainApp(ClassBase):
         self.input = self.addInPort("input")
         new_instance = self.constructObject(0, 0, [])
         self.state.instances[new_instance.instance_id] = new_instance
-        self.state.next_instance = self.state.next_instance + 1
+        new_instance.start()
+        self.state.next_time = 0
     
     def constructObject(self, id, start_port_id, parameters):
         new_instance = MainAppInstance(self, id, start_port_id)
@@ -103,7 +139,6 @@ class ObjectManager(ObjectManagerBase):
         self.input = self.addInPort("input")
         self.output["MainApp"] = self.addOutPort()
         self.state.createInstance("MainApp", [])
-        self.state.to_send.append((("MainApp", 0), ("MainApp", 0), Event("start_instance", None, ["MainApp[0]"])))
 
 class Controller(CoupledDEVS):
     def __init__(self, name):

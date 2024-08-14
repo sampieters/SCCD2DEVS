@@ -18,6 +18,7 @@ if __name__ == '__main__':
             event = output_listener.fetch(-1)
             print("SIMTIME: %.2fs" % (event.getParameters()[0] / 1000.0))
             print("ACTTIME: %.2fs" % (event.getParameters()[1]))
+
     output_thread = threading.Thread(target=outputter)
     output_thread.daemon = True
     output_thread.start()

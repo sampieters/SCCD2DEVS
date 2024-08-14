@@ -1,0 +1,250 @@
+__  Current Time:   0.000000 __________________________________________ 
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: create_window; port: ui; parameters: [100, 350, 'Fixed Traffic Light', 'private_1_field_ui'])
+
+__  Current Time:   0.008000 __________________________________________ 
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: window_created; port: private_1_field_ui; parameters: [0])
+
+INPUT EVENT from port <private_1_field_ui>
+	\Type: field_ui
+	\Event: (event name: window_created; port: private_1_field_ui; parameters: [0])
+
+EXIT STATE in model <MainApp>
+		State: /creating_window
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/creating_window -> /creating_canvas)
+
+ENTER STATE in model <MainApp>
+		State: /creating_canvas
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: bind_event; port: ui; parameters: [0, 'WM_DELETE_WINDOW', 'window_close', 'private_1_field_ui'])
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: create_canvas; port: ui; parameters: [0, 100, 250, {'background': '#222222'}, 'private_1_field_ui'])
+
+__  Current Time:   0.021000 __________________________________________ 
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: canvas_created; port: private_1_field_ui; parameters: [1])
+
+INPUT EVENT from port <private_1_field_ui>
+	\Type: field_ui
+	\Event: (event name: canvas_created; port: private_1_field_ui; parameters: [1])
+
+EXIT STATE in model <MainApp>
+		State: /creating_canvas
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/creating_canvas -> /creating_trafficlight)
+
+ENTER STATE in model <MainApp>
+		State: /creating_trafficlight
+
+ENTER STATE in model <MainApp>
+		State: /creating_trafficlight/creating_greenlight
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: create_rectangle; port: ui; parameters: [1, 50, 50, 50, 50, {'fill': '#000'}, 'private_1_field_ui'])
+
+__  Current Time:   0.022000 __________________________________________ 
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: rectangle_created; port: private_1_field_ui; parameters: [1, 1])
+
+INPUT EVENT from port <private_1_field_ui>
+	\Type: field_ui
+	\Event: (event name: rectangle_created; port: private_1_field_ui; parameters: [1, 1])
+
+EXIT STATE in model <MainApp>
+		State: /creating_trafficlight/creating_greenlight
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/creating_trafficlight/creating_greenlight -> /creating_trafficlight/creating_yellowlight)
+
+ENTER STATE in model <MainApp>
+		State: /creating_trafficlight/creating_yellowlight
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: create_rectangle; port: ui; parameters: [1, 50, 110, 50, 50, {'fill': '#000'}, 'private_1_field_ui'])
+
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: rectangle_created; port: private_1_field_ui; parameters: [1, 2])
+
+INPUT EVENT from port <private_1_field_ui>
+	\Type: field_ui
+	\Event: (event name: rectangle_created; port: private_1_field_ui; parameters: [1, 2])
+
+EXIT STATE in model <MainApp>
+		State: /creating_trafficlight/creating_yellowlight
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/creating_trafficlight/creating_yellowlight -> /creating_trafficlight/creating_redlight)
+
+ENTER STATE in model <MainApp>
+		State: /creating_trafficlight/creating_redlight
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: create_rectangle; port: ui; parameters: [1, 50, 170, 50, 50, {'fill': '#000'}, 'private_1_field_ui'])
+
+__  Current Time:   0.023000 __________________________________________ 
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: rectangle_created; port: private_1_field_ui; parameters: [1, 3])
+
+INPUT EVENT from port <private_1_field_ui>
+	\Type: field_ui
+	\Event: (event name: rectangle_created; port: private_1_field_ui; parameters: [1, 3])
+
+EXIT STATE in model <MainApp>
+		State: /creating_trafficlight/creating_redlight
+
+EXIT STATE in model <MainApp>
+		State: /creating_trafficlight
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/creating_trafficlight/creating_redlight -> /creating_interrupt_button)
+
+ENTER STATE in model <MainApp>
+		State: /creating_interrupt_button
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: create_button; port: ui; parameters: [0, 'Police Interrupt', 'private_1_field_ui'])
+
+__  Current Time:   0.025000 __________________________________________ 
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: button_created; port: private_1_field_ui; parameters: [2])
+
+INPUT EVENT from port <private_1_field_ui>
+	\Type: field_ui
+	\Event: (event name: button_created; port: private_1_field_ui; parameters: [2])
+
+EXIT STATE in model <MainApp>
+		State: /creating_interrupt_button
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/creating_interrupt_button -> /creating_quit_button)
+
+ENTER STATE in model <MainApp>
+		State: /creating_quit_button
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: bind_event; port: ui; parameters: [2, '<Button>', 'interrupt_clicked', 'private_1_field_ui'])
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: create_button; port: ui; parameters: [0, 'Quit', 'private_1_field_ui'])
+
+__  Current Time:   0.026000 __________________________________________ 
+
+INPUT EVENT from <ObjectManager>
+	\Type: cd
+	\Event: (event name: button_created; port: private_1_field_ui; parameters: [3])
+
+INPUT EVENT from port <private_1_field_ui>
+	\Type: field_ui
+	\Event: (event name: button_created; port: private_1_field_ui; parameters: [3])
+
+EXIT STATE in model <MainApp>
+		State: /creating_quit_button
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/creating_quit_button -> /on)
+
+ENTER STATE in model <MainApp>
+		State: /on
+
+ENTER STATE in model <MainApp>
+		State: /on/normal
+
+ENTER STATE in model <MainApp>
+		State: /on/normal/red
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: bind_event; port: ui; parameters: [3, '<Button>', 'quit_clicked', 'private_1_field_ui'])
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: set_element_color; port: ui; parameters: [1, 2, 'black'])
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: set_element_color; port: ui; parameters: [1, 3, 'red'])
+
+__  Current Time:   3.026000 __________________________________________ 
+
+EXIT STATE in model <MainApp>
+		State: /on/normal/red
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/on/normal/red -> /on/normal/green)
+
+ENTER STATE in model <MainApp>
+		State: /on/normal/green
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: set_element_color; port: ui; parameters: [1, 3, 'black'])
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: set_element_color; port: ui; parameters: [1, 1, 'green'])
+
+__  Current Time:   5.026000 __________________________________________ 
+
+EXIT STATE in model <MainApp>
+		State: /on/normal/green
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/on/normal/green -> /on/normal/yellow)
+
+ENTER STATE in model <MainApp>
+		State: /on/normal/yellow
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: set_element_color; port: ui; parameters: [1, 1, 'black'])
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: set_element_color; port: ui; parameters: [1, 2, 'yellow'])
+
+__  Current Time:   6.026000 __________________________________________ 
+
+EXIT STATE in model <MainApp>
+		State: /on/normal/yellow
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/on/normal/yellow -> /on/normal/red)
+
+ENTER STATE in model <MainApp>
+		State: /on/normal/red
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: set_element_color; port: ui; parameters: [1, 2, 'black'])
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: set_element_color; port: ui; parameters: [1, 3, 'red'])
+
+__  Current Time:   9.026000 __________________________________________ 
+
+EXIT STATE in model <MainApp>
+		State: /on/normal/red
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/on/normal/red -> /on/normal/green)
+
+ENTER STATE in model <MainApp>
+		State: /on/normal/green
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: set_element_color; port: ui; parameters: [1, 3, 'black'])
+
+OUTPUT EVENT to port <ui>
+	\Event: (event name: set_element_color; port: ui; parameters: [1, 1, 'green'])
+

@@ -402,7 +402,8 @@ class ObjectManagerBase(object):
         return instance
     
 class Event(object):
-    def __init__(self, event_name, port = "", parameters = []):
+    # TODO SAm: fixed the default of port to None as it was not consistent (sometimes none someting empty)
+    def __init__(self, event_name, port = None, parameters = []):
         self.name = event_name
         self.parameters = parameters
         self.port = port
@@ -519,7 +520,6 @@ class ControllerBase(object):
 
 
     def startTracers(self):
-        # TODO: 
         """
         Start all tracers
         """
@@ -556,7 +556,6 @@ class ControllerBase(object):
         self.accurate_time.set_start_time()
         self.simulated_time = 0
 
-        # TODO: SAM start up all tracers
         tracers = Tracers()
         for tracer in self.tracers:
             tracers.registerTracer(tracer, None, None)
@@ -565,7 +564,6 @@ class ControllerBase(object):
         self.object_manager.start()
     
     def stop(self):
-        #TODO
         self.tracers.stopTracers()
 
     def addInput(self, input_event_list, time_offset = 0, force_internal=False):

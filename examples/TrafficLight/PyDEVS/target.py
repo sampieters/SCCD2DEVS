@@ -10,15 +10,12 @@ Tkinter frame with Traffic light in a single statechart.
 from sccd.runtime.DEVS_statecharts_core import *
 from sccd.runtime.libs import ui_v2 as ui
 CANVAS_DIMS = (100, 350)
-CANVAS_WIDTH = 100
-CANVAS_HEIGHT = 350
 
 # package "TrafficLight"
 
 class MainAppInstance(RuntimeClassBase):
-    def __init__(self, atomdevs, id):
+    def __init__(self, atomdevs, id, start_port_id):
         RuntimeClassBase.__init__(self, atomdevs, id)
-        self.associations = {}
         
         self.semantics.big_step_maximality = StatechartSemantics.TakeMany
         self.semantics.internal_event_lifeline = StatechartSemantics.Queue
@@ -39,10 +36,11 @@ class MainAppInstance(RuntimeClassBase):
         
         # call user defined constructor
         MainAppInstance.user_defined_constructor(self)
-        port_name = Ports.addInputPort("<narrow_cast>", self)
-        atomdevs.addInPort(port_name)
-        port_name = Ports.addInputPort("field_ui", self)
-        atomdevs.addInPort(port_name)
+        port_name = addInputPort("ui", start_port_id, True)
+        atomdevs.state.port_mappings[port_name] = id
+        port_name = addInputPort("<narrow_cast>", start_port_id)
+        atomdevs.state.port_mappings[port_name] = id
+        port_name = addInputPort("field_ui", start_port_id + 1)
         atomdevs.state.port_mappings[port_name] = id
         self.inports["field_ui"] = port_name
     
@@ -59,90 +57,94 @@ class MainAppInstance(RuntimeClassBase):
         # state <root>
         self.states[""] = State(0, "", self)
         
-        # state /creating_window
-        self.states["/creating_window"] = State(1, "/creating_window", self)
-        self.states["/creating_window"].setEnter(self._creating_window_enter)
+        # state /create_ui
+        self.states["/create_ui"] = State(1, "/create_ui", self)
         
-        # state /creating_canvas
-        self.states["/creating_canvas"] = State(2, "/creating_canvas", self)
-        self.states["/creating_canvas"].setEnter(self._creating_canvas_enter)
+        # state /create_ui/creating_window
+        self.states["/create_ui/creating_window"] = State(2, "/create_ui/creating_window", self)
+        self.states["/create_ui/creating_window"].setEnter(self._create_ui_creating_window_enter)
         
-        # state /creating_trafficlight
-        self.states["/creating_trafficlight"] = State(3, "/creating_trafficlight", self)
+        # state /create_ui/creating_canvas
+        self.states["/create_ui/creating_canvas"] = State(3, "/create_ui/creating_canvas", self)
+        self.states["/create_ui/creating_canvas"].setEnter(self._create_ui_creating_canvas_enter)
         
-        # state /creating_trafficlight/creating_greenlight
-        self.states["/creating_trafficlight/creating_greenlight"] = State(4, "/creating_trafficlight/creating_greenlight", self)
-        self.states["/creating_trafficlight/creating_greenlight"].setEnter(self._creating_trafficlight_creating_greenlight_enter)
+        # state /create_ui/creating_trafficlight
+        self.states["/create_ui/creating_trafficlight"] = State(4, "/create_ui/creating_trafficlight", self)
         
-        # state /creating_trafficlight/creating_yellowlight
-        self.states["/creating_trafficlight/creating_yellowlight"] = State(5, "/creating_trafficlight/creating_yellowlight", self)
-        self.states["/creating_trafficlight/creating_yellowlight"].setEnter(self._creating_trafficlight_creating_yellowlight_enter)
+        # state /create_ui/creating_trafficlight/creating_greenlight
+        self.states["/create_ui/creating_trafficlight/creating_greenlight"] = State(5, "/create_ui/creating_trafficlight/creating_greenlight", self)
+        self.states["/create_ui/creating_trafficlight/creating_greenlight"].setEnter(self._create_ui_creating_trafficlight_creating_greenlight_enter)
         
-        # state /creating_trafficlight/creating_redlight
-        self.states["/creating_trafficlight/creating_redlight"] = State(6, "/creating_trafficlight/creating_redlight", self)
-        self.states["/creating_trafficlight/creating_redlight"].setEnter(self._creating_trafficlight_creating_redlight_enter)
+        # state /create_ui/creating_trafficlight/creating_yellowlight
+        self.states["/create_ui/creating_trafficlight/creating_yellowlight"] = State(6, "/create_ui/creating_trafficlight/creating_yellowlight", self)
+        self.states["/create_ui/creating_trafficlight/creating_yellowlight"].setEnter(self._create_ui_creating_trafficlight_creating_yellowlight_enter)
         
-        # state /creating_interrupt_button
-        self.states["/creating_interrupt_button"] = State(7, "/creating_interrupt_button", self)
-        self.states["/creating_interrupt_button"].setEnter(self._creating_interrupt_button_enter)
+        # state /create_ui/creating_trafficlight/creating_redlight
+        self.states["/create_ui/creating_trafficlight/creating_redlight"] = State(7, "/create_ui/creating_trafficlight/creating_redlight", self)
+        self.states["/create_ui/creating_trafficlight/creating_redlight"].setEnter(self._create_ui_creating_trafficlight_creating_redlight_enter)
         
-        # state /creating_quit_button
-        self.states["/creating_quit_button"] = State(8, "/creating_quit_button", self)
-        self.states["/creating_quit_button"].setEnter(self._creating_quit_button_enter)
+        # state /create_ui/creating_interrupt_button
+        self.states["/create_ui/creating_interrupt_button"] = State(8, "/create_ui/creating_interrupt_button", self)
+        self.states["/create_ui/creating_interrupt_button"].setEnter(self._create_ui_creating_interrupt_button_enter)
+        
+        # state /create_ui/creating_quit_button
+        self.states["/create_ui/creating_quit_button"] = State(9, "/create_ui/creating_quit_button", self)
+        self.states["/create_ui/creating_quit_button"].setEnter(self._create_ui_creating_quit_button_enter)
         
         # state /on
-        self.states["/on"] = State(9, "/on", self)
+        self.states["/on"] = State(10, "/on", self)
         
         # state /on/normal
-        self.states["/on/normal"] = State(10, "/on/normal", self)
+        self.states["/on/normal"] = State(11, "/on/normal", self)
         
         # state /on/normal/red
-        self.states["/on/normal/red"] = State(11, "/on/normal/red", self)
+        self.states["/on/normal/red"] = State(12, "/on/normal/red", self)
         self.states["/on/normal/red"].setEnter(self._on_normal_red_enter)
         self.states["/on/normal/red"].setExit(self._on_normal_red_exit)
         
         # state /on/normal/green
-        self.states["/on/normal/green"] = State(12, "/on/normal/green", self)
+        self.states["/on/normal/green"] = State(13, "/on/normal/green", self)
         self.states["/on/normal/green"].setEnter(self._on_normal_green_enter)
         self.states["/on/normal/green"].setExit(self._on_normal_green_exit)
         
         # state /on/normal/yellow
-        self.states["/on/normal/yellow"] = State(13, "/on/normal/yellow", self)
+        self.states["/on/normal/yellow"] = State(14, "/on/normal/yellow", self)
         self.states["/on/normal/yellow"].setEnter(self._on_normal_yellow_enter)
         self.states["/on/normal/yellow"].setExit(self._on_normal_yellow_exit)
         
         # state /on/interrupted
-        self.states["/on/interrupted"] = State(14, "/on/interrupted", self)
+        self.states["/on/interrupted"] = State(15, "/on/interrupted", self)
         
         # state /on/interrupted/yellow
-        self.states["/on/interrupted/yellow"] = State(15, "/on/interrupted/yellow", self)
+        self.states["/on/interrupted/yellow"] = State(16, "/on/interrupted/yellow", self)
         self.states["/on/interrupted/yellow"].setEnter(self._on_interrupted_yellow_enter)
         self.states["/on/interrupted/yellow"].setExit(self._on_interrupted_yellow_exit)
         
         # state /on/interrupted/black
-        self.states["/on/interrupted/black"] = State(16, "/on/interrupted/black", self)
+        self.states["/on/interrupted/black"] = State(17, "/on/interrupted/black", self)
         self.states["/on/interrupted/black"].setEnter(self._on_interrupted_black_enter)
         self.states["/on/interrupted/black"].setExit(self._on_interrupted_black_exit)
         
         # state /off
-        self.states["/off"] = State(17, "/off", self)
+        self.states["/off"] = State(18, "/off", self)
         self.states["/off"].setEnter(self._off_enter)
         
         # state /deleted
-        self.states["/deleted"] = State(18, "/deleted", self)
+        self.states["/deleted"] = State(19, "/deleted", self)
         
         # add children
-        self.states[""].addChild(self.states["/creating_window"])
-        self.states[""].addChild(self.states["/creating_canvas"])
-        self.states[""].addChild(self.states["/creating_trafficlight"])
-        self.states[""].addChild(self.states["/creating_interrupt_button"])
-        self.states[""].addChild(self.states["/creating_quit_button"])
+        self.states[""].addChild(self.states["/create_ui"])
         self.states[""].addChild(self.states["/on"])
         self.states[""].addChild(self.states["/off"])
         self.states[""].addChild(self.states["/deleted"])
-        self.states["/creating_trafficlight"].addChild(self.states["/creating_trafficlight/creating_greenlight"])
-        self.states["/creating_trafficlight"].addChild(self.states["/creating_trafficlight/creating_yellowlight"])
-        self.states["/creating_trafficlight"].addChild(self.states["/creating_trafficlight/creating_redlight"])
+        self.states["/create_ui"].addChild(self.states["/create_ui/creating_window"])
+        self.states["/create_ui"].addChild(self.states["/create_ui/creating_canvas"])
+        self.states["/create_ui"].addChild(self.states["/create_ui/creating_trafficlight"])
+        self.states["/create_ui"].addChild(self.states["/create_ui/creating_interrupt_button"])
+        self.states["/create_ui"].addChild(self.states["/create_ui/creating_quit_button"])
+        self.states["/create_ui/creating_trafficlight"].addChild(self.states["/create_ui/creating_trafficlight/creating_greenlight"])
+        self.states["/create_ui/creating_trafficlight"].addChild(self.states["/create_ui/creating_trafficlight/creating_yellowlight"])
+        self.states["/create_ui/creating_trafficlight"].addChild(self.states["/create_ui/creating_trafficlight/creating_redlight"])
         self.states["/on"].addChild(self.states["/on/normal"])
         self.states["/on"].addChild(self.states["/on/interrupted"])
         self.states["/on/normal"].addChild(self.states["/on/normal/red"])
@@ -151,53 +153,54 @@ class MainAppInstance(RuntimeClassBase):
         self.states["/on/interrupted"].addChild(self.states["/on/interrupted/yellow"])
         self.states["/on/interrupted"].addChild(self.states["/on/interrupted/black"])
         self.states[""].fixTree()
-        self.states[""].default_state = self.states["/creating_window"]
-        self.states["/creating_trafficlight"].default_state = self.states["/creating_trafficlight/creating_greenlight"]
+        self.states[""].default_state = self.states["/create_ui"]
+        self.states["/create_ui"].default_state = self.states["/create_ui/creating_window"]
+        self.states["/create_ui/creating_trafficlight"].default_state = self.states["/create_ui/creating_trafficlight/creating_greenlight"]
         self.states["/on"].default_state = self.states["/on/normal"]
         self.states["/on/normal"].default_state = self.states["/on/normal/red"]
         self.states["/on/interrupted"].default_state = self.states["/on/interrupted/yellow"]
         
-        # transition /creating_window
-        _creating_window_0 = Transition(self, self.states["/creating_window"], [self.states["/creating_canvas"]])
-        _creating_window_0.setAction(self._creating_window_0_exec)
-        _creating_window_0.setTrigger(Event("window_created", None))
-        self.states["/creating_window"].addTransition(_creating_window_0)
+        # transition /create_ui/creating_window
+        _create_ui_creating_window_0 = Transition(self, self.states["/create_ui/creating_window"], [self.states["/create_ui/creating_canvas"]])
+        _create_ui_creating_window_0.setAction(self._create_ui_creating_window_0_exec)
+        _create_ui_creating_window_0.setTrigger(Event("window_created", None))
+        self.states["/create_ui/creating_window"].addTransition(_create_ui_creating_window_0)
         
-        # transition /creating_canvas
-        _creating_canvas_0 = Transition(self, self.states["/creating_canvas"], [self.states["/creating_trafficlight"]])
-        _creating_canvas_0.setAction(self._creating_canvas_0_exec)
-        _creating_canvas_0.setTrigger(Event("canvas_created", None))
-        self.states["/creating_canvas"].addTransition(_creating_canvas_0)
+        # transition /create_ui/creating_canvas
+        _create_ui_creating_canvas_0 = Transition(self, self.states["/create_ui/creating_canvas"], [self.states["/create_ui/creating_trafficlight"]])
+        _create_ui_creating_canvas_0.setAction(self._create_ui_creating_canvas_0_exec)
+        _create_ui_creating_canvas_0.setTrigger(Event("canvas_created", None))
+        self.states["/create_ui/creating_canvas"].addTransition(_create_ui_creating_canvas_0)
         
-        # transition /creating_trafficlight/creating_greenlight
-        _creating_trafficlight_creating_greenlight_0 = Transition(self, self.states["/creating_trafficlight/creating_greenlight"], [self.states["/creating_trafficlight/creating_yellowlight"]])
-        _creating_trafficlight_creating_greenlight_0.setAction(self._creating_trafficlight_creating_greenlight_0_exec)
-        _creating_trafficlight_creating_greenlight_0.setTrigger(Event("rectangle_created", None))
-        self.states["/creating_trafficlight/creating_greenlight"].addTransition(_creating_trafficlight_creating_greenlight_0)
+        # transition /create_ui/creating_trafficlight/creating_greenlight
+        _create_ui_creating_trafficlight_creating_greenlight_0 = Transition(self, self.states["/create_ui/creating_trafficlight/creating_greenlight"], [self.states["/create_ui/creating_trafficlight/creating_yellowlight"]])
+        _create_ui_creating_trafficlight_creating_greenlight_0.setAction(self._create_ui_creating_trafficlight_creating_greenlight_0_exec)
+        _create_ui_creating_trafficlight_creating_greenlight_0.setTrigger(Event("rectangle_created", None))
+        self.states["/create_ui/creating_trafficlight/creating_greenlight"].addTransition(_create_ui_creating_trafficlight_creating_greenlight_0)
         
-        # transition /creating_trafficlight/creating_yellowlight
-        _creating_trafficlight_creating_yellowlight_0 = Transition(self, self.states["/creating_trafficlight/creating_yellowlight"], [self.states["/creating_trafficlight/creating_redlight"]])
-        _creating_trafficlight_creating_yellowlight_0.setAction(self._creating_trafficlight_creating_yellowlight_0_exec)
-        _creating_trafficlight_creating_yellowlight_0.setTrigger(Event("rectangle_created", None))
-        self.states["/creating_trafficlight/creating_yellowlight"].addTransition(_creating_trafficlight_creating_yellowlight_0)
+        # transition /create_ui/creating_trafficlight/creating_yellowlight
+        _create_ui_creating_trafficlight_creating_yellowlight_0 = Transition(self, self.states["/create_ui/creating_trafficlight/creating_yellowlight"], [self.states["/create_ui/creating_trafficlight/creating_redlight"]])
+        _create_ui_creating_trafficlight_creating_yellowlight_0.setAction(self._create_ui_creating_trafficlight_creating_yellowlight_0_exec)
+        _create_ui_creating_trafficlight_creating_yellowlight_0.setTrigger(Event("rectangle_created", None))
+        self.states["/create_ui/creating_trafficlight/creating_yellowlight"].addTransition(_create_ui_creating_trafficlight_creating_yellowlight_0)
         
-        # transition /creating_trafficlight/creating_redlight
-        _creating_trafficlight_creating_redlight_0 = Transition(self, self.states["/creating_trafficlight/creating_redlight"], [self.states["/creating_interrupt_button"]])
-        _creating_trafficlight_creating_redlight_0.setAction(self._creating_trafficlight_creating_redlight_0_exec)
-        _creating_trafficlight_creating_redlight_0.setTrigger(Event("rectangle_created", None))
-        self.states["/creating_trafficlight/creating_redlight"].addTransition(_creating_trafficlight_creating_redlight_0)
+        # transition /create_ui/creating_trafficlight/creating_redlight
+        _create_ui_creating_trafficlight_creating_redlight_0 = Transition(self, self.states["/create_ui/creating_trafficlight/creating_redlight"], [self.states["/create_ui/creating_interrupt_button"]])
+        _create_ui_creating_trafficlight_creating_redlight_0.setAction(self._create_ui_creating_trafficlight_creating_redlight_0_exec)
+        _create_ui_creating_trafficlight_creating_redlight_0.setTrigger(Event("rectangle_created", None))
+        self.states["/create_ui/creating_trafficlight/creating_redlight"].addTransition(_create_ui_creating_trafficlight_creating_redlight_0)
         
-        # transition /creating_interrupt_button
-        _creating_interrupt_button_0 = Transition(self, self.states["/creating_interrupt_button"], [self.states["/creating_quit_button"]])
-        _creating_interrupt_button_0.setAction(self._creating_interrupt_button_0_exec)
-        _creating_interrupt_button_0.setTrigger(Event("button_created", None))
-        self.states["/creating_interrupt_button"].addTransition(_creating_interrupt_button_0)
+        # transition /create_ui/creating_interrupt_button
+        _create_ui_creating_interrupt_button_0 = Transition(self, self.states["/create_ui/creating_interrupt_button"], [self.states["/create_ui/creating_quit_button"]])
+        _create_ui_creating_interrupt_button_0.setAction(self._create_ui_creating_interrupt_button_0_exec)
+        _create_ui_creating_interrupt_button_0.setTrigger(Event("button_created", None))
+        self.states["/create_ui/creating_interrupt_button"].addTransition(_create_ui_creating_interrupt_button_0)
         
-        # transition /creating_quit_button
-        _creating_quit_button_0 = Transition(self, self.states["/creating_quit_button"], [self.states["/on"]])
-        _creating_quit_button_0.setAction(self._creating_quit_button_0_exec)
-        _creating_quit_button_0.setTrigger(Event("button_created", None))
-        self.states["/creating_quit_button"].addTransition(_creating_quit_button_0)
+        # transition /create_ui/creating_quit_button
+        _create_ui_creating_quit_button_0 = Transition(self, self.states["/create_ui/creating_quit_button"], [self.states["/on"]])
+        _create_ui_creating_quit_button_0.setAction(self._create_ui_creating_quit_button_0_exec)
+        _create_ui_creating_quit_button_0.setTrigger(Event("button_created", None))
+        self.states["/create_ui/creating_quit_button"].addTransition(_create_ui_creating_quit_button_0)
         
         # transition /on/normal/red
         _on_normal_red_0 = Transition(self, self.states["/on/normal/red"], [self.states["/on/normal/green"]])
@@ -245,25 +248,25 @@ class MainAppInstance(RuntimeClassBase):
         _on_interrupted_0.setGuard(self._on_interrupted_0_guard)
         self.states["/on/interrupted"].addTransition(_on_interrupted_0)
     
-    def _creating_window_enter(self):
-        self.big_step.outputEvent(Event("create_window", self.getOutPortName("ui"), [CANVAS_DIMS[0], CANVAS_DIMS[1], "Fixed Traffic Light", self.inports['field_ui']]))
+    def _create_ui_creating_window_enter(self):
+        self.big_step.outputEvent(Event("create_window", self.getOutPortName("ui"), [CANVAS_DIMS[0], CANVAS_DIMS[1], "Traffic Light (history)", self.inports['field_ui']]))
     
-    def _creating_canvas_enter(self):
+    def _create_ui_creating_canvas_enter(self):
         self.big_step.outputEvent(Event("create_canvas", self.getOutPortName("ui"), [self.window_id, CANVAS_DIMS[0], CANVAS_DIMS[1] - 100, {'background':'#222222'}, self.inports['field_ui']]))
     
-    def _creating_trafficlight_creating_greenlight_enter(self):
+    def _create_ui_creating_trafficlight_creating_greenlight_enter(self):
         self.big_step.outputEvent(Event("create_rectangle", self.getOutPortName("ui"), [self.canvas_id, 50, 50, 50, 50, {'fill':'#000'}, self.inports['field_ui']]))
     
-    def _creating_trafficlight_creating_yellowlight_enter(self):
+    def _create_ui_creating_trafficlight_creating_yellowlight_enter(self):
         self.big_step.outputEvent(Event("create_rectangle", self.getOutPortName("ui"), [self.canvas_id, 50, 110, 50, 50, {'fill':'#000'}, self.inports['field_ui']]))
     
-    def _creating_trafficlight_creating_redlight_enter(self):
+    def _create_ui_creating_trafficlight_creating_redlight_enter(self):
         self.big_step.outputEvent(Event("create_rectangle", self.getOutPortName("ui"), [self.canvas_id, 50, 170, 50, 50, {'fill':'#000'}, self.inports['field_ui']]))
     
-    def _creating_interrupt_button_enter(self):
+    def _create_ui_creating_interrupt_button_enter(self):
         self.big_step.outputEvent(Event("create_button", self.getOutPortName("ui"), [self.window_id, 'Police Interrupt', self.inports['field_ui']]))
     
-    def _creating_quit_button_enter(self):
+    def _create_ui_creating_quit_button_enter(self):
         self.big_step.outputEvent(Event("create_button", self.getOutPortName("ui"), [self.window_id, 'Quit', self.inports['field_ui']]))
     
     def _on_normal_red_enter(self):
@@ -338,43 +341,43 @@ class MainAppInstance(RuntimeClassBase):
         button = parameters[2]
         return button == ui.MOUSE_BUTTONS.LEFT
     
-    def _creating_window_0_exec(self, parameters):
+    def _create_ui_creating_window_0_exec(self, parameters):
         window_id = parameters[0]
         self.window_id = window_id
         self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [window_id, ui.EVENTS.WINDOW_CLOSE, 'window_close', self.inports['field_ui']]))
     
-    def _creating_canvas_0_exec(self, parameters):
+    def _create_ui_creating_canvas_0_exec(self, parameters):
         canvas_id = parameters[0]
         self.canvas_id = canvas_id
     
-    def _creating_trafficlight_creating_greenlight_0_exec(self, parameters):
+    def _create_ui_creating_trafficlight_creating_greenlight_0_exec(self, parameters):
         canvas_id = parameters[0]
         green_id = parameters[1]
         self.green_id = green_id
     
-    def _creating_trafficlight_creating_yellowlight_0_exec(self, parameters):
+    def _create_ui_creating_trafficlight_creating_yellowlight_0_exec(self, parameters):
         canvas_id = parameters[0]
         yellow_id = parameters[1]
         self.yellow_id = yellow_id
     
-    def _creating_trafficlight_creating_redlight_0_exec(self, parameters):
+    def _create_ui_creating_trafficlight_creating_redlight_0_exec(self, parameters):
         canvas_id = parameters[0]
         red_id = parameters[1]
         self.red_id = red_id
     
-    def _creating_interrupt_button_0_exec(self, parameters):
+    def _create_ui_creating_interrupt_button_0_exec(self, parameters):
         button_id = parameters[0]
         self.police_button_id = button_id
         self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [button_id, ui.EVENTS.MOUSE_CLICK, "interrupt_clicked", self.inports['field_ui']]))
     
-    def _creating_quit_button_0_exec(self, parameters):
+    def _create_ui_creating_quit_button_0_exec(self, parameters):
         button_id = parameters[0]
         self.quit_button_id = button_id
         self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [button_id, ui.EVENTS.MOUSE_CLICK, "quit_clicked", self.inports['field_ui']]))
     
     def initializeStatechart(self):
         # enter default state
-        self.default_targets = self.states["/creating_window"].getEffectiveTargetStates()
+        self.default_targets = self.states["/create_ui"].getEffectiveTargetStates()
         RuntimeClassBase.initializeStatechart(self)
 
 class MainApp(ClassBase):
@@ -383,31 +386,28 @@ class MainApp(ClassBase):
         self.input = self.addInPort("input")
         self.glob_outputs["ui"] = self.addOutPort("ui")
         self.field_ui = self.addInPort("field_ui")
-        new_instance = self.constructObject(0, [])
+        new_instance = self.constructObject(0, 0, [])
         self.state.instances[new_instance.instance_id] = new_instance
-        self.state.next_instance = self.state.next_instance + 1
     
-    def constructObject(self, id, parameters):
-        new_instance = MainAppInstance(self, id)
+    def constructObject(self, id, start_port_id, parameters):
+        new_instance = MainAppInstance(self, id, start_port_id)
         return new_instance
 
-class Dummy(ObjectManagerState):
-    def __init__(self):
-        ObjectManagerState.__init__(self)
-    
-    def instantiate(self, class_name, construct_params):
-        instance = {}
-        instance["name"] = class_name
-        if class_name == "MainApp":
-            instance["associations"] = {}
-        else:
-            raise Exception("Cannot instantiate class " + class_name)
-        return instance
+def instantiate(self, class_name, construct_params):
+    instance = {}
+    instance["name"] = class_name
+    if class_name == "MainApp":
+        self.narrow_cast_id = self.narrow_cast_id + 1
+        instance["associations"] = {}
+    else:
+        raise Exception("Cannot instantiate class " + class_name)
+    return instance
+ObjectManagerState.instantiate = instantiate
 
 class ObjectManager(ObjectManagerBase):
     def __init__(self, name):
         ObjectManagerBase.__init__(self, name)
-        self.state = Dummy()
+        self.state = ObjectManagerState()
         self.input = self.addInPort("input")
         self.output["MainApp"] = self.addOutPort()
         self.state.createInstance("MainApp", [])
@@ -417,9 +417,7 @@ class Controller(CoupledDEVS):
     def __init__(self, name):
         CoupledDEVS.__init__(self, name)
         self.in_ui = self.addInPort("ui")
-        Ports.addInputPort("ui")
         self.out_ui = self.addOutPort("ui")
-        Ports.addOutputPort("ui")
         self.objectmanager = self.addSubModel(ObjectManager("ObjectManager"))
         self.atomics = []
         self.atomics.append(self.addSubModel(MainApp("MainApp")))

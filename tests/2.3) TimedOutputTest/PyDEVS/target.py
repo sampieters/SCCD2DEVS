@@ -85,7 +85,8 @@ class MainApp(ClassBase):
         self.glob_outputs["ui"] = self.addOutPort("ui")
         new_instance = self.constructObject(0, 0, [])
         self.state.instances[new_instance.instance_id] = new_instance
-        self.state.next_instance = self.state.next_instance + 1
+        new_instance.start()
+        self.state.next_time = 0
     
     def constructObject(self, id, start_port_id, parameters):
         new_instance = MainAppInstance(self, id, start_port_id)
@@ -109,7 +110,6 @@ class ObjectManager(ObjectManagerBase):
         self.input = self.addInPort("input")
         self.output["MainApp"] = self.addOutPort()
         self.state.createInstance("MainApp", [])
-        self.state.to_send.append((("MainApp", 0), ("MainApp", 0), Event("start_instance", None, ["MainApp[0]"])))
 
 class Controller(CoupledDEVS):
     def __init__(self, name):

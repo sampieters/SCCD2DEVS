@@ -59,23 +59,6 @@ class Tracers(object):
             except AttributeError:
                 pass
 
-
-    def tracesUser(self, time, aDEVS, variable, value):
-        """
-        Perform all tracing actions for a user imposed modification. This is NOT supported by default DEVS, so we don't require tracers to handle this either.
-
-        :param time: the time at which the modification happend; this will be the termination time of the previous simulation run and **not** the time at which the timeAdvance was recomputed!
-        :param aDEVS: the atomic DEVS model that was altered
-        :param variable: the variable that was altered (as a string)
-        :param value: the new value of the variable
-        """
-        for tracer in self.tracers:
-            try:
-                tracer.traceUser(time, aDEVS, variable, value)
-            except AttributeError:
-                # Some tracers choose to ignore this event
-                pass
-
     def tracesInit(self, aDEVS, t):
         """
         Perform all tracing actions for an initialisation

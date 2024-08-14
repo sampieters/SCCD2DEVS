@@ -72,16 +72,37 @@
                         <parameter expr="self.inports['field_ui']"/><!-- inport for response -->
                     </raise>
                 </onentry>
-                <transition event="canvas_created" target="../create_floors">
+                <transition event="canvas_created" target="../create_elevator">
                     <parameter name="canvas_id" type="int"/>
                     <script>
                         self.canvas_id = canvas_id
                     </script>
                 </transition>
             </state>
+            <state id="create_elevator">
+                <transition target="../creating">
+                    <raise scope="cd" event="create_instance">
+                        <parameter expr='"elevator"' />
+                        <parameter expr='"Elevator"' />
+                        <parameter expr="self.canvas_id" />
+                    </raise>
+                </transition>
+            </state>
+            <state id="creating">
+                <transition event="instance_created" target="../create_floors">
+                    <parameter name="association_name" type="string"/>
+                    <raise scope="cd" event="start_instance">
+                        <parameter expr="association_name" />
+                    </raise>
+                    <raise scope="narrow" event="set_association_name" target="association_name">
+                        <parameter expr="association_name" />
+                        <parameter expr="self.canvas_id" />
+                        <parameter expr="self.window_id" />
+                    </raise>
+                </transition>
+            </state>
             <state id="create_floors">
-                <transition target="../create_controls" cond="self.num_floors == FLOORS" />
-                <transition target="../wait" cond="self.num_floors != FLOORS">
+                <transition target="../wait_created">
                     <raise scope="cd" event="create_instance">
                         <parameter expr='"floor"' />
                         <parameter expr='"Floor"' />
@@ -93,15 +114,24 @@
                     </script>
                 </transition>
             </state>
-            <state id="wait">
-                <transition event='instance_created' target='.'>
+            <state id="wait_created">
+                <transition event='instance_created' target='../wait_started'>
                     <parameter name="association_name" type="string"/>
                     <raise scope="cd" event="start_instance">
                         <parameter expr="association_name" />
                     </raise>
+                    <!-- associate an instance -->
+                    <raise scope="cd" event="associate_instance">
+                        <parameter expr="association_name" />
+                        <parameter expr="'elevator/floors'" />
+                    </raise>
                 </transition>
-                <transition event="instance_started" target="../create_floors" />
             </state>
+            <state id="wait_started">
+                <transition event="instance_started" target="../create_floors" cond="self.num_floors != FLOORS" />
+                <transition event="instance_started" target="../create_controls" cond="self.num_floors == FLOORS" />
+            </state>
+
             <state id="create_controls" initial="create_buttons">
                 <state id="create_buttons" initial="create_a_button">
                     <state id="create_a_button">
@@ -111,7 +141,7 @@
                                 <parameter expr='"ElevatorButton"' />
                                 <parameter expr="self.window_id" />
                                 <parameter expr="self.canvas_id" />
-                                <parameter expr="self.button_num - 1" />
+                                <parameter expr="self.button_num -1" />
                             </raise>
                         </onentry>
                         <transition event='instance_created' target='../start_a_button'>
@@ -130,62 +160,16 @@
                                 self.button_num -= 1
                             </script>
                         </transition>
-                        <transition target="../../../create_elevator" cond="self.button_num == 1" />
+                        <transition target="../../../running" cond="self.button_num == 1" />
                     </state>
                 </state>
             </state>
-            <state id="create_elevator">
-                <transition target="../creating">
-                    <raise scope="cd" event="create_instance">
-                        <parameter expr='"elevator"' />
-                        <parameter expr='"Elevator"' />
-                        <parameter expr="self.canvas_id" />
-                    </raise>
-                </transition>
-            </state>
-            <state id="creating">
-                <transition event="instance_created" target="../running">
-                    <parameter name="association_name" type="string"/>
-                    <raise scope="cd" event="start_instance">
-                        <parameter expr="association_name" />
-                    </raise>
-                    <raise scope="narrow" event="set_association_name" target="association_name">
-                        <parameter expr="association_name" />
-                        <parameter expr="self.canvas_id" />
-                        <parameter expr="self.window_id" />
-                    </raise>
-                    <!-- associate all floors to the elevator -->
-                    <raise scope="cd" event="associate_instance">
-                        <parameter expr="'floor'" />
-                        <parameter expr="association_name" />
-                    </raise>
-                </transition>
-            </state>
             <state id="running">
-                <transition event='update_bounds' target='.'>
-                    <parameter name="pos" type="dict"/>
-                    <parameter name="dim" type="dict"/>
-                    <parameter name="vel" type="int"/>
-                    <raise scope="broad" event="update_elevator_bounds">
-                        <parameter expr="pos" />
-                        <parameter expr="dim" />
-                        <parameter expr="vel" />
-                        <script>
-                            self.elevator_pos = pos
-                            self.elevator_dim = dim
-                        </script>
-                    </raise>
-                </transition>
                 <transition event='button_pressed' target='.'>
                     <parameter name="floor_number" type="int"/>
                     <raise scope="narrow" event="move_elevator" target="'elevator'">
                         <parameter expr="floor_number" />
                     </raise>
-                </transition>
-                <transition event='open_elevator' target='.'>
-                    <!--
-                    <raise scope="narrow" event="open_elevator" target="'ball'" />
-                    -->
                 </transition>
             </state>
         </scxml>
@@ -214,6 +198,12 @@
                 y_dim = (height - ((FLOORS - 1) * FLOOR_SPACE)) / FLOORS
 
                 self.dim = {'x': FLOOR_LENGTH, 'y': y_dim};
+
+                self.elevator_open = False
+
+                self.elev_pos = None
+                self.elev_dim = None
+                self.elev_vel = None
 
 
                 # start position from the bottom instead of from the top
@@ -249,6 +239,43 @@
                             <parameter expr="self.floor_num" />
                             <parameter expr="10" />
                             <parameter expr="self.pos['y']" />
+                            <parameter expr="self.elevator_open" />
+                            <parameter expr="self.elev_pos" />
+                            <parameter expr="self.elev_dim" />
+                            <parameter expr="self.elev_vel" />
+                        </raise>
+                    </transition>
+                    <transition event="open_elevator" target=".">
+                        <script>
+                            print("Elevator opened at:", self.floor_num)
+                            self.elevator_open = True
+                        </script>
+                        <raise scope="narrow" event="update_elevator_open" target="'balls'">
+                            <parameter expr="self.elevator_open" />
+                        </raise>
+                    </transition>
+                    <transition event="close_elevator" target=".">
+                        <script>
+                            print("Elevator closed at:", self.floor_num)
+                            self.elevator_open = False
+                        </script>
+                        <raise scope="narrow" event="update_elevator_open" target="'balls'">
+                            <parameter expr="self.elevator_open" />
+                        </raise>
+                    </transition>
+                    <transition event="update_bounds" target=".">
+                        <parameter name="elev_pos" />
+                        <parameter name="elev_dim" />
+                        <parameter name="elev_vel" />
+                        <script>
+                            self.elev_pos = elev_pos
+                            self.elev_dim = elev_dim
+                            self.elev_vel = elev_vel
+                        </script>
+                        <raise scope="narrow" event="update_elevator_bounds" target="'balls'">
+                            <parameter expr="elev_pos" />
+                            <parameter expr="elev_dim" />
+                            <parameter expr="elev_vel" />
                         </raise>
                     </transition>
                 </state>
@@ -392,14 +419,16 @@
                 <state id="running" initial="idle">
                     <state id="idle">
                         <onentry>
-                            <raise scope="narrow" event="update_bounds" target="'parent'">
+                            <raise scope="narrow" event="update_bounds" target="'floors'">
                                 <parameter expr="self.pos" />
                                 <parameter expr="self.dim" />
                                 <parameter expr="self.vel" />
                             </raise>
+                            <raise scope="narrow" event="open_elevator" target="f'floors[{self.current_floor}]'" />
                         </onentry>
                         <transition event="move_elevator" target="../move">
                             <parameter name="floor_number" type="int"/>
+                            <raise scope="narrow" event="close_elevator" target="f'floors[{self.current_floor}]'" />
                             <script>
                                 if self.current_floor &lt; floor_number:
                                     self.vel = -2
@@ -416,7 +445,7 @@
                     </state>
                     <state id="move">
                         <onentry>
-                            <raise scope="narrow" event="update_bounds" target="'parent'">
+                            <raise scope="narrow" event="update_bounds" target="'floors'">
                                 <parameter expr="self.pos" />
                                 <parameter expr="self.dim" />
                                 <parameter expr="self.vel" />
@@ -434,7 +463,6 @@
                             </script>
                         </transition>
                         <transition target="../idle" cond="(self.vel &gt; 0 and self.pos['y'] &gt; self.next_pos['y']) or (self.vel &lt; 0 and self.pos['y'] &lt; self.next_pos['y'])">
-                            <raise scope="narrow" event="open_elevator" target="'parent'" />
                         </transition>
                     </state>
                 </state>
@@ -455,6 +483,10 @@
             <parameter name="floor_num" />
             <parameter name="x" />
             <parameter name="y" />
+            <parameter name="elevator_open" />
+            <parameter name="rect_pos" />
+            <parameter name="rect_dim" />
+            <parameter name="rect_vel" />
             <body>
                 <![CDATA[
                 self.canvas_id = canvas_id;
@@ -463,7 +495,12 @@
                 self.floor_num = floor_num;
 
                 self.elevator_floor = 0;
-                self.elevator_open = True;
+                self.elevator_open = elevator_open;
+                self.rect_pos = rect_pos
+                self.rect_dim = rect_dim
+                self.rect_vel = rect_vel
+
+
 
                 self.r = 5.0;
                 self.vel = {'x': random.uniform(-5.0, 5.0), 'y': random.uniform(-5.0, 5.0)};
@@ -504,53 +541,58 @@
                     </transition>
                 </state>
                 <state id="bouncing">
+                    <transition cond="self.pos['x'] - self.r &lt; self.rect_pos['x'] - (self.rect_dim['x'] / 2) and self.elevator_open and self.vel['x'] &lt; 0">
+                        <raise scope="narrow" event="transfer_ball" target="parent" >
+                        </raise>
+                    </transition>
                     <transition after="0.02" target=".">
                         <script>
                             <![CDATA[
-                            if self.floor_num == -1:
-                                pass
-                                """
-                                if self.pos['x'] - self.r < self.rect_pos['x'] - (self.rect_dim['x'] / 2):
-                                    if self.elevator_open:
-                                        self.floor_num = self.elevator_floor
-                                    else:
-                                        self.pos['x'] = self.rect_pos['x'] - (self.rect_dim['x'] / 2) + self.r
-                                        self.vel['x'] = -self.vel['x']
-                                elif self.pos['x'] + self.r > self.rect_pos['x'] + (self.rect_dim['x'] / 2):
-                                    self.pos['x'] = self.rect_pos['x'] + (self.rect_dim['x'] / 2) - self.r
-                                    self.vel['x'] = -self.vel['x']
-
-                                # Check collision with the top and bottom borders
-                                if self.pos['y'] - self.r < self.rect_pos['y'] - (self.rect_dim['y'] / 2):
-                                    self.pos['y'] = self.rect_pos['y'] - (self.rect_dim['y'] / 2) + self.r
-                                    self.vel['y'] = -self.vel['y'] + self.rect_vel
-                                elif self.pos['y'] + self.r > self.rect_pos['y'] + (self.rect_dim['y'] / 2):
-                                    self.pos['y'] = self.rect_pos['y'] + (self.rect_dim['y'] / 2) - self.r
-                                    self.vel['y'] = -self.vel['y'] + self.rect_vel
-                                """
-                            else:
                                 floor_height = ((CANVAS_DIMS[1] - 150) - ((FLOORS - 1) * FLOOR_SPACE)) / FLOORS
                                 floor_dim = {'x': FLOOR_LENGTH, 'y': floor_height};
                                 floor_pos = {'x': FLOOR_LENGTH / 2, 'y': (CANVAS_DIMS[1] - 150) - (floor_height /2) - ( self.floor_num * (floor_height + FLOOR_SPACE)  )};
-
-                                if self.pos['x'] - self.r < floor_pos['x'] - (floor_dim['x'] / 2):
-                                    self.pos['x'] = floor_pos['x'] - (floor_dim['x'] / 2) + self.r
-                                    self.vel['x'] = -self.vel['x']
-                                elif self.pos['x'] + self.r > floor_pos['x'] + (floor_dim['x'] / 2):
-                                    if self.elevator_open and (self.elevator_floor == self.floor_num):
-                                        self.floor_num = -1
-                                    else:
-                                        self.pos['x'] = floor_pos['x'] + (floor_dim['x'] / 2) - self.r
+                                
+                                if self.floor_num == -1:
+                                    if self.pos['x'] - self.r < self.rect_pos['x'] - (self.rect_dim['x'] / 2):
+                                        if self.elevator_open and self.vel['x'] < 0:
+                                            print("Delivered ball from floor:", self.floor_num, "to:", self.elevator_floor)
+                                            self.floor_num = self.elevator_floor
+                                        elif self.vel['x'] >= 0:
+                                            pass
+                                        else:
+                                            self.pos['x'] = self.rect_pos['x'] - (self.rect_dim['x'] / 2) + self.r
+                                            self.vel['x'] = -self.vel['x']
+                                    elif self.pos['x'] + self.r > self.rect_pos['x'] + (self.rect_dim['x'] / 2):
+                                        self.pos['x'] = self.rect_pos['x'] + (self.rect_dim['x'] / 2) - self.r
                                         self.vel['x'] = -self.vel['x']
-
-                                # Check collision with the top and bottom borders
-                                if self.pos['y'] - self.r < floor_pos['y'] - (floor_dim['y'] / 2):
-                                    self.pos['y'] = floor_pos['y'] - (floor_dim['y'] / 2) + self.r
-                                    self.vel['y'] = -self.vel['y']
-                                elif self.pos['y'] + self.r > floor_pos['y'] + (floor_dim['y'] / 2):
-                                    self.pos['y'] = floor_pos['y'] + (floor_dim['y'] / 2) - self.r  # Correct position
-                                    self.vel['y'] = -self.vel['y']
-
+                                
+                                    # Check collision with the top and bottom borders
+                                    if self.pos['y'] - self.r < self.rect_pos['y'] - (self.rect_dim['y'] / 2):
+                                        self.pos['y'] = self.rect_pos['y'] - (self.rect_dim['y'] / 2) + self.r
+                                        self.vel['y'] = -self.vel['y'] + self.rect_vel
+                                    elif self.pos['y'] + self.r > self.rect_pos['y'] + (self.rect_dim['y'] / 2):
+                                        self.pos['y'] = self.rect_pos['y'] + (self.rect_dim['y'] / 2) - self.r
+                                        self.vel['y'] = -self.vel['y'] + self.rect_vel
+                                else:
+                                    if self.pos['x'] - self.r < floor_pos['x'] - (floor_dim['x'] / 2):
+                                        self.pos['x'] = floor_pos['x'] - (floor_dim['x'] / 2) + self.r
+                                        self.vel['x'] = -self.vel['x']
+                                    elif self.pos['x'] + self.r > floor_pos['x'] + (floor_dim['x'] / 2):
+                                        if self.elevator_open and self.vel['x'] > 0:
+                                            self.floor_num = -1
+                                        elif self.vel['x'] <= 0:
+                                            pass
+                                        else:
+                                            self.pos['x'] = floor_pos['x'] + (floor_dim['x'] / 2) - self.r
+                                            self.vel['x'] = -self.vel['x']
+                                
+                                    # Check collision with the top and bottom borders
+                                    if self.pos['y'] - self.r < floor_pos['y'] - (floor_dim['y'] / 2):
+                                        self.pos['y'] = floor_pos['y'] - (floor_dim['y'] / 2) + self.r
+                                        self.vel['y'] = -self.vel['y']
+                                    elif self.pos['y'] + self.r > floor_pos['y'] + (floor_dim['y'] / 2):
+                                        self.pos['y'] = floor_pos['y'] + (floor_dim['y'] / 2) - self.r  # Correct position
+                                        self.vel['y'] = -self.vel['y']
                             ]]>
                         </script>
                         <raise port="ui" event="move_element">
@@ -564,12 +606,16 @@
                             self.pos['y'] += self.vel['y']
                         </script>
                     </transition>
-                    <transition event="open_elevator" target=".">
+                    <transition target="../ball_delete" cond="self.pos['x'] - self.r &lt; 2"/>
+                    <transition event="update_elevator_open" target=".">
+                        <parameter name="open_bool" />
                         <script>
-                            self.elevator_open = True
+                            self.elevator_open = open_bool
+                            print("Ball on floor floor_num:", self.floor_num, "went open")
                         </script>
                     </transition>
-                    <transition target="../ball_delete" cond="self.pos['x'] - self.r &lt; 2" />
+
+
                     <transition event="update_elevator_bounds" target=".">
                         <parameter name="pos" type="dict" />
                         <parameter name="dim" type="dict" />
@@ -578,7 +624,6 @@
                             self.rect_pos = pos
                             self.rect_dim = dim
                             self.rect_vel = vel
-                            self.elevator_open = False
                         </script>
                     </transition>
                 </state>

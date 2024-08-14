@@ -12,9 +12,8 @@ import time
 # package "Timer (Threaded Version)"
 
 class MainAppInstance(RuntimeClassBase):
-    def __init__(self, atomdevs):
-        RuntimeClassBase.__init__(self, atomdevs)
-        self.associations = {}
+    def __init__(self, atomdevs, id, start_port_id):
+        RuntimeClassBase.__init__(self, atomdevs, id)
         
         self.semantics.big_step_maximality = StatechartSemantics.TakeMany
         self.semantics.internal_event_lifeline = StatechartSemantics.Queue
@@ -27,8 +26,10 @@ class MainAppInstance(RuntimeClassBase):
         
         # call user defined constructor
         MainAppInstance.user_defined_constructor(self)
-        port_name = Ports.addInputPort("<narrow_cast>", self)
-        atomdevs.addInPort(port_name)
+        port_name = addInputPort("input", start_port_id, True)
+        atomdevs.state.port_mappings[port_name] = id
+        port_name = addInputPort("<narrow_cast>", start_port_id)
+        atomdevs.state.port_mappings[port_name] = id
     
     def user_defined_constructor(self):
         self.starting_time = time.time()
@@ -105,16 +106,25 @@ class MainApp(ClassBase):
         ClassBase.__init__(self, name)
         self.input = self.addInPort("input")
         self.glob_outputs["output"] = self.addOutPort("output")
-        self.state.instances[self.state.next_instance] = MainAppInstance(self)
-        self.state.next_instance = self.state.next_instance + 1
+        new_instance = self.constructObject(0, 0, [])
+        self.state.instances[new_instance.instance_id] = new_instance
+        new_instance.start()
+        self.state.next_time = 0
     
-    def constructObject(self, parameters):
-        new_instance = MainAppInstance(self)
+    def constructObject(self, id, start_port_id, parameters):
+        new_instance = MainAppInstance(self, id, start_port_id)
         return new_instance
 
-class ObjectManagerState:
-    def __init__(self):
-        self.to_send = [("MainApp", "MainApp", Event("start_instance", None, ["MainApp[0]"], 0))]
+def instantiate(self, class_name, construct_params):
+    instance = {}
+    instance["name"] = class_name
+    if class_name == "MainApp":
+        self.narrow_cast_id = self.narrow_cast_id + 0
+        instance["associations"] = {}
+    else:
+        raise Exception("Cannot instantiate class " + class_name)
+    return instance
+ObjectManagerState.instantiate = instantiate
 
 class ObjectManager(ObjectManagerBase):
     def __init__(self, name):
@@ -122,14 +132,13 @@ class ObjectManager(ObjectManagerBase):
         self.state = ObjectManagerState()
         self.input = self.addInPort("input")
         self.output["MainApp"] = self.addOutPort()
+        self.state.createInstance("MainApp", [])
 
 class Controller(CoupledDEVS):
     def __init__(self, name):
         CoupledDEVS.__init__(self, name)
         self.in_input = self.addInPort("input")
-        Ports.addInputPort("input")
         self.out_output = self.addOutPort("output")
-        Ports.addOutputPort("output")
         self.objectmanager = self.addSubModel(ObjectManager("ObjectManager"))
         self.atomics = []
         self.atomics.append(self.addSubModel(MainApp("MainApp")))

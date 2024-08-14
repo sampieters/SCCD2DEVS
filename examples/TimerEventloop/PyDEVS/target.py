@@ -17,7 +17,6 @@ CANVAS_DIMS = (350, 300)
 class MainAppInstance(RuntimeClassBase):
     def __init__(self, atomdevs, id, start_port_id):
         RuntimeClassBase.__init__(self, atomdevs, id)
-        self.associations = {}
         
         self.semantics.big_step_maximality = StatechartSemantics.TakeMany
         self.semantics.internal_event_lifeline = StatechartSemantics.Queue
@@ -39,13 +38,10 @@ class MainAppInstance(RuntimeClassBase):
         # call user defined constructor
         MainAppInstance.user_defined_constructor(self)
         port_name = addInputPort("ui", start_port_id, True)
-        atomdevs.addInPort(port_name)
         atomdevs.state.port_mappings[port_name] = id
         port_name = addInputPort("<narrow_cast>", start_port_id)
-        atomdevs.addInPort(port_name)
         atomdevs.state.port_mappings[port_name] = id
-        port_name = addInputPort("field_ui", start_port_id)
-        atomdevs.addInPort(port_name)
+        port_name = addInputPort("field_ui", start_port_id + 1)
         atomdevs.state.port_mappings[port_name] = id
         self.inports["field_ui"] = port_name
     
@@ -148,7 +144,7 @@ class MainAppInstance(RuntimeClassBase):
         self.states["/interrupted"].addTransition(_interrupted_0)
     
     def _creating_window_enter(self):
-        self.big_step.outputEvent(Event("create_window", self.getOutPortName("ui"), [CANVAS_DIMS[0], CANVAS_DIMS[1], "Fixed Timer", self.inports['field_ui']]))
+        self.big_step.outputEvent(Event("create_window", self.getOutPortName("ui"), [CANVAS_DIMS[0], CANVAS_DIMS[1], "Timer", self.inports['field_ui']]))
     
     def _creating_canvas_enter(self):
         self.big_step.outputEvent(Event("create_canvas", self.getOutPortName("ui"), [self.window_id, CANVAS_DIMS[0], CANVAS_DIMS[1] - 200, {'background':'#222222'}, self.inports['field_ui']]))
@@ -223,30 +219,26 @@ class MainApp(ClassBase):
         self.field_ui = self.addInPort("field_ui")
         new_instance = self.constructObject(0, 0, [])
         self.state.instances[new_instance.instance_id] = new_instance
-        self.state.next_instance = self.state.next_instance + 1
     
     def constructObject(self, id, start_port_id, parameters):
         new_instance = MainAppInstance(self, id, start_port_id)
         return new_instance
 
-class Dummy(ObjectManagerState):
-    def __init__(self):
-        ObjectManagerState.__init__(self)
-    
-    def instantiate(self, class_name, construct_params):
-        instance = {}
-        instance["name"] = class_name
-        if class_name == "MainApp":
-            self.narrow_cast_id = self.narrow_cast_id + 1
-            instance["associations"] = {}
-        else:
-            raise Exception("Cannot instantiate class " + class_name)
-        return instance
+def instantiate(self, class_name, construct_params):
+    instance = {}
+    instance["name"] = class_name
+    if class_name == "MainApp":
+        self.narrow_cast_id = self.narrow_cast_id + 1
+        instance["associations"] = {}
+    else:
+        raise Exception("Cannot instantiate class " + class_name)
+    return instance
+ObjectManagerState.instantiate = instantiate
 
 class ObjectManager(ObjectManagerBase):
     def __init__(self, name):
         ObjectManagerBase.__init__(self, name)
-        self.state = Dummy()
+        self.state = ObjectManagerState()
         self.input = self.addInPort("input")
         self.output["MainApp"] = self.addOutPort()
         self.state.createInstance("MainApp", [])

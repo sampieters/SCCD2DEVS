@@ -1,0 +1,10 @@
+<class name="B">
+    <relationships>
+        <association name="parent" class="A" min="1" max="1"/>
+    </relationships>
+
+    <scxml initial="init">
+        <state id="init">
+        </state>
+    </scxml>
+</class>

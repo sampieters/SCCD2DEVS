@@ -26,16 +26,13 @@ def natural_sort_key(s):
 if __name__ == '__main__':
     tests_directory = "./tests"
 
-    #options = ["GLOBAL_IO", "INTERNAL_IO","STATECHART"]
-    #options = ["STATECHART"]
-
-    config_data = {
+    default_config = {
         "trace": "external"
     }
 
     checkers = {
         "Python": TraceChecker.PythonSCCDTraceChecker(),
-        "Pydevs": TraceChecker.PydevsSCCDTraceChecker()
+        "Pydevs": TraceChecker.ClassicDevsSCCDTraceChecker()
     }
 
     sorted_dirs = sort_directories(tests_directory)
@@ -53,13 +50,15 @@ if __name__ == '__main__':
                     with open(config_file, 'r') as file:
                         config_data = json.load(file)
                 else:
-                    config_data = {
-                        "trace": "external"
-                    }
+                    config_data = default_config
 
-                checker.compile(full_directory)
-                checker.run(full_directory)
-                result = checker.check(full_directory, config_data)
+                checker.directory = full_directory
+                checker.config = config_data
+
+                checker.compile()
+                checker.run()
+                result = checker.check()
+                
                 results[checker_name].append(result)
                 if result == 0:
                     print(f"{checker_name}: ", RED + "Failed" + ENDC)

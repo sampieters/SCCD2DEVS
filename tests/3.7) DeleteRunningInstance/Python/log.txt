@@ -1,7 +1,7 @@
 __  Current Time:   0.000000 __________________________________________ 
 
 OUTPUT EVENT to <ObjectManager>
-	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x100abef90>, 'linkA', 'A'])
+	\Event: (event name: create_instance; port: None; parameters: [<target.MainApp object at 0x1021e3ad0>, 'linkA', 'A'])
 
 INPUT EVENT from <ObjectManager>
 	\Type: cd
@@ -20,7 +20,7 @@ OUTPUT EVENT to port <ui>
 	\Event: (event name: instance_created_succesfully; port: ui; parameters: ['0.00', 'linkA[0]'])
 
 OUTPUT EVENT to <ObjectManager>
-	\Event: (event name: start_instance; port: None; parameters: [<target.MainApp object at 0x100abef90>, 'linkA[0]'])
+	\Event: (event name: start_instance; port: None; parameters: [<target.MainApp object at 0x1021e3ad0>, 'linkA[0]'])
 
 
 OUTPUT EVENT to port <ui>
@@ -28,7 +28,7 @@ OUTPUT EVENT to port <ui>
 
 INPUT EVENT from <ObjectManager>
 	\Type: cd
-	\Event: (event name: instance_started; port: ; parameters: ['linkA[0]'])
+	\Event: (event name: instance_started; port: None; parameters: ['linkA[0]'])
 
 EXIT STATE in model <MainApp>
 		State: /state2
@@ -43,12 +43,12 @@ OUTPUT EVENT to port <ui>
 	\Event: (event name: instance_started_succesfully; port: ui; parameters: ['0.00', 'linkA[0]'])
 
 OUTPUT EVENT to <ObjectManager>
-	\Event: (event name: delete_instance; port: None; parameters: [<target.MainApp object at 0x100abef90>, 'linkA[0]'])
+	\Event: (event name: delete_instance; port: None; parameters: [<target.MainApp object at 0x1021e3ad0>, 'linkA[0]'])
 
 
 INPUT EVENT from <ObjectManager>
 	\Type: cd
-	\Event: (event name: instance_deleted; port: ; parameters: ['linkA[0]'])
+	\Event: (event name: instance_deleted; port: None; parameters: ['linkA[0]'])
 
 EXIT STATE in model <MainApp>
 		State: /state3
@@ -63,6 +63,6 @@ OUTPUT EVENT to port <ui>
 	\Event: (event name: instance_deleted_succesfully; port: ui; parameters: ['0.00', 'linkA[0]'])
 
 OUTPUT EVENT to <ObjectManager>
-	\Event: (event name: narrow_cast; port: None; parameters: [<target.MainApp object at 0x100abef90>, 'linkA[0]', (event name: sanity_check; port: None)])
+	\Event: (event name: narrow_cast; port: None; parameters: [<target.MainApp object at 0x1021e3ad0>, 'linkA[0]', (event name: sanity_check; port: None)])
 
 

@@ -122,10 +122,10 @@ class MainApp(ClassBase):
         ClassBase.__init__(self, name)
         self.input = self.addInPort("input")
         self.glob_outputs["ui"] = self.addOutPort("ui")
-        self.outputs["linkA"] = self.addOutPort("linkA")
         new_instance = self.constructObject(0, 0, [])
         self.state.instances[new_instance.instance_id] = new_instance
-        self.state.next_instance = self.state.next_instance + 1
+        new_instance.start()
+        self.state.next_time = 0
     
     def constructObject(self, id, start_port_id, parameters):
         new_instance = MainAppInstance(self, id, start_port_id)
@@ -214,7 +214,6 @@ class ObjectManager(ObjectManagerBase):
         self.output["MainApp"] = self.addOutPort()
         self.output["A"] = self.addOutPort()
         self.state.createInstance("MainApp", [])
-        self.state.to_send.append((("MainApp", 0), ("MainApp", 0), Event("start_instance", None, ["MainApp[0]"])))
 
 class Controller(CoupledDEVS):
     def __init__(self, name):
@@ -227,7 +226,6 @@ class Controller(CoupledDEVS):
         self.atomics.append(self.addSubModel(A("A")))
         self.connectPorts(self.atomics[0].obj_manager_out, self.objectmanager.input)
         self.connectPorts(self.objectmanager.output["MainApp"], self.atomics[0].obj_manager_in)
-        self.connectPorts(self.atomics[0].outputs["linkA"], self.atomics[1].input)
         self.connectPorts(self.atomics[1].obj_manager_out, self.objectmanager.input)
         self.connectPorts(self.objectmanager.output["A"], self.atomics[1].obj_manager_in)
         self.connectPorts(self.atomics[0].glob_outputs["ui"], self.out_ui)

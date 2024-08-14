@@ -7,7 +7,6 @@ class BaseTracer:
 		Constructor
 		"""
 
-
 	def startTracer(self, recover):
 		"""
 		Starts up the tracer
@@ -27,8 +26,13 @@ class BaseTracer:
 		Actual tracing function
 
 		:param time: time at which this trace happened
-		:param text: the text that was traced
 		"""
+		pass
+
+	def traceInit(self, Statechart, t):
+		pass
+
+	def traceTransition(self, Transition):
 		pass
 	
 	def traceExitState(self, StateChart, State):
@@ -48,20 +52,4 @@ class BaseTracer:
 
 	def traceInput(self, listener, event):
 		pass 
-	
-	def traceTransition(self, Transition):
-		"""
-		Tracing done for the internal transition function
 
-		:param aDEVS: the model that transitioned
-		"""
-		pass
-
-	def traceInit(self, aDEVS, t):
-		"""
-		Tracing done for the initialisation
-
-		:param aDEVS: the model that was initialised
-		:param t: time at which it should be traced
-		"""
-		pass

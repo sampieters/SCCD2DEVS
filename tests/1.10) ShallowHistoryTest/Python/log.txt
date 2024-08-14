@@ -1,0 +1,86 @@
+__  Current Time:   0.000000 __________________________________________ 
+
+__  Current Time:   3.000000 __________________________________________ 
+
+EXIT STATE in model <MainApp>
+		State: /on/normal/red
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/on/normal/red -> /on/normal/green)
+
+ENTER STATE in model <MainApp>
+		State: /on/normal/green
+
+__  Current Time:   3.500000 __________________________________________ 
+
+EXIT STATE in model <MainApp>
+		State: /on/normal/green
+
+EXIT STATE in model <MainApp>
+		State: /on/normal
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/on/normal -> /on/interrupted)
+
+ENTER STATE in model <MainApp>
+		State: /on/interrupted
+
+ENTER STATE in model <MainApp>
+		State: /on/interrupted/yellow
+
+__  Current Time:   4.000000 __________________________________________ 
+
+EXIT STATE in model <MainApp>
+		State: /on/interrupted/yellow
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/on/interrupted/yellow -> /on/interrupted/black)
+
+ENTER STATE in model <MainApp>
+		State: /on/interrupted/black
+
+__  Current Time:   4.500000 __________________________________________ 
+
+EXIT STATE in model <MainApp>
+		State: /on/interrupted/black
+
+EXIT STATE in model <MainApp>
+		State: /on/interrupted
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/on/interrupted -> /on/normal/history)
+
+ENTER STATE in model <MainApp>
+		State: /on/normal
+
+ENTER STATE in model <MainApp>
+		State: /on/normal/green
+
+__  Current Time:   6.500000 __________________________________________ 
+
+EXIT STATE in model <MainApp>
+		State: /on/normal/green
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/on/normal/green -> /on/normal/yellow)
+
+ENTER STATE in model <MainApp>
+		State: /on/normal/yellow
+
+__  Current Time:   7.500000 __________________________________________ 
+
+EXIT STATE in model <MainApp>
+		State: /on/normal/yellow
+
+EXIT STATE in model <MainApp>
+		State: /on/normal
+
+EXIT STATE in model <MainApp>
+		State: /on
+
+TRANSITION FIRED in model <MainApp>
+		Transition(/on/normal/yellow -> /off)
+
+ENTER STATE in model <MainApp>
+		State: /off
+

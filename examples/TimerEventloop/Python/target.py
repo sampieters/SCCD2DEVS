@@ -145,10 +145,10 @@ class MainApp(RuntimeClassBase):
         self.big_step.outputEvent(Event("create_canvas", self.getOutPortName("ui"), [self.window_id, CANVAS_DIMS[0], CANVAS_DIMS[1] - 200, {'background':'#222222'}, self.inports['field_ui']]))
     
     def _creating_clock_text_enter(self):
-        self.big_step.outputEvent(Event("create_text", self.getOutPortName("ui"), [self.canvas_id, 50, 50, '', self.inports['field_ui']]))
+        self.big_step.outputEvent(Event("create_text", self.getOutPortName("ui"), [self.canvas_id, 100, 50, '', self.inports['field_ui']]))
     
     def _creating_actual_clock_text_enter(self):
-        self.big_step.outputEvent(Event("create_text", self.getOutPortName("ui"), [self.canvas_id, 50, 100, '', self.inports['field_ui']]))
+        self.big_step.outputEvent(Event("create_text", self.getOutPortName("ui"), [self.canvas_id, 100, 100, '', self.inports['field_ui']]))
     
     def _creating_interrupt_button_enter(self):
         self.big_step.outputEvent(Event("create_button", self.getOutPortName("ui"), [self.window_id, 'INTERRUPT/CONTINUE', self.inports['field_ui']]))
@@ -186,8 +186,8 @@ class MainApp(RuntimeClassBase):
         self.big_step.outputEvent(Event("bind_event", self.getOutPortName("ui"), [button_id, ui.EVENTS.MOUSE_CLICK, "mouse_click", self.inports['field_ui']]))
     
     def _running_0_exec(self, parameters):
-        self.big_step.outputEvent(Event("update_text", self.getOutPortName("ui"), [self.canvas_id, self.clock_id, str('%.2f' % (self.getSimulatedTime() / 1000.0)), self.inports['field_ui']]))
-        self.big_step.outputEvent(Event("update_text", self.getOutPortName("ui"), [self.canvas_id, self.actual_clock_id, str('%.2f' % (time.time() - self.starting_time)), self.inports['field_ui']]))
+        self.big_step.outputEvent(Event("update_text", self.getOutPortName("ui"), [self.canvas_id, self.clock_id, str('Simulated Time: %.2f' % (self.getSimulatedTime() / 1000.0)), self.inports['field_ui']]))
+        self.big_step.outputEvent(Event("update_text", self.getOutPortName("ui"), [self.canvas_id, self.actual_clock_id, str('Clock Time: %.2f' % (time.time() - self.starting_time)), self.inports['field_ui']]))
     
     def _running_1_guard(self, parameters):
         x = parameters[0]
