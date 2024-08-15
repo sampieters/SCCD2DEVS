@@ -557,7 +557,9 @@ class Ball(RuntimeClassBase):
     def user_defined_constructor(self, canvas_id, x, y):
         self.canvas_id = canvas_id;
         self.r = 20.0;
-        self.vel = {'x': random.uniform(-5.0, 5.0), 'y': random.uniform(-5.0, 5.0)};
+        
+        self.vel = {'x': 1, 'y': 1};
+        #self.vel = {'x': random.uniform(-5.0, 5.0), 'y': random.uniform(-5.0, 5.0)};
         self.pos = {'x': x, 'y': y};
         self.smooth = 0.6; # value between 0 and 1
     

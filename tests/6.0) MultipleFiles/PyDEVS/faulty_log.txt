@@ -1,3 +1,0 @@
-0.00 A: exit /init
-0.00 A: transition (/init -> /initializing)
-0.00 A: enter /initializing

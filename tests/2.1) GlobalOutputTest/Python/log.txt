@@ -1,5 +1,0 @@
-__  Current Time:   0.000000 __________________________________________ 
-
-OUTPUT EVENT to port <Outport>
-	\Event: (event name: output_event; port: Outport)
-

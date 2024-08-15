@@ -3,7 +3,7 @@ This project focuses on the conversion of SCCD XML files into a format compatibl
 
 In this thesis project, we explore the process of transforming SCCD XML files into pypDEVS models, enabling seamless integration of SCCD-based system descriptions into the PypDEVS simulation environment. By leveraging the capabilities of both SCCD and pypDEVS, we aim to facilitate the analysis and simulation of intricate systems, contributing to the advancement of modeling and simulation techniques in various domains.
 
-A small documentation for the project can be found here, providing insights into the conversion methodology, implementation details, and examples of utilizing the converted models within the PypDEVS framework. Through this work, we endeavor to bridge the gap between SCCD-based system specifications and the pypDEVS simulation paradigm, fostering greater flexibility and efficiency in system analysis and design processes.
+A small documentation for the project can be found here. For a more detailed explaination we refer to the paper published with this project.
 
 ## Compiler
 To compile a conforming SCCD XML file, the provided Python compiler can be used. The compiler can compile conforming SCCD models to two languages: Python and Javascript. Four platforms are supported:
@@ -14,7 +14,7 @@ To compile a conforming SCCD XML file, the provided Python compiler can be used.
 - classicdevs (**NEW**): Classical Hierarchical DEVS, for simulating in discrete time.
 
 The compiler can be used from the command line as follows:
-```
+```bash
 $python -m sccd.compiler.sccdc --help
 usage: python -m sccd.compiler.sccdc [-h] [-o OUTPUT] [-v VERBOSE]
                                      [-p PLATFORM] [-l LANGUAGE]
@@ -43,9 +43,37 @@ optional arguments:
 The ```classicdevs``` platform works only in the Python language. The platform works both with and without combination of a UI system that allows for scheduling events. Default implementations are provided for the Tkinter UI library on Python.
 
 ## Testing Framework
-To check if the translation approach from SCCD constructs to classical, hierarchical DEVS constructs is good. 
+To check if the translation approach from SCCD constructs to classical, hierarchical DEVS constructs is good, a testing framework is provided to check trace files of SCCD against the DEVS implementation of SCCD or a user created trace. This framework can be found in the ```TraceVerifier``` folder.
 
+### SCCD Tracer
+Before this could be done, a new tracer is proposed in this project which is loosely based on the PypDEVS tracer. The following events will be traced:
 
+- Statechart exit state
+- Statechart enter state
+- Statechart transition state
+- Global output events
+- Internal events (events sent to the object manager and private ports)
+
+Up untill this point only a verbose tracer is implemented, resulting in the traces to be printed either to the terminal or a provided text file. However, the tracer constructs are implmented in such a way that new tracers could be added by adding a new class to the tracer folder and inheriting from the base tracer.
+
+### Comparing traces
+To compare the traces between the SCCD and DEVS models, the ```tests``` folder can be used. This folder created several predefined tests which can be run by the following command:
+```bash
+python3 ./TraceVerifier/process_tests.py
+```
+If the user wants to create its own test, the user can create a new subfolder with a name. In this folder three things need to be present.
+
+- An SCCDXML file which provides the model that needs to be tested.
+- An expected trace file called ```expected_trace.txt``` which consists of traces in a chronological order the tracer of the model should output them.
+- (Optional) A ```config.json``` file which provides a configuration file for the test. Up to this point the file is a json with one parameter called ```trace``` and could be three options. These options could be used together.
+    - external: check global outputs of the model
+    - internal: check internal events of the model
+    - statechart: check statechart dynamics (exit state, enter state, and transition)
+
+For each test, the script will return a result in the terminal:
+- Passed: The test passed, meaning the trace of the model is the same as the expected trace.
+- Failed: The test failed, the trace of the model is different as the expected trace.
+- Warning: Either the expected trace or the output trace is empty.
 
 ## How to run?
 For an example to be run, two files need to be provided: A runner file (usually called ```runner.py```) which will provide the necessary logic to execute a model and a SSCDXML file (.xml extension) which defines the model. To properly run an example, the following needs to be done:
@@ -106,11 +134,11 @@ if __name__ == '__main__':
 
 Transmitting event becomes a lot more complex as the user should know the id of the private port over which he wants to send the event, if he know this he has to sent over the general port with a realtime interrupt but keep the port of the event the private port. For example, if the user wants to sent to the following private port:
 ```
-# TODO
+private_2_<test_port>
 ```
 The user needs to define the following realtime interrupt
 ```
-# TODO
+test_port Event(event name: an_event; port: private_2_<test_port>; parameters: [...])
 ```
 Of course a global input port can also be used. To simplify this, a new class is created which provides a wrapper around the simulator class of PypDEVS to automatically. A modeller needs to add the following to the runner file:
 ```python
@@ -133,6 +161,21 @@ Further all platforms provides in the PypDEVS package can be used to execute the
 The ```TrafficLight``` example is one of the most simple examples. This example illustrates the dynamics of the statechart in a SCCD class. The example defines one SCCD class with a corresponding statechart
 
 ### Timer
+There are 3 different ```Timer``` examples. These 3 examples do the same thing, printing the simulated and actual clock time when the model is running. This allows the modeller to check that both times do not grow away from each other. This means that the simulated time is closely realted to the actual clock time meaning the simulated time is corrrectly implemented.  
+
+The ```TimerThread``` example implements a runner to print the times to the terminal. The runner also provides a user to input raw text into the terminal. If the user types:
+```
+interrupt
+```
+Both clocks will halt. If the user enters the following:
+```
+continue
+```
+Both timers will start again from the time it was stopped. 
+
+The ```TimerEventloop``` example does the same as the ```TimerThread``` example but with a Tkinter UI. The raw input is replaced by a button called ```continue/interrupt``` which will start and stop the timers.
+
+The ```TimerParallel``` leverages the use of a parallel state. Both timers are run in a unique component of the parrallel state. This is to test if the parallel state executes it components in an ewually timed manner.
 
 ### BouncingBalls
 The ```BouncingBalls``` example used Tkinter to simulate the behaviour of balls bouncing around in a window. A user can create a ball in the window by right clicking in the window field. The ball will be given a random velocity on the clicked position and will never leave the confines of the window. This creation of a ball illustrates the dynamic creation of SCCD classes and their corresponding statechart.
@@ -142,6 +185,7 @@ To further illustrate this, a button on the bottom of the window can be clicked 
 A window can also be deleted by clicking on the close window button on the top right of the screen. Visualizing the dynamic deletion of the earlier created SCCD classes.
 
 ### BouncingBallsCollision
+```BouncingBallsCollision``` is an extension on the ```BouncingBalls```example where the balls will collide and change velocity when a collision occurs. This provides yet another example of the dynamic creation and deletion of classes only in a faster way. Each time a collision occurs, a new object of class ```CollisionPhysics```is created, this object calculates the new velocities, sent it back to the colliding objects, and delete the ```CollisionPhysics```object.
 
 ### ElevatorBalls
 
