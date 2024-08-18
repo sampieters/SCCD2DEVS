@@ -1,5 +1,6 @@
 /tests/**/ClassicDEVS/
 /tests/**/Python/
+/PythonPreconfigTest/
 
 # Byte-compiled / optimized Python files
 __pycache__/

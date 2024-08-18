@@ -1,9 +1,9 @@
 <?xml version="1.1" ?>
-<diagram author="Sam Pieters" name="Global Input Test">
+<diagram author="Sam Pieters" name="GlobalInputTest">
     <description>
-        Test 2.0: Check if the model receives input.
+        Check if the model receives input.
     </description>
-    <inport name="ui"/>
+    <inport name="Input"/>
     <class name="MainApp" default="true">
         <scxml initial="state1">
             <state id="state1">

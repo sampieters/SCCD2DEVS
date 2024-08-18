@@ -1,7 +1,7 @@
 <?xml version="1.1" ?>
 <diagram author="Sam Pieters" name="GuardConditionTest">
     <description>
-        Test 5: Test if the guard condition for a transition works
+        Test if the guard condition for a transition works
     </description>
     <top>
         VALUE = 5

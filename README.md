@@ -65,10 +65,18 @@ If the user wants to create its own test, the user can create a new subfolder wi
 
 - An SCCDXML file which provides the model that needs to be tested.
 - An expected trace file called ```expected_trace.txt``` which consists of traces in a chronological order the tracer of the model should output them.
-- (Optional) A ```config.json``` file which provides a configuration file for the test. Up to this point the file is a json with one parameter called ```trace``` and could be three options. These options could be used together.
-    - external: check global outputs of the model
-    - internal: check internal events of the model
-    - statechart: check statechart dynamics (exit state, enter state, and transition)
+- (Optional) A ```config.json``` file which provides a configuration file for the test. If this is not given, the test framework will default to an internal configuration. The configuration file has the following parameters:
+
+    - ```model```: The SCCDXML file the model to be tested is defined in (default: ```sccd.xml```),
+    - ```input```: Text file with input events (default: ```None```),
+    - ```trace```: Option for which events need to be traced. There are three levels of tracing which can be used together for one test:
+        - ```external``` (default): check global outputs of the model.
+        - ```internal```: check internal events of the model.
+        - ```statechart```: check statechart dynamics (exit state, enter state, and transition).
+    - ```platforms```: The platforms to be tested, the parameter is either one platform or a list of multiple platforms. Current platforms that are supported:
+        - ```Python``` (default): The Python SCCD threading platform.
+        - ```ClassicDEVS``` (default): The DEVS version of SCCD.
+    - ```check_file```: A text file referring to the actual trace (default: ```expected_trace.txt```)
 
 For each test, the script will return a result in the terminal:
 - Passed: The test passed, meaning the trace of the model is the same as the expected trace.
@@ -194,9 +202,5 @@ A window can also be deleted by clicking on the close window button on the top r
 ## TODO
 - [] Create elevator balls example
 - [] Fix bug in narrow cast for testing framework
-- [] Finish README
 - [] Check paper
-- [] Ask for deadline + presentation
-- [] Check if tests are properly named
-- [] Add examples to test (bouncing balls, predefine velocity)
 - [] Send in paper, FINALLY!

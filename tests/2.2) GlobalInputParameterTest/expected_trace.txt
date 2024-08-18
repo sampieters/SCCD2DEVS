@@ -1,0 +1,6 @@
+1.00 MainApp: exit /state1
+1.00 MainApp: transition (/state1 -> /state2)
+1.00 MainApp: enter /state2
+1.00 MainApp: exit /state2
+1.00 MainApp: transition (/state2 -> /state3)
+1.00 MainApp: enter /state3

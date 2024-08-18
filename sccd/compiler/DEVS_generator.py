@@ -2,7 +2,7 @@
 #
 # Visits SCCD-domain constructs (see sccd_constructs.py) and converts them
 # to a DEVS language AST (see generic_language_constructs.py), that can
-# then be visited by a target language writer (only supports python).
+# then be visited by a target language writer (only supports Python).
 
 from sccd.compiler.utils import Enum, Logger
 from sccd.compiler.visitor import Visitor
@@ -62,14 +62,14 @@ class DEVSGenerator(Visitor):
         self.writer.beginMethodBody()
 
         self.writer.addAssignment("instance", "{}")
-        self.writer.addAssignment("instance[\"name\"]", "class_name")
-        for index,c in enumerate(class_diagram.classes):
+        self.writer.addAssignment(GLC.ArrayIndexedExpression("instance", GLC.String("name")), "class_name")
+        for c in class_diagram.classes:
             self.writer.beginElseIf(GLC.EqualsExpression("class_name", GLC.String(c.name)))
             if c.isAbstract():
                 # cannot instantiate abstract class
                 self.writer.add(GLC.ThrowExceptionStatement(GLC.String("Cannot instantiate abstract class \"" + c.name + "\" with unimplemented methods \"" + "\", \"".join(c.abstract_method_names) + "\".")))
             else:
-                self.writer.addAssignment("self.narrow_cast_id", f"self.narrow_cast_id + {len(c.inports)}")
+                self.writer.addAssignment(GLC.SelfProperty("narrow_cast_id"), GLC.SelfProperty(f"narrow_cast_id + {len(c.inports)}"))
                 self.writer.addAssignment(
                     "instance[\"associations\"]", GLC.MapExpression())
                 for a in c.associations:
@@ -111,7 +111,7 @@ class DEVSGenerator(Visitor):
             self.writer.addAssignment(GLC.SelfProperty(f"output[\"{class_name}\"]"),
                                       GLC.FunctionCall(GLC.SelfProperty("addOutPort")))
 
-        self.writer.add(GLC.FunctionCall("self.state.createInstance", [GLC.String(class_diagram.default_class.name), "[]"]))
+        self.writer.add(GLC.FunctionCall(GLC.SelfProperty("state.createInstance"), [GLC.String(class_diagram.default_class.name), GLC.ArrayExpression()]))
         self.writer.endMethodBody()
         self.writer.endConstructor()
         self.writer.endClass()
@@ -143,13 +143,12 @@ class DEVSGenerator(Visitor):
                                                                                                GLC.String(
                                                                                                    "ObjectManager")]))])))
         
-        self.writer.addAssignment(GLC.SelfProperty("atomics"), "[]")
+        self.writer.addAssignment(GLC.SelfProperty("atomics"), GLC.ArrayExpression())
         for (i, class_name) in enumerate(class_diagram.class_names):
-            self.writer.add(GLC.FunctionCall("self.atomics.append", GLC.ActualParameters([(GLC.FunctionCall(GLC.SelfProperty("addSubModel"), [GLC.FunctionCall(class_name,
-                                                                                                           GLC.ActualParameters(
-                                                                                                               [
-                                                                                                                   GLC.String(
-                                                                                                                       class_name)]))]))])))
+            self.writer.add(GLC.ArrayPushBack(
+                GLC.SelfProperty("atomics"), 
+                GLC.FunctionCall(GLC.SelfProperty("addSubModel"), 
+                                [GLC.FunctionCall(class_name, GLC.ActualParameters([GLC.String(class_name)]))])))
 
         # Add links between the models
         for (i, the_class) in enumerate(class_diagram.classes):
@@ -272,10 +271,10 @@ class DEVSGenerator(Visitor):
                 GLC.FunctionCall(GLC.Property("controller", "addOutputPort"), [GLC.String(p), GLC.SelfExpression()]))
 
         if class_node.name == class_node.class_diagram.default_class.name:
-            self.writer.addAssignment("new_instance", "self.constructObject(0, 0, [])")
-            self.writer.addAssignment("self.state.instances[new_instance.instance_id]", "new_instance")
+            self.writer.addAssignment("new_instance", GLC.SelfProperty("constructObject(0, 0, [])"))
+            self.writer.addAssignment(GLC.SelfProperty("state.instances[new_instance.instance_id]"), "new_instance")
             self.writer.add(GLC.FunctionCall("new_instance.start"))
-            self.writer.addAssignment("self.state.next_time", "0")
+            self.writer.addAssignment(GLC.SelfProperty("state.next_time"), "0")
 
         self.writer.endMethodBody()
         self.writer.endConstructor()
@@ -369,7 +368,7 @@ class DEVSGenerator(Visitor):
 
         for inp in constructor.parent_class.class_diagram.inports:
             self.writer.addAssignment("port_name", GLC.FunctionCall("addInputPort", [GLC.String(inp), "start_port_id", "True"]))
-            self.writer.addAssignment("atomdevs.state.port_mappings[port_name]", "id")
+            self.writer.addAssignment("atomdevs.state.port_mappings[port_name]", "None")
 
         self.writer.addAssignment("port_name", GLC.FunctionCall("addInputPort", [GLC.String("<narrow_cast>"), "start_port_id"]))
         self.writer.addAssignment("atomdevs.state.port_mappings[port_name]", "id")
@@ -377,7 +376,7 @@ class DEVSGenerator(Visitor):
         for index, inp in enumerate(constructor.parent_class.inports):
             self.writer.addAssignment("port_name", GLC.FunctionCall("addInputPort", [GLC.String(inp), f"start_port_id + {index + 1}"]))
             self.writer.addAssignment("atomdevs.state.port_mappings[port_name]", "id")
-            self.writer.addAssignment(f"self.inports[\"{inp}\"]", "port_name")
+            self.writer.addAssignment(GLC.SelfProperty(f"inports[\"{inp}\"]"), "port_name")
 
         self.writer.endMethodBody()
         self.writer.endConstructor()

@@ -585,7 +585,30 @@ class ControllerBase(object):
 
     def getEarliestEventTime(self):
         return min(self.object_manager.getEarliestEventTime(), self.input_queue.getEarliestTime())
+    
+    def handleInput(self):
+        while not self.input_queue.isEmpty():
+            event_time = self.input_queue.getEarliestTime()
 
+            # SAM: Changed the handleInput function
+            # The function now waits to input the event when the simulated time is equal to the event first event time
+            # This is because the addINput fnuction adds input at time zero to an instance with a delay to the real time 
+            # the event should trigger, but at time zero this instance may not exist
+            if event_time == self.simulated_time:
+                e = self.input_queue.pop()
+                input_port = self.input_ports[e.getPort()]
+                # e.port = input_port.virtual_name
+                target_instance = input_port.instance
+                if target_instance == None:
+                    self.broadcast(e, event_time - self.simulated_time)
+                    self.tracers.tracesInput(input_port, e)
+                else:
+                    target_instance.addEvent(e, event_time - self.simulated_time)
+                    self.tracers.tracesInput(input_port, e)
+            else:
+                break
+
+    '''
     def handleInput(self):
         while not self.input_queue.isEmpty():
             event_time = self.input_queue.getEarliestTime()
@@ -599,12 +622,13 @@ class ControllerBase(object):
             else:
                 target_instance.addEvent(e, event_time - self.simulated_time)
                 self.tracers.tracesInput(input_port, e)
-
+    '''
     def outputEvent(self, event):
         #TODO: This is the output event, needs to be traced
         self.tracers.tracesOutput(event)
         for listener in self.output_listeners:
             listener.add(event)
+
 
 
     def addOutputListener(self, ports):

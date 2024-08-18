@@ -1,0 +1,70 @@
+0.00 MainApp: exit /running/root/main_behaviour/initializing
+0.00 MainApp: transition (/running/root/main_behaviour/initializing -> /running/root/main_behaviour/running)
+0.00 MainApp: enter /running/root/main_behaviour/running
+0.00 MainApp: exit /running/root/cd_behaviour/waiting
+0.00 MainApp: transition (/running/root/cd_behaviour/waiting -> /running/root/cd_behaviour/creating)
+0.00 MainApp: enter /running/root/cd_behaviour/creating
+0.00 MainApp: exit /running/root/cd_behaviour/creating
+0.00 MainApp: transition (/running/root/cd_behaviour/creating -> /running/root/cd_behaviour/waiting)
+0.00 MainApp: enter /running/root/cd_behaviour/waiting
+0.00 Field: exit /root/waiting
+0.00 Field: transition (/root/waiting -> /root/creating_window)
+0.00 Field: enter /root/creating_window
+0.00 (event name: create_window; port: Outport; parameters: [800, 600, 'BouncingBalls', 'Inport'])
+0.50 Field: exit /root/creating_window
+0.50 Field: transition (/root/creating_window -> /root/creating_canvas)
+0.50 Field: enter /root/creating_canvas
+0.50 (event name: bind_event; port: Outport; parameters: [0, 'WM_DELETE_WINDOW', 'window_close', 'Inport'])
+0.50 (event name: bind_event; port: Outport; parameters: [0, '<Key>', 'key_press', 'Inport'])
+0.50 (event name: create_canvas; port: Outport; parameters: [0, 800, 550, {'background': '#eee'}, 'Inport'])
+1.00 Field: exit /root/creating_canvas
+1.00 Field: transition (/root/creating_canvas -> /root/creating_button)
+1.00 Field: enter /root/creating_button
+1.00 (event name: bind_event; port: Outport; parameters: [1, '<Button-2>', 'right_click', 'Inport'])
+1.00 (event name: bind_event; port: Outport; parameters: [1, '<Motion>', 'mouse_move', 'Inport'])
+1.00 (event name: bind_event; port: Outport; parameters: [1, '<ButtonRelease>', 'mouse_release', 'Inport'])
+1.00 Field: exit /root/creating_button
+1.00 Field: transition (/root/creating_button -> /root/running)
+1.00 Field: enter /root/running
+1.00 Field: enter /root/running/main_behaviour
+1.00 Field: enter /root/running/main_behaviour/running
+1.00 Field: enter /root/running/deleting_behaviour
+1.00 Field: enter /root/running/deleting_behaviour/running
+1.00 Field: enter /root/running/child_behaviour
+1.00 Field: enter /root/running/child_behaviour/listening
+1.00 Field: enter /root/running/deleting_balls_behaviour
+1.00 Field: enter /root/running/deleting_balls_behaviour/listening
+1.00 (event name: create_button; port: Outport; parameters: [0, 'create_new_field', 'Inport'])
+1.50 Button: exit /creating_button
+1.50 Button: transition (/creating_button -> /running)
+1.50 Button: enter /running
+1.50 (event name: bind_event; port: Outport; parameters: [2, '<Button>', 'mouse_click', 'Inport'])
+2.00 Field: exit /root/running/deleting_balls_behaviour/listening
+2.00 Field: exit /root/running/child_behaviour/listening
+2.00 Field: exit /root/running/deleting_behaviour/running
+2.00 Field: exit /root/running/main_behaviour/running
+2.00 Field: exit /root/running/deleting_balls_behaviour
+2.00 Field: exit /root/running/child_behaviour
+2.00 Field: exit /root/running/deleting_behaviour
+2.00 Field: exit /root/running/main_behaviour
+2.00 Field: exit /root/running
+2.00 Field: transition (/root/running -> /root/deleting)
+2.00 Field: enter /root/deleting
+2.00 Field: exit /root/deleting
+2.00 Field: transition (/root/deleting -> /root/deleted)
+2.00 Field: enter /root/deleted
+2.00 (event name: destroy_window; port: Outport; parameters: [0])
+2.00 MainApp: exit /running/root/cd_behaviour/waiting
+2.00 MainApp: transition (/running/root/cd_behaviour/waiting -> /running/root/cd_behaviour/check_nr_of_fields)
+2.00 MainApp: enter /running/root/cd_behaviour/check_nr_of_fields
+2.05 MainApp: exit /running/root/cd_behaviour/check_nr_of_fields
+2.05 MainApp: transition (/running/root/cd_behaviour/check_nr_of_fields -> /running/root/cd_behaviour/stopped)
+2.05 MainApp: enter /running/root/cd_behaviour/stopped
+2.05 MainApp: exit /running/root/cd_behaviour/stopped
+2.05 MainApp: exit /running/root/main_behaviour/running
+2.05 MainApp: exit /running/root/cd_behaviour
+2.05 MainApp: exit /running/root/main_behaviour
+2.05 MainApp: exit /running/root
+2.05 MainApp: transition (/running/root -> /running/stopped)
+2.05 MainApp: enter /running/stopped
+2.05 (event name: destroy_all; port: Outport)

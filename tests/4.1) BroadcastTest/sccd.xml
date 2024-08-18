@@ -1,10 +1,9 @@
 <?xml version="1.1" ?>
-<diagram author="Sam Pieters" name="Create and Delete an Instance (other than the MainApp)">
+<diagram author="Sam Pieters" name="BroadCastTest">
     <description>
-        Test 12: Check if an instance broadcast properly 
+        Check if an instance broadcast properly 
     </description>
-    <inport name="ui"/>
-    <outport name="ui"/>
+    <outport name="Outport"/>
     <class name="MainApp" default="true">
         <relationships>
             <association name="linkA" class="A" />
@@ -19,7 +18,7 @@
                 </onentry>
                 <transition event='instance_created' target='../state2'>
                     <parameter name="association_name" type="string"/>
-                    <raise port="ui" event="instance_created_succesfully">
+                    <raise port="Outport" event="instance_created_succesfully">
                         <parameter expr="association_name" />
                     </raise>
                     <raise scope="cd" event="start_instance">
@@ -36,7 +35,7 @@
                 </onentry>
                 <transition event='instance_created' target='../state3'>
                     <parameter name="association_name" type="string"/>
-                    <raise port="ui" event="instance_created_succesfully">
+                    <raise port="Outport" event="instance_created_succesfully">
                         <parameter expr="association_name" />
                     </raise>
                     <raise scope="cd" event="start_instance">
@@ -53,7 +52,7 @@
                 </onentry>
                 <transition event='instance_created' target='../state4'>
                     <parameter name="association_name" type="string"/>
-                    <raise port="ui" event="instance_created_succesfully">
+                    <raise port="Outport" event="instance_created_succesfully">
                         <parameter expr="association_name" />
                     </raise>
                     <raise scope="cd" event="start_instance">
@@ -73,7 +72,7 @@
         <scxml initial="state1">
             <state id="state1">
                 <transition event="test_broad" target=".">
-                    <raise port="ui" event="broadcast_received" />
+                    <raise port="Outport" event="broadcast_received" />
                 </transition>
             </state>
         </scxml>

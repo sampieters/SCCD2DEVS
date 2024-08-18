@@ -1,38 +1,23 @@
 import os
+import re
 import subprocess
 import importlib.util
-import re
-from sccd.runtime.DEVSSimulatorWrapper import DEVSSimulator
+from sccd.runtime.statecharts_core import Event
 import TraceVerifier.DEVSTesterUnit as DEVSTesterUnit
-from sccd.runtime.DEVS_statecharts_core import Event
+from sccd.runtime.DEVSSimulatorWrapper import DEVSSimulator
 
 def import_target_module(module_name, file_path):
+    # Dynamically import a target module for the runner to execute
     spec = importlib.util.spec_from_file_location(module_name, file_path)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
 
-def extract_pattern(log_file_path, pattern):
-    with open(log_file_path, 'r') as log_file:
-        lines = log_file.readlines()
-
-    matched_lines = [line.strip() for line in lines if re.search(pattern, line)]
-    return matched_lines
-
-def parse_event(line):
-    # Regular expression to match the desired parts of the line
-    pattern = re.compile(r'\(event name: (.*?); port: (.*?); parameters: (.*?)\)$')
-
-    match = pattern.match(line)
-    if match:
-        event_name = match.group(1)
-        port = match.group(2)
-        parameters = match.group(3)
-        return event_name, port, parameters
-    else:
-        raise ValueError(f"Line format is incorrect: {line}")
-
 class SCCDTraceChecker:
+    '''
+    Abstract class, this class defines the methods and parameters a custom trace checker 
+    needs to function in the testing framework
+    '''
     def __init__(self) -> None:
         self.config = None
         self.directory = None
@@ -43,26 +28,24 @@ class SCCDTraceChecker:
     def run(self):
         raise NotImplementedError("Run method must be implemented by the subclass")
 
-    def check(self):
+    def filter(self):
         raise NotImplementedError("Check method must be implemented by the subclass")
 
 
 class PythonSCCDTraceChecker(SCCDTraceChecker):
     def __init__(self) -> None:
         super().__init__()
-
         self.id_dict = {}
     
     def __str__(self):
         return "Python"
 
     def compile(self):
-        """
+        '''
         Convert sccd.xml to target.py for the specified tool.
-        """
+        '''
         sccd_file = os.path.join(self.directory, self.config['model'])
         output_file = os.path.join(self.directory, 'Python', 'target.py')
-
         os.makedirs(os.path.join(self.directory, 'Python'), exist_ok=True)
 
         command = [
@@ -81,22 +64,22 @@ class PythonSCCDTraceChecker(SCCDTraceChecker):
         return result.returncode
 
     def run(self):
-        python_target = os.path.join(self.directory, "Python", "target.py")
-
+        '''
+        Run the model (target.py) with a defined execution function
+        '''
         # Dynamically import the target module
+        python_target = os.path.join(self.directory, "Python", "target.py")
         target = import_target_module("target", python_target)
-
         controller = target.Controller()
         controller.keep_running = False
 
-        # Check if there is an input file
+        # Check if there is an input file for input events
         input_file = os.path.join(self.directory, self.config["input"])
         if os.path.exists(input_file):
-            # add the inputs before the simulation is started  
+            # add the inputs before the simulation is started with the correct event time 
             with open(input_file, 'r') as file:
                 lines = file.readlines()
             input_events = [line.strip() for line in lines] 
-            
             for event in input_events:
                 space_pos = event.find(' ')
                 if space_pos == -1:
@@ -106,10 +89,9 @@ class PythonSCCDTraceChecker(SCCDTraceChecker):
                 next_event_time = float(event[:space_pos]) * 1000
                 event_part = event[space_pos + 1:].strip()  # Strip to remove any leading/trailing whitespace
 
-                name, port, parameters = parse_event(event_part)
+                name, port, parameters = DEVSTesterUnit.parse_event(event_part)
                 # list is as string, convert it to actual list
                 parameters = eval(parameters)
-
                 actual_event = Event(name, port, parameters)
                 controller.addInput(actual_event, next_event_time)
 
@@ -118,60 +100,56 @@ class PythonSCCDTraceChecker(SCCDTraceChecker):
 
         # Set verbose to the log file path
         controller.setVerbose(log_file_path)
-
+        # Start the execution
         controller.start()
-
         controller.tracers.stopTracers()
     
     def extract_globalio(self, line, context):
+        # Extract global output event from the line if present
         event_pattern = re.compile(r'^\s*\\Event: \(event name:.*\)$')
         event_match = event_pattern.match(line)
         if event_match and context["time"] is not None:
             if context["context"] == "global output":
+                # Remove everything before the event string
                 event = line.strip()
-                # Remove everything before '(' in each string
                 event = event[event.index('('):]
+                # Narrow casts are also matched by regex so filter these out
                 if not "<narrow_cast>" in event:
                     return f"{context["time"]:.2f} {event}"
         return None
         
     def extract_internalio(self, line, context):
+        # Extract internal events, e.g. events sended to and from the object manager and classes
         event_pattern = re.compile(r'^\s*\\Event: \(event name:.*\)$')
         event_match = event_pattern.match(line)
 
-        if "test_narrow" in line:
-            pass
         if event_match and context["context"] is not None:
             if context["context"] == "internal input" or context["context"] == "internal output":
+                # Remove everything before the event in string
                 event = line.strip()
-                # Remove everything before '(' in each string
                 event = event[event.index('('):]
 
-                # Special for python SCCD, the first parameter is sometmies the source but the source is a memory address, give it a unique index
+                # Special for python SCCD, the first parameter is sometimes the source but the source is a memory address, give it a unique index 
+                # So that it will match DEVS and is consistent in traces. 
                 id_pattern = re.compile(
                     r'.*\(event name:.*; port:.*; parameters: \[\<[\w\.]+ object at (0x[0-9a-fA-F]+)\>.*\]'
                 )
                 id_match = id_pattern.search(event)
-
                 if id_match:
                     address = id_match.group(1)
                     if address not in self.id_dict:
                         self.id_dict[address] = len(self.id_dict)
 
-                    # Find the start and end indices of the object reference within <>
+                    # Replace the entire object reference wit a unique id
                     start_idx = event.find('<')
                     end_idx = event.find('>', start_idx) + 1
-
                     if start_idx != -1 and end_idx != -1:
-                        # Replace the entire object reference
-                        new_text = event[:start_idx] + str(self.id_dict[address]) + event[end_idx:]
-
-                    return f"{context["time"]:.2f} {new_text}"
-                
+                        event = event[:start_idx] + str(self.id_dict[address]) + event[end_idx:]
                 return f"{context["time"]:.2f} {event}"
         return None
 
     def extract_statechart(self, line, context):
+        # extract statechart statements
         if line != "\n":
             if "TRANSITION FIRED" in line:
                 context["extra_info"] = "transition"
@@ -180,14 +158,13 @@ class PythonSCCDTraceChecker(SCCDTraceChecker):
             elif "ENTER STATE" in line:
                 context["extra_info"] = "enter"
             else:
+                # Remove all unnecessary characters
                 if context["extra_info"] == "transition":
                     line = line[line.index('('):line.rfind(')')+1]
-                    line = line.replace('\n', '')
-                    line = line.replace('\t', '')  # Remove all tab character
                 else:
                     line = line[line.index('/'):]
-                    line = line.replace('\n', '')
-                    line = line.replace('\t', '')  # Remove all tab characters
+                line = line.replace('\n', '')
+                line = line.replace('\t', '')
                 return f"{context["time"]:.2f} {context['model']}: {context["extra_info"]} {line}"
         return None
 
@@ -257,10 +234,10 @@ class PythonSCCDTraceChecker(SCCDTraceChecker):
                 "extra_info": "Transition "
             }
         return context
-    
-    def extract_info(self, log_file_path, options):
-        output_events = []
 
+    def filter(self):
+        log = os.path.join(self.directory, "Python", "log.txt")
+        output_events = []
         context = {
             "time": None,
             "model": None,
@@ -268,59 +245,28 @@ class PythonSCCDTraceChecker(SCCDTraceChecker):
             "extra_info": None
         }
         
-        with open(log_file_path, 'r') as file:
+        with open(log, 'r') as file:
             lines = file.readlines()
             
             for line in lines:
                 context = self.check_state(line, context)
                 
-                if "external" in options["trace"]:
+                if "external" in self.config["trace"]:
                     io_event = self.extract_globalio(line, context)
                     if io_event is not None:
                         output_events.append(io_event)
                 
-                if "internal" in options["trace"]:
+                if "internal" in self.config["trace"]:
                     internal_event = self.extract_internalio(line, context)
                     if internal_event is not None:
                         output_events.append(internal_event)
                 
-                if "statechart" in options["trace"]:
+                if "statechart" in self.config["trace"]:
                     if context['context'] == "state":
                         statechart_event = self.extract_statechart(line, context)
                         if statechart_event is not None:
                             output_events.append(statechart_event)
-        
         return output_events
-
-    def check(self):
-        log = os.path.join(self.directory, "Python", "log.txt")
-
-        expected_log = os.path.join(self.directory, self.config["check_file"])
-
-        expected_events = []
-
-        return_code = 1
-        if os.path.exists(expected_log):
-            with open(expected_log, 'r') as file:
-                expected_events = [line.strip() for line in file.readlines()]
-
-        actual_events = self.extract_info(log, self.config)
-
-        if len(expected_events) != len(actual_events):
-            return_code = 0
-
-        elif len(expected_events) == 0 and len(actual_events) == 0:
-            return_code = 2
-        else:
-            for index, (item1, item2) in enumerate(zip(expected_events, actual_events)):
-                if item1 != item2:
-                    return_code = 0
-            
-        if return_code == 0:
-            # Write actual events to a file
-            with open(os.path.join(self.directory, "Python", "faulty_log.txt"), 'w') as file:
-                file.writelines([event + '\n' for event in actual_events])
-        return return_code
 
 
 class ClassicDevsSCCDTraceChecker(SCCDTraceChecker):
@@ -386,10 +332,10 @@ class ClassicDevsSCCDTraceChecker(SCCDTraceChecker):
         sim = DEVSSimulator(test_model)
         sim.setRealTime(False)
         
-        # Create the full path for the log file
+        # Add the verbose tracer to add traces to .txt file
         log_file_path = os.path.join(self.directory, "ClassicDEVS", "log.txt")
-        # Set verbose to the log file path
         sim.setVerbose(log_file_path)
+        # Start the simulation correctly
         sim.setClassicDEVS()
         sim.simulate()
 
@@ -404,36 +350,26 @@ class ClassicDevsSCCDTraceChecker(SCCDTraceChecker):
         return None
         
     def extract_internalio(self, line, context):
-        if "private_2_<narrow_cast>" in line:
-            pass
         if (context["extra_info"] == "obj_manager_out" and context['transition_type'] == 'internal'):
             # Pattern to match the outermost '(event name: ...)' including a single nested '(event name: ...)'
             event_pattern = re.compile(r'\(event name:.*?(?:\(event name:.*?\))?.*?\)')
             event_match = re.search(event_pattern, line)
             if event_match and context["time"] is not None:
                 event = event_match.group(0)
-                # TODO: quick fix
+                # quick fix
                 if "event name: narrow_cast" in event:
                     event += "])"
                 return f"{context["time"]:.2f} {event}"
             
         elif (context["extra_info"] == "obj_manager_in" and context['transition_type'] == 'external') and ("<narrow_cast>" in line):
-            #event_pattern = re.compile(r'\(event name:.*\)$')
             event_pattern = r'\(event name.*?\)'
-
             event_matches = re.findall(event_pattern, line)
-
             if event_matches and context["time"] is not None:
                 if len(event_matches) > 1:
                     pass
                 # Get the last match
                 event = event_matches[-1]
                 return f"{context['time']:.2f} {event}"
-            #event_match = re.search(event_pattern, line)
-
-            #if event_match and context["time"] is not None:
-            #    event = event_match.group(0)
-            #    return f"{context["time"]:.2f} {event}"
         return None
 
     def extract_statechart(self, line, context):
@@ -497,8 +433,9 @@ class ClassicDevsSCCDTraceChecker(SCCDTraceChecker):
             context["extra_info"] = "other_port"
             
         return context
-    
-    def extract_info(self, log_file_path, options):
+
+    def filter(self):
+        log = os.path.join(self.directory, "ClassicDEVS", "log.txt")
         output_events = []
         current_time = None
 
@@ -510,7 +447,7 @@ class ClassicDevsSCCDTraceChecker(SCCDTraceChecker):
             "extra_info": None
         }
         
-        with open(log_file_path, 'r') as file:
+        with open(log, 'r') as file:
             lines = file.readlines()
             
             time_pattern = re.compile(r"__  Current Time: +([\d\.]+) +__________________________________________")
@@ -522,49 +459,20 @@ class ClassicDevsSCCDTraceChecker(SCCDTraceChecker):
 
                 context = self.check_state(line, context)
                 
-                if "external" in options["trace"]:
+                if "external" in self.config["trace"]:
                     io_event = self.extract_globalio(line, context)
                     if io_event is not None:
                         output_events.append(io_event)
                 
-                if "internal" in options["trace"]:
+                if "internal" in self.config["trace"]:
                     internal_event = self.extract_internalio(line, context)
                     if internal_event is not None:
                         output_events.append(internal_event)
                 
-                if "statechart" in options["trace"]:
+                if "statechart" in self.config["trace"]:
                     if context['context'] == "state":
                         statechart_event = self.extract_statechart(line, context)
                         if statechart_event is not None:
                             output_events.append(statechart_event)
         
         return output_events
-
-    def check(self):
-        log = os.path.join(self.directory, "ClassicDEVS", "log.txt")
-        expected_log = os.path.join(self.directory, self.config["check_file"])
-
-        expected_events = []
-        if os.path.exists(expected_log):
-            with open(expected_log, 'r') as file:
-                expected_events = [line.strip() for line in file.readlines()]
-        
-        actual_events = self.extract_info(log, self.config)
-
-        return_code = 1
-        if len(expected_events) != len(actual_events):
-            return_code = 0
-
-        if len(expected_events) == 0 and len(actual_events) == 0:
-            return_code = 2
-
-        for index, (item1, item2) in enumerate(zip(expected_events, actual_events)):
-            if item1 != item2:
-                return_code = 0
-
-        if return_code == 0:
-            # Write actual events to a file
-            with open(os.path.join(self.directory, "ClassicDEVS", "faulty_log.txt"), 'w') as file:
-                file.writelines([event + '\n' for event in actual_events])
-
-        return return_code

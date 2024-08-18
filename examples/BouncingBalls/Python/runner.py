@@ -8,6 +8,8 @@ import target as target
 from sccd.runtime.libs.ui_v2 import UI
 from sccd.runtime.tkinter_eventloop import TkEventLoop
 
+from sccd.runtime.statecharts_core import Event
+
 class OutputListener:
 	def __init__(self, ui):
 		self.ui = ui
@@ -25,6 +27,9 @@ if __name__ == '__main__':
 	controller.addMyOwnOutputListener(OutputListener(ui))
 
 	controller.setVerbose("./examples/BouncingBalls/Python/trace.txt")
+
+	actual_event = Event("hello", "ui")
+	controller.addInput(actual_event, 500)
 
 	controller.start()
 	tkroot.mainloop()

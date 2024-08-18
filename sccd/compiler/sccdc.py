@@ -56,7 +56,6 @@ def sccdToGeneric(sccd, platform):
 	return generic
 
 def sccdToDEVS(sccd, platform):
-	succesfull_generation = False
 	generator = DEVSGenerator(platform)
 	sccd.accept(generator)
 	generic = generator.get()

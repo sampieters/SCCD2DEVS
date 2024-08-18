@@ -19,8 +19,7 @@ if __name__ == '__main__':
 	tkroot = tk.Tk()
 	tkroot.withdraw()
 	sim = DEVSSimulator(model)
-
-	sim.setVerbose("./examples/BouncingBalls/PyDEVS/log.txt")
+	
 	sim.setRealTimePlatformTk(tkroot)
 
 	ui = UI(tkroot, sim)

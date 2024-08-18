@@ -1,4 +1,4 @@
-<?xml version="1.0" ?>
+<?xml version="1.1" ?>
 <diagram author="Sam Pieters" name="TrafficLight">
     <description>
         Tkinter frame with Traffic light in a single statechart.

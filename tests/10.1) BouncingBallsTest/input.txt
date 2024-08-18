@@ -1,4 +1,0 @@
-0.5 (event name: window_created; port: ui; parameters: [0])
-1.0 (event name: canvas_created; port: ui; parameters: [1])
-1.5 (event name: button_created; port: ui; parameters: [2])
-2.0 (event name: window_close; port: ui; parameters: None)

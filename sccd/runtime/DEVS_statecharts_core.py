@@ -8,17 +8,11 @@ from sccd.runtime.statecharts_core import StatechartSemantics, BigStepState, Com
 from sccd.runtime.statecharts_core import State, HistoryState, ShallowHistoryState, DeepHistoryState, ParallelState
 from sccd.runtime.statecharts_core import RuntimeException, AssociationException,AssociationReferenceException, ParameterException, InputException
 from sccd.runtime.statecharts_core import ELSE_GUARD, Association, Event
+from sccd.runtime.libs import DEVSutils
 
 
 from heapq import heappush, heappop, heapify
 import threading
-
-def get_private_port(text):
-    match = re.search(r'private_\d+_(\w+)', text)
-
-    if match:
-        result = match.group(1)
-        return result
     
 class Transition:
     def __init__(self, obj, source, targets):
@@ -484,7 +478,7 @@ class ClassState():
                 target_instance = self.port_mappings[e.getPort()]
                 if target_instance is not None:
                     target_instance = self.instances[target_instance] 
-                    e.port = get_private_port(e.port)
+                    e.port = DEVSutils.get_general_port(e.port)
             if target_instance == None:
                 self.broadcast(None,e, event_time - self.simulated_time)
             else:
@@ -496,6 +490,12 @@ class ClassState():
             input_event_list = [input_event_list]
 
         for e in input_event_list:
+            # TODO: check, probably more wrong with global inport, sending to multiple instances
+            # If a global event arrives but there are no instances, the event should be ignored
+            # (otherwise the port checking will raise an exception)
+            if len(self.instances) == 0:
+                break
+
             if e.getName() == "":
                 raise InputException("Input event can't have an empty name.")
             
@@ -517,6 +517,8 @@ class ClassState():
 class ClassBase(AtomicDEVS):    
     def __init__(self, name):
         AtomicDEVS.__init__(self, name)
+
+        self.glob_inputs = {}
         self.glob_outputs = {}
         self.outputs = {}
         self.state = ClassState(name)
@@ -580,6 +582,8 @@ class ClassBase(AtomicDEVS):
         # Collect all inputs
         all_inputs = [item for input_list in inputs.values() for item in (input_list if isinstance(input_list, (tuple, list)) else [input_list])]
         for input in all_inputs:
+            if isinstance(input, Event):
+                input = (None, None, input)
             if isinstance(input, str):
                 input = (None, None, eval(input))
             if input[2].getName() in self.handlers:

@@ -1,0 +1,16 @@
+<?xml version="1.1" ?>
+<diagram author="Sam Pieters" name="GlobalInputCheckTest">
+    <description>
+        Check if the model receives input from the right port and not from just any port.
+    </description>
+    <inport name="FalseInput"/>
+    <inport name="Input"/>
+    <class name="MainApp" default="true">
+        <scxml initial="state1">
+            <state id="state1">
+                <transition port="Input" event="input_event" target="../state2" />
+            </state>
+            <state id="state2" />
+        </scxml>
+    </class>
+</diagram>

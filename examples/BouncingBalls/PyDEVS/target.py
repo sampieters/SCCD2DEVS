@@ -31,7 +31,7 @@ class MainAppInstance(RuntimeClassBase):
         # call user defined constructor
         MainAppInstance.user_defined_constructor(self)
         port_name = addInputPort("ui", start_port_id, True)
-        atomdevs.state.port_mappings[port_name] = id
+        atomdevs.state.port_mappings[port_name] = None
         port_name = addInputPort("<narrow_cast>", start_port_id)
         atomdevs.state.port_mappings[port_name] = id
     
@@ -229,7 +229,7 @@ class FieldInstance(RuntimeClassBase):
         # call user defined constructor
         FieldInstance.user_defined_constructor(self)
         port_name = addInputPort("ui", start_port_id, True)
-        atomdevs.state.port_mappings[port_name] = id
+        atomdevs.state.port_mappings[port_name] = None
         port_name = addInputPort("<narrow_cast>", start_port_id)
         atomdevs.state.port_mappings[port_name] = id
         port_name = addInputPort("field_ui", start_port_id + 1)
@@ -498,7 +498,7 @@ class ButtonInstance(RuntimeClassBase):
         # call user defined constructor
         ButtonInstance.user_defined_constructor(self, window_id, event_name, button_text)
         port_name = addInputPort("ui", start_port_id, True)
-        atomdevs.state.port_mappings[port_name] = id
+        atomdevs.state.port_mappings[port_name] = None
         port_name = addInputPort("<narrow_cast>", start_port_id)
         atomdevs.state.port_mappings[port_name] = id
         port_name = addInputPort("button_ui", start_port_id + 1)
@@ -601,7 +601,7 @@ class BallInstance(RuntimeClassBase):
         # call user defined constructor
         BallInstance.user_defined_constructor(self, canvas_id, x, y)
         port_name = addInputPort("ui", start_port_id, True)
-        atomdevs.state.port_mappings[port_name] = id
+        atomdevs.state.port_mappings[port_name] = None
         port_name = addInputPort("<narrow_cast>", start_port_id)
         atomdevs.state.port_mappings[port_name] = id
         port_name = addInputPort("ball_ui", start_port_id + 1)

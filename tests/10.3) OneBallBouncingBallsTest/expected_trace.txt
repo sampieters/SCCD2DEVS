@@ -1,0 +1,186 @@
+0.00 MainApp: exit /running/root/main_behaviour/initializing
+0.00 MainApp: transition (/running/root/main_behaviour/initializing -> /running/root/main_behaviour/running)
+0.00 MainApp: enter /running/root/main_behaviour/running
+0.00 MainApp: exit /running/root/cd_behaviour/waiting
+0.00 MainApp: transition (/running/root/cd_behaviour/waiting -> /running/root/cd_behaviour/creating)
+0.00 MainApp: enter /running/root/cd_behaviour/creating
+0.00 MainApp: exit /running/root/cd_behaviour/creating
+0.00 MainApp: transition (/running/root/cd_behaviour/creating -> /running/root/cd_behaviour/waiting)
+0.00 MainApp: enter /running/root/cd_behaviour/waiting
+0.00 Field: exit /root/waiting
+0.00 Field: transition (/root/waiting -> /root/creating_window)
+0.00 Field: enter /root/creating_window
+0.00 (event name: create_window; port: Outport; parameters: [800, 600, 'BouncingBalls', 'Inport'])
+0.50 Field: exit /root/creating_window
+0.50 Field: transition (/root/creating_window -> /root/creating_canvas)
+0.50 Field: enter /root/creating_canvas
+0.50 (event name: bind_event; port: Outport; parameters: [0, 'WM_DELETE_WINDOW', 'window_close', 'Inport'])
+0.50 (event name: bind_event; port: Outport; parameters: [0, '<Key>', 'key_press', 'Inport'])
+0.50 (event name: create_canvas; port: Outport; parameters: [0, 800, 550, {'background': '#eee'}, 'Inport'])
+1.00 Field: exit /root/creating_canvas
+1.00 Field: transition (/root/creating_canvas -> /root/creating_button)
+1.00 Field: enter /root/creating_button
+1.00 (event name: bind_event; port: Outport; parameters: [1, '<Button-2>', 'right_click', 'Inport'])
+1.00 (event name: bind_event; port: Outport; parameters: [1, '<Motion>', 'mouse_move', 'Inport'])
+1.00 (event name: bind_event; port: Outport; parameters: [1, '<ButtonRelease>', 'mouse_release', 'Inport'])
+1.00 Field: exit /root/creating_button
+1.00 Field: transition (/root/creating_button -> /root/running)
+1.00 Field: enter /root/running
+1.00 Field: enter /root/running/main_behaviour
+1.00 Field: enter /root/running/main_behaviour/running
+1.00 Field: enter /root/running/deleting_behaviour
+1.00 Field: enter /root/running/deleting_behaviour/running
+1.00 Field: enter /root/running/child_behaviour
+1.00 Field: enter /root/running/child_behaviour/listening
+1.00 Field: enter /root/running/deleting_balls_behaviour
+1.00 Field: enter /root/running/deleting_balls_behaviour/listening
+1.00 (event name: create_button; port: Outport; parameters: [0, 'create_new_field', 'Inport'])
+1.50 Button: exit /creating_button
+1.50 Button: transition (/creating_button -> /running)
+1.50 Button: enter /running
+1.50 (event name: bind_event; port: Outport; parameters: [2, '<Button>', 'mouse_click', 'Inport'])
+2.00 Field: exit /root/running/main_behaviour/running
+2.00 Field: transition (/root/running/main_behaviour/running -> /root/running/main_behaviour/creating_ball)
+2.00 Field: enter /root/running/main_behaviour/creating_ball
+2.00 Field: exit /root/running/main_behaviour/creating_ball
+2.00 Field: transition (/root/running/main_behaviour/creating_ball -> /root/running/main_behaviour/running)
+2.00 Field: enter /root/running/main_behaviour/running
+2.00 Ball: exit /main_behaviour/initializing
+2.00 Ball: transition (/main_behaviour/initializing -> /main_behaviour/creating_circle)
+2.00 Ball: enter /main_behaviour/creating_circle
+2.00 (event name: create_circle; port: Outport; parameters: [1, 206, 77, 20.0, {'fill': '#000'}, 'Inport'])
+2.50 Ball: exit /main_behaviour/creating_circle
+2.50 Ball: transition (/main_behaviour/creating_circle -> /main_behaviour/bouncing)
+2.50 Ball: enter /main_behaviour/bouncing
+2.50 (event name: bind_canvas_event; port: Outport; parameters: [1, 1, '<ButtonPress>', 'mouse_press', 'Inport'])
+2.50 (event name: bind_canvas_event; port: Outport; parameters: [1, 1, '<Motion>', 'mouse_move', 'Inport'])
+2.50 (event name: bind_canvas_event; port: Outport; parameters: [1, 1, '<ButtonRelease>', 'mouse_release', 'Inport'])
+2.52 Ball: exit /main_behaviour/bouncing
+2.52 Ball: transition (/main_behaviour/bouncing -> /main_behaviour/bouncing)
+2.52 Ball: enter /main_behaviour/bouncing
+2.52 (event name: move_element; port: Outport; parameters: [1, 1, 1, 1])
+2.54 Ball: exit /main_behaviour/bouncing
+2.54 Ball: transition (/main_behaviour/bouncing -> /main_behaviour/bouncing)
+2.54 Ball: enter /main_behaviour/bouncing
+2.54 (event name: move_element; port: Outport; parameters: [1, 1, 1, 1])
+2.56 Ball: exit /main_behaviour/bouncing
+2.56 Ball: transition (/main_behaviour/bouncing -> /main_behaviour/bouncing)
+2.56 Ball: enter /main_behaviour/bouncing
+2.56 (event name: move_element; port: Outport; parameters: [1, 1, 1, 1])
+2.58 Ball: exit /main_behaviour/bouncing
+2.58 Ball: transition (/main_behaviour/bouncing -> /main_behaviour/bouncing)
+2.58 Ball: enter /main_behaviour/bouncing
+2.58 (event name: move_element; port: Outport; parameters: [1, 1, 1, 1])
+2.60 Ball: exit /main_behaviour/bouncing
+2.60 Ball: transition (/main_behaviour/bouncing -> /main_behaviour/bouncing)
+2.60 Ball: enter /main_behaviour/bouncing
+2.60 (event name: move_element; port: Outport; parameters: [1, 1, 1, 1])
+2.62 Ball: exit /main_behaviour/bouncing
+2.62 Ball: transition (/main_behaviour/bouncing -> /main_behaviour/bouncing)
+2.62 Ball: enter /main_behaviour/bouncing
+2.62 (event name: move_element; port: Outport; parameters: [1, 1, 1, 1])
+2.64 Ball: exit /main_behaviour/bouncing
+2.64 Ball: transition (/main_behaviour/bouncing -> /main_behaviour/bouncing)
+2.64 Ball: enter /main_behaviour/bouncing
+2.64 (event name: move_element; port: Outport; parameters: [1, 1, 1, 1])
+2.66 Ball: exit /main_behaviour/bouncing
+2.66 Ball: transition (/main_behaviour/bouncing -> /main_behaviour/bouncing)
+2.66 Ball: enter /main_behaviour/bouncing
+2.66 (event name: move_element; port: Outport; parameters: [1, 1, 1, 1])
+2.68 Ball: exit /main_behaviour/bouncing
+2.68 Ball: transition (/main_behaviour/bouncing -> /main_behaviour/bouncing)
+2.68 Ball: enter /main_behaviour/bouncing
+2.68 (event name: move_element; port: Outport; parameters: [1, 1, 1, 1])
+2.70 Ball: exit /main_behaviour/bouncing
+2.70 Ball: transition (/main_behaviour/bouncing -> /main_behaviour/bouncing)
+2.70 Ball: enter /main_behaviour/bouncing
+2.70 (event name: move_element; port: Outport; parameters: [1, 1, 1, 1])
+2.72 Ball: exit /main_behaviour/bouncing
+2.72 Ball: transition (/main_behaviour/bouncing -> /main_behaviour/bouncing)
+2.72 Ball: enter /main_behaviour/bouncing
+2.72 (event name: move_element; port: Outport; parameters: [1, 1, 1, 1])
+2.74 Ball: exit /main_behaviour/bouncing
+2.74 Ball: transition (/main_behaviour/bouncing -> /main_behaviour/bouncing)
+2.74 Ball: enter /main_behaviour/bouncing
+2.74 (event name: move_element; port: Outport; parameters: [1, 1, 1, 1])
+2.76 Ball: exit /main_behaviour/bouncing
+2.76 Ball: transition (/main_behaviour/bouncing -> /main_behaviour/bouncing)
+2.76 Ball: enter /main_behaviour/bouncing
+2.76 (event name: move_element; port: Outport; parameters: [1, 1, 1, 1])
+2.78 Ball: exit /main_behaviour/bouncing
+2.78 Ball: transition (/main_behaviour/bouncing -> /main_behaviour/bouncing)
+2.78 Ball: enter /main_behaviour/bouncing
+2.78 (event name: move_element; port: Outport; parameters: [1, 1, 1, 1])
+2.80 Ball: exit /main_behaviour/bouncing
+2.80 Ball: transition (/main_behaviour/bouncing -> /main_behaviour/bouncing)
+2.80 Ball: enter /main_behaviour/bouncing
+2.80 (event name: move_element; port: Outport; parameters: [1, 1, 1, 1])
+2.82 Ball: exit /main_behaviour/bouncing
+2.82 Ball: transition (/main_behaviour/bouncing -> /main_behaviour/bouncing)
+2.82 Ball: enter /main_behaviour/bouncing
+2.82 (event name: move_element; port: Outport; parameters: [1, 1, 1, 1])
+2.84 Ball: exit /main_behaviour/bouncing
+2.84 Ball: transition (/main_behaviour/bouncing -> /main_behaviour/bouncing)
+2.84 Ball: enter /main_behaviour/bouncing
+2.84 (event name: move_element; port: Outport; parameters: [1, 1, 1, 1])
+2.86 Ball: exit /main_behaviour/bouncing
+2.86 Ball: transition (/main_behaviour/bouncing -> /main_behaviour/bouncing)
+2.86 Ball: enter /main_behaviour/bouncing
+2.86 (event name: move_element; port: Outport; parameters: [1, 1, 1, 1])
+2.88 Ball: exit /main_behaviour/bouncing
+2.88 Ball: transition (/main_behaviour/bouncing -> /main_behaviour/bouncing)
+2.88 Ball: enter /main_behaviour/bouncing
+2.88 (event name: move_element; port: Outport; parameters: [1, 1, 1, 1])
+2.90 Ball: exit /main_behaviour/bouncing
+2.90 Ball: transition (/main_behaviour/bouncing -> /main_behaviour/bouncing)
+2.90 Ball: enter /main_behaviour/bouncing
+2.90 (event name: move_element; port: Outport; parameters: [1, 1, 1, 1])
+2.92 Ball: exit /main_behaviour/bouncing
+2.92 Ball: transition (/main_behaviour/bouncing -> /main_behaviour/bouncing)
+2.92 Ball: enter /main_behaviour/bouncing
+2.92 (event name: move_element; port: Outport; parameters: [1, 1, 1, 1])
+2.94 Ball: exit /main_behaviour/bouncing
+2.94 Ball: transition (/main_behaviour/bouncing -> /main_behaviour/bouncing)
+2.94 Ball: enter /main_behaviour/bouncing
+2.94 (event name: move_element; port: Outport; parameters: [1, 1, 1, 1])
+2.96 Ball: exit /main_behaviour/bouncing
+2.96 Ball: transition (/main_behaviour/bouncing -> /main_behaviour/bouncing)
+2.96 Ball: enter /main_behaviour/bouncing
+2.96 (event name: move_element; port: Outport; parameters: [1, 1, 1, 1])
+2.98 Ball: exit /main_behaviour/bouncing
+2.98 Ball: transition (/main_behaviour/bouncing -> /main_behaviour/bouncing)
+2.98 Ball: enter /main_behaviour/bouncing
+2.98 (event name: move_element; port: Outport; parameters: [1, 1, 1, 1])
+3.00 Ball: exit /main_behaviour/bouncing
+3.00 Ball: transition (/main_behaviour/bouncing -> /main_behaviour/bouncing)
+3.00 Ball: enter /main_behaviour/bouncing
+3.00 (event name: move_element; port: Outport; parameters: [1, 1, 1, 1])
+3.00 Field: exit /root/running/deleting_balls_behaviour/listening
+3.00 Field: exit /root/running/child_behaviour/listening
+3.00 Field: exit /root/running/deleting_behaviour/running
+3.00 Field: exit /root/running/main_behaviour/running
+3.00 Field: exit /root/running/deleting_balls_behaviour
+3.00 Field: exit /root/running/child_behaviour
+3.00 Field: exit /root/running/deleting_behaviour
+3.00 Field: exit /root/running/main_behaviour
+3.00 Field: exit /root/running
+3.00 Field: transition (/root/running -> /root/deleting)
+3.00 Field: enter /root/deleting
+3.00 Field: exit /root/deleting
+3.00 Field: transition (/root/deleting -> /root/deleted)
+3.00 Field: enter /root/deleted
+3.00 (event name: destroy_window; port: Outport; parameters: [0])
+3.00 MainApp: exit /running/root/cd_behaviour/waiting
+3.00 MainApp: transition (/running/root/cd_behaviour/waiting -> /running/root/cd_behaviour/check_nr_of_fields)
+3.00 MainApp: enter /running/root/cd_behaviour/check_nr_of_fields
+3.05 MainApp: exit /running/root/cd_behaviour/check_nr_of_fields
+3.05 MainApp: transition (/running/root/cd_behaviour/check_nr_of_fields -> /running/root/cd_behaviour/stopped)
+3.05 MainApp: enter /running/root/cd_behaviour/stopped
+3.05 MainApp: exit /running/root/cd_behaviour/stopped
+3.05 MainApp: exit /running/root/main_behaviour/running
+3.05 MainApp: exit /running/root/cd_behaviour
+3.05 MainApp: exit /running/root/main_behaviour
+3.05 MainApp: exit /running/root
+3.05 MainApp: transition (/running/root -> /running/stopped)
+3.05 MainApp: enter /running/stopped
+3.05 (event name: destroy_all; port: Outport)

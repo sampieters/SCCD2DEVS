@@ -1,7 +1,0 @@
-0.00 (event name: instance_created_succesfully; port: ui; parameters: ['linkA[0]'])
-0.00 (event name: statechart_started_succesfully; port: ui)
-0.00 (event name: instance_started_succesfully; port: ui; parameters: ['linkA[0]'])
-0.00 (event name: instance_created_succesfully; port: ui; parameters: ['linkB[0]'])
-0.00 (event name: statechart_started_succesfully; port: ui)
-0.00 (event name: instance_started_succesfully; port: ui; parameters: ['linkB[0]'])
-0.00 (event name: instance_deleted_succesfully; port: ui; parameters: ['linkB[0]'])

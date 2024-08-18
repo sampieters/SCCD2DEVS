@@ -1,5 +1,9 @@
-<?xml version="1.0" ?>
-<diagram author="Raphael Mannadiar" name="">
+<?xml version="1.1" ?>
+<diagram author="Sam Pieters" name="NonDeterminismTest">
+    <description>
+        Test if nondeterminism works as expected. 
+        There are two states defined in a composite that fire the same moment but these get resolved as the composite state also has an upper trnasition.
+    </description>
     <class name="MainApp" default="true">
         <scxml initial="Y">
             <state id="Y" initial="A"> 

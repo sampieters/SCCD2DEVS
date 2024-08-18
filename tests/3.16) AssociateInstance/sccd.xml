@@ -1,11 +1,9 @@
 <?xml version="1.1" ?>
-<diagram author="Sam Pieters" name="Delete from Non Parent">
+<diagram author="Sam Pieters" name="AssociateInstance">
     <description>
-        Test 3.9: Try to delete an instance from a class that is not the creator of that instance
-        Note: This is not going to work probably as the instance first need to be associated
+        Associate a target instance to another instance that is not its creator
     </description>
-    <inport name="ui"/>
-    <outport name="ui"/>
+    <outport name="Outport"/>
     <class name="MainApp" default="true">
         <relationships>
             <association name="linkA" class="A" />
@@ -29,7 +27,7 @@
                     <script>
                         self.assoc_name = association_name
                     </script>
-                    <raise port="ui" event="instance_created_succesfully">
+                    <raise port="Outport" event="instance_created_succesfully">
                         <parameter expr="association_name" />
                     </raise>
                     <raise scope="cd" event="start_instance">
@@ -40,7 +38,7 @@
             <state id="state2">
                 <transition event='instance_started' target='../state3'>
                     <parameter name="association_name" type="string"/>
-                    <raise port="ui" event="instance_started_succesfully">
+                    <raise port="Outport" event="instance_started_succesfully">
                         <parameter expr="association_name" />
                     </raise>
                     <raise scope="cd" event="create_instance">
@@ -52,7 +50,7 @@
             <state id="state3">
                 <transition event='instance_created' target='../state4'>
                     <parameter name="association_name" type="string"/>
-                    <raise port="ui" event="instance_created_succesfully">
+                    <raise port="Outport" event="instance_created_succesfully">
                         <parameter expr="association_name" />
                     </raise>
                     <raise scope="cd" event="start_instance">
@@ -63,7 +61,7 @@
             <state id="state4">
                 <transition event='instance_started' target='../state5'>
                     <parameter name="association_name" type="string"/>
-                    <raise port="ui" event="instance_started_succesfully">
+                    <raise port="Outport" event="instance_started_succesfully">
                         <parameter expr="association_name" />
                     </raise>
                 </transition>
@@ -91,7 +89,7 @@
         <scxml initial="state1">
             <state id="state1">
                 <onentry>
-                    <raise port="ui" event="statechart_started_succesfully" />
+                    <raise port="Outport" event="statechart_started_succesfully" />
                 </onentry>
                 <transition event="test_link" target="../state2">
                     <raise event="test_new_link" scope="narrow" target="'linkB[0]'" />
@@ -105,10 +103,10 @@
         <scxml initial="state1">
             <state id="state1">
                 <onentry>
-                    <raise port="ui" event="statechart_started_succesfully" />
+                    <raise port="Outport" event="statechart_started_succesfully" />
                 </onentry>
                 <transition event="test_new_link" target="../state2">
-                    <raise port="ui" event="associated_succesfully" />
+                    <raise port="Outport" event="associated_succesfully" />
                 </transition>
             </state>
             <state id="state2" />

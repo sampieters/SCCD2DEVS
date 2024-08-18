@@ -1,4 +1,0 @@
-0.031 field_ui Event("window_created","private_2_field_ui",[0])
-0.064 field_ui Event("canvas_created","private_2_field_ui",[1])
-0.072 button_ui Event("button_created","private_4_button_ui",[2])
-2.202 field_ui Event("window_close","private_2_field_ui",None)

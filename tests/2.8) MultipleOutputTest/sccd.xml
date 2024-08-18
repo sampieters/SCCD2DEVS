@@ -1,0 +1,35 @@
+<?xml version="1.1" ?>
+<diagram author="Sam Pieters" name="MultipleOutputTest">
+    <description>
+        Check if the model outputs multiple events with an interval on the right time.
+    </description>
+    <outport name="Outport"/>
+    <class name="MainApp" default="true">
+        <constructor>
+            <body>
+                self.amount = 1
+            </body> 
+        </constructor>
+        <scxml initial="state1">
+            <state id="state1">
+                <transition after="1" target="../state2" />
+            </state>
+            <state id="state2">
+                <onentry>
+                    <raise port="Outport" event="test_event">
+                        <parameter expr="str(self.amount)" />
+                    </raise>
+                </onentry>
+                <transition target="../state1" cond="self.amount != 5">
+                    <script>
+                        self.amount += 1
+                    </script>
+                </transition>
+                <transition target="../end" cond="self.amount == 5">
+                </transition>
+            </state>
+            <state id="end">
+            </state>
+        </scxml>
+    </class>
+</diagram>

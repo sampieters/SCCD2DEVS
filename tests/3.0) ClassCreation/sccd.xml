@@ -1,10 +1,9 @@
 <?xml version="1.1" ?>
-<diagram author="Sam Pieters" name="Create Instance">
+<diagram author="Sam Pieters" name="ClassCreation">
     <description>
-        Test 6: Check if an instance in created successfully (other than the main app, without parameters)
+        Check if an instance in created successfully (other than the main app, without parameters)
     </description>
-    <inport name="ui"/>
-    <outport name="ui"/>
+    <outport name="Outport"/>
     <class name="MainApp" default="true">
         <relationships>
             <association name="linkA" class="A" />
@@ -19,8 +18,7 @@
                 </onentry>
                 <transition event="instance_created" target="../state2">
                     <parameter name="association_name" type="string"/>
-                    <raise port="ui" event="instance_created_succesfully">
-                        <parameter expr="str('%.2f' % (self.getSimulatedTime() / 1000.0))" />
+                    <raise port="Outport" event="instance_created_succesfully">
                         <parameter expr="association_name" />
                     </raise>
                 </transition>
@@ -34,9 +32,7 @@
         <scxml initial="state1">
             <state id="state1">
                 <onentry>
-                    <raise port="ui" event="not_possible">
-                        <parameter expr="str('%.2f' % (self.getSimulatedTime() / 1000.0))" />
-                    </raise>
+                    <raise port="Outport" event="not_possible" />
                 </onentry>
             </state>
         </scxml>

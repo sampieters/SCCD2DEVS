@@ -1,7 +1,7 @@
 <?xml version="1.1" ?>
-<diagram author="Sam Pieters" name="AfterTransitionTest">
+<diagram author="Sam Pieters" name="ScriptExitTest">
     <description>
-        Test 3: Check if a script works by updating parameters.
+        Check if a script works by updating parameters in the exit of a state.
     </description>
     <class name="MainApp" default="true">
         <constructor>

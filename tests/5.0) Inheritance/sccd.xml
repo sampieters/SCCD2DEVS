@@ -1,15 +1,13 @@
 <?xml version="1.1" ?>
-<diagram author="Sam Pieters" name="Bouncing_Balls_DEVS_Version">
+<diagram author="Sam Pieters" name="InheritanceTest">
     <description>
+        Check if SCCD classes can inherit from other classes
     </description>
-    <top>
-    </top>
-    <outport name="ui"/>
-
+    <outport name="Outport"/>
     <class name="A">
         <constructor>
             <body>
-                self.huh = 21
+                self.parent_param = 21
             </body>
         </constructor>
         <scxml initial="running">
@@ -29,8 +27,8 @@
         <scxml initial="running">
             <state id="running">
                 <onentry>
-                    <raise port="ui" event="output_event">
-                        <parameter expr="self.huh" />
+                    <raise port="Outport" event="output_event">
+                        <parameter expr="self.parent_param" />
                     </raise>
                 </onentry>
             </state>

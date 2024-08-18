@@ -1,10 +1,9 @@
 <?xml version="1.1" ?>
-<diagram author="Sam Pieters" name="Create and Delete Multiple Instances of the same type (other than the MainApp)">
+<diagram author="Sam Pieters" name="DeleteMultipleBeforeStarting">
     <description>
-        Test 13: Check if multiple instances can be deleted after the creation, the instance is not started yet.
+        Check if multiple instances can be deleted after the creation, the instance is not started yet.
     </description>
-    <inport name="ui"/>
-    <outport name="ui"/>
+    <outport name="Outport"/>
     <class name="MainApp" default="true">
         <relationships>
             <association name="linkA" class="A" />
@@ -19,8 +18,7 @@
                 </onentry>
                 <transition event='instance_created' target='../state2'>
                     <parameter name="association_name" type="string"/>
-                    <raise port="ui" event="instance_created_succesfully">
-                        <parameter expr="str('%.2f' % (self.getSimulatedTime() / 1000.0))" />
+                    <raise port="Outport" event="instance_created_succesfully">
                         <parameter expr="association_name" />
                     </raise>
                 </transition>
@@ -34,8 +32,7 @@
                 </onentry>
                 <transition event='instance_created' target='../state3'>
                     <parameter name="association_name" type="string"/>
-                    <raise port="ui" event="instance_created_succesfully">
-                        <parameter expr="str('%.2f' % (self.getSimulatedTime() / 1000.0))" />
+                    <raise port="Outport" event="instance_created_succesfully">
                         <parameter expr="association_name" />
                     </raise>
                 </transition>
@@ -54,8 +51,7 @@
             <state id="state4">
                 <transition event='instance_deleted' target='.'>
                     <parameter name="deleted_links" type="string"/>
-                    <raise port="ui" event="instance_deleted_succesfully">
-                        <parameter expr="str('%.2f' % (self.getSimulatedTime() / 1000.0))" />
+                    <raise port="Outport" event="instance_deleted_succesfully">
                         <parameter expr="deleted_links" />
                     </raise>
                 </transition>
@@ -67,9 +63,7 @@
         <scxml initial="state1">
             <state id="state1">
                 <onentry>
-                    <raise port="ui" event="not_possible">
-                        <parameter expr="str('%.2f' % (self.getSimulatedTime() / 1000.0))" />
-                    </raise>
+                    <raise port="Outport" event="not_possible" />
                 </onentry>
             </state>
         </scxml>

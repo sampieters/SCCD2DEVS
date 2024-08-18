@@ -1,6 +1,8 @@
-<?xml version="1.0" ?>
-<diagram author="Raphael Mannadiar" name="">
-    <inport name="ui" />
+<?xml version="1.1" ?>
+<diagram author="Sam Pieters" name="ShallowHistoryTest">
+    <description>
+        Test if a shallow history keeps the state when leaving out of composite.
+    </description>
     <class name="MainApp" default="true">
         <scxml initial="on">
             <state id="on" initial="normal">
