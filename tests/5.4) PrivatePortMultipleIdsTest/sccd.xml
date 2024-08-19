@@ -1,0 +1,82 @@
+<?xml version="1.1" ?>
+<diagram author="Sam Pieters" name="PrivatPortMultipleIdsTest">
+    <description>
+        Check if multiple instances (other than default class) of the same class handle private ports correctly. 
+    </description>
+    <class name="MainApp" default="true">
+        <outport name="priv_5_port" />
+        <inport name="priv_4_port" />
+        <inport name="priv_3_port" />
+        <outport name="priv_2_port" />
+        <inport name="priv_1_port" />
+        <relationships>
+            <association name="linkA" class="A" />
+        </relationships>
+        <scxml initial="state1">
+            <state id="state1">
+                <onentry>
+                    <raise port="priv_5_port" event="priv_5_event">
+                        <parameter expr='self.inports["priv_4_port"]' />
+                        <parameter expr='self.inports["priv_3_port"]' />
+                        <parameter expr='self.inports["priv_1_port"]' />
+                    </raise>
+                    <raise port="priv_2_port" event="priv_2_event">
+                        <parameter expr='self.inports["priv_1_port"]' />
+                        <parameter expr='self.inports["priv_3_port"]' />
+                        <parameter expr='self.inports["priv_4_port"]' />
+                    </raise>
+                    <raise scope="cd" event="create_instance">
+                        <parameter expr='"linkA"' />
+                        <parameter expr='"A"' />
+                    </raise>
+                </onentry>
+                <transition event='instance_created' target='../state3'>
+                    <parameter name="association_name" type="string"/>
+                    <raise scope="cd" event="start_instance">
+                        <parameter expr="association_name" />
+                    </raise>
+                </transition>
+            </state>
+            <state id="state3">
+                <onentry>
+                    <raise scope="cd" event="create_instance">
+                        <parameter expr='"linkA"' />
+                        <parameter expr='"A"' />
+                    </raise>
+                </onentry>
+                <transition event='instance_created' target='../state4'>
+                    <parameter name="association_name" type="string"/>
+                    <raise scope="cd" event="start_instance">
+                        <parameter expr="association_name" />
+                    </raise>
+                </transition>
+            </state>
+            <state id="state4" />
+        </scxml>
+    </class>
+
+    <class name="A">
+        <outport name="priv_1_port" />
+        <inport name="priv_2_port" />
+        <inport name="priv_3_port" />
+        <outport name="priv_4_port" />
+        <inport name="priv_5_port" />
+        <scxml initial="state1">
+            <state id="state1">
+                <onentry>
+                    <raise port="priv_4_port" event="priv_4_event">
+                        <parameter expr='self.inports["priv_2_port"]' />
+                        <parameter expr='self.inports["priv_3_port"]' />
+                        <parameter expr='self.inports["priv_5_port"]' />
+                    </raise>
+                    <raise port="priv_1_port" event="priv_1_event">
+                        <parameter expr='self.inports["priv_5_port"]' />
+                        <parameter expr='self.inports["priv_3_port"]' />
+                        <parameter expr='self.inports["priv_2_port"]' />
+                    </raise>
+                </onentry>
+            </state>
+            <state id="state2" />
+        </scxml>
+    </class>
+</diagram>

@@ -1,0 +1,10 @@
+0.00 (event name: priv_5_event; port: private_4_priv_5_port; parameters: ['private_1_priv_4_port', 'private_2_priv_3_port', 'private_3_priv_1_port'])
+0.00 (event name: priv_2_event; port: private_5_priv_2_port; parameters: ['private_3_priv_1_port', 'private_2_priv_3_port', 'private_1_priv_4_port'])
+0.00 MainApp: exit /state1
+0.00 MainApp: transition (/state1 -> /state2)
+0.00 MainApp: enter /state2
+0.00 (event name: priv_4_event; port: private_11_priv_4_port; parameters: ['private_7_priv_2_port', 'private_8_priv_3_port', 'private_9_priv_5_port'])
+0.00 (event name: priv_1_event; port: private_10_priv_1_port; parameters: ['private_9_priv_5_port', 'private_8_priv_3_port', 'private_7_priv_2_port'])
+0.00 MainApp: exit /state2
+0.00 MainApp: transition (/state2 -> /state2)
+0.00 MainApp: enter /state2

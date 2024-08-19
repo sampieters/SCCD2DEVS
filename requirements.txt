@@ -1,0 +1,6 @@
+matplotlib==3.9.1.post1
+numpy==2.0.0
+pillow==10.4.0
+pyparsing==3.1.2
+python-dateutil==2.9.0.post0
+tk==0.1.0

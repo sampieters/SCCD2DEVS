@@ -1,0 +1,30 @@
+<?xml version="1.1" ?>
+<diagram author="Sam Pieters" name="PrivatePortIdTest">
+    <description>
+        Classes could have multiple private ports for one SCCD class, check if the id's are as expected (ids in ascending order as the ports are defined).
+    </description>
+    <class name="MainApp" default="true">
+        <outport name="priv_1_port" />
+        <inport name="priv_2_port" />
+        <inport name="priv_3_port" />
+        <outport name="priv_4_port" />
+        <inport name="priv_5_port" />
+        <scxml initial="state1">
+            <state id="state1">
+                <onentry>
+                    <raise port="priv_4_port" event="priv_4_event">
+                        <parameter expr='self.inports["priv_2_port"]' />
+                        <parameter expr='self.inports["priv_3_port"]' />
+                        <parameter expr='self.inports["priv_5_port"]' />
+                    </raise>
+                    <raise port="priv_1_port" event="priv_1_event">
+                        <parameter expr='self.inports["priv_5_port"]' />
+                        <parameter expr='self.inports["priv_3_port"]' />
+                        <parameter expr='self.inports["priv_2_port"]' />
+                    </raise>
+                </onentry>
+            </state>
+            <state id="state2" />
+        </scxml>
+    </class>
+</diagram>

@@ -69,7 +69,7 @@ class DEVSGenerator(Visitor):
                 # cannot instantiate abstract class
                 self.writer.add(GLC.ThrowExceptionStatement(GLC.String("Cannot instantiate abstract class \"" + c.name + "\" with unimplemented methods \"" + "\", \"".join(c.abstract_method_names) + "\".")))
             else:
-                self.writer.addAssignment(GLC.SelfProperty("narrow_cast_id"), GLC.SelfProperty(f"narrow_cast_id + {len(c.inports)}"))
+                self.writer.addAssignment(GLC.SelfProperty("narrow_cast_id"), GLC.SelfProperty(f"narrow_cast_id + {len(c.inports) + len(c.outports)}"))
                 self.writer.addAssignment(
                     "instance[\"associations\"]", GLC.MapExpression())
                 for a in c.associations:

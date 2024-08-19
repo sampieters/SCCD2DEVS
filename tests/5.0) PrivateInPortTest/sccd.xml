@@ -1,7 +1,7 @@
 <?xml version="1.1" ?>
-<diagram author="Sam Pieters" name="InputPrivatePortTest">
+<diagram author="Sam Pieters" name="PrivateInPortTest">
     <description>
-        Classes could have a private port, check if this port can receive events.
+        Classes could have a private input port, check if this port can receive events.
     </description>
     <class name="MainApp" default="true">
         <inport name="priv_port"/>
