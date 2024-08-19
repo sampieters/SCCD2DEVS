@@ -1,0 +1,18 @@
+<?xml version="1.1" ?>
+<diagram author="Sam Pieters" name="InputPrivatePortTest">
+    <description>
+        Classes could have a private port, check if this port can receive events.
+    </description>
+    <class name="MainApp" default="true">
+        <inport name="check" />
+        <outport name="priv_port"/>
+        <scxml initial="state1">
+            <state id="state1">
+                <onentry>
+                    <raise port="priv_port" event="priv_event" />
+                </onentry>
+            </state>
+            <state id="state2" />
+        </scxml>
+    </class>
+</diagram>

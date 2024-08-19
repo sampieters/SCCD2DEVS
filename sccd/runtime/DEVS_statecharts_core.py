@@ -625,7 +625,7 @@ class ClassBase(AtomicDEVS):
                 to_dict[self.obj_manager_out] = sending
             else:
                 # Get the port to sent to the outside of the simulation
-                the_port = next((port for port in self.OPorts if port.name == sending.port), None)
+                the_port = next((port for port in self.OPorts if port.name == DEVSutils.get_general_port(sending.port)), None)
                 to_dict[the_port] = sending
         return to_dict
     

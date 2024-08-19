@@ -266,9 +266,13 @@ class DEVSGenerator(Visitor):
                                       GLC.FunctionCall(GLC.SelfProperty("addInPort"), [GLC.String(p)]))
 
         for p in class_node.outports:
-            self.writer.addAssignment(
-                GLC.MapIndexedExpression(GLC.SelfProperty("outports"), GLC.String(p)),
-                GLC.FunctionCall(GLC.Property("controller", "addOutputPort"), [GLC.String(p), GLC.SelfExpression()]))
+            self.writer.addAssignment(GLC.SelfProperty(p),
+                                      GLC.FunctionCall(GLC.SelfProperty("addOutPort"), [GLC.String(p)]))
+
+        #for p in class_node.outports:
+        #    self.writer.addAssignment(
+        #        GLC.MapIndexedExpression(GLC.SelfProperty("outports"), GLC.String(p)),
+        #        GLC.FunctionCall(GLC.Property("controller", "addOutputPort"), [GLC.String(p), GLC.SelfExpression()]))
 
         if class_node.name == class_node.class_diagram.default_class.name:
             self.writer.addAssignment("new_instance", GLC.SelfProperty("constructObject(0, 0, [])"))
@@ -373,10 +377,19 @@ class DEVSGenerator(Visitor):
         self.writer.addAssignment("port_name", GLC.FunctionCall("addInputPort", [GLC.String("<narrow_cast>"), "start_port_id"]))
         self.writer.addAssignment("atomdevs.state.port_mappings[port_name]", "id")
 
+        total_ports = 0
         for index, inp in enumerate(constructor.parent_class.inports):
-            self.writer.addAssignment("port_name", GLC.FunctionCall("addInputPort", [GLC.String(inp), f"start_port_id + {index + 1}"]))
+            total_ports += 1
+            self.writer.addAssignment("port_name", GLC.FunctionCall("addInputPort", [GLC.String(inp), f"start_port_id + {total_ports}"]))
             self.writer.addAssignment("atomdevs.state.port_mappings[port_name]", "id")
             self.writer.addAssignment(GLC.SelfProperty(f"inports[\"{inp}\"]"), "port_name")
+
+        for index, inp in enumerate(constructor.parent_class.outports):
+            total_ports += 1
+            self.writer.addAssignment("port_name", GLC.FunctionCall("addOutputPort", [GLC.String(inp), f"start_port_id + {total_ports}"]))
+            self.writer.addAssignment("atomdevs.state.port_mappings[port_name]", "id")
+            self.writer.addAssignment(GLC.SelfProperty(f"outports[\"{inp}\"]"), "port_name")
+
 
         self.writer.endMethodBody()
         self.writer.endConstructor()
