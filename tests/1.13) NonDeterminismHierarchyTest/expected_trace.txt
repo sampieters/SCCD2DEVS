@@ -1,0 +1,4 @@
+0.00 MainApp: exit /Y/A
+0.00 MainApp: exit /Y
+0.00 MainApp: transition (/Y -> /D)
+0.00 MainApp: enter /D

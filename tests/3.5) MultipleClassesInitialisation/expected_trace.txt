@@ -1,0 +1,26 @@
+0.00 (event name: create_instance; port: None; parameters: [0, 'linkA', 'A'])
+0.00 (event name: instance_created; port: None; parameters: ['linkA[0]'])
+0.00 MainApp: exit /state1
+0.00 MainApp: transition (/state1 -> /state2)
+0.00 MainApp: enter /state2
+0.00 (event name: instance_created_succesfully; port: Outport; parameters: ['linkA[0]'])
+0.00 (event name: start_instance; port: None; parameters: [0, 'linkA[0]'])
+0.00 (event name: statechart_started_succesfully; port: Outport)
+0.00 (event name: instance_started; port: None; parameters: ['linkA[0]'])
+0.00 MainApp: exit /state2
+0.00 MainApp: transition (/state2 -> /state3)
+0.00 MainApp: enter /state3
+0.00 (event name: instance_started_succesfully; port: Outport; parameters: ['linkA[0]'])
+0.00 (event name: create_instance; port: None; parameters: [0, 'linkB', 'B'])
+0.00 (event name: instance_created; port: None; parameters: ['linkB[0]'])
+0.00 MainApp: exit /state3
+0.00 MainApp: transition (/state3 -> /state4)
+0.00 MainApp: enter /state4
+0.00 (event name: instance_created_succesfully; port: Outport; parameters: ['linkB[0]'])
+0.00 (event name: start_instance; port: None; parameters: [0, 'linkB[0]'])
+0.00 (event name: statechart_started_succesfully; port: Outport)
+0.00 (event name: instance_started; port: None; parameters: ['linkB[0]'])
+0.00 MainApp: exit /state4
+0.00 MainApp: transition (/state4 -> /state5)
+0.00 MainApp: enter /state5
+0.00 (event name: instance_started_succesfully; port: Outport; parameters: ['linkB[0]'])

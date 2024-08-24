@@ -58,7 +58,13 @@ class DEVSGenerator(Visitor):
         ################################
         self.writer.beginMethod("instantiate")
         self.writer.addFormalParameter("class_name")
-        self.writer.addFormalParameter("construct_params")
+
+
+
+        #self.writer.addFormalParameter("construct_params")
+
+
+
         self.writer.beginMethodBody()
 
         self.writer.addAssignment("instance", "{}")
@@ -111,7 +117,7 @@ class DEVSGenerator(Visitor):
             self.writer.addAssignment(GLC.SelfProperty(f"output[\"{class_name}\"]"),
                                       GLC.FunctionCall(GLC.SelfProperty("addOutPort")))
 
-        self.writer.add(GLC.FunctionCall(GLC.SelfProperty("state.createInstance"), [GLC.String(class_diagram.default_class.name), GLC.ArrayExpression()]))
+        self.writer.add(GLC.FunctionCall(GLC.SelfProperty("state.createInstance"), [GLC.String(class_diagram.default_class.name)]))
         self.writer.endMethodBody()
         self.writer.endConstructor()
         self.writer.endClass()
@@ -187,7 +193,7 @@ class DEVSGenerator(Visitor):
         super_classes = []
         if not class_node.super_class_objs:
             if class_node.statechart:
-                super_classes.append("RuntimeClassBase")
+                super_classes.append("RuntimeStatechartBase")
         if class_node.super_classes:
             for super_class in class_node.super_classes:
                 super_classes.append(super_class + "Instance")
@@ -230,7 +236,7 @@ class DEVSGenerator(Visitor):
             )
 
             self.writer.add(GLC.SuperClassMethodCall(
-                "RuntimeClassBase",
+                "RuntimeStatechartBase",
                 "initializeStatechart",
                 []
             ))
@@ -243,7 +249,7 @@ class DEVSGenerator(Visitor):
         ################################
         # Class (Type) 
         ################################
-        self.writer.beginClass(class_node.name, ["ClassBase"])
+        self.writer.beginClass(class_node.name, ["RuntimeClassBase"])
         
         ################################
         # Constructor of Class AtomicDEVS
@@ -252,7 +258,7 @@ class DEVSGenerator(Visitor):
         self.writer.addFormalParameter("name")
 
         self.writer.beginMethodBody()  # constructor body
-        self.writer.beginSuperClassConstructorCall("ClassBase")
+        self.writer.beginSuperClassConstructorCall("RuntimeClassBase")
         self.writer.addActualParameter("name")
         self.writer.endSuperClassConstructorCall()
 
@@ -312,7 +318,7 @@ class DEVSGenerator(Visitor):
 
         self.writer.beginMethodBody()
 
-        self.writer.beginSuperClassConstructorCall("RuntimeClassBase")
+        self.writer.beginSuperClassConstructorCall("RuntimeStatechartBase")
         self.writer.addActualParameter("atomdevs")
         self.writer.addActualParameter("id")
         self.writer.endSuperClassConstructorCall()

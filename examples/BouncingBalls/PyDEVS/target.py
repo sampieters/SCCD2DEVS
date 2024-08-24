@@ -15,9 +15,9 @@ CANVAS_DIMS = (800, 550)
 
 # package "Bouncing_Balls_DEVS_Version"
 
-class MainAppInstance(RuntimeClassBase):
+class MainAppInstance(RuntimeStatechartBase):
     def __init__(self, atomdevs, id, start_port_id):
-        RuntimeClassBase.__init__(self, atomdevs, id)
+        RuntimeStatechartBase.__init__(self, atomdevs, id)
         
         self.semantics.big_step_maximality = StatechartSemantics.TakeMany
         self.semantics.internal_event_lifeline = StatechartSemantics.Queue
@@ -193,11 +193,11 @@ class MainAppInstance(RuntimeClassBase):
     def initializeStatechart(self):
         # enter default state
         self.default_targets = self.states["/running"].getEffectiveTargetStates()
-        RuntimeClassBase.initializeStatechart(self)
+        RuntimeStatechartBase.initializeStatechart(self)
 
-class MainApp(ClassBase):
+class MainApp(RuntimeClassBase):
     def __init__(self, name):
-        ClassBase.__init__(self, name)
+        RuntimeClassBase.__init__(self, name)
         self.input = self.addInPort("input")
         self.glob_outputs["ui"] = self.addOutPort("ui")
         new_instance = self.constructObject(0, 0, [])
@@ -209,9 +209,9 @@ class MainApp(ClassBase):
         new_instance = MainAppInstance(self, id, start_port_id)
         return new_instance
 
-class FieldInstance(RuntimeClassBase):
+class FieldInstance(RuntimeStatechartBase):
     def __init__(self, atomdevs, id, start_port_id):
-        RuntimeClassBase.__init__(self, atomdevs, id)
+        RuntimeStatechartBase.__init__(self, atomdevs, id)
         
         self.semantics.big_step_maximality = StatechartSemantics.TakeMany
         self.semantics.internal_event_lifeline = StatechartSemantics.Queue
@@ -464,11 +464,11 @@ class FieldInstance(RuntimeClassBase):
     def initializeStatechart(self):
         # enter default state
         self.default_targets = self.states["/root"].getEffectiveTargetStates()
-        RuntimeClassBase.initializeStatechart(self)
+        RuntimeStatechartBase.initializeStatechart(self)
 
-class Field(ClassBase):
+class Field(RuntimeClassBase):
     def __init__(self, name):
-        ClassBase.__init__(self, name)
+        RuntimeClassBase.__init__(self, name)
         self.input = self.addInPort("input")
         self.glob_outputs["ui"] = self.addOutPort("ui")
         self.field_ui = self.addInPort("field_ui")
@@ -477,9 +477,9 @@ class Field(ClassBase):
         new_instance = FieldInstance(self, id, start_port_id)
         return new_instance
 
-class ButtonInstance(RuntimeClassBase):
+class ButtonInstance(RuntimeStatechartBase):
     def __init__(self, atomdevs, id, start_port_id, window_id, event_name, button_text):
-        RuntimeClassBase.__init__(self, atomdevs, id)
+        RuntimeStatechartBase.__init__(self, atomdevs, id)
         
         self.semantics.big_step_maximality = StatechartSemantics.TakeMany
         self.semantics.internal_event_lifeline = StatechartSemantics.Queue
@@ -568,11 +568,11 @@ class ButtonInstance(RuntimeClassBase):
     def initializeStatechart(self):
         # enter default state
         self.default_targets = self.states["/creating_button"].getEffectiveTargetStates()
-        RuntimeClassBase.initializeStatechart(self)
+        RuntimeStatechartBase.initializeStatechart(self)
 
-class Button(ClassBase):
+class Button(RuntimeClassBase):
     def __init__(self, name):
-        ClassBase.__init__(self, name)
+        RuntimeClassBase.__init__(self, name)
         self.input = self.addInPort("input")
         self.glob_outputs["ui"] = self.addOutPort("ui")
         self.button_ui = self.addInPort("button_ui")
@@ -581,9 +581,9 @@ class Button(ClassBase):
         new_instance = ButtonInstance(self, id, start_port_id, parameters[1], parameters[2], parameters[3])
         return new_instance
 
-class BallInstance(RuntimeClassBase):
+class BallInstance(RuntimeStatechartBase):
     def __init__(self, atomdevs, id, start_port_id, canvas_id, x, y):
-        RuntimeClassBase.__init__(self, atomdevs, id)
+        RuntimeStatechartBase.__init__(self, atomdevs, id)
         
         self.semantics.big_step_maximality = StatechartSemantics.TakeMany
         self.semantics.internal_event_lifeline = StatechartSemantics.Queue
@@ -791,11 +791,11 @@ class BallInstance(RuntimeClassBase):
     def initializeStatechart(self):
         # enter default state
         self.default_targets = self.states["/main_behaviour"].getEffectiveTargetStates()
-        RuntimeClassBase.initializeStatechart(self)
+        RuntimeStatechartBase.initializeStatechart(self)
 
-class Ball(ClassBase):
+class Ball(RuntimeClassBase):
     def __init__(self, name):
-        ClassBase.__init__(self, name)
+        RuntimeClassBase.__init__(self, name)
         self.input = self.addInPort("input")
         self.glob_outputs["ui"] = self.addOutPort("ui")
         self.ball_ui = self.addInPort("ball_ui")
@@ -804,7 +804,7 @@ class Ball(ClassBase):
         new_instance = BallInstance(self, id, start_port_id, parameters[1], parameters[2], parameters[3])
         return new_instance
 
-def instantiate(self, class_name, construct_params):
+def instantiate(self, class_name):
     instance = {}
     instance["name"] = class_name
     if class_name == "MainApp":
@@ -839,7 +839,7 @@ class ObjectManager(ObjectManagerBase):
         self.output["Field"] = self.addOutPort()
         self.output["Button"] = self.addOutPort()
         self.output["Ball"] = self.addOutPort()
-        self.state.createInstance("MainApp", [])
+        self.state.createInstance("MainApp")
 
 class Controller(CoupledDEVS):
     def __init__(self, name):

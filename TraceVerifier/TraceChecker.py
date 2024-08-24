@@ -245,6 +245,8 @@ class PythonSCCDTraceChecker(SCCDTraceChecker):
             "extra_info": None
         }
         
+        # Clean id dictionary for following test
+        self.id_dict = {}
         with open(log, 'r') as file:
             lines = file.readlines()
             

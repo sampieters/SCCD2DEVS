@@ -237,8 +237,8 @@
                             <parameter expr='"Ball"' />
                             <parameter expr="self.canvas_id" />
                             <parameter expr="self.floor_num" />
-                            <parameter expr="10" />
-                            <parameter expr="self.pos['y']" />
+                            <parameter expr="{'x': 10, 'y': self.pos['y']}" />
+                            <parameter expr="{'x': random.uniform(1.0, 5.0), 'y': random.uniform(-5.0, 5.0)}" />
                             <parameter expr="self.elevator_open" />
                             <parameter expr="self.elev_pos" />
                             <parameter expr="self.elev_dim" />
@@ -276,6 +276,25 @@
                             <parameter expr="elev_pos" />
                             <parameter expr="elev_dim" />
                             <parameter expr="elev_vel" />
+                        </raise>
+                    </transition>
+                    <transition event='transfer_ball' target='.'>
+                        <parameter name="link_id" type="int"/>
+                        <parameter name="prev_floor" type="int" />
+                        <parameter name="new_floor" type="int"/>
+                        <parameter name="pos" />
+                        <parameter name="vel" />
+                        <raise scope="cd" event="create_instance">
+                            <parameter expr='"balls"' />
+                            <parameter expr='"Ball"' />
+                            <parameter expr="self.canvas_id" />
+                            <parameter expr="new_floor" />
+                            <parameter expr="pos" />
+                            <parameter expr="{'x': random.uniform(-5.0, 5.0), 'y': random.uniform(-5.0, 5.0)}" />
+                            <parameter expr="self.elevator_open" />
+                            <parameter expr="self.elev_pos" />
+                            <parameter expr="self.elev_dim" />
+                            <parameter expr="self.elev_vel" />
                         </raise>
                     </transition>
                 </state>
@@ -476,13 +495,13 @@
         <attribute name="pos" />
         <inport name="ball_ui" />
         <relationships>
-            <association name="parent" class="MainApp" min="1" max="1" />
+            <association name="parent" class="Floor" min="1" max="1" />
         </relationships>
         <constructor>
             <parameter name="canvas_id" />
             <parameter name="floor_num" />
-            <parameter name="x" />
-            <parameter name="y" />
+            <parameter name="pos" />
+            <parameter name="vel" />
             <parameter name="elevator_open" />
             <parameter name="rect_pos" />
             <parameter name="rect_dim" />
@@ -496,15 +515,14 @@
 
                 self.elevator_floor = 0;
                 self.elevator_open = elevator_open;
+
                 self.rect_pos = rect_pos
                 self.rect_dim = rect_dim
                 self.rect_vel = rect_vel
 
-
-
                 self.r = 5.0;
-                self.vel = {'x': random.uniform(-5.0, 5.0), 'y': random.uniform(-5.0, 5.0)};
-                self.pos = {'x': x, 'y': y};
+                self.vel = vel;
+                self.pos = pos;
                 self.smooth = 0.6; # value between 0 and 1
                 ]]>
             </body>
@@ -541,8 +559,16 @@
                     </transition>
                 </state>
                 <state id="bouncing">
-                    <transition cond="self.pos['x'] - self.r &lt; self.rect_pos['x'] - (self.rect_dim['x'] / 2) and self.elevator_open and self.vel['x'] &lt; 0">
-                        <raise scope="narrow" event="transfer_ball" target="parent" >
+                    <transition cond="self.pos['x'] + self.r &gt; self.rect_pos['x'] + (self.rect_dim['x'] / 2) and self.elevator_open" target=".">
+                        <script>
+                            self.prev_floor = self.floor_num
+                        </script>
+                        <raise scope="narrow" event="transfer_ball" target="'parent'" >
+                            <parameter expr="self.association_name" />
+                            <parameter expr="self.prev_floor" />
+                            <parameter expr="self.elevator_floor" />
+                            <parameter expr="self.pos" />
+                            <parameter expr="self.vel" />
                         </raise>
                     </transition>
                     <transition after="0.02" target=".">
@@ -614,8 +640,6 @@
                             print("Ball on floor floor_num:", self.floor_num, "went open")
                         </script>
                     </transition>
-
-
                     <transition event="update_elevator_bounds" target=".">
                         <parameter name="pos" type="dict" />
                         <parameter name="dim" type="dict" />

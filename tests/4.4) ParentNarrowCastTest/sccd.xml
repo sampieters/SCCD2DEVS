@@ -1,0 +1,66 @@
+<?xml version="1.1" ?>
+<diagram author="Sam Pieters" name="NarrowCastTest">
+    <description>
+        Check if an instance narrowcast properly. The narrow cast event will be sent to the parent of an instance
+    </description>
+    <outport name="ui"/>
+    <class name="MainApp" default="true">
+        <relationships>
+            <association name="linkA" class="A" />
+        </relationships>
+        <scxml initial="state1">
+            <state id="state1">
+                <onentry>
+                    <raise scope="cd" event="create_instance">
+                        <parameter expr='"linkA"' />
+                        <parameter expr='"A"' />
+                    </raise>
+                </onentry>
+                <transition event='instance_created' target='../state2'>
+                    <parameter name="association_name" type="string"/>
+                    <raise port="ui" event="instance_created_succesfully">
+                        <parameter expr="association_name" />
+                    </raise>
+                    <raise scope="cd" event="start_instance">
+                        <parameter expr='"linkA[0]"' />
+                    </raise>
+                </transition>
+            </state>
+            <state id ="state2">
+                <onentry>
+                    <raise scope="cd" event="create_instance">
+                        <parameter expr='"linkA"' />
+                        <parameter expr='"A"' />
+                    </raise>
+                </onentry>
+                <transition event='instance_created' target='../state4'>
+                    <parameter name="association_name" type="string"/>
+                    <raise port="ui" event="instance_created_succesfully">
+                        <parameter expr="association_name" />
+                    </raise>
+                    <raise scope="cd" event="start_instance">
+                        <parameter expr='"linkA[1]"' />
+                    </raise>
+                </transition>
+            </state>
+            <state id ="state4">
+                <transition event="test_narrow" target=".">
+                    <raise port="ui" event="narrowcast_received" />
+                </transition>
+            </state>
+        </scxml>
+    </class>
+
+    <class name="A">
+        <relationships>
+            <association name="parent" class="MainApp" min="1" max="1" />
+        </relationships>
+        <scxml initial="state1">
+            <state id="state1">
+                <onentry>
+                    <raise scope="narrow" event="test_narrow" target="'parent'"/>
+                </onentry>
+            </state>
+        </scxml>
+    </class>
+</diagram>

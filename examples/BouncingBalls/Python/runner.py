@@ -28,8 +28,5 @@ if __name__ == '__main__':
 
 	controller.setVerbose("./examples/BouncingBalls/Python/trace.txt")
 
-	actual_event = Event("hello", "ui")
-	controller.addInput(actual_event, 500)
-
 	controller.start()
 	tkroot.mainloop()

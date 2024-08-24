@@ -1,0 +1,42 @@
+<?xml version="1.1" ?>
+<diagram author="Sam Pieters" name="MultipleInstancesGlobalInputTest">
+    <description>
+        Check if multiple SCCD classes receive the events from the inport
+    </description>
+    <inport name="Inport"/>
+    <class name="MainApp" default="true">
+        <relationships>
+            <association name="linkA" class="A" />
+        </relationships>
+        <scxml initial="state1">
+            <state id="state1">
+                <onentry>
+                    <raise scope="cd" event="create_instance">
+                        <parameter expr='"linkA"' />
+                        <parameter expr='"A"' />
+                    </raise>
+                </onentry>
+                <transition event='instance_created' target='../state2'>
+                    <parameter name="association_name" type="string"/>
+                    <raise scope="cd" event="start_instance">
+                        <parameter expr="association_name" />
+                    </raise>
+                </transition>
+            </state>
+            <state id="state2">
+                <transition event='instance_started' target='.' />
+                <transition event='input_event' target='../state3'/>
+            </state>
+            <state id="state3" />
+        </scxml>
+    </class>
+
+    <class name="A">
+        <scxml initial="state1">
+            <state id="state1">
+                <transition event='input_event' target='../state2'/>
+            </state>
+            <state id="state2" />
+        </scxml>
+    </class>
+</diagram>

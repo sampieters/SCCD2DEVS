@@ -1,0 +1,20 @@
+<?xml version="1.1" ?>
+<diagram author="Sam Pieters" name="GlobalIOTest">
+    <description>
+        Check if the model responds to an input with an output over its global ports.
+    </description>
+    <inport name="Inport"/>
+    <outport name="Outport"/>
+    <class name="MainApp" default="true">
+        <scxml initial="state1">
+            <state id="state1">
+                <transition event="input_event" target="../state2" />
+            </state>
+            <state id="state2">
+                <onentry>
+                    <raise port="Outport" event="output_event" />
+                </onentry>
+            </state>
+        </scxml>
+    </class>
+</diagram>

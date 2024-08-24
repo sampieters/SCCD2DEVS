@@ -1,0 +1,130 @@
+0.00 (event name: create_instance; port: None; parameters: [0, 'linkA', 'A', 10])
+0.00 (event name: instance_created; port: None; parameters: ['linkA[0]'])
+0.00 MainApp: exit /state1
+0.00 MainApp: transition (/state1 -> /state2)
+0.00 MainApp: enter /state2
+0.00 MainApp: exit /state2
+0.00 MainApp: transition (/state2 -> /state1)
+0.00 MainApp: enter /state1
+0.00 (event name: instance_created_succesfully; port: Outport; parameters: ['linkA[0]'])
+0.00 (event name: start_instance; port: None; parameters: [0, 'linkA[0]'])
+0.00 (event name: create_instance; port: None; parameters: [0, 'linkA', 'A', 9])
+0.00 (event name: statechart_started_succesfully; port: Outport; parameters: [10])
+0.00 (event name: constructor_initialized_succesfully; port: Outport; parameters: [10])
+0.00 (event name: instance_started; port: None; parameters: ['linkA[0]'])
+0.00 (event name: instance_created; port: None; parameters: ['linkA[1]'])
+0.00 MainApp: exit /state1
+0.00 MainApp: transition (/state1 -> /state2)
+0.00 MainApp: enter /state2
+0.00 MainApp: exit /state2
+0.00 MainApp: transition (/state2 -> /state1)
+0.00 MainApp: enter /state1
+0.00 (event name: instance_created_succesfully; port: Outport; parameters: ['linkA[1]'])
+0.00 (event name: start_instance; port: None; parameters: [0, 'linkA[1]'])
+0.00 (event name: create_instance; port: None; parameters: [0, 'linkA', 'A', 8])
+0.00 (event name: statechart_started_succesfully; port: Outport; parameters: [9])
+0.00 (event name: constructor_initialized_succesfully; port: Outport; parameters: [9])
+0.00 (event name: instance_started; port: None; parameters: ['linkA[1]'])
+0.00 (event name: instance_created; port: None; parameters: ['linkA[2]'])
+0.00 MainApp: exit /state1
+0.00 MainApp: transition (/state1 -> /state2)
+0.00 MainApp: enter /state2
+0.00 MainApp: exit /state2
+0.00 MainApp: transition (/state2 -> /state1)
+0.00 MainApp: enter /state1
+0.00 (event name: instance_created_succesfully; port: Outport; parameters: ['linkA[2]'])
+0.00 (event name: start_instance; port: None; parameters: [0, 'linkA[2]'])
+0.00 (event name: create_instance; port: None; parameters: [0, 'linkA', 'A', 7])
+0.00 (event name: statechart_started_succesfully; port: Outport; parameters: [8])
+0.00 (event name: constructor_initialized_succesfully; port: Outport; parameters: [8])
+0.00 (event name: instance_started; port: None; parameters: ['linkA[2]'])
+0.00 (event name: instance_created; port: None; parameters: ['linkA[3]'])
+0.00 MainApp: exit /state1
+0.00 MainApp: transition (/state1 -> /state2)
+0.00 MainApp: enter /state2
+0.00 MainApp: exit /state2
+0.00 MainApp: transition (/state2 -> /state1)
+0.00 MainApp: enter /state1
+0.00 (event name: instance_created_succesfully; port: Outport; parameters: ['linkA[3]'])
+0.00 (event name: start_instance; port: None; parameters: [0, 'linkA[3]'])
+0.00 (event name: create_instance; port: None; parameters: [0, 'linkA', 'A', 6])
+0.00 (event name: statechart_started_succesfully; port: Outport; parameters: [7])
+0.00 (event name: constructor_initialized_succesfully; port: Outport; parameters: [7])
+0.00 (event name: instance_started; port: None; parameters: ['linkA[3]'])
+0.00 (event name: instance_created; port: None; parameters: ['linkA[4]'])
+0.00 MainApp: exit /state1
+0.00 MainApp: transition (/state1 -> /state2)
+0.00 MainApp: enter /state2
+0.00 MainApp: exit /state2
+0.00 MainApp: transition (/state2 -> /state1)
+0.00 MainApp: enter /state1
+0.00 (event name: instance_created_succesfully; port: Outport; parameters: ['linkA[4]'])
+0.00 (event name: start_instance; port: None; parameters: [0, 'linkA[4]'])
+0.00 (event name: create_instance; port: None; parameters: [0, 'linkA', 'A', 5])
+0.00 (event name: statechart_started_succesfully; port: Outport; parameters: [6])
+0.00 (event name: constructor_initialized_succesfully; port: Outport; parameters: [6])
+0.00 (event name: instance_started; port: None; parameters: ['linkA[4]'])
+0.00 (event name: instance_created; port: None; parameters: ['linkA[5]'])
+0.00 MainApp: exit /state1
+0.00 MainApp: transition (/state1 -> /state2)
+0.00 MainApp: enter /state2
+0.00 MainApp: exit /state2
+0.00 MainApp: transition (/state2 -> /state1)
+0.00 MainApp: enter /state1
+0.00 (event name: instance_created_succesfully; port: Outport; parameters: ['linkA[5]'])
+0.00 (event name: start_instance; port: None; parameters: [0, 'linkA[5]'])
+0.00 (event name: create_instance; port: None; parameters: [0, 'linkA', 'A', 4])
+0.00 (event name: statechart_started_succesfully; port: Outport; parameters: [5])
+0.00 (event name: constructor_initialized_succesfully; port: Outport; parameters: [5])
+0.00 (event name: instance_started; port: None; parameters: ['linkA[5]'])
+0.00 (event name: instance_created; port: None; parameters: ['linkA[6]'])
+0.00 MainApp: exit /state1
+0.00 MainApp: transition (/state1 -> /state2)
+0.00 MainApp: enter /state2
+0.00 MainApp: exit /state2
+0.00 MainApp: transition (/state2 -> /state1)
+0.00 MainApp: enter /state1
+0.00 (event name: instance_created_succesfully; port: Outport; parameters: ['linkA[6]'])
+0.00 (event name: start_instance; port: None; parameters: [0, 'linkA[6]'])
+0.00 (event name: create_instance; port: None; parameters: [0, 'linkA', 'A', 3])
+0.00 (event name: statechart_started_succesfully; port: Outport; parameters: [4])
+0.00 (event name: constructor_initialized_succesfully; port: Outport; parameters: [4])
+0.00 (event name: instance_started; port: None; parameters: ['linkA[6]'])
+0.00 (event name: instance_created; port: None; parameters: ['linkA[7]'])
+0.00 MainApp: exit /state1
+0.00 MainApp: transition (/state1 -> /state2)
+0.00 MainApp: enter /state2
+0.00 MainApp: exit /state2
+0.00 MainApp: transition (/state2 -> /state1)
+0.00 MainApp: enter /state1
+0.00 (event name: instance_created_succesfully; port: Outport; parameters: ['linkA[7]'])
+0.00 (event name: start_instance; port: None; parameters: [0, 'linkA[7]'])
+0.00 (event name: create_instance; port: None; parameters: [0, 'linkA', 'A', 2])
+0.00 (event name: statechart_started_succesfully; port: Outport; parameters: [3])
+0.00 (event name: constructor_initialized_succesfully; port: Outport; parameters: [3])
+0.00 (event name: instance_started; port: None; parameters: ['linkA[7]'])
+0.00 (event name: instance_created; port: None; parameters: ['linkA[8]'])
+0.00 MainApp: exit /state1
+0.00 MainApp: transition (/state1 -> /state2)
+0.00 MainApp: enter /state2
+0.00 MainApp: exit /state2
+0.00 MainApp: transition (/state2 -> /state1)
+0.00 MainApp: enter /state1
+0.00 (event name: instance_created_succesfully; port: Outport; parameters: ['linkA[8]'])
+0.00 (event name: start_instance; port: None; parameters: [0, 'linkA[8]'])
+0.00 (event name: create_instance; port: None; parameters: [0, 'linkA', 'A', 1])
+0.00 (event name: statechart_started_succesfully; port: Outport; parameters: [2])
+0.00 (event name: constructor_initialized_succesfully; port: Outport; parameters: [2])
+0.00 (event name: instance_started; port: None; parameters: ['linkA[8]'])
+0.00 (event name: instance_created; port: None; parameters: ['linkA[9]'])
+0.00 MainApp: exit /state1
+0.00 MainApp: transition (/state1 -> /state2)
+0.00 MainApp: enter /state2
+0.00 MainApp: exit /state2
+0.00 MainApp: transition (/state2 -> /state3)
+0.00 MainApp: enter /state3
+0.00 (event name: instance_created_succesfully; port: Outport; parameters: ['linkA[9]'])
+0.00 (event name: start_instance; port: None; parameters: [0, 'linkA[9]'])
+0.00 (event name: statechart_started_succesfully; port: Outport; parameters: [1])
+0.00 (event name: constructor_initialized_succesfully; port: Outport; parameters: [1])
+0.00 (event name: instance_started; port: None; parameters: ['linkA[9]'])

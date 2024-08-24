@@ -1,0 +1,125 @@
+<?xml version="1.1" ?>
+<diagram author="Sam Pieters" name="DeleteMultipleRunning">
+    <description>
+        Check if multiple running instances can be deleted after the creation.
+    </description>
+    <outport name="Outport"/>
+    <class name="MainApp" default="true">
+        <relationships>
+            <association name="linkA" class="A" />
+        </relationships>
+        <scxml initial="state1">
+            <state id="state1">
+                <onentry>
+                    <raise scope="cd" event="create_instance">
+                        <parameter expr='"linkA"' />
+                        <parameter expr='"A"' />
+                    </raise>
+                </onentry>
+                <transition event='instance_created' target='../state2'>
+                    <parameter name="association_name" type="string"/>
+                    <raise port="Outport" event="instance_created_succesfully">
+                        <parameter expr="association_name" />
+                    </raise>
+                    <raise scope="cd" event="start_instance">
+                        <parameter expr='association_name' />
+                    </raise>
+                </transition>
+            </state>
+            <state id="state2">
+                <transition event='instance_started' target='../state3'>
+                    <parameter name="association_name" type="string"/>
+                    <raise port="Outport" event="instance_started_succesfully">
+                        <parameter expr="association_name" />
+                    </raise>
+                </transition>
+            </state>
+            <state id="state3">
+                <onentry>
+                    <raise scope="cd" event="create_instance">
+                        <parameter expr='"linkA"' />
+                        <parameter expr='"A"' />
+                    </raise>
+                </onentry>
+                <transition event='instance_created' target='../state4'>
+                    <parameter name="association_name" type="string"/>
+                    <raise port="Outport" event="instance_created_succesfully">
+                        <parameter expr="association_name" />
+                    </raise>
+                    <raise scope="cd" event="start_instance">
+                        <parameter expr='association_name' />
+                    </raise>
+                </transition>
+            </state>
+            <state id="state4">
+                <transition event='instance_started' target='../state5'>
+                    <parameter name="association_name" type="string"/>
+                    <raise port="Outport" event="instance_started_succesfully">
+                        <parameter expr="association_name" />
+                    </raise>
+                </transition>
+            </state>
+            <state id="state5">
+                <onentry>
+                    <raise scope="cd" event="create_instance">
+                        <parameter expr='"linkA"' />
+                        <parameter expr='"A"' />
+                    </raise>
+                </onentry>
+                <transition event='instance_created' target='../state6'>
+                    <parameter name="association_name" type="string"/>
+                    <raise port="Outport" event="instance_created_succesfully">
+                        <parameter expr="association_name" />
+                    </raise>
+                    <raise scope="cd" event="start_instance">
+                        <parameter expr='association_name' />
+                    </raise>
+                </transition>
+            </state>
+            <state id="state6">
+                <transition event='instance_started' target='../state7'>
+                    <parameter name="association_name" type="string"/>
+                    <raise port="Outport" event="instance_started_succesfully">
+                        <parameter expr="association_name" />
+                    </raise>
+                </transition>
+            </state>
+            <state id="state7">
+                <onentry>
+                    <raise scope="cd" event="delete_instance">
+                        <parameter expr="'linkA[0]'" />
+                    </raise>
+                </onentry>
+                <transition event='instance_deleted' target='../state8'>
+                    <parameter name="deleted_links" type="string"/>
+                    <raise port="Outport" event="instance_deleted_succesfully">
+                        <parameter expr="deleted_links" />
+                    </raise>
+                </transition>
+            </state>
+            <state id="state8">
+                <onentry>
+                    <raise scope="cd" event="delete_instance">
+                        <parameter expr="'linkA[2]'" />
+                    </raise>
+                </onentry>
+                <transition event='instance_deleted' target='../test9'>
+                    <parameter name="deleted_links" type="string"/>
+                    <raise port="Outport" event="instance_deleted_succesfully">
+                        <parameter expr="deleted_links" />
+                    </raise>
+                </transition>
+            </state>
+            <state id="test9" />
+        </scxml>
+    </class>
+
+    <class name="A">
+        <scxml initial="state1">
+            <state id="state1">
+                <transition event="sanity_check" target="../state2" />
+            </state>
+            <state id="state2" />
+        </scxml>
+    </class>
+</diagram>

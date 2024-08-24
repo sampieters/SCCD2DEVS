@@ -156,7 +156,7 @@ class Transition:
         return "Transition(%s -> %s)" % (self.source.name, self.targets[0].name)
 
 
-class RuntimeClassBase(object):
+class RuntimeStatechartBase(object):
     def __init__(self, controller, id):
         self.events = EventQueue()
 
@@ -514,7 +514,7 @@ class ClassState():
         self.to_send.append(event)
 
 
-class ClassBase(AtomicDEVS):    
+class RuntimeClassBase(AtomicDEVS):    
     def __init__(self, name):
         AtomicDEVS.__init__(self, name)
 
@@ -760,7 +760,7 @@ class ObjectManagerState():
 
                 ''' allow subclasses to be instantiated '''
                 class_name = association.to_class if len(parameters[2].parameters) == 2 else parameters[2].parameters[2]
-                new_instance = self.createInstance(class_name, parameters[2].parameters[3:])
+                new_instance = self.createInstance(class_name)
 
                 #  Work on index instead of the instance
                 new_instance_index = len(self.instances) - 1
@@ -809,9 +809,9 @@ class ObjectManagerState():
             self.narrow_cast_id += 1
         return port_name
         
-    def createInstance(self, to_class, construct_params = []):
+    def createInstance(self, to_class):
         test = self.addtestInputPort("<narrow_cast>", 0)
-        instance = self.instantiate(to_class, construct_params)
+        instance = self.instantiate(to_class)
         
         self.narrow_cast_ports[len(self.instances)] = test
 
@@ -909,7 +909,6 @@ class ObjectManagerBase(AtomicDEVS):
     def __init__(self, name):
         AtomicDEVS.__init__(self, name)
         self.output = {}
-
         self.to_propagate = ["instance_created", "instance_started", "instance_associated", "instance_disassociated", "instance_deleted"]
 
     def extTransition(self, inputs):
@@ -921,17 +920,10 @@ class ObjectManagerBase(AtomicDEVS):
         return self.state
     
     def intTransition(self):
-        #self.state.to_send.pop(0)
         self.state.to_send.clear()
         return self.state
     
     def outputFnc(self):
-        #out_dict = {}
-        #if not len(self.state.to_send) == 0:
-        #    source, target, message = self.state.to_send[0]
-        #    out_dict[self.output.get(target[0])] = [(source, target, message)]
-        #return out_dict
-
         out_dict = {}
         for source, target, message in self.state.to_send:
             out_dict.setdefault(self.output.get(target[0]), []).append((source, target, message))

@@ -1,7 +1,8 @@
 <?xml version="1.1" ?>
 <diagram author="Sam Pieters" name="NonDeterminismTest">
     <description>
-        Test if nondeterminism works as expected. If two transitions fire, the first transition that is defined in the SCCDXML needs to fire.
+        Test if nondeterminism works as expected. 
+        There are two states defined in a composite that fire the same moment but these get resolved as the composite state also has an upper transition.
     </description>
     <class name="MainApp" default="true">
         <scxml initial="Y">
@@ -12,7 +13,9 @@
                 </state>
                 <state id="B" />
                 <state id="C" />
+                <transition target="../D" />
             </state>
+            <state id="D" />
         </scxml>
     </class>
 </diagram>

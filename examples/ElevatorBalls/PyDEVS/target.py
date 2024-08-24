@@ -18,9 +18,9 @@ FLOORS = 3
 
 # package "Elevator Balls"
 
-class MainAppInstance(RuntimeClassBase):
+class MainAppInstance(RuntimeStatechartBase):
     def __init__(self, atomdevs, id, start_port_id):
-        RuntimeClassBase.__init__(self, atomdevs, id)
+        RuntimeStatechartBase.__init__(self, atomdevs, id)
         
         self.semantics.big_step_maximality = StatechartSemantics.TakeMany
         self.semantics.internal_event_lifeline = StatechartSemantics.Queue
@@ -40,7 +40,7 @@ class MainAppInstance(RuntimeClassBase):
         # call user defined constructor
         MainAppInstance.user_defined_constructor(self)
         port_name = addInputPort("ui", start_port_id, True)
-        atomdevs.state.port_mappings[port_name] = id
+        atomdevs.state.port_mappings[port_name] = None
         port_name = addInputPort("<narrow_cast>", start_port_id)
         atomdevs.state.port_mappings[port_name] = id
         port_name = addInputPort("field_ui", start_port_id + 1)
@@ -81,27 +81,30 @@ class MainAppInstance(RuntimeClassBase):
         # state /create_floors
         self.states["/create_floors"] = State(5, "/create_floors", self)
         
-        # state /wait
-        self.states["/wait"] = State(6, "/wait", self)
+        # state /wait_created
+        self.states["/wait_created"] = State(6, "/wait_created", self)
+        
+        # state /wait_started
+        self.states["/wait_started"] = State(7, "/wait_started", self)
         
         # state /create_controls
-        self.states["/create_controls"] = State(7, "/create_controls", self)
+        self.states["/create_controls"] = State(8, "/create_controls", self)
         
         # state /create_controls/create_buttons
-        self.states["/create_controls/create_buttons"] = State(8, "/create_controls/create_buttons", self)
+        self.states["/create_controls/create_buttons"] = State(9, "/create_controls/create_buttons", self)
         
         # state /create_controls/create_buttons/create_a_button
-        self.states["/create_controls/create_buttons/create_a_button"] = State(9, "/create_controls/create_buttons/create_a_button", self)
+        self.states["/create_controls/create_buttons/create_a_button"] = State(10, "/create_controls/create_buttons/create_a_button", self)
         self.states["/create_controls/create_buttons/create_a_button"].setEnter(self._create_controls_create_buttons_create_a_button_enter)
         
         # state /create_controls/create_buttons/start_a_button
-        self.states["/create_controls/create_buttons/start_a_button"] = State(10, "/create_controls/create_buttons/start_a_button", self)
+        self.states["/create_controls/create_buttons/start_a_button"] = State(11, "/create_controls/create_buttons/start_a_button", self)
         
         # state /create_controls/create_buttons/check_next
-        self.states["/create_controls/create_buttons/check_next"] = State(11, "/create_controls/create_buttons/check_next", self)
+        self.states["/create_controls/create_buttons/check_next"] = State(12, "/create_controls/create_buttons/check_next", self)
         
         # state /running
-        self.states["/running"] = State(12, "/running", self)
+        self.states["/running"] = State(13, "/running", self)
         
         # add children
         self.states[""].addChild(self.states["/creating_window"])
@@ -109,7 +112,8 @@ class MainAppInstance(RuntimeClassBase):
         self.states[""].addChild(self.states["/create_elevator"])
         self.states[""].addChild(self.states["/creating"])
         self.states[""].addChild(self.states["/create_floors"])
-        self.states[""].addChild(self.states["/wait"])
+        self.states[""].addChild(self.states["/wait_created"])
+        self.states[""].addChild(self.states["/wait_started"])
         self.states[""].addChild(self.states["/create_controls"])
         self.states[""].addChild(self.states["/running"])
         self.states["/create_controls"].addChild(self.states["/create_controls/create_buttons"])
@@ -146,24 +150,26 @@ class MainAppInstance(RuntimeClassBase):
         self.states["/creating"].addTransition(_creating_0)
         
         # transition /create_floors
-        _create_floors_0 = Transition(self, self.states["/create_floors"], [self.states["/create_controls"]])
+        _create_floors_0 = Transition(self, self.states["/create_floors"], [self.states["/wait_created"]])
+        _create_floors_0.setAction(self._create_floors_0_exec)
         _create_floors_0.setTrigger(None)
-        _create_floors_0.setGuard(self._create_floors_0_guard)
         self.states["/create_floors"].addTransition(_create_floors_0)
-        _create_floors_1 = Transition(self, self.states["/create_floors"], [self.states["/wait"]])
-        _create_floors_1.setAction(self._create_floors_1_exec)
-        _create_floors_1.setTrigger(None)
-        _create_floors_1.setGuard(self._create_floors_1_guard)
-        self.states["/create_floors"].addTransition(_create_floors_1)
         
-        # transition /wait
-        _wait_0 = Transition(self, self.states["/wait"], [self.states["/wait"]])
-        _wait_0.setAction(self._wait_0_exec)
-        _wait_0.setTrigger(Event("instance_created", None))
-        self.states["/wait"].addTransition(_wait_0)
-        _wait_1 = Transition(self, self.states["/wait"], [self.states["/create_floors"]])
-        _wait_1.setTrigger(Event("instance_started", None))
-        self.states["/wait"].addTransition(_wait_1)
+        # transition /wait_created
+        _wait_created_0 = Transition(self, self.states["/wait_created"], [self.states["/wait_started"]])
+        _wait_created_0.setAction(self._wait_created_0_exec)
+        _wait_created_0.setTrigger(Event("instance_created", None))
+        self.states["/wait_created"].addTransition(_wait_created_0)
+        
+        # transition /wait_started
+        _wait_started_0 = Transition(self, self.states["/wait_started"], [self.states["/create_floors"]])
+        _wait_started_0.setTrigger(Event("instance_started", None))
+        _wait_started_0.setGuard(self._wait_started_0_guard)
+        self.states["/wait_started"].addTransition(_wait_started_0)
+        _wait_started_1 = Transition(self, self.states["/wait_started"], [self.states["/create_controls"]])
+        _wait_started_1.setTrigger(Event("instance_started", None))
+        _wait_started_1.setGuard(self._wait_started_1_guard)
+        self.states["/wait_started"].addTransition(_wait_started_1)
         
         # transition /create_controls/create_buttons/create_a_button
         _create_controls_create_buttons_create_a_button_0 = Transition(self, self.states["/create_controls/create_buttons/create_a_button"], [self.states["/create_controls/create_buttons/start_a_button"]])
@@ -190,15 +196,8 @@ class MainAppInstance(RuntimeClassBase):
         # transition /running
         _running_0 = Transition(self, self.states["/running"], [self.states["/running"]])
         _running_0.setAction(self._running_0_exec)
-        _running_0.setTrigger(Event("update_bounds", None))
+        _running_0.setTrigger(Event("button_pressed", None))
         self.states["/running"].addTransition(_running_0)
-        _running_1 = Transition(self, self.states["/running"], [self.states["/running"]])
-        _running_1.setAction(self._running_1_exec)
-        _running_1.setTrigger(Event("button_pressed", None))
-        self.states["/running"].addTransition(_running_1)
-        _running_2 = Transition(self, self.states["/running"], [self.states["/running"]])
-        _running_2.setTrigger(Event("open_elevator", None))
-        self.states["/running"].addTransition(_running_2)
     
     def _creating_window_enter(self):
         self.big_step.outputEvent(Event("create_window", self.getOutPortName("ui"), [CANVAS_DIMS[0], CANVAS_DIMS[1], "Bouncing Balls Elevator", self.inports['field_ui']]))
@@ -207,7 +206,7 @@ class MainAppInstance(RuntimeClassBase):
         self.big_step.outputEvent(Event("create_canvas", self.getOutPortName("ui"), [self.window_id, CANVAS_DIMS[0], CANVAS_DIMS[1] - 150, {'background':'#fff'}, self.inports['field_ui']]))
     
     def _create_controls_create_buttons_create_a_button_enter(self):
-        self.big_step.outputEventOM(Event("create_instance", None, [self, "button", "ElevatorButton", self.window_id, self.canvas_id, self.button_num]))
+        self.big_step.outputEventOM(Event("create_instance", None, [self, "button", "ElevatorButton", self.window_id, self.canvas_id, self.button_num -1]))
     
     def _creating_window_0_exec(self, parameters):
         window_id = parameters[0]
@@ -227,19 +226,20 @@ class MainAppInstance(RuntimeClassBase):
         self.big_step.outputEventOM(Event("start_instance", None, [self, association_name]))
         self.big_step.outputEventOM(Event("narrow_cast", None, [self, association_name, Event("set_association_name", None, [association_name, self.canvas_id, self.window_id])]))
     
-    def _create_floors_0_guard(self, parameters):
-        return self.num_floors == FLOORS
-    
-    def _create_floors_1_exec(self, parameters):
+    def _create_floors_0_exec(self, parameters):
         self.big_step.outputEventOM(Event("create_instance", None, [self, "floor", "Floor", self.canvas_id, self.num_floors]))
         self.num_floors += 1
     
-    def _create_floors_1_guard(self, parameters):
-        return self.num_floors != FLOORS
-    
-    def _wait_0_exec(self, parameters):
+    def _wait_created_0_exec(self, parameters):
         association_name = parameters[0]
         self.big_step.outputEventOM(Event("start_instance", None, [self, association_name]))
+        self.big_step.outputEventOM(Event("associate_instance", None, [self, association_name, 'elevator/floors']))
+    
+    def _wait_started_0_guard(self, parameters):
+        return self.num_floors != FLOORS
+    
+    def _wait_started_1_guard(self, parameters):
+        return self.num_floors == FLOORS
     
     def _create_controls_create_buttons_create_a_button_0_exec(self, parameters):
         association_name = parameters[0]
@@ -249,45 +249,38 @@ class MainAppInstance(RuntimeClassBase):
         self.button_num -= 1
     
     def _create_controls_create_buttons_check_next_0_guard(self, parameters):
-        return self.button_num != 0
+        return self.button_num != 1
     
     def _create_controls_create_buttons_check_next_1_guard(self, parameters):
-        return self.button_num == 0
+        return self.button_num == 1
     
     def _running_0_exec(self, parameters):
-        pos = parameters[0]
-        dim = parameters[1]
-        vel = parameters[2]
-        self.big_step.outputEventOM(Event("broad_cast", None, [self, Event("update_elevator_bounds", None, [pos, dim, vel])]))
-    
-    def _running_1_exec(self, parameters):
         floor_number = parameters[0]
         self.big_step.outputEventOM(Event("narrow_cast", None, [self, 'elevator', Event("move_elevator", None, [floor_number])]))
     
     def initializeStatechart(self):
         # enter default state
         self.default_targets = self.states["/creating_window"].getEffectiveTargetStates()
-        RuntimeClassBase.initializeStatechart(self)
+        RuntimeStatechartBase.initializeStatechart(self)
 
-class MainApp(ClassBase):
+class MainApp(RuntimeClassBase):
     def __init__(self, name):
-        ClassBase.__init__(self, name)
+        RuntimeClassBase.__init__(self, name)
         self.input = self.addInPort("input")
         self.glob_outputs["ui"] = self.addOutPort("ui")
-        self.outputs["floor"] = self.addOutPort("floor")
-        self.outputs["button"] = self.addOutPort("button")
-        self.outputs["elevator"] = self.addOutPort("elevator")
         self.field_ui = self.addInPort("field_ui")
         new_instance = self.constructObject(0, 0, [])
         self.state.instances[new_instance.instance_id] = new_instance
+        new_instance.start()
+        self.state.next_time = 0
     
     def constructObject(self, id, start_port_id, parameters):
         new_instance = MainAppInstance(self, id, start_port_id)
         return new_instance
 
-class FloorInstance(RuntimeClassBase):
+class FloorInstance(RuntimeStatechartBase):
     def __init__(self, atomdevs, id, start_port_id, canvas_id, floor_num):
-        RuntimeClassBase.__init__(self, atomdevs, id)
+        RuntimeStatechartBase.__init__(self, atomdevs, id)
         
         self.semantics.big_step_maximality = StatechartSemantics.TakeMany
         self.semantics.internal_event_lifeline = StatechartSemantics.Queue
@@ -306,7 +299,7 @@ class FloorInstance(RuntimeClassBase):
         # call user defined constructor
         FloorInstance.user_defined_constructor(self, canvas_id, floor_num)
         port_name = addInputPort("ui", start_port_id, True)
-        atomdevs.state.port_mappings[port_name] = id
+        atomdevs.state.port_mappings[port_name] = None
         port_name = addInputPort("<narrow_cast>", start_port_id)
         atomdevs.state.port_mappings[port_name] = id
         port_name = addInputPort("floor_ui", start_port_id + 1)
@@ -322,6 +315,12 @@ class FloorInstance(RuntimeClassBase):
         y_dim = (height - ((FLOORS - 1) * FLOOR_SPACE)) / FLOORS
         
         self.dim = {'x': FLOOR_LENGTH, 'y': y_dim};
+        
+        self.elevator_open = False
+        
+        self.elev_pos = None
+        self.elev_dim = None
+        self.elev_vel = None
         
         
         # start position from the bottom instead of from the top
@@ -373,6 +372,22 @@ class FloorInstance(RuntimeClassBase):
         _running_create_random_ball_0.setAction(self._running_create_random_ball_0_exec)
         _running_create_random_ball_0.setTrigger(Event("_0after"))
         self.states["/running/create_random_ball"].addTransition(_running_create_random_ball_0)
+        _running_create_random_ball_1 = Transition(self, self.states["/running/create_random_ball"], [self.states["/running/create_random_ball"]])
+        _running_create_random_ball_1.setAction(self._running_create_random_ball_1_exec)
+        _running_create_random_ball_1.setTrigger(Event("open_elevator", None))
+        self.states["/running/create_random_ball"].addTransition(_running_create_random_ball_1)
+        _running_create_random_ball_2 = Transition(self, self.states["/running/create_random_ball"], [self.states["/running/create_random_ball"]])
+        _running_create_random_ball_2.setAction(self._running_create_random_ball_2_exec)
+        _running_create_random_ball_2.setTrigger(Event("close_elevator", None))
+        self.states["/running/create_random_ball"].addTransition(_running_create_random_ball_2)
+        _running_create_random_ball_3 = Transition(self, self.states["/running/create_random_ball"], [self.states["/running/create_random_ball"]])
+        _running_create_random_ball_3.setAction(self._running_create_random_ball_3_exec)
+        _running_create_random_ball_3.setTrigger(Event("update_bounds", None))
+        self.states["/running/create_random_ball"].addTransition(_running_create_random_ball_3)
+        _running_create_random_ball_4 = Transition(self, self.states["/running/create_random_ball"], [self.states["/running/create_random_ball"]])
+        _running_create_random_ball_4.setAction(self._running_create_random_ball_4_exec)
+        _running_create_random_ball_4.setTrigger(Event("transfer_ball", None))
+        self.states["/running/create_random_ball"].addTransition(_running_create_random_ball_4)
         
         # transition /running/wait
         _running_wait_0 = Transition(self, self.states["/running/wait"], [self.states["/running/create_random_ball"]])
@@ -390,7 +405,34 @@ class FloorInstance(RuntimeClassBase):
         self.removeTimer(0)
     
     def _running_create_random_ball_0_exec(self, parameters):
-        self.big_step.outputEventOM(Event("create_instance", None, [self, "balls", "Ball", self.canvas_id, self.floor_num, 10, self.pos['y']]))
+        self.big_step.outputEventOM(Event("create_instance", None, [self, "balls", "Ball", self.canvas_id, self.floor_num, {'x': 10, 'y': self.pos['y']}, {'x': random.uniform(1.0, 5.0), 'y': random.uniform(-5.0, 5.0)}, self.elevator_open, self.elev_pos, self.elev_dim, self.elev_vel]))
+    
+    def _running_create_random_ball_1_exec(self, parameters):
+        print("Elevator opened at:", self.floor_num)
+        self.elevator_open = True
+        self.big_step.outputEventOM(Event("narrow_cast", None, [self, 'balls', Event("update_elevator_open", None, [self.elevator_open])]))
+    
+    def _running_create_random_ball_2_exec(self, parameters):
+        print("Elevator closed at:", self.floor_num)
+        self.elevator_open = False
+        self.big_step.outputEventOM(Event("narrow_cast", None, [self, 'balls', Event("update_elevator_open", None, [self.elevator_open])]))
+    
+    def _running_create_random_ball_3_exec(self, parameters):
+        elev_pos = parameters[0]
+        elev_dim = parameters[1]
+        elev_vel = parameters[2]
+        self.elev_pos = elev_pos
+        self.elev_dim = elev_dim
+        self.elev_vel = elev_vel
+        self.big_step.outputEventOM(Event("narrow_cast", None, [self, 'balls', Event("update_elevator_bounds", None, [elev_pos, elev_dim, elev_vel])]))
+    
+    def _running_create_random_ball_4_exec(self, parameters):
+        link_id = parameters[0]
+        prev_floor = parameters[1]
+        new_floor = parameters[2]
+        pos = parameters[3]
+        vel = parameters[4]
+        self.big_step.outputEventOM(Event("create_instance", None, [self, "balls", "Ball", self.canvas_id, new_floor, pos, {'x': random.uniform(-5.0, 5.0), 'y': random.uniform(-5.0, 5.0)}, self.elevator_open, self.elev_pos, self.elev_dim, self.elev_vel]))
     
     def _running_wait_0_exec(self, parameters):
         association_name = parameters[0]
@@ -400,24 +442,22 @@ class FloorInstance(RuntimeClassBase):
     def initializeStatechart(self):
         # enter default state
         self.default_targets = self.states["/creating_floor"].getEffectiveTargetStates()
-        RuntimeClassBase.initializeStatechart(self)
+        RuntimeStatechartBase.initializeStatechart(self)
 
-class Floor(ClassBase):
+class Floor(RuntimeClassBase):
     def __init__(self, name):
-        ClassBase.__init__(self, name)
+        RuntimeClassBase.__init__(self, name)
         self.input = self.addInPort("input")
         self.glob_outputs["ui"] = self.addOutPort("ui")
-        self.outputs["parent"] = self.addOutPort("parent")
-        self.outputs["balls"] = self.addOutPort("balls")
         self.floor_ui = self.addInPort("floor_ui")
     
     def constructObject(self, id, start_port_id, parameters):
         new_instance = FloorInstance(self, id, start_port_id, parameters[1], parameters[2])
         return new_instance
 
-class ElevatorButtonInstance(RuntimeClassBase):
+class ElevatorButtonInstance(RuntimeStatechartBase):
     def __init__(self, atomdevs, id, start_port_id, window_id, canvas_id, number):
-        RuntimeClassBase.__init__(self, atomdevs, id)
+        RuntimeStatechartBase.__init__(self, atomdevs, id)
         
         self.semantics.big_step_maximality = StatechartSemantics.TakeMany
         self.semantics.internal_event_lifeline = StatechartSemantics.Queue
@@ -431,7 +471,7 @@ class ElevatorButtonInstance(RuntimeClassBase):
         # call user defined constructor
         ElevatorButtonInstance.user_defined_constructor(self, window_id, canvas_id, number)
         port_name = addInputPort("ui", start_port_id, True)
-        atomdevs.state.port_mappings[port_name] = id
+        atomdevs.state.port_mappings[port_name] = None
         port_name = addInputPort("<narrow_cast>", start_port_id)
         atomdevs.state.port_mappings[port_name] = id
         port_name = addInputPort("button_ui", start_port_id + 1)
@@ -507,23 +547,22 @@ class ElevatorButtonInstance(RuntimeClassBase):
     def initializeStatechart(self):
         # enter default state
         self.default_targets = self.states["/creating"].getEffectiveTargetStates()
-        RuntimeClassBase.initializeStatechart(self)
+        RuntimeStatechartBase.initializeStatechart(self)
 
-class ElevatorButton(ClassBase):
+class ElevatorButton(RuntimeClassBase):
     def __init__(self, name):
-        ClassBase.__init__(self, name)
+        RuntimeClassBase.__init__(self, name)
         self.input = self.addInPort("input")
         self.glob_outputs["ui"] = self.addOutPort("ui")
-        self.outputs["parent"] = self.addOutPort("parent")
         self.button_ui = self.addInPort("button_ui")
     
     def constructObject(self, id, start_port_id, parameters):
         new_instance = ElevatorButtonInstance(self, id, start_port_id, parameters[1], parameters[2], parameters[3])
         return new_instance
 
-class ElevatorInstance(RuntimeClassBase):
+class ElevatorInstance(RuntimeStatechartBase):
     def __init__(self, atomdevs, id, start_port_id, canvas_id):
-        RuntimeClassBase.__init__(self, atomdevs, id)
+        RuntimeStatechartBase.__init__(self, atomdevs, id)
         
         self.semantics.big_step_maximality = StatechartSemantics.TakeMany
         self.semantics.internal_event_lifeline = StatechartSemantics.Queue
@@ -542,7 +581,7 @@ class ElevatorInstance(RuntimeClassBase):
         # call user defined constructor
         ElevatorInstance.user_defined_constructor(self, canvas_id)
         port_name = addInputPort("ui", start_port_id, True)
-        atomdevs.state.port_mappings[port_name] = id
+        atomdevs.state.port_mappings[port_name] = None
         port_name = addInputPort("<narrow_cast>", start_port_id)
         atomdevs.state.port_mappings[port_name] = id
         port_name = addInputPort("elevator_ui", start_port_id + 1)
@@ -635,7 +674,6 @@ class ElevatorInstance(RuntimeClassBase):
         _root_running_move_0.setTrigger(Event("_0after"))
         self.states["/root/running/move"].addTransition(_root_running_move_0)
         _root_running_move_1 = Transition(self, self.states["/root/running/move"], [self.states["/root/running/idle"]])
-        _root_running_move_1.setAction(self._root_running_move_1_exec)
         _root_running_move_1.setTrigger(None)
         _root_running_move_1.setGuard(self._root_running_move_1_guard)
         self.states["/root/running/move"].addTransition(_root_running_move_1)
@@ -644,10 +682,11 @@ class ElevatorInstance(RuntimeClassBase):
         self.big_step.outputEvent(Event("create_rectangle", self.getOutPortName("ui"), [self.canvas_id, self.pos['x'], self.pos['y'], self.dim['x'], self.dim['y'], {'fill':'white', 'outline': 'black'}, self.inports['elevator_ui']]))
     
     def _root_running_idle_enter(self):
-        self.big_step.outputEventOM(Event("narrow_cast", None, [self, 'parent', Event("update_bounds", None, [self.pos, self.dim, self.vel])]))
+        self.big_step.outputEventOM(Event("narrow_cast", None, [self, 'floors', Event("update_bounds", None, [self.pos, self.dim, self.vel])]))
+        self.big_step.outputEventOM(Event("narrow_cast", None, [self, f'floors[{self.current_floor}]', Event("open_elevator", None, [])]))
     
     def _root_running_move_enter(self):
-        self.big_step.outputEventOM(Event("narrow_cast", None, [self, 'parent', Event("update_bounds", None, [self.pos, self.dim, self.vel])]))
+        self.big_step.outputEventOM(Event("narrow_cast", None, [self, 'floors', Event("update_bounds", None, [self.pos, self.dim, self.vel])]))
         self.addTimer(0, 0.02)
     
     def _root_running_move_exit(self):
@@ -668,6 +707,7 @@ class ElevatorInstance(RuntimeClassBase):
     
     def _root_running_idle_0_exec(self, parameters):
         floor_number = parameters[0]
+        self.big_step.outputEventOM(Event("narrow_cast", None, [self, f'floors[{self.current_floor}]', Event("close_elevator", None, [])]))
         if self.current_floor < floor_number:
             self.vel = -2
         else:
@@ -683,33 +723,28 @@ class ElevatorInstance(RuntimeClassBase):
         self.big_step.outputEvent(Event("set_element_pos", self.getOutPortName("ui"), [self.canvas_id, self.elevator_id, self.pos['x'], self.pos['y']]))
         self.pos['y'] += self.vel
     
-    def _root_running_move_1_exec(self, parameters):
-        self.big_step.outputEventOM(Event("narrow_cast", None, [self, 'parent', Event("open_elevator", None, [])]))
-    
     def _root_running_move_1_guard(self, parameters):
         return (self.vel > 0 and self.pos['y'] > self.next_pos['y']) or (self.vel < 0 and self.pos['y'] < self.next_pos['y'])
     
     def initializeStatechart(self):
         # enter default state
         self.default_targets = self.states["/root"].getEffectiveTargetStates()
-        RuntimeClassBase.initializeStatechart(self)
+        RuntimeStatechartBase.initializeStatechart(self)
 
-class Elevator(ClassBase):
+class Elevator(RuntimeClassBase):
     def __init__(self, name):
-        ClassBase.__init__(self, name)
+        RuntimeClassBase.__init__(self, name)
         self.input = self.addInPort("input")
         self.glob_outputs["ui"] = self.addOutPort("ui")
-        self.outputs["floors"] = self.addOutPort("floors")
-        self.outputs["parent"] = self.addOutPort("parent")
         self.elevator_ui = self.addInPort("elevator_ui")
     
     def constructObject(self, id, start_port_id, parameters):
         new_instance = ElevatorInstance(self, id, start_port_id, parameters[1])
         return new_instance
 
-class BallInstance(RuntimeClassBase):
-    def __init__(self, atomdevs, id, start_port_id, canvas_id, floor_num, x, y):
-        RuntimeClassBase.__init__(self, atomdevs, id)
+class BallInstance(RuntimeStatechartBase):
+    def __init__(self, atomdevs, id, start_port_id, canvas_id, floor_num, pos, vel, elevator_open, rect_pos, rect_dim, rect_vel):
+        RuntimeStatechartBase.__init__(self, atomdevs, id)
         
         self.semantics.big_step_maximality = StatechartSemantics.TakeMany
         self.semantics.internal_event_lifeline = StatechartSemantics.Queue
@@ -725,27 +760,31 @@ class BallInstance(RuntimeClassBase):
         self.pos = None
         
         # call user defined constructor
-        BallInstance.user_defined_constructor(self, canvas_id, floor_num, x, y)
+        BallInstance.user_defined_constructor(self, canvas_id, floor_num, pos, vel, elevator_open, rect_pos, rect_dim, rect_vel)
         port_name = addInputPort("ui", start_port_id, True)
-        atomdevs.state.port_mappings[port_name] = id
+        atomdevs.state.port_mappings[port_name] = None
         port_name = addInputPort("<narrow_cast>", start_port_id)
         atomdevs.state.port_mappings[port_name] = id
         port_name = addInputPort("ball_ui", start_port_id + 1)
         atomdevs.state.port_mappings[port_name] = id
         self.inports["ball_ui"] = port_name
     
-    def user_defined_constructor(self, canvas_id, floor_num, x, y):
+    def user_defined_constructor(self, canvas_id, floor_num, pos, vel, elevator_open, rect_pos, rect_dim, rect_vel):
         self.canvas_id = canvas_id;
         
         
         self.floor_num = floor_num;
         
         self.elevator_floor = 0;
-        self.elevator_open = True;
+        self.elevator_open = elevator_open;
+        
+        self.rect_pos = rect_pos
+        self.rect_dim = rect_dim
+        self.rect_vel = rect_vel
         
         self.r = 5.0;
-        self.vel = {'x': random.uniform(-5.0, 5.0), 'y': random.uniform(-5.0, 5.0)};
-        self.pos = {'x': x, 'y': y};
+        self.vel = vel;
+        self.pos = pos;
         self.smooth = 0.6; # value between 0 and 1
     
     def user_defined_destructor(self):
@@ -805,11 +844,12 @@ class BallInstance(RuntimeClassBase):
         # transition /main_behaviour/bouncing
         _main_behaviour_bouncing_0 = Transition(self, self.states["/main_behaviour/bouncing"], [self.states["/main_behaviour/bouncing"]])
         _main_behaviour_bouncing_0.setAction(self._main_behaviour_bouncing_0_exec)
-        _main_behaviour_bouncing_0.setTrigger(Event("_0after"))
+        _main_behaviour_bouncing_0.setTrigger(None)
+        _main_behaviour_bouncing_0.setGuard(self._main_behaviour_bouncing_0_guard)
         self.states["/main_behaviour/bouncing"].addTransition(_main_behaviour_bouncing_0)
         _main_behaviour_bouncing_1 = Transition(self, self.states["/main_behaviour/bouncing"], [self.states["/main_behaviour/bouncing"]])
         _main_behaviour_bouncing_1.setAction(self._main_behaviour_bouncing_1_exec)
-        _main_behaviour_bouncing_1.setTrigger(Event("open_elevator", None))
+        _main_behaviour_bouncing_1.setTrigger(Event("_0after"))
         self.states["/main_behaviour/bouncing"].addTransition(_main_behaviour_bouncing_1)
         _main_behaviour_bouncing_2 = Transition(self, self.states["/main_behaviour/bouncing"], [self.states["/main_behaviour/ball_delete"]])
         _main_behaviour_bouncing_2.setTrigger(None)
@@ -817,8 +857,12 @@ class BallInstance(RuntimeClassBase):
         self.states["/main_behaviour/bouncing"].addTransition(_main_behaviour_bouncing_2)
         _main_behaviour_bouncing_3 = Transition(self, self.states["/main_behaviour/bouncing"], [self.states["/main_behaviour/bouncing"]])
         _main_behaviour_bouncing_3.setAction(self._main_behaviour_bouncing_3_exec)
-        _main_behaviour_bouncing_3.setTrigger(Event("update_elevator_bounds", None))
+        _main_behaviour_bouncing_3.setTrigger(Event("update_elevator_open", None))
         self.states["/main_behaviour/bouncing"].addTransition(_main_behaviour_bouncing_3)
+        _main_behaviour_bouncing_4 = Transition(self, self.states["/main_behaviour/bouncing"], [self.states["/main_behaviour/bouncing"]])
+        _main_behaviour_bouncing_4.setAction(self._main_behaviour_bouncing_4_exec)
+        _main_behaviour_bouncing_4.setTrigger(Event("update_elevator_bounds", None))
+        self.states["/main_behaviour/bouncing"].addTransition(_main_behaviour_bouncing_4)
         
         # transition /main_behaviour/ball_delete
         _main_behaviour_ball_delete_0 = Transition(self, self.states["/main_behaviour/ball_delete"], [self.states["/deleted"]])
@@ -845,12 +889,24 @@ class BallInstance(RuntimeClassBase):
         self.circle_id = circle_id
     
     def _main_behaviour_bouncing_0_exec(self, parameters):
+        self.prev_floor = self.floor_num
+        self.big_step.outputEventOM(Event("narrow_cast", None, [self, 'parent', Event("transfer_ball", None, [self.association_name, self.prev_floor, self.elevator_floor, self.pos, self.vel])]))
+    
+    def _main_behaviour_bouncing_0_guard(self, parameters):
+        return self.pos['x'] + self.r > self.rect_pos['x'] + (self.rect_dim['x'] / 2) and self.elevator_open
+    
+    def _main_behaviour_bouncing_1_exec(self, parameters):
+        floor_height = ((CANVAS_DIMS[1] - 150) - ((FLOORS - 1) * FLOOR_SPACE)) / FLOORS
+        floor_dim = {'x': FLOOR_LENGTH, 'y': floor_height};
+        floor_pos = {'x': FLOOR_LENGTH / 2, 'y': (CANVAS_DIMS[1] - 150) - (floor_height /2) - ( self.floor_num * (floor_height + FLOOR_SPACE)  )};
+        
         if self.floor_num == -1:
-            pass
-            """
             if self.pos['x'] - self.r < self.rect_pos['x'] - (self.rect_dim['x'] / 2):
-                if self.elevator_open:
+                if self.elevator_open and self.vel['x'] < 0:
+                    print("Delivered ball from floor:", self.floor_num, "to:", self.elevator_floor)
                     self.floor_num = self.elevator_floor
+                elif self.vel['x'] >= 0:
+                    pass
                 else:
                     self.pos['x'] = self.rect_pos['x'] - (self.rect_dim['x'] / 2) + self.r
                     self.vel['x'] = -self.vel['x']
@@ -865,18 +921,15 @@ class BallInstance(RuntimeClassBase):
             elif self.pos['y'] + self.r > self.rect_pos['y'] + (self.rect_dim['y'] / 2):
                 self.pos['y'] = self.rect_pos['y'] + (self.rect_dim['y'] / 2) - self.r
                 self.vel['y'] = -self.vel['y'] + self.rect_vel
-            """
         else:
-            floor_height = ((CANVAS_DIMS[1] - 150) - ((FLOORS - 1) * FLOOR_SPACE)) / FLOORS
-            floor_dim = {'x': FLOOR_LENGTH, 'y': floor_height};
-            floor_pos = {'x': FLOOR_LENGTH / 2, 'y': (CANVAS_DIMS[1] - 150) - (floor_height /2) - ( self.floor_num * (floor_height + FLOOR_SPACE)  )};
-        
             if self.pos['x'] - self.r < floor_pos['x'] - (floor_dim['x'] / 2):
                 self.pos['x'] = floor_pos['x'] - (floor_dim['x'] / 2) + self.r
                 self.vel['x'] = -self.vel['x']
             elif self.pos['x'] + self.r > floor_pos['x'] + (floor_dim['x'] / 2):
-                if self.elevator_open and (self.elevator_floor == self.floor_num):
+                if self.elevator_open and self.vel['x'] > 0:
                     self.floor_num = -1
+                elif self.vel['x'] <= 0:
+                    pass
                 else:
                     self.pos['x'] = floor_pos['x'] + (floor_dim['x'] / 2) - self.r
                     self.vel['x'] = -self.vel['x']
@@ -892,20 +945,21 @@ class BallInstance(RuntimeClassBase):
         self.pos['x'] += self.vel['x']
         self.pos['y'] += self.vel['y']
     
-    def _main_behaviour_bouncing_1_exec(self, parameters):
-        self.elevator_open = True
-    
     def _main_behaviour_bouncing_2_guard(self, parameters):
         return self.pos['x'] - self.r < 2
     
     def _main_behaviour_bouncing_3_exec(self, parameters):
+        open_bool = parameters[0]
+        self.elevator_open = open_bool
+        print("Ball on floor floor_num:", self.floor_num, "went open")
+    
+    def _main_behaviour_bouncing_4_exec(self, parameters):
         pos = parameters[0]
         dim = parameters[1]
         vel = parameters[2]
         self.rect_pos = pos
         self.rect_dim = dim
         self.rect_vel = vel
-        self.elevator_open = False
     
     def _main_behaviour_ball_delete_0_exec(self, parameters):
         self.big_step.outputEventOM(Event("narrow_cast", None, [self, 'floor', Event("delete_ball", None, [self.association_name])]))
@@ -914,21 +968,20 @@ class BallInstance(RuntimeClassBase):
     def initializeStatechart(self):
         # enter default state
         self.default_targets = self.states["/main_behaviour"].getEffectiveTargetStates()
-        RuntimeClassBase.initializeStatechart(self)
+        RuntimeStatechartBase.initializeStatechart(self)
 
-class Ball(ClassBase):
+class Ball(RuntimeClassBase):
     def __init__(self, name):
-        ClassBase.__init__(self, name)
+        RuntimeClassBase.__init__(self, name)
         self.input = self.addInPort("input")
         self.glob_outputs["ui"] = self.addOutPort("ui")
-        self.outputs["parent"] = self.addOutPort("parent")
         self.ball_ui = self.addInPort("ball_ui")
     
     def constructObject(self, id, start_port_id, parameters):
-        new_instance = BallInstance(self, id, start_port_id, parameters[1], parameters[2], parameters[3], parameters[4])
+        new_instance = BallInstance(self, id, start_port_id, parameters[1], parameters[2], parameters[3], parameters[4], parameters[5], parameters[6], parameters[7], parameters[8])
         return new_instance
 
-def instantiate(self, class_name, construct_params):
+def instantiate(self, class_name):
     instance = {}
     instance["name"] = class_name
     if class_name == "MainApp":
@@ -954,7 +1007,7 @@ def instantiate(self, class_name, construct_params):
     elif class_name == "Ball":
         self.narrow_cast_id = self.narrow_cast_id + 1
         instance["associations"] = {}
-        instance["associations"]["parent"] = Association("MainApp", 1, 1)
+        instance["associations"]["parent"] = Association("Floor", 1, 1)
     else:
         raise Exception("Cannot instantiate class " + class_name)
     return instance
@@ -970,8 +1023,7 @@ class ObjectManager(ObjectManagerBase):
         self.output["ElevatorButton"] = self.addOutPort()
         self.output["Elevator"] = self.addOutPort()
         self.output["Ball"] = self.addOutPort()
-        self.state.createInstance("MainApp", [])
-        self.state.to_send.append((("MainApp", 0), ("MainApp", 0), Event("start_instance", None, ["MainApp[0]"])))
+        self.state.createInstance("MainApp")
 
 class Controller(CoupledDEVS):
     def __init__(self, name):
@@ -987,23 +1039,14 @@ class Controller(CoupledDEVS):
         self.atomics.append(self.addSubModel(Ball("Ball")))
         self.connectPorts(self.atomics[0].obj_manager_out, self.objectmanager.input)
         self.connectPorts(self.objectmanager.output["MainApp"], self.atomics[0].obj_manager_in)
-        self.connectPorts(self.atomics[0].outputs["floor"], self.atomics[1].input)
-        self.connectPorts(self.atomics[0].outputs["button"], self.atomics[2].input)
-        self.connectPorts(self.atomics[0].outputs["elevator"], self.atomics[3].input)
         self.connectPorts(self.atomics[1].obj_manager_out, self.objectmanager.input)
         self.connectPorts(self.objectmanager.output["Floor"], self.atomics[1].obj_manager_in)
-        self.connectPorts(self.atomics[1].outputs["parent"], self.atomics[0].input)
-        self.connectPorts(self.atomics[1].outputs["balls"], self.atomics[4].input)
         self.connectPorts(self.atomics[2].obj_manager_out, self.objectmanager.input)
         self.connectPorts(self.objectmanager.output["ElevatorButton"], self.atomics[2].obj_manager_in)
-        self.connectPorts(self.atomics[2].outputs["parent"], self.atomics[0].input)
         self.connectPorts(self.atomics[3].obj_manager_out, self.objectmanager.input)
         self.connectPorts(self.objectmanager.output["Elevator"], self.atomics[3].obj_manager_in)
-        self.connectPorts(self.atomics[3].outputs["floors"], self.atomics[1].input)
-        self.connectPorts(self.atomics[3].outputs["parent"], self.atomics[0].input)
         self.connectPorts(self.atomics[4].obj_manager_out, self.objectmanager.input)
         self.connectPorts(self.objectmanager.output["Ball"], self.atomics[4].obj_manager_in)
-        self.connectPorts(self.atomics[4].outputs["parent"], self.atomics[0].input)
         self.connectPorts(self.atomics[0].glob_outputs["ui"], self.out_ui)
         self.connectPorts(self.in_ui, self.atomics[0].input)
         self.connectPorts(self.atomics[1].glob_outputs["ui"], self.out_ui)

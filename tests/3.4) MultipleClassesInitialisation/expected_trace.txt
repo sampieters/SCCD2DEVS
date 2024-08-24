@@ -1,6 +1,0 @@
-0.00 (event name: instance_created_succesfully; port: Outport; parameters: ['linkA[0]'])
-0.00 (event name: statechart_started_succesfully; port: Outport)
-0.00 (event name: instance_started_succesfully; port: Outport; parameters: ['linkA[0]'])
-0.00 (event name: instance_created_succesfully; port: Outport; parameters: ['linkB[0]'])
-0.00 (event name: statechart_started_succesfully; port: Outport)
-0.00 (event name: instance_started_succesfully; port: Outport; parameters: ['linkB[0]'])

@@ -629,8 +629,6 @@ class ControllerBase(object):
         for listener in self.output_listeners:
             listener.add(event)
 
-
-
     def addOutputListener(self, ports):
         listener = OutputListener(ports)
         self.output_listeners.append(listener)
