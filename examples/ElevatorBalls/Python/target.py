@@ -48,6 +48,9 @@ class MainApp(RuntimeClassBase):
         
         self.elevator_pos = None
         self.elevator_dim = None
+        
+        
+        self.tmp_floor = None
     
     def user_defined_destructor(self):
         pass
@@ -101,6 +104,9 @@ class MainApp(RuntimeClassBase):
         # state /running
         self.states["/running"] = State(13, "/running", self)
         
+        # state /wait
+        self.states["/wait"] = State(14, "/wait", self)
+        
         # add children
         self.states[""].addChild(self.states["/creating_window"])
         self.states[""].addChild(self.states["/creating_canvas"])
@@ -111,6 +117,7 @@ class MainApp(RuntimeClassBase):
         self.states[""].addChild(self.states["/wait_started"])
         self.states[""].addChild(self.states["/create_controls"])
         self.states[""].addChild(self.states["/running"])
+        self.states[""].addChild(self.states["/wait"])
         self.states["/create_controls"].addChild(self.states["/create_controls/create_buttons"])
         self.states["/create_controls/create_buttons"].addChild(self.states["/create_controls/create_buttons/create_a_button"])
         self.states["/create_controls/create_buttons"].addChild(self.states["/create_controls/create_buttons/start_a_button"])
@@ -193,6 +200,16 @@ class MainApp(RuntimeClassBase):
         _running_0.setAction(self._running_0_exec)
         _running_0.setTrigger(Event("button_pressed", None))
         self.states["/running"].addTransition(_running_0)
+        _running_1 = Transition(self, self.states["/running"], [self.states["/wait"]])
+        _running_1.setAction(self._running_1_exec)
+        _running_1.setTrigger(Event("create_ball", None))
+        self.states["/running"].addTransition(_running_1)
+        
+        # transition /wait
+        _wait_0 = Transition(self, self.states["/wait"], [self.states["/running"]])
+        _wait_0.setAction(self._wait_0_exec)
+        _wait_0.setTrigger(Event("instance_created", None))
+        self.states["/wait"].addTransition(_wait_0)
     
     def _creating_window_enter(self):
         self.big_step.outputEvent(Event("create_window", self.getOutPortName("ui"), [CANVAS_DIMS[0], CANVAS_DIMS[1], "Bouncing Balls Elevator", self.inports['field_ui']]))
@@ -252,6 +269,23 @@ class MainApp(RuntimeClassBase):
     def _running_0_exec(self, parameters):
         floor_number = parameters[0]
         self.big_step.outputEventOM(Event("narrow_cast", None, [self, 'elevator', Event("move_elevator", None, [floor_number])]))
+    
+    def _running_1_exec(self, parameters):
+        floor_num = parameters[0]
+        pos = parameters[1]
+        vel = parameters[2]
+        elevator_open = parameters[3]
+        elev_pos = parameters[4]
+        elev_dim = parameters[5]
+        elev_vel = parameters[6]
+        self.tmp_floor = floor_num
+        self.big_step.outputEventOM(Event("create_instance", None, [self, "balls", "Ball", self.canvas_id, floor_num, pos, vel, elevator_open, elev_pos, elev_dim, elev_vel]))
+    
+    def _wait_0_exec(self, parameters):
+        association_name = parameters[0]
+        self.big_step.outputEventOM(Event("start_instance", None, [self, association_name]))
+        self.big_step.outputEventOM(Event("narrow_cast", None, [self, association_name, Event("set_association_name", None, [association_name])]))
+        self.big_step.outputEventOM(Event("associate_instance", None, [self, association_name, 'floor/balls']))
     
     def initializeStatechart(self):
         # enter default state
@@ -343,7 +377,7 @@ class Floor(RuntimeClassBase):
         self.states["/creating_floor"].addTransition(_creating_floor_0)
         
         # transition /running/create_random_ball
-        _running_create_random_ball_0 = Transition(self, self.states["/running/create_random_ball"], [self.states["/running/wait"]])
+        _running_create_random_ball_0 = Transition(self, self.states["/running/create_random_ball"], [self.states["/running/create_random_ball"]])
         _running_create_random_ball_0.setAction(self._running_create_random_ball_0_exec)
         _running_create_random_ball_0.setTrigger(Event("_0after"))
         self.states["/running/create_random_ball"].addTransition(_running_create_random_ball_0)
@@ -359,10 +393,6 @@ class Floor(RuntimeClassBase):
         _running_create_random_ball_3.setAction(self._running_create_random_ball_3_exec)
         _running_create_random_ball_3.setTrigger(Event("update_bounds", None))
         self.states["/running/create_random_ball"].addTransition(_running_create_random_ball_3)
-        _running_create_random_ball_4 = Transition(self, self.states["/running/create_random_ball"], [self.states["/running/create_random_ball"]])
-        _running_create_random_ball_4.setAction(self._running_create_random_ball_4_exec)
-        _running_create_random_ball_4.setTrigger(Event("transfer_ball", None))
-        self.states["/running/create_random_ball"].addTransition(_running_create_random_ball_4)
         
         # transition /running/wait
         _running_wait_0 = Transition(self, self.states["/running/wait"], [self.states["/running/create_random_ball"]])
@@ -380,7 +410,7 @@ class Floor(RuntimeClassBase):
         self.removeTimer(0)
     
     def _running_create_random_ball_0_exec(self, parameters):
-        self.big_step.outputEventOM(Event("create_instance", None, [self, "balls", "Ball", self.canvas_id, self.floor_num, {'x': 10, 'y': self.pos['y']}, {'x': random.uniform(1.0, 5.0), 'y': random.uniform(-5.0, 5.0)}, self.elevator_open, self.elev_pos, self.elev_dim, self.elev_vel]))
+        self.big_step.outputEventOM(Event("narrow_cast", None, [self, 'parent', Event("create_ball", None, [self.floor_num, {'x': 10, 'y': self.pos['y']}, {'x': random.uniform(1.0, 5.0), 'y': random.uniform(-5.0, 5.0)}, self.elevator_open, self.elev_pos, self.elev_dim, self.elev_vel])]))
     
     def _running_create_random_ball_1_exec(self, parameters):
         print("Elevator opened at:", self.floor_num)
@@ -400,14 +430,6 @@ class Floor(RuntimeClassBase):
         self.elev_dim = elev_dim
         self.elev_vel = elev_vel
         self.big_step.outputEventOM(Event("narrow_cast", None, [self, 'balls', Event("update_elevator_bounds", None, [elev_pos, elev_dim, elev_vel])]))
-    
-    def _running_create_random_ball_4_exec(self, parameters):
-        link_id = parameters[0]
-        prev_floor = parameters[1]
-        new_floor = parameters[2]
-        pos = parameters[3]
-        vel = parameters[4]
-        self.big_step.outputEventOM(Event("create_instance", None, [self, "balls", "Ball", self.canvas_id, new_floor, pos, {'x': random.uniform(-5.0, 5.0), 'y': random.uniform(-5.0, 5.0)}, self.elevator_open, self.elev_pos, self.elev_dim, self.elev_vel]))
     
     def _running_wait_0_exec(self, parameters):
         association_name = parameters[0]
@@ -771,25 +793,20 @@ class Ball(RuntimeClassBase):
         # transition /main_behaviour/bouncing
         _main_behaviour_bouncing_0 = Transition(self, self.states["/main_behaviour/bouncing"], [self.states["/main_behaviour/bouncing"]])
         _main_behaviour_bouncing_0.setAction(self._main_behaviour_bouncing_0_exec)
-        _main_behaviour_bouncing_0.setTrigger(None)
-        _main_behaviour_bouncing_0.setGuard(self._main_behaviour_bouncing_0_guard)
+        _main_behaviour_bouncing_0.setTrigger(Event("_0after"))
         self.states["/main_behaviour/bouncing"].addTransition(_main_behaviour_bouncing_0)
-        _main_behaviour_bouncing_1 = Transition(self, self.states["/main_behaviour/bouncing"], [self.states["/main_behaviour/bouncing"]])
-        _main_behaviour_bouncing_1.setAction(self._main_behaviour_bouncing_1_exec)
-        _main_behaviour_bouncing_1.setTrigger(Event("_0after"))
+        _main_behaviour_bouncing_1 = Transition(self, self.states["/main_behaviour/bouncing"], [self.states["/main_behaviour/ball_delete"]])
+        _main_behaviour_bouncing_1.setTrigger(None)
+        _main_behaviour_bouncing_1.setGuard(self._main_behaviour_bouncing_1_guard)
         self.states["/main_behaviour/bouncing"].addTransition(_main_behaviour_bouncing_1)
-        _main_behaviour_bouncing_2 = Transition(self, self.states["/main_behaviour/bouncing"], [self.states["/main_behaviour/ball_delete"]])
-        _main_behaviour_bouncing_2.setTrigger(None)
-        _main_behaviour_bouncing_2.setGuard(self._main_behaviour_bouncing_2_guard)
+        _main_behaviour_bouncing_2 = Transition(self, self.states["/main_behaviour/bouncing"], [self.states["/main_behaviour/bouncing"]])
+        _main_behaviour_bouncing_2.setAction(self._main_behaviour_bouncing_2_exec)
+        _main_behaviour_bouncing_2.setTrigger(Event("update_elevator_open", None))
         self.states["/main_behaviour/bouncing"].addTransition(_main_behaviour_bouncing_2)
         _main_behaviour_bouncing_3 = Transition(self, self.states["/main_behaviour/bouncing"], [self.states["/main_behaviour/bouncing"]])
         _main_behaviour_bouncing_3.setAction(self._main_behaviour_bouncing_3_exec)
-        _main_behaviour_bouncing_3.setTrigger(Event("update_elevator_open", None))
+        _main_behaviour_bouncing_3.setTrigger(Event("update_elevator_bounds", None))
         self.states["/main_behaviour/bouncing"].addTransition(_main_behaviour_bouncing_3)
-        _main_behaviour_bouncing_4 = Transition(self, self.states["/main_behaviour/bouncing"], [self.states["/main_behaviour/bouncing"]])
-        _main_behaviour_bouncing_4.setAction(self._main_behaviour_bouncing_4_exec)
-        _main_behaviour_bouncing_4.setTrigger(Event("update_elevator_bounds", None))
-        self.states["/main_behaviour/bouncing"].addTransition(_main_behaviour_bouncing_4)
         
         # transition /main_behaviour/ball_delete
         _main_behaviour_ball_delete_0 = Transition(self, self.states["/main_behaviour/ball_delete"], [self.states["/deleted"]])
@@ -816,13 +833,6 @@ class Ball(RuntimeClassBase):
         self.circle_id = circle_id
     
     def _main_behaviour_bouncing_0_exec(self, parameters):
-        self.prev_floor = self.floor_num
-        self.big_step.outputEventOM(Event("narrow_cast", None, [self, 'parent', Event("transfer_ball", None, [self.association_name, self.prev_floor, self.elevator_floor, self.pos, self.vel])]))
-    
-    def _main_behaviour_bouncing_0_guard(self, parameters):
-        return self.pos['x'] + self.r > self.rect_pos['x'] + (self.rect_dim['x'] / 2) and self.elevator_open
-    
-    def _main_behaviour_bouncing_1_exec(self, parameters):
         floor_height = ((CANVAS_DIMS[1] - 150) - ((FLOORS - 1) * FLOOR_SPACE)) / FLOORS
         floor_dim = {'x': FLOOR_LENGTH, 'y': floor_height};
         floor_pos = {'x': FLOOR_LENGTH / 2, 'y': (CANVAS_DIMS[1] - 150) - (floor_height /2) - ( self.floor_num * (floor_height + FLOOR_SPACE)  )};
@@ -872,15 +882,15 @@ class Ball(RuntimeClassBase):
         self.pos['x'] += self.vel['x']
         self.pos['y'] += self.vel['y']
     
-    def _main_behaviour_bouncing_2_guard(self, parameters):
+    def _main_behaviour_bouncing_1_guard(self, parameters):
         return self.pos['x'] - self.r < 2
     
-    def _main_behaviour_bouncing_3_exec(self, parameters):
+    def _main_behaviour_bouncing_2_exec(self, parameters):
         open_bool = parameters[0]
         self.elevator_open = open_bool
         print("Ball on floor floor_num:", self.floor_num, "went open")
     
-    def _main_behaviour_bouncing_4_exec(self, parameters):
+    def _main_behaviour_bouncing_3_exec(self, parameters):
         pos = parameters[0]
         dim = parameters[1]
         vel = parameters[2]
@@ -906,6 +916,7 @@ class ObjectManager(ObjectManagerBase):
             instance = MainApp(self.controller)
             instance.associations = {}
             instance.associations["floor"] = Association("Floor", 2, -1)
+            instance.associations["balls"] = Association("Ball", 0, -1)
             instance.associations["button"] = Association("ElevatorButton", 0, -1)
             instance.associations["elevator"] = Association("Elevator", 1, 1)
         elif class_name == "Floor":

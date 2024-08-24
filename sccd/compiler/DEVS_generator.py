@@ -58,13 +58,6 @@ class DEVSGenerator(Visitor):
         ################################
         self.writer.beginMethod("instantiate")
         self.writer.addFormalParameter("class_name")
-
-
-
-        #self.writer.addFormalParameter("construct_params")
-
-
-
         self.writer.beginMethodBody()
 
         self.writer.addAssignment("instance", "{}")
@@ -76,8 +69,8 @@ class DEVSGenerator(Visitor):
                 self.writer.add(GLC.ThrowExceptionStatement(GLC.String("Cannot instantiate abstract class \"" + c.name + "\" with unimplemented methods \"" + "\", \"".join(c.abstract_method_names) + "\".")))
             else:
                 self.writer.addAssignment(GLC.SelfProperty("narrow_cast_id"), GLC.SelfProperty(f"narrow_cast_id + {len(c.inports) + len(c.outports)}"))
-                self.writer.addAssignment(
-                    "instance[\"associations\"]", GLC.MapExpression())
+                
+                self.writer.addAssignment(GLC.ArrayIndexedExpression("instance", GLC.String("associations")), GLC.MapExpression())
                 for a in c.associations:
                     a.accept(self)
             self.writer.endElseIf()
@@ -274,11 +267,6 @@ class DEVSGenerator(Visitor):
         for p in class_node.outports:
             self.writer.addAssignment(GLC.SelfProperty(p),
                                       GLC.FunctionCall(GLC.SelfProperty("addOutPort"), [GLC.String(p)]))
-
-        #for p in class_node.outports:
-        #    self.writer.addAssignment(
-        #        GLC.MapIndexedExpression(GLC.SelfProperty("outports"), GLC.String(p)),
-        #        GLC.FunctionCall(GLC.Property("controller", "addOutputPort"), [GLC.String(p), GLC.SelfExpression()]))
 
         if class_node.name == class_node.class_diagram.default_class.name:
             self.writer.addAssignment("new_instance", GLC.SelfProperty("constructObject(0, 0, [])"))
