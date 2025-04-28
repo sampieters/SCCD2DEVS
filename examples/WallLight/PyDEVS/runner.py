@@ -1,5 +1,5 @@
 import tkinter as tk
-import target as target
+import examples.TrafficLight.PyDEVS.target as target
 from sccd.runtime.libs.ui_v2 import UI
 from sccd.runtime.DEVSSimulatorWrapper import DEVSSimulator
 
@@ -21,7 +21,7 @@ if __name__ == '__main__':
 	tkroot.withdraw()
 	sim = DEVSSimulator(model)
 
-	sim.setVerbose()
+	sim.setVerbose("./output.txt")
 	sim.setRealTimePlatformTk(tkroot)
 
 	ui = UI(tkroot, sim)

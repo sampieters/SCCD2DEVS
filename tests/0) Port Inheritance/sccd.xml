@@ -1,0 +1,38 @@
+<?xml version="1.1" ?>
+<diagram author="Sam Pieters" name="InheritanceTest">
+    <description>
+        Check if SCCD classes can inherit from other classes
+    </description>
+    <outport name="Outport"/>
+    <class name="A">
+        <inport name="inherit_port"/>
+        <constructor>
+            <body>
+                self.parent_param = 21
+            </body>
+        </constructor>
+        <scxml initial="running">
+            <state id="running">
+            </state>
+        </scxml>
+    </class>
+    <class name="B" default="true">
+        <relationships>
+            <inheritance class="A" />
+        </relationships>
+        <constructor>
+            <body>
+                self.nr_of_fields = 0
+            </body>
+        </constructor>
+        <scxml initial="running">
+            <state id="running">
+                <onentry>
+                    <raise port="Outport" event="output_event">
+                        <parameter expr="self.parent_param" />
+                    </raise>
+                </onentry>
+            </state>
+        </scxml>
+    </class>
+</diagram>

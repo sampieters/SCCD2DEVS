@@ -14,9 +14,9 @@ CANVAS_DIMS = (350, 300)
 
 # package "Timer (Eventloop Version)"
 
-class MainAppInstance(RuntimeClassBase):
+class MainAppInstance(RuntimeStatechartBase):
     def __init__(self, atomdevs, id, start_port_id):
-        RuntimeClassBase.__init__(self, atomdevs, id)
+        RuntimeStatechartBase.__init__(self, atomdevs, id)
         
         self.semantics.big_step_maximality = StatechartSemantics.TakeMany
         self.semantics.internal_event_lifeline = StatechartSemantics.Queue
@@ -209,11 +209,11 @@ class MainAppInstance(RuntimeClassBase):
     def initializeStatechart(self):
         # enter default state
         self.default_targets = self.states["/creating_window"].getEffectiveTargetStates()
-        RuntimeClassBase.initializeStatechart(self)
+        RuntimeStatechartBase.initializeStatechart(self)
 
-class MainApp(ClassBase):
+class MainApp(RuntimeClassBase):
     def __init__(self, name):
-        ClassBase.__init__(self, name)
+        RuntimeClassBase.__init__(self, name)
         self.input = self.addInPort("input")
         self.glob_outputs["ui"] = self.addOutPort("ui")
         self.field_ui = self.addInPort("field_ui")

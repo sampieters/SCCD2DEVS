@@ -11,9 +11,9 @@ import time
 
 # package "Timer (Threaded Version)"
 
-class MainAppInstance(RuntimeClassBase):
+class MainAppInstance(RuntimeStatechartBase):
     def __init__(self, atomdevs, id, start_port_id):
-        RuntimeClassBase.__init__(self, atomdevs, id)
+        RuntimeStatechartBase.__init__(self, atomdevs, id)
         
         self.semantics.big_step_maximality = StatechartSemantics.TakeMany
         self.semantics.internal_event_lifeline = StatechartSemantics.Queue
@@ -27,7 +27,7 @@ class MainAppInstance(RuntimeClassBase):
         # call user defined constructor
         MainAppInstance.user_defined_constructor(self)
         port_name = addInputPort("input", start_port_id, True)
-        atomdevs.state.port_mappings[port_name] = id
+        atomdevs.state.port_mappings[port_name] = None
         port_name = addInputPort("<narrow_cast>", start_port_id)
         atomdevs.state.port_mappings[port_name] = id
     
@@ -99,11 +99,11 @@ class MainAppInstance(RuntimeClassBase):
     def initializeStatechart(self):
         # enter default state
         self.default_targets = self.states["/running"].getEffectiveTargetStates()
-        RuntimeClassBase.initializeStatechart(self)
+        RuntimeStatechartBase.initializeStatechart(self)
 
-class MainApp(ClassBase):
+class MainApp(RuntimeClassBase):
     def __init__(self, name):
-        ClassBase.__init__(self, name)
+        RuntimeClassBase.__init__(self, name)
         self.input = self.addInPort("input")
         self.glob_outputs["output"] = self.addOutPort("output")
         new_instance = self.constructObject(0, 0, [])
@@ -115,7 +115,7 @@ class MainApp(ClassBase):
         new_instance = MainAppInstance(self, id, start_port_id)
         return new_instance
 
-def instantiate(self, class_name, construct_params):
+def instantiate(self, class_name):
     instance = {}
     instance["name"] = class_name
     if class_name == "MainApp":
@@ -132,7 +132,7 @@ class ObjectManager(ObjectManagerBase):
         self.state = ObjectManagerState()
         self.input = self.addInPort("input")
         self.output["MainApp"] = self.addOutPort()
-        self.state.createInstance("MainApp", [])
+        self.state.createInstance("MainApp")
 
 class Controller(CoupledDEVS):
     def __init__(self, name):

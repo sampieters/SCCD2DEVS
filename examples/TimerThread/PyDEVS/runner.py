@@ -1,5 +1,6 @@
 import target as target
 from sccd.runtime.DEVSSimulatorWrapper import DEVSSimulator
+from sccd.runtime.DEVS_statecharts_core import Event
 
 class OutputListener:
 	def add(self, events):
@@ -20,4 +21,4 @@ if __name__ == '__main__':
 	sim.simulate()
 
 	while 1:
-		pass
+		sim.addInput(Event(input(), "input", []))

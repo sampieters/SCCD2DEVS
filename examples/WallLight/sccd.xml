@@ -1,0 +1,53 @@
+<?xml version="1.1" ?>
+<diagram author="Sam Pieters" name="IoTLight">
+    <description> An amazing Internet Of Things system </description>
+    <top> import paho.mqtt.client as mqtt </top>
+    <inport name="Input"/>
+    <class name="Wall" default="True">
+        <attribute name="material" type="string"/>
+        <outport name="out_socket" />
+        <relationships>
+            <association name="lights" class="Light" />
+        </relationships>
+        <scxml initial="setup">
+            <state id="setup">
+                <transition after="1"  target="../running"/>
+            </state>
+            <state id ="running" />
+        </scxml>
+    </class>
+    <class name="Light">
+        <constructor>
+            <body>
+                self.status = "#FFFFFF"
+            </body>
+        </constructor>
+        <method name="log_status">
+            print(self.status)
+        </method>
+        <scxml initial="off">
+            <state id="off">
+                <onentry>
+                    <script>
+                        self.status = "#000000"
+                        self.log_status()
+                    </script>
+                </onentry>
+                <transition event="button_pressed" target="../on"/>
+            </state>
+            <state id="on">
+                <onentry>
+                    <script>
+                        self.status = "#FFFFFF"
+                        self.log_status()
+                    </script>
+                </onentry>
+            </state>
+        </scxml>
+    </class>
+    <class name="ColorLight">
+        <relationships>
+            <inheritance class="Light" />
+        </relationships>
+    </class>
+</diagram>

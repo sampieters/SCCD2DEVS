@@ -1,0 +1,36 @@
+<?xml version="1.1" ?>
+<diagram author="anonymous" name="SimpleModel">
+    <description>
+        A  simple SCCDXML model
+    </description>
+    <inport name="Inport" />
+    <outport name="Outport"/>
+    <class name="MainApp" default="true">
+        <relationships>
+            <association name="linkA" class="A" />
+        </relationships>
+        <scxml initial="state1">
+            <state id="state1">
+                <onentry>
+                    <raise scope="cd" event="create_instance">
+                        <parameter expr='"linkA"' />
+                        <parameter expr='"A"' />
+                    </raise>
+                </onentry>
+                <transition event='instance_created' target='../state2'>
+                    <parameter name="association_name" type="string"/>
+                    <raise scope="cd" event="start_instance">
+                        <parameter expr='"linkA[0]"' />
+                    </raise>
+                </transition>
+            </state>
+            <state id ="state2" />
+        </scxml>
+    </class>
+
+    <class name="A">
+        <scxml initial="state1">
+            <state id="state1" />
+        </scxml>
+    </class>
+</diagram>

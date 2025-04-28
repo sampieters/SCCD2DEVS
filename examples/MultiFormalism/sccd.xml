@@ -9,14 +9,6 @@
         FLOOR_LENGTH = 350
         FLOOR_SPACE = 50
         FLOORS = 3
-
-        import logging
-        # Configure the logging
-        logging.basicConfig(
-            filename='app.log',  # File where logs will be saved
-            level=logging.DEBUG,  # Set the minimum logging level
-            format='%(asctime)s - %(levelname)s - %(message)s',  # Format for log messages
-        )
     </top>
     <inport name="ui" />
     <outport name="ui" />
@@ -282,7 +274,10 @@
             </state>
             <state id="running" initial="create_random_ball">
                 <state id="create_random_ball" >
-                    <transition after="random.randint(2, 10)" target=".">
+                    <transition event="produce_ball" target=".">
+                        <script>
+                            print("Outside event received")
+                        </script>
                         <raise scope="narrow" event="create_ball" target="'parent'">
                             <parameter expr="self.floor_num" />
                             <parameter expr="{'x': 10, 'y': self.pos['y']}" />
@@ -324,17 +319,6 @@
                             <parameter expr="elev_pos" />
                             <parameter expr="elev_dim" />
                             <parameter expr="elev_vel" />
-                        </raise>
-                    </transition>
-                </state>
-                <state id="wait">
-                    <transition event="instance_created" target="../create_random_ball">
-                        <parameter name="association_name" type="string"/>
-                        <raise scope="cd" event="start_instance">
-                            <parameter expr="association_name" />
-                        </raise>
-                        <raise scope="narrow" event="set_association_name" target="association_name">
-                            <parameter expr="association_name" />
                         </raise>
                     </transition>
                 </state>
@@ -507,7 +491,6 @@
                                 <parameter expr="self.pos['y']"/>
                             </raise>
                             <script>
-                                logging.debug(f'Elevator: {self.pos}')
                                 self.pos['y'] += self.vel
                             </script>
                         </transition>
@@ -646,7 +629,6 @@
                             <parameter expr="self.vel['y']"/>
                         </raise>
                         <script>
-                            logging.debug(f'Ball {self.association_name}: {self.pos}')
                             self.pos['x'] += self.vel['x']
                             self.pos['y'] += self.vel['y']
                         </script>

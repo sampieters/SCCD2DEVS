@@ -402,7 +402,7 @@ class ObjectManagerBase(object):
         return instance
     
 class Event(object):
-    # TODO SAm: fixed the default of port to None as it was not consistent (sometimes none someting empty)
+    # TODO SAm: fixed the default of port to None as it was not consistent (sometimes none sometimes empty)
     def __init__(self, event_name, port = None, parameters = []):
         self.name = event_name
         self.parameters = parameters

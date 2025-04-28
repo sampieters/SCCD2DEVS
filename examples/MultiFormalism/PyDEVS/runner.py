@@ -3,6 +3,7 @@ import target as target
 from sccd.runtime.libs.ui_v2 import UI
 from sccd.runtime.DEVSSimulatorWrapper import DEVSSimulator
 
+from OtherFormalism import Generator
 
 class OutputListener:
 	def __init__(self, ui):
@@ -17,11 +18,16 @@ class OutputListener:
 if __name__ == '__main__':
 	model = target.Controller(name="controller")
 
+	AGen = Generator()
+	model.addSubModel(AGen)
+	model.connectPorts(AGen.outport, model.atomics[1].input)
+
+
 	tkroot = tk.Tk()
 	tkroot.withdraw()
 	sim = DEVSSimulator(model)
 
-	sim.setVerbose()
+	#sim.setVerbose("./examples/BouncingBalls/PyDEVS/log.txt")
 	sim.setRealTimePlatformTk(tkroot)
 
 	ui = UI(tkroot, sim)
